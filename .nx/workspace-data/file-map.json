@@ -1,0 +1,202 @@
+{
+  "version": "6.0",
+  "nxVersion": "20.2.2",
+  "pathMappings": {},
+  "nxJsonPlugins": [
+    {
+      "name": "@nx/webpack/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview"
+      }
+    },
+    {
+      "name": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    },
+    {
+      "name": "@nx/jest/plugin",
+      "options": {
+        "targetName": "test"
+      }
+    },
+    {
+      "name": "@nx/vite/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "testTargetName": "test",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview",
+        "serveStaticTargetName": "serve-static",
+        "typecheckTargetName": "typecheck"
+      }
+    }
+  ],
+  "fileMap": {
+    "projectFileMap": {
+      "frontend": [
+        {
+          "file": "apps/frontend/.DS_Store",
+          "hash": "10826058128369708160"
+        },
+        {
+          "file": "apps/frontend/eslint.config.js",
+          "hash": "18206053935892145363",
+          "deps": [
+            "npm:@nx/eslint-plugin"
+          ]
+        },
+        {
+          "file": "apps/frontend/index.html",
+          "hash": "7982888858080532489"
+        },
+        {
+          "file": "apps/frontend/project.json",
+          "hash": "1581687993160957088"
+        },
+        {
+          "file": "apps/frontend/src/i18n.ts",
+          "hash": "6370700441950962076",
+          "deps": [
+            "npm:i18next",
+            "npm:react-i18next",
+            "npm:i18next-http-backend",
+            "npm:i18next-browser-languagedetector"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/index.css",
+          "hash": "15537370412722344358"
+        },
+        {
+          "file": "apps/frontend/src/main.tsx",
+          "hash": "14477106164793817101",
+          "deps": [
+            "npm:react",
+            "npm:react-router-dom",
+            "npm:react-dom"
+          ]
+        },
+        {
+          "file": "apps/frontend/tsconfig.app.json",
+          "hash": "7232119452847825095"
+        },
+        {
+          "file": "apps/frontend/tsconfig.json",
+          "hash": "570015216586653101"
+        },
+        {
+          "file": "apps/frontend/vite.config.ts",
+          "hash": "12711686978875662939",
+          "deps": [
+            "npm:vite",
+            "npm:@vitejs/plugin-react",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "backend": [
+        {
+          "file": "apps/backend/.DS_Store",
+          "hash": "9963589263086890697"
+        },
+        {
+          "file": "apps/backend/eslint.config.js",
+          "hash": "17472210594086834595"
+        },
+        {
+          "file": "apps/backend/project.json",
+          "hash": "4149889149878856778"
+        },
+        {
+          "file": "apps/backend/src/app/app.controller.ts",
+          "hash": "14539296045922538600",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/app.module.ts",
+          "hash": "7434837709090719889",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/config",
+            "npm:@nestjs/serve-static"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/app.service.ts",
+          "hash": "9967902337593410053",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/assets/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/backend/src/main.ts",
+          "hash": "2383571462416785073",
+          "deps": [
+            "npm:@nestjs/core",
+            "npm:@nestjs/platform-fastify",
+            "npm:@fastify/multipart"
+          ]
+        },
+        {
+          "file": "apps/backend/tsconfig.app.json",
+          "hash": "13133896605933310698"
+        },
+        {
+          "file": "apps/backend/tsconfig.json",
+          "hash": "3025378044812449119"
+        },
+        {
+          "file": "apps/backend/webpack.config.js",
+          "hash": "13633534260012947124",
+          "deps": [
+            "npm:@nx/webpack"
+          ]
+        }
+      ]
+    },
+    "nonProjectFiles": [
+      {
+        "file": ".DS_Store",
+        "hash": "6351692475925489009"
+      },
+      {
+        "file": "README.md",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "apps/.DS_Store",
+        "hash": "4933001585704704520"
+      },
+      {
+        "file": "eslint.config.js",
+        "hash": "15409767529246623525"
+      },
+      {
+        "file": "nx.json",
+        "hash": "18442106360932333561"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "3928730247632358896"
+      },
+      {
+        "file": "package.json",
+        "hash": "15230900144099040670"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "16936441711144470533"
+      }
+    ]
+  }
+}

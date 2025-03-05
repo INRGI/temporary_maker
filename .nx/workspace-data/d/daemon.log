@@ -1,0 +1,11 @@
+[NX Daemon Server] - 2025-03-05T15:49:47.630Z - Started listening on: /var/folders/25/3d2pfpy17r5f1y3d04bfmf080000gn/T/a2f870cac2a730fa384b/d.sock
+[NX Daemon Server] - 2025-03-05T15:49:47.631Z - [WATCHER]: Subscribed to changes within: /Users/r.omelchenko/Desktop/Additional Projects/temporary_maker (native)
+[NX Daemon Server] - 2025-03-05T15:49:47.633Z - Established a connection. Number of open connections: 1
+[NX Daemon Server] - 2025-03-05T15:49:47.634Z - Established a connection. Number of open connections: 2
+[NX Daemon Server] - 2025-03-05T15:49:47.634Z - Closed a connection. Number of open connections: 1
+[NX Daemon Server] - 2025-03-05T15:49:47.635Z - [REQUEST]: Responding to the client. Shutdown initiated
+[NX Daemon Server] - 2025-03-05T15:49:47.635Z - Done responding to the client Shutdown initiated
+[NX Daemon Server] - 2025-03-05T15:49:47.635Z - Handled FORCE_SHUTDOWN. Handling time: 0. Response time: 0.
+[NX Daemon Server] - 2025-03-05T15:49:47.637Z - [WATCHER]: Stopping the watcher for /Users/r.omelchenko/Desktop/Additional Projects/temporary_maker (sources)
+[NX Daemon Server] - 2025-03-05T15:49:47.637Z - Closed a connection. Number of open connections: 0
+[NX Daemon Server] - 2025-03-05T15:49:47.637Z - [WATCHER]: Stopping the watcher for /Users/r.omelchenko/Desktop/Additional Projects/temporary_maker (outputs)
