@@ -36,73 +36,196 @@
     }
   ],
   "fileMap": {
+    "nonProjectFiles": [
+      {
+        "file": ".gitignore",
+        "hash": "12470966486255261801"
+      },
+      {
+        "file": "README.md",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "eslint.config.js",
+        "hash": "15409767529246623525"
+      },
+      {
+        "file": "nx.json",
+        "hash": "18442106360932333561"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "2424630091391216920"
+      },
+      {
+        "file": "package.json",
+        "hash": "7416107367658202556"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "16936441711144470533"
+      }
+    ],
     "projectFileMap": {
-      "frontend": [
+      "interface-adapters": [
         {
-          "file": "apps/frontend/.DS_Store",
-          "hash": "10826058128369708160"
+          "file": "libs/interface-adapters/project.json",
+          "hash": "12738007541737839606"
         },
         {
-          "file": "apps/frontend/eslint.config.js",
-          "hash": "18206053935892145363",
+          "file": "libs/interface-adapters/src/index.ts",
+          "hash": "14428353282588746736"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/dtos/broadcast/index.ts",
+          "hash": "17759643122452588404"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/dtos/broadcast/request/get-domain-broadcast-with-date.request.dto.ts",
+          "hash": "17651564361189611614",
           "deps": [
-            "npm:@nx/eslint-plugin"
+            "npm:class-validator"
           ]
         },
         {
-          "file": "apps/frontend/index.html",
-          "hash": "7982888858080532489"
-        },
-        {
-          "file": "apps/frontend/project.json",
-          "hash": "1581687993160957088"
-        },
-        {
-          "file": "apps/frontend/src/i18n.ts",
-          "hash": "6370700441950962076",
+          "file": "libs/interface-adapters/src/lib/dtos/broadcast/request/get-domain-broadcast.request.dto.ts",
+          "hash": "115871889101111236",
           "deps": [
-            "npm:i18next",
-            "npm:react-i18next",
-            "npm:i18next-http-backend",
-            "npm:i18next-browser-languagedetector"
+            "npm:class-validator"
           ]
         },
         {
-          "file": "apps/frontend/src/index.css",
-          "hash": "15537370412722344358"
-        },
-        {
-          "file": "apps/frontend/src/main.tsx",
-          "hash": "14477106164793817101",
+          "file": "libs/interface-adapters/src/lib/dtos/broadcast/request/get-domains-by-team.request.dto.ts",
+          "hash": "5683291080033519148",
           "deps": [
-            "npm:react",
-            "npm:react-router-dom",
-            "npm:react-dom"
+            "npm:class-validator"
           ]
         },
         {
-          "file": "apps/frontend/tsconfig.app.json",
-          "hash": "7232119452847825095"
+          "file": "libs/interface-adapters/src/lib/dtos/broadcast/response/broadcast.response.dto.ts",
+          "hash": "46209902013798052"
         },
         {
-          "file": "apps/frontend/tsconfig.json",
-          "hash": "570015216586653101"
+          "file": "libs/interface-adapters/src/lib/dtos/broadcast/response/get-domain-broadcast.response.dto.ts",
+          "hash": "9886013814766641991"
         },
         {
-          "file": "apps/frontend/vite.config.ts",
-          "hash": "12711686978875662939",
+          "file": "libs/interface-adapters/src/lib/dtos/broadcast/response/get-domains-by-team.response.ts",
+          "hash": "3139074838103383156"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/dtos/copy/index.ts",
+          "hash": "12992529777679190037"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/dtos/copy/request/make-copy.request.dto.ts",
+          "hash": "8953828183041890639",
           "deps": [
-            "npm:vite",
-            "npm:@vitejs/plugin-react",
-            "npm:@nx/vite"
+            "npm:class-validator"
           ]
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/dtos/copy/request/make-multiple-copies.request.dto.ts",
+          "hash": "14265755216657443409"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/dtos/copy/response/get-monday-trackings.response.dto.ts",
+          "hash": "6264164962159999340"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/dtos/copy/response/make-copy.response.dto.ts",
+          "hash": "11416615185348583772"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/dtos/copy/response/make-multiple-copies.response.dto.ts",
+          "hash": "10176233280496205958"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/dtos/index.ts",
+          "hash": "8701915418987722459"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/dtos/priority/index.ts",
+          "hash": "1339619260272659127"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/dtos/priority/response/get-priority-types.dto.ts",
+          "hash": "1366335885566044238"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/index.ts",
+          "hash": "9286571803509707364"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/interfaces/index.ts",
+          "hash": "9331579817399611681"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/interfaces/preset/bot-trap.types.ts",
+          "hash": "17696114909983253302"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/interfaces/preset/broadcast.types.ts",
+          "hash": "16724730727739698540"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/interfaces/preset/copy-styles.types.ts",
+          "hash": "15302494990825758971"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/interfaces/preset/copy-what-to-replace.types.ts",
+          "hash": "12489215712344311320"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/interfaces/preset/index.ts",
+          "hash": "6098776476681624904"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/interfaces/preset/is-padding.types.ts",
+          "hash": "16704194644717056368"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/interfaces/preset/link-url.types.ts",
+          "hash": "8722658982489977837"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/interfaces/preset/padding.types.ts",
+          "hash": "16232975624353073748"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/interfaces/preset/preset.types.ts",
+          "hash": "9420598950769629172"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/interfaces/preset/subject-line.types.ts",
+          "hash": "11283253631791165373"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/interfaces/preset/unsub-link-url.types.ts",
+          "hash": "13107201593843809029"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/interfaces/preset/unsubData.types.ts",
+          "hash": "17570802241660884957"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/interfaces/priority/index.ts",
+          "hash": "17605481915957310497"
+        },
+        {
+          "file": "libs/interface-adapters/src/lib/interfaces/priority/unsub-sheet.types.ts",
+          "hash": "2647774459760640455"
+        },
+        {
+          "file": "libs/interface-adapters/tsconfig.json",
+          "hash": "9754418180035196521"
+        },
+        {
+          "file": "libs/interface-adapters/tsconfig.lib.json",
+          "hash": "12324236988128018069"
         }
       ],
       "backend": [
-        {
-          "file": "apps/backend/.DS_Store",
-          "hash": "9963589263086890697"
-        },
         {
           "file": "apps/backend/eslint.config.js",
           "hash": "17472210594086834595"
@@ -112,15 +235,8 @@
           "hash": "4149889149878856778"
         },
         {
-          "file": "apps/backend/src/app/app.controller.ts",
-          "hash": "14539296045922538600",
-          "deps": [
-            "npm:@nestjs/common"
-          ]
-        },
-        {
           "file": "apps/backend/src/app/app.module.ts",
-          "hash": "7434837709090719889",
+          "hash": "8401651464551689378",
           "deps": [
             "npm:@nestjs/common",
             "npm:@nestjs/config",
@@ -128,10 +244,366 @@
           ]
         },
         {
-          "file": "apps/backend/src/app/app.service.ts",
-          "hash": "9967902337593410053",
+          "file": "apps/backend/src/app/infrastructure/options-factory/gdrive-api.options-factory.service.ts",
+          "hash": "15246827642939343778",
           "deps": [
             "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/infrastructure/options-factory/monday-api.options-factory.service.ts",
+          "hash": "596306563554846098",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/broadcast/broadcast.module.ts",
+          "hash": "13031467672834913818",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/broadcast/broadcast.providers.ts",
+          "hash": "11588901293881608053"
+        },
+        {
+          "file": "apps/backend/src/app/modules/broadcast/controllers/broadcast.message.controller.ts",
+          "hash": "16166216543940630465",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/broadcast/services/get-domain-broadcast-from-drive/get-domain-broadcast-from-drive.payload.ts",
+          "hash": "14112786045121157169"
+        },
+        {
+          "file": "apps/backend/src/app/modules/broadcast/services/get-domain-broadcast-from-drive/get-domain-broadcast-from-drive.service.ts",
+          "hash": "10715880724681298416",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:xlsx"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/broadcast/services/get-domain-broadcast-with-date/get-domain-broadcast-with-date.payload.ts",
+          "hash": "14596202146737036402"
+        },
+        {
+          "file": "apps/backend/src/app/modules/broadcast/services/get-domain-broadcast-with-date/get-domain-broadcast-with-date.service.ts",
+          "hash": "6116931602838140800",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/broadcast/services/get-domains-by-team/get-domains-by-team.payload.ts",
+          "hash": "8555988291054815440"
+        },
+        {
+          "file": "apps/backend/src/app/modules/broadcast/services/get-domains-by-team/get-domains-by-team.service.ts",
+          "hash": "15321940874297877216",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:xlsx"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/copy-parser.module.ts",
+          "hash": "1101631325327492046",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/copy-parser.providers.ts",
+          "hash": "11492902266105637135",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/add-bot-trap/add-bot-trap.payload.ts",
+          "hash": "9594900825356265623"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/add-bot-trap/add-bot-trap.service.ts",
+          "hash": "13019604751170658257",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:jsdom"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/anti-spam/anti-spam.payload.ts",
+          "hash": "14904884828924353114"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/anti-spam/anti-spam.service.ts",
+          "hash": "15094122417786694086",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:jsdom"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/anti-spam/spam-words.json",
+          "hash": "7464784499943842361"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/change-bg-color/change-bg-color.payload.ts",
+          "hash": "3639625451927255080"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/change-bg-color/change-bg-color.service.ts",
+          "hash": "877952062718486058",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:jsdom"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/change-font-family/change-font-family.payload.ts",
+          "hash": "6130242178648759277"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/change-font-family/change-font-family.service.ts",
+          "hash": "1955259521100388326",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:jsdom"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/change-font-size/change-font-size.payload.ts",
+          "hash": "2382602548330477337"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/change-font-size/change-font-size.service.ts",
+          "hash": "797767145594863711",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:jsdom"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/change-line-height/change-line-height.payload.ts",
+          "hash": "8587180661226448763"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/change-line-height/change-line-height.service.ts",
+          "hash": "11299694115418855934",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:jsdom"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/change-link-color/change-link-color.payload.ts",
+          "hash": "6709697646914271788"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/change-link-color/change-link-color.service.ts",
+          "hash": "3017250831659914539",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:jsdom"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/change-max-width/change-max-width.payload.ts",
+          "hash": "15626131833415960678"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/change-max-width/change-max-width.service.ts",
+          "hash": "3132146877671243257",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:jsdom"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/change-padding/change-padding.payload.ts",
+          "hash": "10812193997755633888"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/change-padding/change-padding.service.ts",
+          "hash": "10884599874335994109",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:jsdom"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/change-url-link/change-url-link.payload.ts",
+          "hash": "2449309303114986369"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/change-url-link/change-url-link.service.ts",
+          "hash": "10833815452115021115",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/get-image-links/get-image-links.payload.ts",
+          "hash": "355208253362670004"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy-parser/services/get-image-links/get-image-links.service.ts",
+          "hash": "12124245262000097989",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:jsdom"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/controllers/copy.message.controller.ts",
+          "hash": "15961965129766682490",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/copy.module.ts",
+          "hash": "2994537432515502010",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/copy.providers.ts",
+          "hash": "12073727529277434919",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/services/apply-changes-on-copy/apply-changes-on-copy.payload.ts",
+          "hash": "3851305762564392301"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/services/apply-changes-on-copy/apply-changes-on-copy.service.ts",
+          "hash": "5616585568764684054",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/services/build-link/build-link.payload.ts",
+          "hash": "12836111482225192081"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/services/build-link/build-link.service.ts",
+          "hash": "4585156816113543029",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/services/get-copy-from-drive/get-copy-from-drive.payload.ts",
+          "hash": "876579960259321892"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/services/get-copy-from-drive/get-copy-from-drive.service.ts",
+          "hash": "14783734465406931927",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/services/get-monday-data/get-monday-data.payload.ts",
+          "hash": "15097118435270763430"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/services/get-monday-data/get-monday-data.service.ts",
+          "hash": "1940135886526976747",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/services/get-monday-trackings/get-monday-trackings.service.ts",
+          "hash": "4226030448776648715",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/services/get-subject/get-subject.payload.ts",
+          "hash": "10005811675431388983"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/services/get-subject/get-subject.service.ts",
+          "hash": "7030583310120115970",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:adm-zip"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/services/make-copy/make-copy.payload.ts",
+          "hash": "15799589936594043459"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/services/make-copy/make-copy.service.ts",
+          "hash": "5163263529914988651",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/services/make-multiple-copies/make-multiple-copies.payload.ts",
+          "hash": "1610728652710569255"
+        },
+        {
+          "file": "apps/backend/src/app/modules/copy/services/make-multiple-copies/make-multiple-copies.service.ts",
+          "hash": "5306669802645280370",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/priority-products/controllers/priority-products.message.controller.ts",
+          "hash": "12631468818303434698",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/priority-products/priority-products.module.ts",
+          "hash": "15354743420556788253",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/priority-products/priority-products.providers.ts",
+          "hash": "13240868848238772286",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/priority-products/services/get-priority-types/get-priority-types.service.ts",
+          "hash": "6379380466720892890",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:xlsx"
+          ]
+        },
+        {
+          "file": "apps/backend/src/app/modules/priority-products/services/get-priority/get-priority.payload.ts",
+          "hash": "10372807121749979610"
+        },
+        {
+          "file": "apps/backend/src/app/modules/priority-products/services/get-priority/get-priority.service.ts",
+          "hash": "16828164279449518098",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:xlsx"
           ]
         },
         {
@@ -149,7 +621,7 @@
         },
         {
           "file": "apps/backend/tsconfig.app.json",
-          "hash": "13133896605933310698"
+          "hash": "14450651256864550062"
         },
         {
           "file": "apps/backend/tsconfig.json",
@@ -162,41 +634,345 @@
             "npm:@nx/webpack"
           ]
         }
+      ],
+      "frontend": [
+        {
+          "file": "apps/frontend/eslint.config.js",
+          "hash": "18206053935892145363",
+          "deps": [
+            "npm:@nx/eslint-plugin"
+          ]
+        },
+        {
+          "file": "apps/frontend/index.html",
+          "hash": "7049854084403631454"
+        },
+        {
+          "file": "apps/frontend/project.json",
+          "hash": "1581687993160957088"
+        },
+        {
+          "file": "apps/frontend/src/index.css",
+          "hash": "15537370412722344358"
+        },
+        {
+          "file": "apps/frontend/src/main.tsx",
+          "hash": "2501917091417643344",
+          "deps": [
+            "npm:react",
+            "npm:react-router-dom",
+            "npm:react-dom"
+          ]
+        },
+        {
+          "file": "apps/frontend/tsconfig.app.json",
+          "hash": "4519667887135049011"
+        },
+        {
+          "file": "apps/frontend/tsconfig.json",
+          "hash": "570015216586653101"
+        },
+        {
+          "file": "apps/frontend/vite.config.ts",
+          "hash": "12711686978875662939",
+          "deps": [
+            "npm:vite",
+            "npm:@vitejs/plugin-react",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "core": [
+        {
+          "file": "libs/core/project.json",
+          "hash": "13121793408434241062"
+        },
+        {
+          "file": "libs/core/src/index.ts",
+          "hash": "14428353282588746736"
+        },
+        {
+          "file": "libs/core/src/lib/config/gdrive/configuration.ts",
+          "hash": "8449940338389696584",
+          "deps": [
+            "npm:@nestjs/config"
+          ]
+        },
+        {
+          "file": "libs/core/src/lib/config/gdrive/gdrive.config.module.ts",
+          "hash": "9775537285786585632",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/config"
+          ]
+        },
+        {
+          "file": "libs/core/src/lib/config/gdrive/gdrive.config.service.ts",
+          "hash": "7938141708524457156",
+          "deps": [
+            "npm:@nestjs/config",
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/core/src/lib/config/gdrive/index.ts",
+          "hash": "1058151100913041781"
+        },
+        {
+          "file": "libs/core/src/lib/config/index.ts",
+          "hash": "13114178700746922737"
+        },
+        {
+          "file": "libs/core/src/lib/config/monday/configuration.ts",
+          "hash": "17675660313422732249",
+          "deps": [
+            "npm:@nestjs/config"
+          ]
+        },
+        {
+          "file": "libs/core/src/lib/config/monday/index.ts",
+          "hash": "13383339359790743934"
+        },
+        {
+          "file": "libs/core/src/lib/config/monday/monday.config.module.ts",
+          "hash": "6121814528299824041",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/config"
+          ]
+        },
+        {
+          "file": "libs/core/src/lib/config/monday/monday.config.service.ts",
+          "hash": "1005808997170995219",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:@nestjs/config"
+          ]
+        },
+        {
+          "file": "libs/core/src/lib/index.ts",
+          "hash": "2537789943699795918"
+        },
+        {
+          "file": "libs/core/tsconfig.json",
+          "hash": "14490782888307098276"
+        },
+        {
+          "file": "libs/core/tsconfig.lib.json",
+          "hash": "12324236988128018069"
+        }
+      ],
+      "gdrive-creatives": [
+        {
+          "file": "libs/gdrive-api/project.json",
+          "hash": "13381932219043219100"
+        },
+        {
+          "file": "libs/gdrive-api/src/index.ts",
+          "hash": "7204519471607002773"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/constants/gdrive-api.constants.ts",
+          "hash": "8688066863560144811"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/constants/index.ts",
+          "hash": "14121578895747238602"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/decorators/gdrive-api.decorators.ts",
+          "hash": "2475191819051793434",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/decorators/index.ts",
+          "hash": "2638177994089573603"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/gdrive-api.module-definition.ts",
+          "hash": "655925012126283160",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/gdrive-api.module.ts",
+          "hash": "11750001757917443905",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/gdrive-api.tokens.ts",
+          "hash": "18268955266114810359"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/interfaces/gdrive-api-connection-options.interface.ts",
+          "hash": "6189062646315674095"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/interfaces/gdrive-api-module.options.interface.ts",
+          "hash": "1269534075005204844"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/interfaces/index.ts",
+          "hash": "1314839192888833314"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/providers/gdrive-api.providers.ts",
+          "hash": "9358886745209011814",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/providers/index.ts",
+          "hash": "15293151715772156213"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/services/gdrive-api.service..port.ts",
+          "hash": "1259541507340164633",
+          "deps": [
+            "npm:googleapis"
+          ]
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/services/gdrive-api.service.ts",
+          "hash": "7694250971608107756",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:googleapis"
+          ]
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/services/index.ts",
+          "hash": "12168835962737597061"
+        },
+        {
+          "file": "libs/gdrive-api/tsconfig.json",
+          "hash": "14490782888307098276"
+        },
+        {
+          "file": "libs/gdrive-api/tsconfig.lib.json",
+          "hash": "17198385366435388722"
+        }
+      ],
+      "monday-api": [
+        {
+          "file": "libs/monday-api/README.md",
+          "hash": "10144737562612703725"
+        },
+        {
+          "file": "libs/monday-api/project.json",
+          "hash": "16059098420747987900"
+        },
+        {
+          "file": "libs/monday-api/src/index.ts",
+          "hash": "3723210887251804685"
+        },
+        {
+          "file": "libs/monday-api/src/lib/constants/index.ts",
+          "hash": "9707757047215267996"
+        },
+        {
+          "file": "libs/monday-api/src/lib/constants/monday-api.constants.ts",
+          "hash": "1572891772482819936"
+        },
+        {
+          "file": "libs/monday-api/src/lib/decorators/index.ts",
+          "hash": "13778483744003007491"
+        },
+        {
+          "file": "libs/monday-api/src/lib/decorators/monday-api.decorators.ts",
+          "hash": "6299613125880917075",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/monday-api/src/lib/interfaces/index.ts",
+          "hash": "9562922219790166633"
+        },
+        {
+          "file": "libs/monday-api/src/lib/interfaces/monday-api-connection-options.interface.ts",
+          "hash": "5049101603773558595"
+        },
+        {
+          "file": "libs/monday-api/src/lib/interfaces/monday-api-domain.interface.ts",
+          "hash": "773859395675358737"
+        },
+        {
+          "file": "libs/monday-api/src/lib/interfaces/monday-api-module.options.interface.ts",
+          "hash": "10825439288046179607"
+        },
+        {
+          "file": "libs/monday-api/src/lib/interfaces/monday-api-product.inteface.ts",
+          "hash": "257639764564312108"
+        },
+        {
+          "file": "libs/monday-api/src/lib/monday-api.module-definition.ts",
+          "hash": "9217878855506676649",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/monday-api/src/lib/monday-api.module.ts",
+          "hash": "10143827414855112960",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/monday-api/src/lib/monday-api.tokens.ts",
+          "hash": "15364913265272964204"
+        },
+        {
+          "file": "libs/monday-api/src/lib/providers/index.ts",
+          "hash": "6458091649343871989"
+        },
+        {
+          "file": "libs/monday-api/src/lib/providers/monday-api.providers.ts",
+          "hash": "17164479464904733390",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/monday-api/src/lib/services/index.ts",
+          "hash": "13847842019898303451"
+        },
+        {
+          "file": "libs/monday-api/src/lib/services/monday-api.service.port.ts",
+          "hash": "17615337877349943425"
+        },
+        {
+          "file": "libs/monday-api/src/lib/services/monday-api.service.ts",
+          "hash": "4688897103641666145",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "libs/monday-api/src/lib/utils/index.ts",
+          "hash": "5359013221583541448"
+        },
+        {
+          "file": "libs/monday-api/src/lib/utils/monday-api.utils.ts",
+          "hash": "4767518748221677044"
+        },
+        {
+          "file": "libs/monday-api/tsconfig.json",
+          "hash": "9754418180035196521"
+        },
+        {
+          "file": "libs/monday-api/tsconfig.lib.json",
+          "hash": "1190285829453989065"
+        }
       ]
-    },
-    "nonProjectFiles": [
-      {
-        "file": ".DS_Store",
-        "hash": "6351692475925489009"
-      },
-      {
-        "file": "README.md",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "apps/.DS_Store",
-        "hash": "4933001585704704520"
-      },
-      {
-        "file": "eslint.config.js",
-        "hash": "15409767529246623525"
-      },
-      {
-        "file": "nx.json",
-        "hash": "18442106360932333561"
-      },
-      {
-        "file": "package-lock.json",
-        "hash": "3928730247632358896"
-      },
-      {
-        "file": "package.json",
-        "hash": "15230900144099040670"
-      },
-      {
-        "file": "tsconfig.base.json",
-        "hash": "16936441711144470533"
-      }
-    ]
+    }
   }
 }

@@ -5,8 +5,31 @@
     "module": "commonjs",
     "types": ["node"],
     "emitDecoratorMetadata": true,
-    "target": "es2021"
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "target": "es2021",
+    "paths": {
+      "@infrastructure/*": ["apps/copy-maker-svc/src/app/infrastructure/*"],
+      "@modules/*": ["apps/copy-maker-svc/src/app/modules/*"],
+      "@epc-services/common": ["libs/common/src/index.ts"],
+      "@epc-services/core": ["libs/core/src/index.ts"],
+      "@epc-services/monday-api": ["libs/monday-api/src/index.ts"],
+      "@epc-services/gdrive-api": ["libs/gdrive-api/src/index.ts"],
+      "@epc-services/interface-adapters": [
+        "libs/interface-adapters/src/index.ts"
+      ],
+    }
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"]
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "jest.config.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "test/**/*.test.ts",
+    "test/**/*.spec.ts",
+    "test/**/*.d.ts",
+    "test/**/*.ts"
+  ],
+  "include": ["src/**/*.ts"]
 }
