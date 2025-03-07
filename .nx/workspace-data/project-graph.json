@@ -16537,12 +16537,42 @@
       },
       {
         "source": "frontend",
+        "target": "npm:@emotion/styled",
+        "type": "static"
+      },
+      {
+        "source": "frontend",
         "target": "npm:react",
         "type": "static"
       },
       {
         "source": "frontend",
+        "target": "npm:react-modal",
+        "type": "static"
+      },
+      {
+        "source": "frontend",
+        "target": "npm:@emotion/react",
+        "type": "static"
+      },
+      {
+        "source": "frontend",
         "target": "npm:react-router-dom",
+        "type": "static"
+      },
+      {
+        "source": "frontend",
+        "target": "npm:react-toastify",
+        "type": "static"
+      },
+      {
+        "source": "frontend",
+        "target": "npm:react-icons",
+        "type": "static"
+      },
+      {
+        "source": "frontend",
+        "target": "npm:axios",
         "type": "static"
       },
       {

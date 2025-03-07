@@ -8,9 +8,9 @@ import { CopyModule } from './modules/copy/copy.module';
 
 @Module({
   imports: [    
-    // ServeStaticModule.forRoot({
-    //   rootPath: join(__dirname, '..', 'frontend'),
-    // }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'frontend'),
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
