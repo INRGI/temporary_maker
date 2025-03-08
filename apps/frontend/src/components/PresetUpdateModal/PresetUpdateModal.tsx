@@ -37,7 +37,7 @@ const PresetUpdateModal: React.FC<PresetUpdateModalProps> = ({
       case "unsub":
         return <UnsubBlock />;
       case "subject":
-        return <SubjectBlock />;
+        return <SubjectBlock preset={currentPreset} />;
       case "bottrap":
         return <BotTrapBlock />;
       default:

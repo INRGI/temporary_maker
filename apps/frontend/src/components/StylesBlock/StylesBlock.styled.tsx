@@ -31,7 +31,7 @@ export const Container = styled.div`
   display: flex;
   gap: 10px;
   width: 100%;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-content: center;
 `;
@@ -109,4 +109,18 @@ export const StyledInput = styled.input`
     border-color: #6a5acd;
     outline: none;
   }
+`;
+
+export const LeftContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+`;
+
+export const RightContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
 `;

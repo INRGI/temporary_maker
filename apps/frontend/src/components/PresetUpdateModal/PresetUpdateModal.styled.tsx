@@ -30,15 +30,16 @@ export const SaveButton = styled.button`
 export const UpdatePresetContainer = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 1200px;
-  max-width: 1200px;
+  min-width: 900px;
+  max-width: 900px;
+  height: 80vh;
   width: 100%;
   gap: 20px;
   background-color: #181818;
   padding: 25px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
 `;
 
