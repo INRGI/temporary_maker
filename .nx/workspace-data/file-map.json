@@ -46,24 +46,24 @@
         "hash": "18442106360932333561"
       },
       {
-        "file": "eslint.config.js",
-        "hash": "15409767529246623525"
-      },
-      {
         "file": ".gitignore",
         "hash": "12470966486255261801"
       },
       {
-        "file": "tsconfig.base.json",
-        "hash": "16936441711144470533"
+        "file": "README.md",
+        "hash": "3244421341483603138"
       },
       {
         "file": "package-lock.json",
         "hash": "2424630091391216920"
       },
       {
-        "file": "README.md",
-        "hash": "3244421341483603138"
+        "file": "eslint.config.js",
+        "hash": "15409767529246623525"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "16936441711144470533"
       }
     ],
     "projectFileMap": {
@@ -685,11 +685,17 @@
         },
         {
           "file": "apps/frontend/src/components/BotTrapBlock/BotTrapBlock.styled.tsx",
-          "hash": "3244421341483603138"
+          "hash": "3089135892651844399",
+          "deps": [
+            "npm:@emotion/styled"
+          ]
         },
         {
           "file": "apps/frontend/src/components/BotTrapBlock/BotTrapBlock.tsx",
-          "hash": "8442957658984055723"
+          "hash": "13053749975264556432",
+          "deps": [
+            "npm:react"
+          ]
         },
         {
           "file": "apps/frontend/src/components/BotTrapBlock/index.ts",
@@ -791,7 +797,7 @@
         },
         {
           "file": "apps/frontend/src/components/PresetUpdateModal/PresetUpdateModal.tsx",
-          "hash": "14844252427437840608",
+          "hash": "10534279924670892489",
           "deps": [
             "npm:react"
           ]
