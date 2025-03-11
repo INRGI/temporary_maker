@@ -39,7 +39,8 @@ export class GetMondayTrackingsService {
           column.column.title !== 'Domain Sending' &&
           column.column.title !== 'Copy Location' &&
           column.column.title !== 'Expires' &&
-          column.column.title !== 'WarmUp'
+          column.column.title !== 'WarmUp' &&
+          column.column.title !== 'Abbreviation'
         ) {
           return column.column.title;
         }

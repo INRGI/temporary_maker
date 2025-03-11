@@ -12,6 +12,7 @@ export class ChangeBgColorService {
 
     const updateStyles = (element: Element) => {
       const style = element.getAttribute('style');
+      
       if (style) {
         const updatedStyle = style
           .replace(/background-color\s*:\s*[^;]+;?/gi, '')
@@ -31,6 +32,14 @@ export class ChangeBgColorService {
     ['table', 'td'].forEach((tag) => {
       const elements = container?.getElementsByTagName(tag) || [];
       for (const element of elements) {
+        const isButtonWithLink = tag === 'td' && 
+          element.querySelector('a[href]') && 
+          element.querySelectorAll('*').length === 1;
+        
+        if (isButtonWithLink) {
+          continue;
+        }
+        
         if (element.hasAttribute('bgcolor')) {
           element.removeAttribute('bgcolor');
         }

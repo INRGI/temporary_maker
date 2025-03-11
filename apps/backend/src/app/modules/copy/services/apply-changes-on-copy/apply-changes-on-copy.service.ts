@@ -34,7 +34,7 @@ export class ApplyChangesOnCopyService {
     let { html } = payload;
 
     if (
-      presetProps.copyWhatToReplace.isBgColor &&
+      presetProps.copyWhatToReplace?.isBgColor &&
       presetProps.copyStyles.bgColor
     ) {
       html = await this.changeBgColorService.modifyBackgroundColors({
@@ -44,7 +44,7 @@ export class ApplyChangesOnCopyService {
     }
 
     if (
-      presetProps.copyWhatToReplace.isFontFamily &&
+      presetProps.copyWhatToReplace?.isFontFamily &&
       presetProps.copyStyles.fontFamily
     ) {
       html = await this.changeFontFamilyService.modifyFontFamily({
@@ -54,7 +54,7 @@ export class ApplyChangesOnCopyService {
     }
 
     if (
-      presetProps.copyWhatToReplace.isFontSize &&
+      presetProps.copyWhatToReplace?.isFontSize &&
       presetProps.copyStyles.fontSize
     ) {
       html = await this.changeFontSizeService.modifyFontSize({
@@ -64,7 +64,7 @@ export class ApplyChangesOnCopyService {
     }
 
     if (
-      presetProps.copyWhatToReplace.isLineHeight &&
+      presetProps.copyWhatToReplace?.isLineHeight &&
       presetProps.copyStyles.lineHeight
     ) {
       html = await this.changeLineHeightService.modifyLineHeight({
@@ -74,7 +74,7 @@ export class ApplyChangesOnCopyService {
     }
 
     if (
-      presetProps.copyWhatToReplace.isLinkColor &&
+      presetProps.copyWhatToReplace?.isLinkColor &&
       presetProps.copyStyles.linkColor
     ) {
       html = await this.changeLinkColorService.modifyLinkColor({
@@ -84,7 +84,7 @@ export class ApplyChangesOnCopyService {
     }
 
     if (
-      presetProps.copyWhatToReplace.isMaxWidth &&
+      presetProps.copyWhatToReplace?.isMaxWidth &&
       presetProps.copyStyles.maxWidth
     ) {
       html = await this.changeMaxWidthService.modifyMaxWidth({
@@ -94,7 +94,7 @@ export class ApplyChangesOnCopyService {
     }
 
     if (
-      presetProps.copyWhatToReplace.isPadding &&
+      presetProps.copyWhatToReplace?.isPadding &&
       presetProps.copyStyles.padding
     ) {
       html = await this.changePaddingService.modifyPadding({
@@ -104,7 +104,7 @@ export class ApplyChangesOnCopyService {
     }
 
     if (
-      presetProps.copyWhatToReplace.isLinkUrl &&
+      presetProps.copyWhatToReplace?.isLinkUrl &&
       presetProps.linkUrl &&
       linkUrl
     ) {
@@ -114,7 +114,7 @@ export class ApplyChangesOnCopyService {
       });
     }
 
-    if (presetProps.copyWhatToReplace.isBotTrap && presetProps.botTrap) {
+    if (presetProps.copyWhatToReplace?.isBotTrap && presetProps.botTrap) {
       html = await this.addBotTrapService.addBotTrap({
         html: html,
         botTrap: presetProps.botTrap,
@@ -122,8 +122,8 @@ export class ApplyChangesOnCopyService {
     }
 
     if (
-      presetProps.copyWhatToReplace.isAntiSpam &&
-      presetProps.copyWhatToReplace.isAntiSpam === 'Full Anti Spam'
+      presetProps.copyWhatToReplace?.isAntiSpam &&
+      presetProps.copyWhatToReplace?.isAntiSpam === 'Full Anti Spam'
     ) {
       html = await this.antiSpam.changeAllWords({
         html: html,
@@ -131,8 +131,8 @@ export class ApplyChangesOnCopyService {
     }
 
     if (
-      presetProps.copyWhatToReplace.isAntiSpam &&
-      presetProps.copyWhatToReplace.isAntiSpam === 'Spam Words Only'
+      presetProps.copyWhatToReplace?.isAntiSpam &&
+      presetProps.copyWhatToReplace?.isAntiSpam === 'Spam Words Only'
     ) {
       html = await this.antiSpam.changeSpamWords({
         html: html,

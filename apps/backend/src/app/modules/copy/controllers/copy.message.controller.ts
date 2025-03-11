@@ -5,13 +5,13 @@ import {
   MakeMulitpleCopiesRequestDto,
   MakeMultipleCopiesResponseDto,
 } from '@epc-services/interface-adapters';
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { MakeCopyService } from '../services/make-copy/make-copy.service';
 import { MakeMultipleCopiesService } from '../services/make-multiple-copies/make-multiple-copies.service';
 import { GetMondayTrackingsService } from '../services/get-monday-trackings/get-monday-trackings.service';
 
 
-@Controller()
+@Controller('copy')
 export class CopyMessageController {
   constructor(
     private readonly makeCopyService: MakeCopyService,
@@ -32,7 +32,7 @@ export class CopyMessageController {
     @Body() request: MakeMulitpleCopiesRequestDto
   ): Promise<MakeMultipleCopiesResponseDto> {
     const today = new Date();
-    // today.setDate(today.getDate() - 1);
+    today.setDate(today.getDate() - 1);
     const threeDaysFromNow = new Date();
     threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 2);
 
@@ -41,12 +41,12 @@ export class CopyMessageController {
       fromDate: today,
       toDate: threeDaysFromNow,
     });
-    return result;
+    return await result;
   }
 
-  
+  @Get('trackings')
   public async getTrackings(): Promise<GetMondayTrackingsResponseDto> {
     const result = await this.getTrackingsService.geTrackings();
-    return result;
+    return await result;
   }
 }

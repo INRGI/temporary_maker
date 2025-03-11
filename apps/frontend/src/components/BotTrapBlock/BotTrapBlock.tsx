@@ -63,9 +63,9 @@ const BotTrapBlock: React.FC<Props> = ({ preset }) => {
               ...p,
               copyWhatToReplace: {
                 ...p.copyWhatToReplace,
-                botTrap,
                 isBotTrap,
               },
+              botTrap
             }
           : p
       );

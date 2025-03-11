@@ -28,56 +28,56 @@ const StylesBlock: React.FC<Props> = ({ preset }) => {
     maxWidth: preset.copyStyles ? preset.copyStyles.maxWidth : "",
     lineHeight: preset.copyStyles ? preset.copyStyles.lineHeight : "",
     padding: {
-      top: preset.copyStyles ? preset.copyStyles.padding.top : "",
-      right: preset.copyStyles ? preset.copyStyles.padding.right : "",
-      bottom: preset.copyStyles ? preset.copyStyles.padding.bottom : "",
-      left: preset.copyStyles ? preset.copyStyles.padding.left : "",
+      top: preset.copyStyles ? preset.copyStyles.padding?.top : "",
+      right: preset.copyStyles ? preset.copyStyles.padding?.right : "",
+      bottom: preset.copyStyles ? preset.copyStyles.padding?.bottom : "",
+      left: preset.copyStyles ? preset.copyStyles.padding?.left : "",
     },
   });
   const [replaceOptions, setReplaceOptions] = useState<CopyWhatToReplace>({
     isFontSize:
-      (preset.copyWhatToReplace && preset.copyWhatToReplace.isFontSize) ||
+      (preset.copyWhatToReplace && preset.copyWhatToReplace?.isFontSize) ||
       false,
     isFontFamily:
-      (preset.copyWhatToReplace && preset.copyWhatToReplace.isFontFamily) ||
+      (preset.copyWhatToReplace && preset.copyWhatToReplace?.isFontFamily) ||
       false,
     isBgColor:
-      (preset.copyWhatToReplace && preset.copyWhatToReplace.isBgColor) || false,
+      (preset.copyWhatToReplace && preset.copyWhatToReplace?.isBgColor) || false,
     isLinkColor:
-      (preset.copyWhatToReplace && preset.copyWhatToReplace.isLinkColor) ||
+      (preset.copyWhatToReplace && preset.copyWhatToReplace?.isLinkColor) ||
       false,
     isMaxWidth:
-      (preset.copyWhatToReplace && preset.copyWhatToReplace.isMaxWidth) ||
+      (preset.copyWhatToReplace && preset.copyWhatToReplace?.isMaxWidth) ||
       false,
     isLineHeight:
-      (preset.copyWhatToReplace && preset.copyWhatToReplace.isLineHeight) ||
+      (preset.copyWhatToReplace && preset.copyWhatToReplace?.isLineHeight) ||
       false,
     isPadding: {
       top:
-        (preset.copyWhatToReplace && preset.copyWhatToReplace.isPadding.top) ||
+        (preset.copyWhatToReplace && preset.copyWhatToReplace?.isPadding?.top) ||
         false,
       right:
         (preset.copyWhatToReplace &&
-          preset.copyWhatToReplace.isPadding.right) ||
+          preset.copyWhatToReplace?.isPadding?.right) ||
         false,
       bottom:
         (preset.copyWhatToReplace &&
-          preset.copyWhatToReplace.isPadding.bottom) ||
+          preset.copyWhatToReplace?.isPadding?.bottom) ||
         false,
       left:
-        (preset.copyWhatToReplace && preset.copyWhatToReplace.isPadding.left) ||
+        (preset.copyWhatToReplace && preset.copyWhatToReplace?.isPadding?.left) ||
         false,
     },
     isLinkUrl:
-      (preset.copyWhatToReplace && preset.copyWhatToReplace.isLinkUrl) || false,
+      (preset.copyWhatToReplace && preset.copyWhatToReplace?.isLinkUrl) || false,
     isUnsubLink:
-      (preset.copyWhatToReplace && preset.copyWhatToReplace.isUnsubLink) ||
+      (preset.copyWhatToReplace && preset.copyWhatToReplace?.isUnsubLink) ||
       false,
     isAntiSpam:
-      (preset.copyWhatToReplace && preset.copyWhatToReplace.isAntiSpam) ||
+      (preset.copyWhatToReplace && preset.copyWhatToReplace?.isAntiSpam) ||
       "None",
     isBotTrap:
-      (preset.copyWhatToReplace && preset.copyWhatToReplace.isBotTrap) || false,
+      (preset.copyWhatToReplace && preset.copyWhatToReplace?.isBotTrap) || false,
   });
 
   useEffect(() => {

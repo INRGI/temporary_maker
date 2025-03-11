@@ -47,7 +47,7 @@ export class MakeCopyService {
 
     const presetProps = preset;
 
-    if (presetProps.copyWhatToReplace.isLinkUrl) {
+    if (presetProps.copyWhatToReplace?.isLinkUrl) {
       link = await this.buildLinkService.buildLink({
         product,
         productLift,
@@ -56,14 +56,14 @@ export class MakeCopyService {
       });
     }
 
-    if (presetProps.copyWhatToReplace.isUnsubLink) {
+    if (presetProps.copyWhatToReplace?.isUnsubLink) {
       unsubData = await this.getPriorityService.getPriorityDetails({
         product,
         unsubLinkUrl: presetProps.unsubLinkUrl,
       });
     }
 
-    if (presetProps.subjectLine && presetProps.subjectLine.isSubjectLine) {
+    if (presetProps.subjectLine && presetProps.subjectLine?.isSubjectLine) {
       subjects = await this.getSubjectService.getSubject({
         product,
         productLift,

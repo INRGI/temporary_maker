@@ -1,11 +1,5 @@
 import styled from "@emotion/styled";
 
-export const RootContainer = styled.div`
-  display: flex;
-  gap: 20px;
-  width: 100%;
-`;
-
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -15,7 +9,7 @@ export const Container = styled.div`
   margin-left: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
-  max-width: 470px;
+  max-width: 570px;
   width: 100%;
 
   @media (max-width: 768px) {
@@ -54,7 +48,7 @@ export const Button = styled.button`
   }
 `;
 
-export const PresetsContainer = styled.ul`
+export const CopiesList = styled.ul`
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -62,30 +56,23 @@ export const PresetsContainer = styled.ul`
   width: 100%;
   padding: 0;
   height: auto;
-  max-height: 400px;
-  min-height: 400px;
+  max-height: 500px;
+  min-height: 500px;
   overflow-y: auto;
-
-  @media (max-width: 768px) {
-    max-height: none;
-  }
 `;
 
-export const PresetCard = styled.li<{ isActive: boolean }>`
+export const CopyCard = styled.li`
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
   background-color: #5c5c5c;
   padding: 10px 15px;
   border-radius: 8px;
-  border: ${(props) =>
-    props.isActive ? "2px solid #5acd60" : "2px solid transparent"};
+  border: 2px solid transparent;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  height: auto;
-  min-height: 50px;
-  width: 92%;
-  max-width: 440px;
+  width: calc(100% - 40px);
   color: #fff;
+  gap: 15px;
   cursor: pointer;
   transition: all 0.3s ease;
 
@@ -97,86 +84,62 @@ export const PresetCard = styled.li<{ isActive: boolean }>`
     margin: 0;
     padding-right: 15px;
     max-width: 90%;
+    color: #fff;
+  }
+
+  p {
+    color: #fff;
+    padding: 0;
+    margin: 0;
   }
 
   div {
     display: flex;
     gap: 10px;
   }
-
-  button {
-    min-width: 80px;
-  }
 `;
 
-export const DeleteButton = styled.button`
+export const CardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  appearance: none;
-  background-color: #e63946;
-  border-radius: 4px;
-  border-width: 0;
-  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
-    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #b22b36 0 -3px 0 inset;
-  box-sizing: border-box;
-  color: white;
-  cursor: pointer;
-  display: inline-flex;
-  font-family: "JetBrains Mono", monospace;
-  height: 48px;
-  justify-content: center;
-  line-height: 1;
-  list-style: none;
-  overflow: hidden;
-  padding-left: 16px;
-  padding-right: 16px;
-  position: relative;
-  text-align: left;
-  text-decoration: none;
-  transition: box-shadow 0.15s, transform 0.15s;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  white-space: nowrap;
-  will-change: box-shadow, transform;
+  padding: 0;
+  margin: 0;
+`;
+
+export const TextTitle = styled.span`
+  font-weight: bold;
   font-size: 18px;
-  margin-left: 10px;
-  &:focus {
-    box-shadow: #b22b36 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
-      rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #b22b36 0 -3px 0 inset;
-  }
-
-  &:hover {
-    box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px,
-      rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #b22b36 0 -3px 0 inset;
-    transform: translateY(-2px);
-  }
-
-  &:active {
-    box-shadow: #b22b36 0 3px 7px inset;
-    transform: translateY(2px);
-  }
 `;
 
-export const EditButton = styled.button`
+export const TextSpaceDivider = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+`;
+
+export const CopyButton = styled.button`
   align-items: center;
   appearance: none;
-  background-color: #fca311;
+  background-color: #6a5acd;
   border-radius: 4px;
   border-width: 0;
   box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
-    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #e19110 0 -3px 0 inset;
+    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #5941a9 0 -3px 0 inset;
   box-sizing: border-box;
   color: white;
   cursor: pointer;
   display: inline-flex;
   font-family: "JetBrains Mono", monospace;
-  height: 48px;
+  height: 35px;
   justify-content: center;
   line-height: 1;
   list-style: none;
   overflow: hidden;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding: 5px 7px;
   position: relative;
   text-align: left;
   text-decoration: none;
@@ -188,64 +151,138 @@ export const EditButton = styled.button`
   will-change: box-shadow, transform;
   font-size: 18px;
   &:focus {
-    box-shadow: #e19110 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
-      rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #e19110 0 -3px 0 inset;
+    box-shadow: #5941a9 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
+      rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #5941a9 0 -3px 0 inset;
   }
 
   &:hover {
     box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px,
-      rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #e19110 0 -3px 0 inset;
-    transform: translateY(-2px);
+      rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #5941a9 0 -3px 0 inset;
+    transform: translateY(-1px);
   }
 
   &:active {
-    box-shadow: #e19110 0 3px 7px inset;
-    transform: translateY(2px);
+    box-shadow: #5941a9 0 3px 7px inset;
+    transform: translateY(1px);
   }
 `;
 
-export const ServicesBlockHeader = styled.div`
+export const DownloadButton = styled.a`
+  text-decoration: none;
+  align-items: center;
+  appearance: none;
+  background-color: #6a5acd;
+  border-radius: 4px;
+  border-width: 0;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #5941a9 0 -3px 0 inset;
+  box-sizing: border-box;
+  color: white;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: "JetBrains Mono", monospace;
+  height: 35px;
+  justify-content: center;
+  line-height: 1;
+  list-style: none;
+  overflow: hidden;
+  padding: 5px 7px;
+  min-width: 30px;
+  position: relative;
   text-align: left;
+  text-decoration: none;
+  transition: box-shadow 0.15s, transform 0.15s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  will-change: box-shadow, transform;
+  font-size: 18px;
+  &:focus {
+    box-shadow: #5941a9 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
+      rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #5941a9 0 -3px 0 inset;
+  }
+
+  &:hover {
+    box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px,
+      rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #5941a9 0 -3px 0 inset;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    box-shadow: #5941a9 0 3px 7px inset;
+    transform: translateY(1px);
+  }
+`;
+
+export const ImagesList = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  align-content: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+`;
 
-  h2 {
-    font-size: 30px;
-    line-height: 1.2;
-    color: #fff;
-    margin: 0;
-    font-weight: 500;
-    font-family: "Arial Black", sans-serif;
-    text-transform: uppercase;
-    border-bottom: 2px solid #fff;
-  }
+export const ImageCard = styled.div`
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  background-color: #3c3c3c;
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+`;
 
-  p {
-    text-transform: uppercase;
-    font-size: 20px;
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    padding-left: 2px;
-  }
+export const ImagePreviewContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #1e1e1e;
+  overflow: hidden;
+  width: 60px;
+  min-width: 60px;
+  height: 60px;
+  border-radius: 8px;
 
-  @media (max-width: 1023px) {
-    h2 {
-      font-size: 22px;
-    }
-    p {
-      font-size: 15px;
-    }
-  }
-
-  @media (max-width: 430px) {
-    h2 {
-      font-size: 16px;
-    }
-    p {
-      font-size: 14px;
-    }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
   }
 `;
+
+export const ReplaceButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #6a5acd;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  width: 100%;
+  max-width: 100px;
+  height: 35px;
+
+  &:hover {
+    background-color: #5941a9;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+export const AddButton = styled(ReplaceButton)``;

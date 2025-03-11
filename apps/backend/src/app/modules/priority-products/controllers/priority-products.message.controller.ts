@@ -1,9 +1,9 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { GetPriorityTypesResponseDto } from '@epc-services/interface-adapters';
 import { GetPriorityService } from '../services/get-priority/get-priority.service';
 import { GetPriorityTypesService } from '../services/get-priority-types/get-priority-types.service';
 
-@Controller()
+@Controller('priority-products')
 export class PriorityProductsMessageController {
   constructor(
     private readonly getPriorityService: GetPriorityService,
@@ -15,6 +15,7 @@ export class PriorityProductsMessageController {
     return result;
   }
 
+  @Get('types')
   public async getPriorityTypes(): Promise<GetPriorityTypesResponseDto> {
     const result = await this.getPriorityTypesService.getPriorityTypes();
     return result;

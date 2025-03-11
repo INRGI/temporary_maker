@@ -33,9 +33,9 @@ const PresetUpdateModal: React.FC<PresetUpdateModalProps> = ({
       case "styles":
         return <StylesBlock preset={currentPreset} />;
       case "link":
-        return <LinkBlock />;
+        return <LinkBlock preset={currentPreset}/>;
       case "unsub":
-        return <UnsubBlock />;
+        return <UnsubBlock preset={currentPreset}/>;
       case "subject":
         return <SubjectBlock preset={currentPreset} />;
       case "bottrap":

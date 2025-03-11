@@ -105,11 +105,6 @@ export class GetDomainBroadcastFromDriveService {
           if (domainFound) break;
         }
 
-        this.logger.debug(
-          `Sheet: ${sheetName} | Available columns: ${availableColumns.join(
-            ', '
-          )}`
-        );
         if (domainFound) break;
       }
 

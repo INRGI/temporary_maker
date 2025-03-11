@@ -38,16 +38,24 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "package.json",
-        "hash": "7416107367658202556"
+        "file": ".gitignore",
+        "hash": "12470966486255261801"
       },
       {
         "file": "nx.json",
         "hash": "18442106360932333561"
       },
       {
-        "file": ".gitignore",
-        "hash": "12470966486255261801"
+        "file": "tsconfig.base.json",
+        "hash": "16936441711144470533"
+      },
+      {
+        "file": "package.json",
+        "hash": "14463137775839188672"
+      },
+      {
+        "file": "eslint.config.js",
+        "hash": "15409767529246623525"
       },
       {
         "file": "README.md",
@@ -55,18 +63,647 @@
       },
       {
         "file": "package-lock.json",
-        "hash": "2424630091391216920"
-      },
-      {
-        "file": "eslint.config.js",
-        "hash": "15409767529246623525"
-      },
-      {
-        "file": "tsconfig.base.json",
-        "hash": "16936441711144470533"
+        "hash": "7927038310348977847"
       }
     ],
     "projectFileMap": {
+      "frontend": [
+        {
+          "file": "apps/frontend/eslint.config.js",
+          "hash": "18206053935892145363",
+          "deps": [
+            "npm:@nx/eslint-plugin"
+          ]
+        },
+        {
+          "file": "apps/frontend/index.html",
+          "hash": "15173409807328119393"
+        },
+        {
+          "file": "apps/frontend/project.json",
+          "hash": "1581687993160957088"
+        },
+        {
+          "file": "apps/frontend/public/logo.svg",
+          "hash": "9535336914352566346"
+        },
+        {
+          "file": "apps/frontend/src/components/AddImageModal/AddImageModal.styled.tsx",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/frontend/src/components/AddImageModal/AddImageModal.tsx",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/frontend/src/components/AddImageModal/index.ts",
+          "hash": "4151056668024375409"
+        },
+        {
+          "file": "apps/frontend/src/components/AdminModal/AdminModal.styled.tsx",
+          "hash": "8864744746709249940",
+          "deps": [
+            "npm:@emotion/styled"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/AdminModal/AdminModal.tsx",
+          "hash": "6925749099692358756",
+          "deps": [
+            "npm:react",
+            "npm:react-modal",
+            "npm:@emotion/react"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/AdminModal/index.ts",
+          "hash": "2857595885771655068"
+        },
+        {
+          "file": "apps/frontend/src/components/App/App.tsx",
+          "hash": "2283616061031167033",
+          "deps": [
+            "npm:react-router-dom",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/App/index.ts",
+          "hash": "16006114221571600098"
+        },
+        {
+          "file": "apps/frontend/src/components/BotTrapBlock/BotTrapBlock.styled.tsx",
+          "hash": "3089135892651844399",
+          "deps": [
+            "npm:@emotion/styled"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/BotTrapBlock/BotTrapBlock.tsx",
+          "hash": "13116275068250259333",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/BotTrapBlock/index.ts",
+          "hash": "10094176437572804443"
+        },
+        {
+          "file": "apps/frontend/src/components/CopyMaker/CopyMaker.styled.tsx",
+          "hash": "6940284750235980584",
+          "deps": [
+            "npm:@emotion/styled"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/CopyMaker/CopyMaker.tsx",
+          "hash": "8781226662475178290",
+          "deps": [
+            "npm:react",
+            "npm:react-icons",
+            "npm:axios"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/CopyMaker/index.ts",
+          "hash": "6522233065302940358"
+        },
+        {
+          "file": "apps/frontend/src/components/Dropdown/Dropdown.tsx",
+          "hash": "17572308247638201086",
+          "deps": [
+            "npm:@emotion/styled",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/Dropdown/index.ts",
+          "hash": "3960729729442463377"
+        },
+        {
+          "file": "apps/frontend/src/components/FloatingLabelInput/FloatingLabelInput.tsx",
+          "hash": "4826218490711990930",
+          "deps": [
+            "npm:@emotion/styled",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/FloatingLabelInput/index.ts",
+          "hash": "7659860147573761106"
+        },
+        {
+          "file": "apps/frontend/src/components/Layout/Layout.tsx",
+          "hash": "4287082983600050434",
+          "deps": [
+            "npm:react",
+            "npm:react-router-dom",
+            "npm:react-toastify"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/Layout/index.ts",
+          "hash": "4081970490917208075"
+        },
+        {
+          "file": "apps/frontend/src/components/LinkBlock/LinkBlock.styled.tsx",
+          "hash": "14675086426916732026",
+          "deps": [
+            "npm:@emotion/styled"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/LinkBlock/LinkBlock.tsx",
+          "hash": "9588483299514085291",
+          "deps": [
+            "npm:react",
+            "npm:axios"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/LinkBlock/index.ts",
+          "hash": "6946957682742777093"
+        },
+        {
+          "file": "apps/frontend/src/components/Loader/Loader.styled.tsx",
+          "hash": "12171650045060332206",
+          "deps": [
+            "npm:@emotion/styled"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/Loader/Loader.tsx",
+          "hash": "11442388728866374509",
+          "deps": [
+            "npm:react-loader-spinner"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/Loader/index.ts",
+          "hash": "7046016815050987831"
+        },
+        {
+          "file": "apps/frontend/src/components/PresetContainer/PresetContainer.styled.tsx",
+          "hash": "3043655598287091957",
+          "deps": [
+            "npm:@emotion/styled"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/PresetContainer/PresetContainer.tsx",
+          "hash": "9378701679700144175",
+          "deps": [
+            "npm:react",
+            "npm:react-icons"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/PresetContainer/index.ts",
+          "hash": "3904137482723203197"
+        },
+        {
+          "file": "apps/frontend/src/components/PresetCreateModal/PresetCreateModal.styled.tsx",
+          "hash": "3161756592117009963",
+          "deps": [
+            "npm:@emotion/styled"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/PresetCreateModal/PresetCreateModal.tsx",
+          "hash": "9802124337828611593",
+          "deps": [
+            "npm:react",
+            "npm:axios"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/PresetCreateModal/index.ts",
+          "hash": "3023273111296926146"
+        },
+        {
+          "file": "apps/frontend/src/components/PresetUpdateModal/PresetUpdateModal.styled.tsx",
+          "hash": "13162081450932046742",
+          "deps": [
+            "npm:@emotion/styled"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/PresetUpdateModal/PresetUpdateModal.tsx",
+          "hash": "11399679699485737211",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/PresetUpdateModal/index.ts",
+          "hash": "3635261204931310147"
+        },
+        {
+          "file": "apps/frontend/src/components/SearchInput/SearchInput.tsx",
+          "hash": "13264994943812353230",
+          "deps": [
+            "npm:@emotion/styled",
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/SearchInput/index.ts",
+          "hash": "3291730053880057103"
+        },
+        {
+          "file": "apps/frontend/src/components/StylesBlock/StylesBlock.styled.tsx",
+          "hash": "6855462449520557380",
+          "deps": [
+            "npm:@emotion/styled"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/StylesBlock/StylesBlock.tsx",
+          "hash": "6626740338261545802",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/StylesBlock/index.ts",
+          "hash": "14095162459876103008"
+        },
+        {
+          "file": "apps/frontend/src/components/SubjectBlock/SubjectBlock.styled.tsx",
+          "hash": "3089135892651844399",
+          "deps": [
+            "npm:@emotion/styled"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/SubjectBlock/SubjectBlock.tsx",
+          "hash": "17229291558478815913",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/SubjectBlock/index.ts",
+          "hash": "201940231872785580"
+        },
+        {
+          "file": "apps/frontend/src/components/UnsubBlock/UnsubBlock.styled.tsx",
+          "hash": "14675086426916732026",
+          "deps": [
+            "npm:@emotion/styled"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/UnsubBlock/UnsubBlock.tsx",
+          "hash": "9560726873627516848",
+          "deps": [
+            "npm:react",
+            "npm:axios"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/UnsubBlock/index.ts",
+          "hash": "18290072808932469213"
+        },
+        {
+          "file": "apps/frontend/src/helpers/toastify.ts",
+          "hash": "11685346028984602791",
+          "deps": [
+            "npm:react-toastify"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/index.css",
+          "hash": "15537370412722344358"
+        },
+        {
+          "file": "apps/frontend/src/main.tsx",
+          "hash": "1289869607602649118",
+          "deps": [
+            "npm:react",
+            "npm:react-router-dom",
+            "npm:react-dom"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/pages/Home/Home.styled.tsx",
+          "hash": "15069507784645627329",
+          "deps": [
+            "npm:@emotion/styled"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/pages/Home/Home.tsx",
+          "hash": "11338303485145702688"
+        },
+        {
+          "file": "apps/frontend/src/pages/Home/index.ts",
+          "hash": "14252982227345822550"
+        },
+        {
+          "file": "apps/frontend/src/pages/NotFound/NotFound.styled.tsx",
+          "hash": "5060700796756935761",
+          "deps": [
+            "npm:@emotion/styled",
+            "npm:react-router-dom"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/pages/NotFound/NotFound.tsx",
+          "hash": "14910856117985641337",
+          "deps": [
+            "npm:react"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/pages/NotFound/index.ts",
+          "hash": "4055829991407774834"
+        },
+        {
+          "file": "apps/frontend/src/types/bot-trap.types.ts",
+          "hash": "17696114909983253302"
+        },
+        {
+          "file": "apps/frontend/src/types/broadcast.types.ts",
+          "hash": "7476571085960097339"
+        },
+        {
+          "file": "apps/frontend/src/types/copy-styles.types.ts",
+          "hash": "15302494990825758971"
+        },
+        {
+          "file": "apps/frontend/src/types/copy-what-to-replace.types.ts",
+          "hash": "6814205031238627552"
+        },
+        {
+          "file": "apps/frontend/src/types/index.ts",
+          "hash": "7888784654519490225"
+        },
+        {
+          "file": "apps/frontend/src/types/is-padding.types.ts",
+          "hash": "16704194644717056368"
+        },
+        {
+          "file": "apps/frontend/src/types/link-url.types.ts",
+          "hash": "8722658982489977837"
+        },
+        {
+          "file": "apps/frontend/src/types/padding.types.ts",
+          "hash": "16232975624353073748"
+        },
+        {
+          "file": "apps/frontend/src/types/preset.types.ts",
+          "hash": "9420598950769629172"
+        },
+        {
+          "file": "apps/frontend/src/types/subject-line.types.ts",
+          "hash": "11283253631791165373"
+        },
+        {
+          "file": "apps/frontend/src/types/unsub-link-url.types.ts",
+          "hash": "13107201593843809029"
+        },
+        {
+          "file": "apps/frontend/src/types/unsub-sheet.types.ts",
+          "hash": "2647774459760640455"
+        },
+        {
+          "file": "apps/frontend/src/types/unsubData.types.ts",
+          "hash": "17570802241660884957"
+        },
+        {
+          "file": "apps/frontend/tsconfig.app.json",
+          "hash": "4519667887135049011"
+        },
+        {
+          "file": "apps/frontend/tsconfig.json",
+          "hash": "570015216586653101"
+        },
+        {
+          "file": "apps/frontend/vite.config.ts",
+          "hash": "12711686978875662939",
+          "deps": [
+            "npm:vite",
+            "npm:@vitejs/plugin-react",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "monday-api": [
+        {
+          "file": "libs/monday-api/README.md",
+          "hash": "10144737562612703725"
+        },
+        {
+          "file": "libs/monday-api/project.json",
+          "hash": "16059098420747987900"
+        },
+        {
+          "file": "libs/monday-api/src/index.ts",
+          "hash": "3723210887251804685"
+        },
+        {
+          "file": "libs/monday-api/src/lib/constants/index.ts",
+          "hash": "9707757047215267996"
+        },
+        {
+          "file": "libs/monday-api/src/lib/constants/monday-api.constants.ts",
+          "hash": "1572891772482819936"
+        },
+        {
+          "file": "libs/monday-api/src/lib/decorators/index.ts",
+          "hash": "13778483744003007491"
+        },
+        {
+          "file": "libs/monday-api/src/lib/decorators/monday-api.decorators.ts",
+          "hash": "6299613125880917075",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/monday-api/src/lib/interfaces/index.ts",
+          "hash": "9562922219790166633"
+        },
+        {
+          "file": "libs/monday-api/src/lib/interfaces/monday-api-connection-options.interface.ts",
+          "hash": "5049101603773558595"
+        },
+        {
+          "file": "libs/monday-api/src/lib/interfaces/monday-api-domain.interface.ts",
+          "hash": "773859395675358737"
+        },
+        {
+          "file": "libs/monday-api/src/lib/interfaces/monday-api-module.options.interface.ts",
+          "hash": "10825439288046179607",
+          "deps": [
+            "npm:@nestjs/axios"
+          ]
+        },
+        {
+          "file": "libs/monday-api/src/lib/interfaces/monday-api-product.inteface.ts",
+          "hash": "257639764564312108"
+        },
+        {
+          "file": "libs/monday-api/src/lib/monday-api.module-definition.ts",
+          "hash": "9217878855506676649",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/monday-api/src/lib/monday-api.module.ts",
+          "hash": "10143827414855112960",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/monday-api/src/lib/monday-api.tokens.ts",
+          "hash": "15364913265272964204"
+        },
+        {
+          "file": "libs/monday-api/src/lib/providers/index.ts",
+          "hash": "6458091649343871989"
+        },
+        {
+          "file": "libs/monday-api/src/lib/providers/monday-api.providers.ts",
+          "hash": "17164479464904733390",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/monday-api/src/lib/services/index.ts",
+          "hash": "13847842019898303451"
+        },
+        {
+          "file": "libs/monday-api/src/lib/services/monday-api.service.port.ts",
+          "hash": "17615337877349943425"
+        },
+        {
+          "file": "libs/monday-api/src/lib/services/monday-api.service.ts",
+          "hash": "4688897103641666145",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "libs/monday-api/src/lib/utils/index.ts",
+          "hash": "5359013221583541448"
+        },
+        {
+          "file": "libs/monday-api/src/lib/utils/monday-api.utils.ts",
+          "hash": "4767518748221677044"
+        },
+        {
+          "file": "libs/monday-api/tsconfig.json",
+          "hash": "9754418180035196521"
+        },
+        {
+          "file": "libs/monday-api/tsconfig.lib.json",
+          "hash": "1190285829453989065"
+        }
+      ],
+      "gdrive-creatives": [
+        {
+          "file": "libs/gdrive-api/project.json",
+          "hash": "13381932219043219100"
+        },
+        {
+          "file": "libs/gdrive-api/src/index.ts",
+          "hash": "7204519471607002773"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/constants/gdrive-api.constants.ts",
+          "hash": "8688066863560144811"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/constants/index.ts",
+          "hash": "14121578895747238602"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/decorators/gdrive-api.decorators.ts",
+          "hash": "2475191819051793434",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/decorators/index.ts",
+          "hash": "2638177994089573603"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/gdrive-api.module-definition.ts",
+          "hash": "655925012126283160",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/gdrive-api.module.ts",
+          "hash": "11750001757917443905",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/gdrive-api.tokens.ts",
+          "hash": "18268955266114810359"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/interfaces/gdrive-api-connection-options.interface.ts",
+          "hash": "6189062646315674095"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/interfaces/gdrive-api-module.options.interface.ts",
+          "hash": "1269534075005204844"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/interfaces/index.ts",
+          "hash": "1314839192888833314"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/providers/gdrive-api.providers.ts",
+          "hash": "9358886745209011814",
+          "deps": [
+            "npm:@nestjs/common"
+          ]
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/providers/index.ts",
+          "hash": "15293151715772156213"
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/services/gdrive-api.service..port.ts",
+          "hash": "1259541507340164633",
+          "deps": [
+            "npm:googleapis"
+          ]
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/services/gdrive-api.service.ts",
+          "hash": "7694250971608107756",
+          "deps": [
+            "npm:@nestjs/common",
+            "npm:googleapis"
+          ]
+        },
+        {
+          "file": "libs/gdrive-api/src/lib/services/index.ts",
+          "hash": "12168835962737597061"
+        },
+        {
+          "file": "libs/gdrive-api/tsconfig.json",
+          "hash": "14490782888307098276"
+        },
+        {
+          "file": "libs/gdrive-api/tsconfig.lib.json",
+          "hash": "17198385366435388722"
+        }
+      ],
       "interface-adapters": [
         {
           "file": "libs/interface-adapters/project.json",
@@ -281,7 +918,7 @@
         },
         {
           "file": "apps/backend/src/app/modules/broadcast/services/get-domain-broadcast-from-drive/get-domain-broadcast-from-drive.service.ts",
-          "hash": "10715880724681298416",
+          "hash": "15554732928927150815",
           "deps": [
             "npm:@nestjs/common",
             "npm:xlsx"
@@ -342,7 +979,7 @@
         },
         {
           "file": "apps/backend/src/app/modules/copy-parser/services/anti-spam/anti-spam.service.ts",
-          "hash": "15094122417786694086",
+          "hash": "3114965975525419168",
           "deps": [
             "npm:@nestjs/common",
             "npm:jsdom"
@@ -350,7 +987,7 @@
         },
         {
           "file": "apps/backend/src/app/modules/copy-parser/services/anti-spam/spam-words.json",
-          "hash": "7464784499943842361"
+          "hash": "16347992050571670479"
         },
         {
           "file": "apps/backend/src/app/modules/copy-parser/services/change-bg-color/change-bg-color.payload.ts",
@@ -358,7 +995,7 @@
         },
         {
           "file": "apps/backend/src/app/modules/copy-parser/services/change-bg-color/change-bg-color.service.ts",
-          "hash": "877952062718486058",
+          "hash": "16501710154493023517",
           "deps": [
             "npm:@nestjs/common",
             "npm:jsdom"
@@ -461,7 +1098,7 @@
         },
         {
           "file": "apps/backend/src/app/modules/copy/controllers/copy.message.controller.ts",
-          "hash": "15961965129766682490",
+          "hash": "10961794952733251062",
           "deps": [
             "npm:@nestjs/common"
           ]
@@ -486,7 +1123,7 @@
         },
         {
           "file": "apps/backend/src/app/modules/copy/services/apply-changes-on-copy/apply-changes-on-copy.service.ts",
-          "hash": "5616585568764684054",
+          "hash": "5968968414170670307",
           "deps": [
             "npm:@nestjs/common"
           ]
@@ -526,7 +1163,7 @@
         },
         {
           "file": "apps/backend/src/app/modules/copy/services/get-monday-trackings/get-monday-trackings.service.ts",
-          "hash": "4226030448776648715",
+          "hash": "2385685303756245502",
           "deps": [
             "npm:@nestjs/common"
           ]
@@ -549,7 +1186,7 @@
         },
         {
           "file": "apps/backend/src/app/modules/copy/services/make-copy/make-copy.service.ts",
-          "hash": "5163263529914988651",
+          "hash": "17756844807362623450",
           "deps": [
             "npm:@nestjs/common"
           ]
@@ -567,7 +1204,7 @@
         },
         {
           "file": "apps/backend/src/app/modules/priority-products/controllers/priority-products.message.controller.ts",
-          "hash": "12631468818303434698",
+          "hash": "10862473311117293138",
           "deps": [
             "npm:@nestjs/common"
           ]
@@ -632,357 +1269,6 @@
           "hash": "13633534260012947124",
           "deps": [
             "npm:@nx/webpack"
-          ]
-        }
-      ],
-      "frontend": [
-        {
-          "file": "apps/frontend/eslint.config.js",
-          "hash": "18206053935892145363",
-          "deps": [
-            "npm:@nx/eslint-plugin"
-          ]
-        },
-        {
-          "file": "apps/frontend/index.html",
-          "hash": "7049854084403631454"
-        },
-        {
-          "file": "apps/frontend/project.json",
-          "hash": "1581687993160957088"
-        },
-        {
-          "file": "apps/frontend/src/components/AdminModal/AdminModal.styled.tsx",
-          "hash": "8864744746709249940",
-          "deps": [
-            "npm:@emotion/styled"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/AdminModal/AdminModal.tsx",
-          "hash": "6925749099692358756",
-          "deps": [
-            "npm:react",
-            "npm:react-modal",
-            "npm:@emotion/react"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/AdminModal/index.ts",
-          "hash": "2857595885771655068"
-        },
-        {
-          "file": "apps/frontend/src/components/App/App.tsx",
-          "hash": "2283616061031167033",
-          "deps": [
-            "npm:react-router-dom",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/App/index.ts",
-          "hash": "16006114221571600098"
-        },
-        {
-          "file": "apps/frontend/src/components/BotTrapBlock/BotTrapBlock.styled.tsx",
-          "hash": "3089135892651844399",
-          "deps": [
-            "npm:@emotion/styled"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/BotTrapBlock/BotTrapBlock.tsx",
-          "hash": "13053749975264556432",
-          "deps": [
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/BotTrapBlock/index.ts",
-          "hash": "10094176437572804443"
-        },
-        {
-          "file": "apps/frontend/src/components/Dropdown/Dropdown.tsx",
-          "hash": "17572308247638201086",
-          "deps": [
-            "npm:@emotion/styled",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/Dropdown/index.ts",
-          "hash": "3960729729442463377"
-        },
-        {
-          "file": "apps/frontend/src/components/FloatingLabelInput/FloatingLabelInput.tsx",
-          "hash": "4826218490711990930",
-          "deps": [
-            "npm:@emotion/styled",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/FloatingLabelInput/index.ts",
-          "hash": "7659860147573761106"
-        },
-        {
-          "file": "apps/frontend/src/components/Layout/Layout.tsx",
-          "hash": "4287082983600050434",
-          "deps": [
-            "npm:react",
-            "npm:react-router-dom",
-            "npm:react-toastify"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/Layout/index.ts",
-          "hash": "4081970490917208075"
-        },
-        {
-          "file": "apps/frontend/src/components/LinkBlock/LinkBlock.styled.tsx",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/frontend/src/components/LinkBlock/LinkBlock.tsx",
-          "hash": "8287052822228931385"
-        },
-        {
-          "file": "apps/frontend/src/components/LinkBlock/index.ts",
-          "hash": "6946957682742777093"
-        },
-        {
-          "file": "apps/frontend/src/components/PresetContainer/PresetContainer.styled.tsx",
-          "hash": "3083572815980718941",
-          "deps": [
-            "npm:@emotion/styled"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/PresetContainer/PresetContainer.tsx",
-          "hash": "5386221613015344662",
-          "deps": [
-            "npm:react",
-            "npm:react-icons"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/PresetContainer/index.ts",
-          "hash": "3904137482723203197"
-        },
-        {
-          "file": "apps/frontend/src/components/PresetCreateModal/PresetCreateModal.styled.tsx",
-          "hash": "3161756592117009963",
-          "deps": [
-            "npm:@emotion/styled"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/PresetCreateModal/PresetCreateModal.tsx",
-          "hash": "9802124337828611593",
-          "deps": [
-            "npm:react",
-            "npm:axios"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/PresetCreateModal/index.ts",
-          "hash": "3023273111296926146"
-        },
-        {
-          "file": "apps/frontend/src/components/PresetUpdateModal/PresetUpdateModal.styled.tsx",
-          "hash": "13162081450932046742",
-          "deps": [
-            "npm:@emotion/styled"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/PresetUpdateModal/PresetUpdateModal.tsx",
-          "hash": "10534279924670892489",
-          "deps": [
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/PresetUpdateModal/index.ts",
-          "hash": "3635261204931310147"
-        },
-        {
-          "file": "apps/frontend/src/components/SearchInput/SearchInput.tsx",
-          "hash": "13264994943812353230",
-          "deps": [
-            "npm:@emotion/styled",
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/SearchInput/index.ts",
-          "hash": "3291730053880057103"
-        },
-        {
-          "file": "apps/frontend/src/components/StylesBlock/StylesBlock.styled.tsx",
-          "hash": "6855462449520557380",
-          "deps": [
-            "npm:@emotion/styled"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/StylesBlock/StylesBlock.tsx",
-          "hash": "8761901781897934822",
-          "deps": [
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/StylesBlock/index.ts",
-          "hash": "14095162459876103008"
-        },
-        {
-          "file": "apps/frontend/src/components/SubjectBlock/SubjectBlock.styled.tsx",
-          "hash": "3089135892651844399",
-          "deps": [
-            "npm:@emotion/styled"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/SubjectBlock/SubjectBlock.tsx",
-          "hash": "17229291558478815913",
-          "deps": [
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/components/SubjectBlock/index.ts",
-          "hash": "201940231872785580"
-        },
-        {
-          "file": "apps/frontend/src/components/UnsubBlock/UnsubBlock.styled.tsx",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/frontend/src/components/UnsubBlock/UnsubBlock.tsx",
-          "hash": "3714850467985310072"
-        },
-        {
-          "file": "apps/frontend/src/components/UnsubBlock/index.ts",
-          "hash": "18290072808932469213"
-        },
-        {
-          "file": "apps/frontend/src/helpers/toastify.ts",
-          "hash": "11685346028984602791",
-          "deps": [
-            "npm:react-toastify"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/index.css",
-          "hash": "15537370412722344358"
-        },
-        {
-          "file": "apps/frontend/src/main.tsx",
-          "hash": "1289869607602649118",
-          "deps": [
-            "npm:react",
-            "npm:react-router-dom",
-            "npm:react-dom"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/pages/Home/Home.styled.tsx",
-          "hash": "15069507784645627329",
-          "deps": [
-            "npm:@emotion/styled"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/pages/Home/Home.tsx",
-          "hash": "11338303485145702688"
-        },
-        {
-          "file": "apps/frontend/src/pages/Home/index.ts",
-          "hash": "14252982227345822550"
-        },
-        {
-          "file": "apps/frontend/src/pages/NotFound/NotFound.styled.tsx",
-          "hash": "5060700796756935761",
-          "deps": [
-            "npm:@emotion/styled",
-            "npm:react-router-dom"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/pages/NotFound/NotFound.tsx",
-          "hash": "14910856117985641337",
-          "deps": [
-            "npm:react"
-          ]
-        },
-        {
-          "file": "apps/frontend/src/pages/NotFound/index.ts",
-          "hash": "4055829991407774834"
-        },
-        {
-          "file": "apps/frontend/src/types/bot-trap.types.ts",
-          "hash": "17696114909983253302"
-        },
-        {
-          "file": "apps/frontend/src/types/broadcast.types.ts",
-          "hash": "7476571085960097339"
-        },
-        {
-          "file": "apps/frontend/src/types/copy-styles.types.ts",
-          "hash": "15302494990825758971"
-        },
-        {
-          "file": "apps/frontend/src/types/copy-what-to-replace.types.ts",
-          "hash": "6814205031238627552"
-        },
-        {
-          "file": "apps/frontend/src/types/index.ts",
-          "hash": "6098776476681624904"
-        },
-        {
-          "file": "apps/frontend/src/types/is-padding.types.ts",
-          "hash": "16704194644717056368"
-        },
-        {
-          "file": "apps/frontend/src/types/link-url.types.ts",
-          "hash": "8722658982489977837"
-        },
-        {
-          "file": "apps/frontend/src/types/padding.types.ts",
-          "hash": "16232975624353073748"
-        },
-        {
-          "file": "apps/frontend/src/types/preset.types.ts",
-          "hash": "9420598950769629172"
-        },
-        {
-          "file": "apps/frontend/src/types/subject-line.types.ts",
-          "hash": "11283253631791165373"
-        },
-        {
-          "file": "apps/frontend/src/types/unsub-link-url.types.ts",
-          "hash": "13107201593843809029"
-        },
-        {
-          "file": "apps/frontend/src/types/unsubData.types.ts",
-          "hash": "17570802241660884957"
-        },
-        {
-          "file": "apps/frontend/tsconfig.app.json",
-          "hash": "4519667887135049011"
-        },
-        {
-          "file": "apps/frontend/tsconfig.json",
-          "hash": "570015216586653101"
-        },
-        {
-          "file": "apps/frontend/vite.config.ts",
-          "hash": "12711686978875662939",
-          "deps": [
-            "npm:vite",
-            "npm:@vitejs/plugin-react",
-            "npm:@nx/vite"
           ]
         }
       ],
@@ -1064,217 +1350,6 @@
         {
           "file": "libs/core/tsconfig.lib.json",
           "hash": "12324236988128018069"
-        }
-      ],
-      "gdrive-creatives": [
-        {
-          "file": "libs/gdrive-api/project.json",
-          "hash": "13381932219043219100"
-        },
-        {
-          "file": "libs/gdrive-api/src/index.ts",
-          "hash": "7204519471607002773"
-        },
-        {
-          "file": "libs/gdrive-api/src/lib/constants/gdrive-api.constants.ts",
-          "hash": "8688066863560144811"
-        },
-        {
-          "file": "libs/gdrive-api/src/lib/constants/index.ts",
-          "hash": "14121578895747238602"
-        },
-        {
-          "file": "libs/gdrive-api/src/lib/decorators/gdrive-api.decorators.ts",
-          "hash": "2475191819051793434",
-          "deps": [
-            "npm:@nestjs/common"
-          ]
-        },
-        {
-          "file": "libs/gdrive-api/src/lib/decorators/index.ts",
-          "hash": "2638177994089573603"
-        },
-        {
-          "file": "libs/gdrive-api/src/lib/gdrive-api.module-definition.ts",
-          "hash": "655925012126283160",
-          "deps": [
-            "npm:@nestjs/common"
-          ]
-        },
-        {
-          "file": "libs/gdrive-api/src/lib/gdrive-api.module.ts",
-          "hash": "11750001757917443905",
-          "deps": [
-            "npm:@nestjs/common"
-          ]
-        },
-        {
-          "file": "libs/gdrive-api/src/lib/gdrive-api.tokens.ts",
-          "hash": "18268955266114810359"
-        },
-        {
-          "file": "libs/gdrive-api/src/lib/interfaces/gdrive-api-connection-options.interface.ts",
-          "hash": "6189062646315674095"
-        },
-        {
-          "file": "libs/gdrive-api/src/lib/interfaces/gdrive-api-module.options.interface.ts",
-          "hash": "1269534075005204844"
-        },
-        {
-          "file": "libs/gdrive-api/src/lib/interfaces/index.ts",
-          "hash": "1314839192888833314"
-        },
-        {
-          "file": "libs/gdrive-api/src/lib/providers/gdrive-api.providers.ts",
-          "hash": "9358886745209011814",
-          "deps": [
-            "npm:@nestjs/common"
-          ]
-        },
-        {
-          "file": "libs/gdrive-api/src/lib/providers/index.ts",
-          "hash": "15293151715772156213"
-        },
-        {
-          "file": "libs/gdrive-api/src/lib/services/gdrive-api.service..port.ts",
-          "hash": "1259541507340164633",
-          "deps": [
-            "npm:googleapis"
-          ]
-        },
-        {
-          "file": "libs/gdrive-api/src/lib/services/gdrive-api.service.ts",
-          "hash": "7694250971608107756",
-          "deps": [
-            "npm:@nestjs/common",
-            "npm:googleapis"
-          ]
-        },
-        {
-          "file": "libs/gdrive-api/src/lib/services/index.ts",
-          "hash": "12168835962737597061"
-        },
-        {
-          "file": "libs/gdrive-api/tsconfig.json",
-          "hash": "14490782888307098276"
-        },
-        {
-          "file": "libs/gdrive-api/tsconfig.lib.json",
-          "hash": "17198385366435388722"
-        }
-      ],
-      "monday-api": [
-        {
-          "file": "libs/monday-api/README.md",
-          "hash": "10144737562612703725"
-        },
-        {
-          "file": "libs/monday-api/project.json",
-          "hash": "16059098420747987900"
-        },
-        {
-          "file": "libs/monday-api/src/index.ts",
-          "hash": "3723210887251804685"
-        },
-        {
-          "file": "libs/monday-api/src/lib/constants/index.ts",
-          "hash": "9707757047215267996"
-        },
-        {
-          "file": "libs/monday-api/src/lib/constants/monday-api.constants.ts",
-          "hash": "1572891772482819936"
-        },
-        {
-          "file": "libs/monday-api/src/lib/decorators/index.ts",
-          "hash": "13778483744003007491"
-        },
-        {
-          "file": "libs/monday-api/src/lib/decorators/monday-api.decorators.ts",
-          "hash": "6299613125880917075",
-          "deps": [
-            "npm:@nestjs/common"
-          ]
-        },
-        {
-          "file": "libs/monday-api/src/lib/interfaces/index.ts",
-          "hash": "9562922219790166633"
-        },
-        {
-          "file": "libs/monday-api/src/lib/interfaces/monday-api-connection-options.interface.ts",
-          "hash": "5049101603773558595"
-        },
-        {
-          "file": "libs/monday-api/src/lib/interfaces/monday-api-domain.interface.ts",
-          "hash": "773859395675358737"
-        },
-        {
-          "file": "libs/monday-api/src/lib/interfaces/monday-api-module.options.interface.ts",
-          "hash": "10825439288046179607"
-        },
-        {
-          "file": "libs/monday-api/src/lib/interfaces/monday-api-product.inteface.ts",
-          "hash": "257639764564312108"
-        },
-        {
-          "file": "libs/monday-api/src/lib/monday-api.module-definition.ts",
-          "hash": "9217878855506676649",
-          "deps": [
-            "npm:@nestjs/common"
-          ]
-        },
-        {
-          "file": "libs/monday-api/src/lib/monday-api.module.ts",
-          "hash": "10143827414855112960",
-          "deps": [
-            "npm:@nestjs/common"
-          ]
-        },
-        {
-          "file": "libs/monday-api/src/lib/monday-api.tokens.ts",
-          "hash": "15364913265272964204"
-        },
-        {
-          "file": "libs/monday-api/src/lib/providers/index.ts",
-          "hash": "6458091649343871989"
-        },
-        {
-          "file": "libs/monday-api/src/lib/providers/monday-api.providers.ts",
-          "hash": "17164479464904733390",
-          "deps": [
-            "npm:@nestjs/common"
-          ]
-        },
-        {
-          "file": "libs/monday-api/src/lib/services/index.ts",
-          "hash": "13847842019898303451"
-        },
-        {
-          "file": "libs/monday-api/src/lib/services/monday-api.service.port.ts",
-          "hash": "17615337877349943425"
-        },
-        {
-          "file": "libs/monday-api/src/lib/services/monday-api.service.ts",
-          "hash": "4688897103641666145",
-          "deps": [
-            "npm:@nestjs/common",
-            "npm:rxjs"
-          ]
-        },
-        {
-          "file": "libs/monday-api/src/lib/utils/index.ts",
-          "hash": "5359013221583541448"
-        },
-        {
-          "file": "libs/monday-api/src/lib/utils/monday-api.utils.ts",
-          "hash": "4767518748221677044"
-        },
-        {
-          "file": "libs/monday-api/tsconfig.json",
-          "hash": "9754418180035196521"
-        },
-        {
-          "file": "libs/monday-api/tsconfig.lib.json",
-          "hash": "1190285829453989065"
         }
       ]
     }
