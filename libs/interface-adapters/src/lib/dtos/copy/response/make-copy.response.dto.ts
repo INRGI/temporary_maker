@@ -6,4 +6,5 @@ export class MakeCopyResponseDto {
   unsubData: UnsubData;
   subjects: string;
   imageLinks: string[];
+  buildedLink: string;
 }

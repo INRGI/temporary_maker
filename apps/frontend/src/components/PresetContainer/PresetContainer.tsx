@@ -35,6 +35,12 @@ const PresetContainer: React.FC = () => {
     getPresets();
   }, []);
 
+  useEffect(() => {
+    if(presets.length && activePreset){
+    setActivePreset(presets.filter(preset => preset.name === activePreset.name)[0])
+    }
+  }, [presets]);
+
   const handleDeletePreset = async (preset: Preset) => {
     const savedPresets = JSON.parse(localStorage.getItem("presets") || "[]");
     const updatedPresets = savedPresets.filter((p: Preset) => p.name !== preset.name);
@@ -48,10 +54,10 @@ const PresetContainer: React.FC = () => {
     setPresetEditModalOpen(true);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = async () => {
     setPresetCreateModalOpen(false);
     setPresetEditModalOpen(false);
-    getPresets();
+    await getPresets();
   };
 
   const filteredPresets = presets.filter((preset) =>

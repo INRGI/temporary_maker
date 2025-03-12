@@ -59,29 +59,39 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
   };
 
   const handleSavePreset = () => {
-    if (!presetData.name || !presetData.broadcast.domain || presetData.broadcast.team === "Select Team") {
+    if (
+      !presetData.name ||
+      !presetData.broadcast.domain ||
+      presetData.broadcast.team === "Select Team"
+    ) {
       toastError("Please fill in all fields.");
       return;
     }
-  
+
     try {
-      const savedPresets: Preset[] = JSON.parse(localStorage.getItem("presets") || "[]");
-  
-      const isDuplicate = savedPresets.some(preset => preset.name.toLowerCase() === presetData.name.toLowerCase());
-  
+      const savedPresets: Preset[] = JSON.parse(
+        localStorage.getItem("presets") || "[]"
+      );
+
+      const isDuplicate = savedPresets.some(
+        (preset) => preset.name.toLowerCase() === presetData.name.toLowerCase()
+      );
+
       if (isDuplicate) {
         toastError("A preset with this name already exists.");
         return;
       }
-  
-      localStorage.setItem("presets", JSON.stringify([...savedPresets, presetData]));
+
+      localStorage.setItem(
+        "presets",
+        JSON.stringify([...savedPresets, presetData])
+      );
       toastSuccess("Preset saved successfully.");
       onClose();
     } catch (error) {
       toastError("Error saving preset.");
     }
   };
-  
 
   return (
     <AdminModal isOpen={isOpen} onClose={onClose}>
@@ -90,46 +100,45 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
           <h2>Create Preset</h2>
         </BlockHeader>
         <Container>
-            <FloatingLabelInput
-              value={presetData.name}
-              onChange={(e) =>
-                setPresetData({ ...presetData, name: e.target.value })
-              }
-              placeholder="Preset Name"
-            />
-          
+          <FloatingLabelInput
+            value={presetData.name}
+            onChange={(e) =>
+              setPresetData({ ...presetData, name: e.target.value })
+            }
+            placeholder="Preset Name"
+          />
 
-          
-            <Dropdown
-              placeholder="Team"
-              options={teams}
-              selected={presetData.broadcast.team}
-              onSelect={(team) =>
-                setPresetData({
-                  ...presetData,
-                  broadcast: {
-                    ...presetData.broadcast,
-                    team: team as Broadcast["team"],
-                  },
-                })
-              }
-            />
+          <Dropdown
+            placeholder="Team"
+            options={teams}
+            selected={presetData.broadcast.team}
+            onSelect={(team) =>
+              setPresetData({
+                ...presetData,
+                broadcast: {
+                  ...presetData.broadcast,
+                  team: team as Broadcast["team"],
+                },
+              })
+            }
+          />
 
-           
+          {presetData.broadcast.team !== "Select Team" &&
+            domains.length > 0 && (
+              <Dropdown
+                placeholder="Domain"
+                options={domains}
+                selected={presetData.broadcast.domain}
+                onSelect={(domain) =>
+                  setPresetData({
+                    ...presetData,
+                    broadcast: { ...presetData.broadcast, domain },
+                  })
+                }
+              />
+            )}
 
-            {presetData.broadcast.team !== "Select Team" && domains.length > 0 && <Dropdown
-              placeholder="Domain"
-              options={domains}
-              selected={presetData.broadcast.domain}
-              onSelect={(domain) =>
-                setPresetData({
-                  ...presetData,
-                  broadcast: { ...presetData.broadcast, domain },
-                })
-              }
-            />}
-          
-            <SaveButton onClick={handleSavePreset}>Save</SaveButton>
+          <SaveButton onClick={handleSavePreset}>Save</SaveButton>
         </Container>
       </CreatePresetContainer>
     </AdminModal>

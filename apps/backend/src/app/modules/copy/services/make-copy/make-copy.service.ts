@@ -101,6 +101,7 @@ export class MakeCopyService {
       unsubData,
       subjects,
       imageLinks: links,
+      buildedLink: link || 'urlhere',
     };
   }
 }

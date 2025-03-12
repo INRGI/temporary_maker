@@ -1,16 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { ChangeBgColorService } from '../../../copy-parser/services/change-bg-color/change-bg-color.service';
-import { ChangeFontFamilyService } from '../../../copy-parser/services/change-font-family/change-font-family.service';
-import { ChangeFontSizeService } from '../../../copy-parser/services/change-font-size/change-font-size.service';
-import { ChangeLineHeightService } from '../../../copy-parser/services/change-line-height/change-line-height.service';
-import { ChangeLinkColorService } from '../../../copy-parser/services/change-link-color/change-link-color.service';
-import { ChangeMaxWidthService } from '../../../copy-parser/services/change-max-width/change-max-width.service';
-import { ChangePaddingService } from '../../../copy-parser/services/change-padding/change-padding.service';
-import { ChangeUrlLinkService } from '../../../copy-parser/services/change-url-link/change-url-link.service';
-import { AntiSpamService } from '../../../copy-parser/services/anti-spam/anti-spam.service';
-import { AddBotTrapService } from '../../../copy-parser/services/add-bot-trap/add-bot-trap.service';
-import { ApplyChangesOnCopyPayload } from './apply-changes-on-copy.payload';
-
+import { Injectable } from "@nestjs/common";
+import { ChangeBgColorService } from "../../../copy-parser/services/change-bg-color/change-bg-color.service";
+import { ChangeFontFamilyService } from "../../../copy-parser/services/change-font-family/change-font-family.service";
+import { ChangeFontSizeService } from "../../../copy-parser/services/change-font-size/change-font-size.service";
+import { ChangeLineHeightService } from "../../../copy-parser/services/change-line-height/change-line-height.service";
+import { ChangeLinkColorService } from "../../../copy-parser/services/change-link-color/change-link-color.service";
+import { ChangeMaxWidthService } from "../../../copy-parser/services/change-max-width/change-max-width.service";
+import { ChangePaddingService } from "../../../copy-parser/services/change-padding/change-padding.service";
+import { ChangeUrlLinkService } from "../../../copy-parser/services/change-url-link/change-url-link.service";
+import { AntiSpamService } from "../../../copy-parser/services/anti-spam/anti-spam.service";
+import { AddBotTrapService } from "../../../copy-parser/services/add-bot-trap/add-bot-trap.service";
+import { ApplyChangesOnCopyPayload } from "./apply-changes-on-copy.payload";
 
 @Injectable()
 export class ApplyChangesOnCopyService {
@@ -95,11 +94,13 @@ export class ApplyChangesOnCopyService {
 
     if (
       presetProps.copyWhatToReplace?.isPadding &&
-      presetProps.copyStyles.padding
+      presetProps.copyStyles.padding &&
+      presetProps.copyWhatToReplace?.isPadding
     ) {
       html = await this.changePaddingService.modifyPadding({
         html: html,
         padding: presetProps.copyStyles.padding,
+        isPadding: presetProps.copyWhatToReplace.isPadding,
       });
     }
 
@@ -123,7 +124,7 @@ export class ApplyChangesOnCopyService {
 
     if (
       presetProps.copyWhatToReplace?.isAntiSpam &&
-      presetProps.copyWhatToReplace?.isAntiSpam === 'Full Anti Spam'
+      presetProps.copyWhatToReplace?.isAntiSpam === "Full Anti Spam"
     ) {
       html = await this.antiSpam.changeAllWords({
         html: html,
@@ -132,7 +133,7 @@ export class ApplyChangesOnCopyService {
 
     if (
       presetProps.copyWhatToReplace?.isAntiSpam &&
-      presetProps.copyWhatToReplace?.isAntiSpam === 'Spam Words Only'
+      presetProps.copyWhatToReplace?.isAntiSpam === "Spam Words Only"
     ) {
       html = await this.antiSpam.changeSpamWords({
         html: html,

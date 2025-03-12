@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Preset, UnsubData } from "../../types";
+import { Preset } from "../../types";
 import { ServicesBlockHeader } from "../PresetContainer/PresetContainer.styled";
 import {
   AddButton,
@@ -25,24 +25,23 @@ import axios from "axios";
 import { toastError, toastSuccess } from "../../helpers/toastify";
 import Loader from "../Loader";
 import FloatingLabelInput from "../FloatingLabelInput/FloatingLabelInput";
+import AddImageModal from "../AddImageModal/AddImageModal";
+import { ResponseCopy } from "../../types/copy-response";
 
 interface Props {
   preset: Preset;
-}
-
-interface ResponseCopy {
-  copyName: string;
-  html: string;
-  unsubData?: UnsubData;
-  subjects?: string;
-  imageLinks?: string[];
 }
 
 const CopyMaker: React.FC<Props> = ({ preset }) => {
   const [copies, setCopies] = useState<ResponseCopy[]>([]);
   const [loading, setLoading] = useState(false);
   const [addImageModal, setAddImageModal] = useState(false);
-  const [imagesSource, setImagesSource] = useState([]);
+  const [imagesSource, setImagesSource] = useState<
+    { copyName: string; imageLink: string }[]
+  >([]);
+  const [newImageLinks, setNewImageLinks] = useState<Record<string, string>>({});
+
+  const [activeAddImageCopy, setActiveAddImageCopy] = useState<ResponseCopy>();
 
   const makeCopies = async () => {
     try {
@@ -52,6 +51,17 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           preset: preset,
         }
       );
+      
+      const imageSourceData: { copyName: string; imageLink: string }[] = [];
+      response.data.forEach((copy: ResponseCopy) => {
+        if (copy.imageLinks && copy.imageLinks.length > 0) {
+          copy.imageLinks.forEach(imageLink => {
+            imageSourceData.push({ copyName: copy.copyName, imageLink });
+          });
+        }
+      });
+      
+      setImagesSource(imageSourceData);
       setCopies(response.data);
       toastSuccess("Copies made successfully");
     } catch (error) {
@@ -65,9 +75,64 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
     setLoading(false);
   };
 
-  const handleImageSourceReplace = async () => {};
+  const handleImageSourceReplace = async (
+    copyName: string,
+    oldImageLink: string
+  ) => {
+    const newImageLink = newImageLinks[`${copyName}-${oldImageLink}`];
+    
+    if (!newImageLink) {
+      toastError("Please enter a new image link first");
+      return;
+    }
+    
+    try {
+      const copyIndex = copies.findIndex(copy => copy.copyName === copyName);
+      if (copyIndex === -1) {
+        toastError("Copy not found");
+        return;
+      }
+      
+      const updatedCopy = { ...copies[copyIndex] };
 
-  const handleAddImage = async () => {};
+      updatedCopy.html = updatedCopy.html.replace(
+        new RegExp(oldImageLink.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), 
+        newImageLink
+      );
+      
+      if (updatedCopy.imageLinks) {
+        updatedCopy.imageLinks = updatedCopy.imageLinks.map(link => 
+          link === oldImageLink ? newImageLink : link
+        );
+      }
+      
+      const newCopies = [...copies];
+      newCopies[copyIndex] = updatedCopy;
+      setCopies(newCopies);
+      
+      setImagesSource(prevImagesSource => 
+        prevImagesSource.map(img => 
+          (img.copyName === copyName && img.imageLink === oldImageLink) 
+            ? { ...img, imageLink: newImageLink } 
+            : img
+        )
+      );
+      
+      const newLinks = { ...newImageLinks };
+      delete newLinks[`${copyName}-${oldImageLink}`];
+      setNewImageLinks(newLinks);
+      
+      toastSuccess("Image replaced successfully");
+    } catch (error) {
+      toastError("Failed to replace image");
+      console.error(error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setAddImageModal(false);
+    setActiveAddImageCopy(undefined);
+  };
 
   return (
     <Container>
@@ -146,18 +211,32 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
 
                             <FloatingLabelInput
                               placeholder="Paste new image link"
-                              value={image}
-                              onChange={(e) => handleImageSourceReplace()}
+                              value={newImageLinks[`${copy.copyName}-${image}`] || ''}
+                              onChange={(e) => {
+                                setNewImageLinks({
+                                  ...newImageLinks,
+                                  [`${copy.copyName}-${image}`]: e.target.value
+                                });
+                              }}
                             />
 
-                            <ReplaceButton>Replace</ReplaceButton>
+                            <ReplaceButton
+                              onClick={() =>
+                                handleImageSourceReplace(copy.copyName, image)
+                              }
+                            >
+                              Replace
+                            </ReplaceButton>
                           </ImageCard>
                         ))}
                       </ImagesList>
                     </>
                   )}
 
-                  <AddButton onClick={() => setAddImageModal(true)}>
+                  <AddButton onClick={() => {
+                    setActiveAddImageCopy(copy);
+                    setAddImageModal(true);
+                  }}>
                     Add Image
                   </AddButton>
                 </>
@@ -165,6 +244,19 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
             </CopyCard>
           ))}
         </CopiesList>
+      )}
+
+      {addImageModal && activeAddImageCopy && (
+        <AddImageModal 
+          copy={activeAddImageCopy}
+          copies={copies}
+          setCopies={setCopies}
+          imagesSource={imagesSource}
+          setImagesSource={setImagesSource}
+          onClose={handleCloseModal}
+          isOpen={addImageModal}
+          link={activeAddImageCopy.buildedLink}
+        />
       )}
     </Container>
   );

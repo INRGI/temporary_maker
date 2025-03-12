@@ -38,32 +38,32 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": ".gitignore",
-        "hash": "12470966486255261801"
-      },
-      {
         "file": "nx.json",
         "hash": "18442106360932333561"
       },
       {
-        "file": "tsconfig.base.json",
-        "hash": "16936441711144470533"
-      },
-      {
-        "file": "package.json",
-        "hash": "14463137775839188672"
+        "file": ".gitignore",
+        "hash": "12470966486255261801"
       },
       {
         "file": "eslint.config.js",
         "hash": "15409767529246623525"
       },
       {
+        "file": "package-lock.json",
+        "hash": "7927038310348977847"
+      },
+      {
+        "file": "package.json",
+        "hash": "14463137775839188672"
+      },
+      {
         "file": "README.md",
         "hash": "3244421341483603138"
       },
       {
-        "file": "package-lock.json",
-        "hash": "7927038310348977847"
+        "file": "tsconfig.base.json",
+        "hash": "16936441711144470533"
       }
     ],
     "projectFileMap": {
@@ -89,11 +89,17 @@
         },
         {
           "file": "apps/frontend/src/components/AddImageModal/AddImageModal.styled.tsx",
-          "hash": "3244421341483603138"
+          "hash": "4048884037076779376",
+          "deps": [
+            "npm:@emotion/styled"
+          ]
         },
         {
           "file": "apps/frontend/src/components/AddImageModal/AddImageModal.tsx",
-          "hash": "3244421341483603138"
+          "hash": "8063824038936411164",
+          "deps": [
+            "npm:react"
+          ]
         },
         {
           "file": "apps/frontend/src/components/AddImageModal/index.ts",
@@ -158,7 +164,7 @@
         },
         {
           "file": "apps/frontend/src/components/CopyMaker/CopyMaker.tsx",
-          "hash": "8781226662475178290",
+          "hash": "3212890233802202550",
           "deps": [
             "npm:react",
             "npm:react-icons",
@@ -252,7 +258,7 @@
         },
         {
           "file": "apps/frontend/src/components/PresetContainer/PresetContainer.tsx",
-          "hash": "9378701679700144175",
+          "hash": "3495540041537429849",
           "deps": [
             "npm:react",
             "npm:react-icons"
@@ -271,7 +277,7 @@
         },
         {
           "file": "apps/frontend/src/components/PresetCreateModal/PresetCreateModal.tsx",
-          "hash": "9802124337828611593",
+          "hash": "16346365723415083287",
           "deps": [
             "npm:react",
             "npm:axios"
@@ -427,6 +433,10 @@
         {
           "file": "apps/frontend/src/types/broadcast.types.ts",
           "hash": "7476571085960097339"
+        },
+        {
+          "file": "apps/frontend/src/types/copy-response.ts",
+          "hash": "14115652433612364336"
         },
         {
           "file": "apps/frontend/src/types/copy-styles.types.ts",
@@ -771,7 +781,7 @@
         },
         {
           "file": "libs/interface-adapters/src/lib/dtos/copy/response/make-copy.response.dto.ts",
-          "hash": "11416615185348583772"
+          "hash": "11128887022247566473"
         },
         {
           "file": "libs/interface-adapters/src/lib/dtos/copy/response/make-multiple-copies.response.dto.ts",
@@ -1063,11 +1073,11 @@
         },
         {
           "file": "apps/backend/src/app/modules/copy-parser/services/change-padding/change-padding.payload.ts",
-          "hash": "10812193997755633888"
+          "hash": "9820068699543432863"
         },
         {
           "file": "apps/backend/src/app/modules/copy-parser/services/change-padding/change-padding.service.ts",
-          "hash": "10884599874335994109",
+          "hash": "17396494809575350138",
           "deps": [
             "npm:@nestjs/common",
             "npm:jsdom"
@@ -1123,7 +1133,7 @@
         },
         {
           "file": "apps/backend/src/app/modules/copy/services/apply-changes-on-copy/apply-changes-on-copy.service.ts",
-          "hash": "5968968414170670307",
+          "hash": "16110866515787293288",
           "deps": [
             "npm:@nestjs/common"
           ]
@@ -1186,7 +1196,7 @@
         },
         {
           "file": "apps/backend/src/app/modules/copy/services/make-copy/make-copy.service.ts",
-          "hash": "17756844807362623450",
+          "hash": "12994313579526639615",
           "deps": [
             "npm:@nestjs/common"
           ]

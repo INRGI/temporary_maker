@@ -5,10 +5,19 @@ import { JSDOM } from 'jsdom';
 @Injectable()
 export class ChangePaddingService {
   public async modifyPadding(payload: ChangePaddingPayload): Promise<string> {
-    const { html, padding } = payload;
+    const { html, padding, isPadding } = payload;
     const dom = new JSDOM(`<div id="container">${html}</div>`);
     const { document } = dom.window;
     const container = document.getElementById('container');
+
+    const checkedPaddings = {
+      top: isPadding.top ? padding.top : '20',
+      bottom: isPadding.bottom ? padding.bottom : '20',
+      right: isPadding.right ? padding.right : '20',
+      left: isPadding.left ? padding.left: '20'
+    }
+
+    if (!isPadding.top && !isPadding.right && !isPadding.left && !isPadding.bottom) return html;
 
     const updateStyles = (element: Element) => {
       const style = element.getAttribute('style');
@@ -23,13 +32,13 @@ export class ChangePaddingService {
         element.setAttribute(
           'style',
           updatedStyle
-            ? `${updatedStyle}; padding-top: ${padding.top}; padding-right: ${padding.right}; padding-bottom: ${padding.bottom}; padding-left: ${padding.left};`
-            : `padding-top: ${padding.top}; padding-right: ${padding.right}; padding-bottom: ${padding.bottom}; padding-left: ${padding.left};`
+            ? `${updatedStyle}; padding-top: ${checkedPaddings.top}px; padding-right: ${checkedPaddings.right}px; padding-bottom: ${checkedPaddings.bottom}px; padding-left: ${checkedPaddings.left}px;`
+            : `padding-top: ${checkedPaddings.top}px; padding-right: ${checkedPaddings.right}px; padding-bottom: ${checkedPaddings.bottom}px; padding-left: ${checkedPaddings.left}px;`
         );
       } else {
         element.setAttribute(
           'style',
-          `padding-top: ${padding.top}; padding-right: ${padding.right}; padding-bottom: ${padding.bottom}; padding-left: ${padding.left};`
+          `padding-top: ${checkedPaddings.top}px; padding-right: ${checkedPaddings.right}px; padding-bottom: ${checkedPaddings.bottom}px; padding-left: ${checkedPaddings.left}px;`
         );
       }
     };
@@ -51,7 +60,7 @@ export class ChangePaddingService {
       }
     });
 
-    ['table', 'td', 'tbody'].forEach((tag) => {
+    ['table'].forEach((tag) => {
       const elements = container?.getElementsByTagName(tag) || [];
       for (const element of elements) {
         if (element.hasAttribute('style')) {
