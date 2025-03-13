@@ -4,6 +4,7 @@ import {
   Button,
   Container,
   DeleteButton,
+  DublicateButton,
   EditButton,
   HeaderContainer,
   PresetCard,
@@ -16,7 +17,8 @@ import SearchInput from "../SearchInput/SearchInput";
 import PresetCreateModal from "../PresetCreateModal/PresetCreateModal";
 import PresetUpdateModal from "../PresetUpdateModal/PresetUpdateModal";
 import CopyMaker from "../CopyMaker/CopyMaker";
-import { toastSuccess } from "../../helpers/toastify";
+import { toastError, toastSuccess } from "../../helpers/toastify";
+import { FaRegCopy } from "react-icons/fa6";
 
 const PresetContainer: React.FC = () => {
   const [presets, setPresets] = useState<Preset[]>([]);
@@ -36,17 +38,40 @@ const PresetContainer: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if(presets.length && activePreset){
-    setActivePreset(presets.filter(preset => preset.name === activePreset.name)[0])
+    if (presets.length && activePreset) {
+      setActivePreset(
+        presets.filter((preset) => preset.name === activePreset.name)[0]
+      );
     }
   }, [presets]);
 
   const handleDeletePreset = async (preset: Preset) => {
     const savedPresets = JSON.parse(localStorage.getItem("presets") || "[]");
-    const updatedPresets = savedPresets.filter((p: Preset) => p.name !== preset.name);
+    const updatedPresets = savedPresets.filter(
+      (p: Preset) => p.name !== preset.name
+    );
     localStorage.setItem("presets", JSON.stringify(updatedPresets));
     getPresets();
     toastSuccess("Preset deleted successfully");
+  };
+
+  const handleDuplicatePreset = async (preset: Preset) => {
+    const presets = JSON.parse(localStorage.getItem("presets") || "[]");
+    const newPresetName = `${preset.name}_copy`;
+    const existingPreset = presets.find(
+      (p: Preset) => p.name === newPresetName
+    );
+
+    if (existingPreset) {
+      toastError("Preset with this name already exists");
+      return;
+    }
+
+    const newPreset = { ...preset, name: newPresetName };
+    presets.push(newPreset);
+    localStorage.setItem("presets", JSON.stringify(presets));
+    getPresets();
+    toastSuccess("Preset duplicated successfully");
   };
 
   const handleUpdatePreset = async (preset: Preset) => {
@@ -91,8 +116,13 @@ const PresetContainer: React.FC = () => {
               >
                 <h2>{preset.name}</h2>
                 <div>
+                  <DublicateButton
+                    onClick={() => handleDuplicatePreset(preset)}
+                  >
+                    <FaRegCopy />
+                  </DublicateButton>
                   <EditButton onClick={() => handleUpdatePreset(preset)}>
-                    Styles
+                    Edit
                   </EditButton>
                   <DeleteButton onClick={() => handleDeletePreset(preset)}>
                     Delete
@@ -101,7 +131,9 @@ const PresetContainer: React.FC = () => {
               </PresetCard>
             ))
           ) : (
-            <PresetCard isActive={false}>No presets available.</PresetCard>
+            <PresetCard isActive={false}>
+              Presets not found. Create one
+            </PresetCard>
           )}
         </PresetsContainer>
 

@@ -286,3 +286,17 @@ export const ReplaceButton = styled.button`
 `;
 
 export const AddButton = styled(ReplaceButton)``;
+
+export const PreviewButton = styled(ReplaceButton)`
+  background-color: #fca311;
+
+  &:hover {
+    background-color: #e19110;
+  }
+`;
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+`;

@@ -13,6 +13,7 @@ import UnsubBlock from "../UnsubBlock/UnsubBlock";
 import SubjectBlock from "../SubjectBlock/SubjectBlock";
 import BotTrapBlock from "../BotTrapBlock/BotTrapBlock";
 import { Preset } from "../../types";
+import BroadcastBlock from "../BroadcastBlock/BroadcastBlock";
 
 interface PresetUpdateModalProps {
   isOpen: boolean;
@@ -40,6 +41,8 @@ const PresetUpdateModal: React.FC<PresetUpdateModalProps> = ({
         return <SubjectBlock preset={currentPreset} />;
       case "bottrap":
         return <BotTrapBlock preset={currentPreset} />;
+      case "broadcast":
+        return <BroadcastBlock preset={currentPreset} />;
       default:
         return null;
     }
@@ -81,6 +84,12 @@ const PresetUpdateModal: React.FC<PresetUpdateModalProps> = ({
               onClick={() => setActiveTab("bottrap")}
             >
               Bot Trap
+            </TabButton>
+            <TabButton
+              active={activeTab === "broadcast"}
+              onClick={() => setActiveTab("broadcast")}
+            >
+              Preset
             </TabButton>
           </TabsContainer>
         <Container>

@@ -16585,12 +16585,12 @@
       },
       {
         "source": "frontend",
-        "target": "npm:react-icons",
+        "target": "npm:axios",
         "type": "static"
       },
       {
         "source": "frontend",
-        "target": "npm:axios",
+        "target": "npm:react-icons",
         "type": "static"
       },
       {

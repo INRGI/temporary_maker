@@ -167,7 +167,7 @@ const StylesBlock: React.FC<Props> = ({ preset }) => {
           />
           <InputContainer>
             <FloatingLabelInput
-              placeholder="Font Family"
+              placeholder="Font Family(ex: Tahoma)"
               value={styles.fontFamily}
               onChange={(e) => handleChange("fontFamily", e.target.value)}
             />
@@ -182,7 +182,7 @@ const StylesBlock: React.FC<Props> = ({ preset }) => {
           />
           <InputContainer>
             <FloatingLabelInput
-              placeholder="Font Size"
+              placeholder="Font Size(ex: 16)"
               value={styles.fontSize}
               onChange={(e) => handleChange("fontSize", e.target.value)}
             />
@@ -197,7 +197,7 @@ const StylesBlock: React.FC<Props> = ({ preset }) => {
           />
           <InputContainer>
             <FloatingLabelInput
-              placeholder="Background Color"
+              placeholder="Background Color(ex: #f3f3f3)"
               value={styles.bgColor}
               onChange={(e) => handleChange("bgColor", e.target.value)}
             />
@@ -212,7 +212,7 @@ const StylesBlock: React.FC<Props> = ({ preset }) => {
           />
           <InputContainer>
             <FloatingLabelInput
-              placeholder="Link Color"
+              placeholder="Link Color(ex: #f3f3f3)"
               value={styles.linkColor}
               onChange={(e) => handleChange("linkColor", e.target.value)}
             />
@@ -227,7 +227,7 @@ const StylesBlock: React.FC<Props> = ({ preset }) => {
           />
           <InputContainer>
             <FloatingLabelInput
-              placeholder="Max Width"
+              placeholder="Max Width(ex: 600)"
               value={styles.maxWidth}
               onChange={(e) => handleChange("maxWidth", e.target.value)}
             />
@@ -242,7 +242,7 @@ const StylesBlock: React.FC<Props> = ({ preset }) => {
           />
           <InputContainer>
             <FloatingLabelInput
-              placeholder="Line Height"
+              placeholder="Line Height(ex: 1.5)"
               value={styles.lineHeight}
               onChange={(e) => handleChange("lineHeight", e.target.value)}
             />
@@ -264,7 +264,7 @@ const StylesBlock: React.FC<Props> = ({ preset }) => {
           />
           <InputContainer>
             <FloatingLabelInput
-              placeholder="Top Padding"
+              placeholder="Top Padding(ex: 20)"
               value={styles.padding.top}
               onChange={(e) => handlePaddingChange("top", e.target.value)}
             />
@@ -287,7 +287,7 @@ const StylesBlock: React.FC<Props> = ({ preset }) => {
           />
           <InputContainer>
             <FloatingLabelInput
-              placeholder="Bottom Padding"
+              placeholder="Bottom Padding(ex: 20)"
               value={styles.padding.bottom}
               onChange={(e) => handlePaddingChange("bottom", e.target.value)}
             />
@@ -307,7 +307,7 @@ const StylesBlock: React.FC<Props> = ({ preset }) => {
           />
           <InputContainer>
             <FloatingLabelInput
-              placeholder="Left Padding"
+              placeholder="Left Padding(ex: 20)"
               value={styles.padding.left}
               onChange={(e) => handlePaddingChange("left", e.target.value)}
             />
@@ -327,7 +327,7 @@ const StylesBlock: React.FC<Props> = ({ preset }) => {
           />
           <InputContainer>
             <FloatingLabelInput
-              placeholder="Right Padding"
+              placeholder="Right Padding(ex: 20)"
               value={styles.padding.right}
               onChange={(e) => handlePaddingChange("right", e.target.value)}
             />

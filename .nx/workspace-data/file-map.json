@@ -38,12 +38,32 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "nx.json",
-        "hash": "18442106360932333561"
+        "file": "docker-compose.yml",
+        "hash": "379323079877377404"
+      },
+      {
+        "file": "README.md",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "package.json",
+        "hash": "14463137775839188672"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "16936441711144470533"
+      },
+      {
+        "file": "Dockerfile",
+        "hash": "15816779704874290826"
       },
       {
         "file": ".gitignore",
         "hash": "12470966486255261801"
+      },
+      {
+        "file": "nx.json",
+        "hash": "18442106360932333561"
       },
       {
         "file": "eslint.config.js",
@@ -52,18 +72,6 @@
       {
         "file": "package-lock.json",
         "hash": "7927038310348977847"
-      },
-      {
-        "file": "package.json",
-        "hash": "14463137775839188672"
-      },
-      {
-        "file": "README.md",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "tsconfig.base.json",
-        "hash": "16936441711144470533"
       }
     ],
     "projectFileMap": {
@@ -156,15 +164,34 @@
           "hash": "10094176437572804443"
         },
         {
+          "file": "apps/frontend/src/components/BroadcastBlock/BroadcastBlock.styled.tsx",
+          "hash": "2518360118572165882",
+          "deps": [
+            "npm:@emotion/styled"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/BroadcastBlock/BroadcastBlock.tsx",
+          "hash": "8376885559787879906",
+          "deps": [
+            "npm:react",
+            "npm:axios"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/BroadcastBlock/index.ts",
+          "hash": "9741463308917212926"
+        },
+        {
           "file": "apps/frontend/src/components/CopyMaker/CopyMaker.styled.tsx",
-          "hash": "6940284750235980584",
+          "hash": "5854615385490948405",
           "deps": [
             "npm:@emotion/styled"
           ]
         },
         {
           "file": "apps/frontend/src/components/CopyMaker/CopyMaker.tsx",
-          "hash": "3212890233802202550",
+          "hash": "8059622835682530439",
           "deps": [
             "npm:react",
             "npm:react-icons",
@@ -251,14 +278,14 @@
         },
         {
           "file": "apps/frontend/src/components/PresetContainer/PresetContainer.styled.tsx",
-          "hash": "3043655598287091957",
+          "hash": "5693066703152794936",
           "deps": [
             "npm:@emotion/styled"
           ]
         },
         {
           "file": "apps/frontend/src/components/PresetContainer/PresetContainer.tsx",
-          "hash": "3495540041537429849",
+          "hash": "13492205897948244215",
           "deps": [
             "npm:react",
             "npm:react-icons"
@@ -296,7 +323,7 @@
         },
         {
           "file": "apps/frontend/src/components/PresetUpdateModal/PresetUpdateModal.tsx",
-          "hash": "11399679699485737211",
+          "hash": "1264174357962728322",
           "deps": [
             "npm:react"
           ]
@@ -304,6 +331,21 @@
         {
           "file": "apps/frontend/src/components/PresetUpdateModal/index.ts",
           "hash": "3635261204931310147"
+        },
+        {
+          "file": "apps/frontend/src/components/PreviewModal/PreviewModal.styled.tsx",
+          "hash": "18316627343278091377",
+          "deps": [
+            "npm:@emotion/styled"
+          ]
+        },
+        {
+          "file": "apps/frontend/src/components/PreviewModal/PreviewModal.tsx",
+          "hash": "4442401747867903475"
+        },
+        {
+          "file": "apps/frontend/src/components/PreviewModal/index.ts",
+          "hash": "15868379438296860101"
         },
         {
           "file": "apps/frontend/src/components/SearchInput/SearchInput.tsx",
@@ -326,7 +368,7 @@
         },
         {
           "file": "apps/frontend/src/components/StylesBlock/StylesBlock.tsx",
-          "hash": "6626740338261545802",
+          "hash": "10196597765989778775",
           "deps": [
             "npm:react"
           ]
@@ -374,7 +416,7 @@
         },
         {
           "file": "apps/frontend/src/helpers/toastify.ts",
-          "hash": "11685346028984602791",
+          "hash": "1726616670084009050",
           "deps": [
             "npm:react-toastify"
           ]

@@ -139,7 +139,6 @@ export const DeleteButton = styled.button`
   white-space: nowrap;
   will-change: box-shadow, transform;
   font-size: 18px;
-  margin-left: 10px;
   &:focus {
     box-shadow: #b22b36 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
       rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #b22b36 0 -3px 0 inset;
@@ -203,6 +202,26 @@ export const EditButton = styled.button`
     transform: translateY(2px);
   }
 `;
+
+export const DublicateButton = styled(EditButton)`
+  background-color: #6a5acd;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #6a5acd 0 -3px 0 inset;
+
+    &:focus {
+    box-shadow: #6a5acd 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
+      rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #6a5acd 0 -3px 0 inset;
+  }
+
+  &:hover {
+    box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px,
+      rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #6a5acd 0 -3px 0 inset;
+  }
+
+  &:active {
+    box-shadow: #6a5acd 0 3px 7px inset;
+  }
+`
 
 export const ServicesBlockHeader = styled.div`
   text-align: left;
