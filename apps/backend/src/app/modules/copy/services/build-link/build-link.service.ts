@@ -34,5 +34,11 @@ export class BuildLinkService {
     if (linkUrl.productCode === '000_#IMAGE') {
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.imgData.slice(1)}_${productLift}${productImage}`;
     }
+
+    if (linkUrl.productCode === 'TRACKINGID_#IMAGE') {
+      return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.trackingData}_${productLift}${productImage}`;
+    }
+
+    return 'urlhere';
   }
 }

@@ -38,40 +38,40 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "docker-compose.yml",
-        "hash": "379323079877377404"
-      },
-      {
-        "file": "README.md",
-        "hash": "3244421341483603138"
-      },
-      {
         "file": "package.json",
         "hash": "14463137775839188672"
-      },
-      {
-        "file": "tsconfig.base.json",
-        "hash": "16936441711144470533"
-      },
-      {
-        "file": "Dockerfile",
-        "hash": "15816779704874290826"
-      },
-      {
-        "file": ".gitignore",
-        "hash": "12470966486255261801"
       },
       {
         "file": "nx.json",
         "hash": "18442106360932333561"
       },
       {
-        "file": "eslint.config.js",
-        "hash": "15409767529246623525"
+        "file": "docker-compose.yml",
+        "hash": "379323079877377404"
       },
       {
         "file": "package-lock.json",
         "hash": "7927038310348977847"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "16936441711144470533"
+      },
+      {
+        "file": "eslint.config.js",
+        "hash": "15409767529246623525"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "12470966486255261801"
+      },
+      {
+        "file": "README.md",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "Dockerfile",
+        "hash": "15816779704874290826"
       }
     ],
     "projectFileMap": {
@@ -191,7 +191,7 @@
         },
         {
           "file": "apps/frontend/src/components/CopyMaker/CopyMaker.tsx",
-          "hash": "8059622835682530439",
+          "hash": "10689391581255384344",
           "deps": [
             "npm:react",
             "npm:react-icons",
@@ -248,7 +248,7 @@
         },
         {
           "file": "apps/frontend/src/components/LinkBlock/LinkBlock.tsx",
-          "hash": "9588483299514085291",
+          "hash": "10709735125315946714",
           "deps": [
             "npm:react",
             "npm:axios"
@@ -498,7 +498,7 @@
         },
         {
           "file": "apps/frontend/src/types/link-url.types.ts",
-          "hash": "8722658982489977837"
+          "hash": "12242624591585268033"
         },
         {
           "file": "apps/frontend/src/types/padding.types.ts",
@@ -875,7 +875,7 @@
         },
         {
           "file": "libs/interface-adapters/src/lib/interfaces/preset/link-url.types.ts",
-          "hash": "8722658982489977837"
+          "hash": "12242624591585268033"
         },
         {
           "file": "libs/interface-adapters/src/lib/interfaces/preset/padding.types.ts",
@@ -1186,7 +1186,7 @@
         },
         {
           "file": "apps/backend/src/app/modules/copy/services/build-link/build-link.service.ts",
-          "hash": "4585156816113543029",
+          "hash": "17889025442849161165",
           "deps": [
             "npm:@nestjs/common"
           ]

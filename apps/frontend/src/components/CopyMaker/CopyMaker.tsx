@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Preset } from "../../types";
 import { ServicesBlockHeader } from "../PresetContainer/PresetContainer.styled";
 import {
@@ -50,9 +50,13 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
   const [previewModal, setPreviewModal] = useState(false);
   const [previewHtml, setPreviewHtml] = useState("");
 
+  useEffect(() => {
+    setCopies([]);
+  }, [preset]);
+
   const makeCopies = async () => {
     try {
-      const response = await axios.post(`http://localhost:3000/api/copy/make-multiple-copies`, {
+      const response = await axios.post(`/api/copy/make-multiple-copies`, {
         preset: preset,
       });
 

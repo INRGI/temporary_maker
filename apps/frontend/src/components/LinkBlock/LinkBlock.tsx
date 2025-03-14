@@ -23,6 +23,7 @@ const productCodeOptions: LinkUrl["productCode"][] = [
   "IMG0000_#IMAGE",
   "0000_#IMAGE",
   "000_#IMAGE",
+  "TRACKINGID_#IMAGE",
 ];
 
 const LinkBlock: React.FC<Props> = ({ preset }) => {
@@ -124,7 +125,7 @@ const LinkBlock: React.FC<Props> = ({ preset }) => {
             onChange={(e) => handleChange("linkStart", e.target.value)}
           />
         </InputContainer>
-      </InputGroup>
+      </InputGroup> 
 
       <InputGroup>
         <Dropdown
