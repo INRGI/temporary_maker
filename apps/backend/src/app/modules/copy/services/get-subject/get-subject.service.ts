@@ -15,26 +15,66 @@ export class GetSubjectService {
 
   public async getSubject(payload: GetSubjectPayload): Promise<string> {
     const { product, productLift } = payload;
-    
-    const files = await this.gdriveApiService.searchFileWithQuery(
-      `name contains '${product} ${productLift} SL' and mimeType = 'application/vnd.google-apps.document'`,
+
+    const exactFileName = `${product} ${productLift} SL`;
+
+    const googleDocs = await this.gdriveApiService.searchFileWithQuery(
+      `name = '${exactFileName}' and mimeType = 'application/vnd.google-apps.document'`,
       10
     );
+
+    const wordDocs = await this.gdriveApiService.searchFileWithQuery(
+      `name = '${exactFileName}' and mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'`,
+      10
+    );
+
+    let files = {
+      files: [...(googleDocs.files || []), ...(wordDocs.files || [])],
+    };
+
+    if (!files.files.length) {
+      const googleDocsContains =
+        await this.gdriveApiService.searchFileWithQuery(
+          `name contains '${product} ${productLift} SL' and mimeType = 'application/vnd.google-apps.document'`,
+          10
+        );
+
+      const wordDocsContains = await this.gdriveApiService.searchFileWithQuery(
+        `name contains '${product} ${productLift} SL' and mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'`,
+        10
+      );
+
+      files = {
+        files: [
+          ...(googleDocsContains.files || []),
+          ...(wordDocsContains.files || []),
+        ],
+      };
+    }
 
     if (!files.files.length) {
       return 'Subject not found';
     }
 
+    const exactMatch = files.files.find((file) => file.name === exactFileName);
+    const fileToUse = exactMatch || files.files[0];
+
     try {
-      const fileBuffer = await this.gdriveApiService.getContentLikeBuffer(
-        files.files[0].id,
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-      );
-  
+      let fileBuffer: Buffer;
+
+      if (fileToUse.mimeType === 'application/vnd.google-apps.document') {
+        fileBuffer = await this.gdriveApiService.getContentLikeBuffer(
+          fileToUse.id,
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        );
+      } else {
+        fileBuffer = await this.gdriveApiService.getFileAsBuffer(fileToUse.id);
+      }
+
       if (!Buffer.isBuffer(fileBuffer)) {
         throw new Error('Invalid file format. Expected Buffer.');
       }
-  
+
       const text = this.extractTextFromDocx(fileBuffer);
       return text || 'No text found in document';
     } catch (error) {
@@ -45,20 +85,33 @@ export class GetSubjectService {
   private extractTextFromDocx(buffer: Buffer): string {
     try {
       const zip = new AdmZip(buffer);
-      const xmlFile = zip.getEntry('word/document.xml');
 
-      if (!xmlFile) {
+      const documentXml = zip.getEntry('word/document.xml');
+      if (!documentXml) {
         throw new Error('document.xml not found in DOCX file');
       }
 
-      const xmlContent = xmlFile.getData().toString('utf8');
+      let content = documentXml.getData().toString('utf8');
 
-      return xmlContent
-        .replace(/<[^>]+>/g, ' ')
-        .replace(/\s+/g, ' ')
+      const textMatches = content.match(/<w:t[^>]*>(.*?)<\/w:t>/g) || [];
+      if (textMatches.length > 0) {
+        content = textMatches
+          .map((match) => match.replace(/<w:t[^>]*>|<\/w:t>/g, ''))
+          .join(' ');
+      } else {
+        content = content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+      }
+
+      content = content
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&')
+        .replace(/&quot;/g, '"')
+        .replace(/&apos;/g, "'")
         .trim();
+
+      return content;
     } catch (error) {
-      console.error('Error extracting text from DOCX:', error);
       return 'Error extracting text';
     }
   }
