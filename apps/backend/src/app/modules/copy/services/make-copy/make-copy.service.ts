@@ -47,6 +47,22 @@ export class MakeCopyService {
 
     const presetProps = preset;
 
+    const html = await this.getCopyFromDriveService.getCopyFromDrive({
+      product,
+      productLift,
+    });
+
+    if(html.includes('Error reading file')) {
+      return {
+        copyName,
+        html: html,
+        unsubData,
+        subjects,
+        imageLinks: [],
+        buildedLink: 'urlhere',
+      };
+    }
+
     if (presetProps.copyWhatToReplace?.isLinkUrl) {
       link = await this.buildLinkService.buildLink({
         product,
@@ -77,11 +93,6 @@ export class MakeCopyService {
           html: subjects,
         });
     }
-
-    const html = await this.getCopyFromDriveService.getCopyFromDrive({
-      product,
-      productLift,
-    });
 
     const updatedHtml = await this.applyChangesOnCopyService.applyChangesOnCopy(
       {
