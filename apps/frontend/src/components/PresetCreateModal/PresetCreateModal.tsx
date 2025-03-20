@@ -4,14 +4,15 @@ import { Preset, Broadcast } from "../../types";
 import { toastError, toastSuccess } from "../../helpers/toastify";
 import {
   BlockHeader,
+  CenterContainer,
   Container,
   CreatePresetContainer,
   SaveButton,
 } from "./PresetCreateModal.styled";
 import FloatingLabelInput from "../FloatingLabelInput/FloatingLabelInput";
 import axios from "axios";
-import SearchInput from "../SearchInput/SearchInput";
 import Dropdown from "../Dropdown/Dropdown";
+import Loader, { SmallLoader } from "../Loader";
 
 interface PresetCreateModalProps {
   isOpen: boolean;
@@ -42,6 +43,7 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
   );
 
   const [domains, setDomains] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (presetData.broadcast.team !== "Select Team") {
@@ -51,11 +53,13 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
 
   const fetchDomains = async (team: string) => {
     try {
+      setLoading(true);
       const response = await axios.get(`/api/broadcast/${team}`);
       setDomains(response.data.domains);
     } catch (error) {
       toastError("Error fetching domains.");
     }
+    setLoading(false);
   };
 
   const handleSavePreset = () => {
@@ -122,7 +126,7 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
               })
             }
           />
-
+          {loading && <CenterContainer><SmallLoader /></CenterContainer>}
           {presetData.broadcast.team !== "Select Team" &&
             domains.length > 0 && (
               <Dropdown

@@ -17,6 +17,7 @@ import {
   ImagesList,
   PreviewButton,
   ReplaceButton,
+  Text,
   TextSpaceDivider,
   TextTitle,
 } from "./CopyMaker.styled";
@@ -186,13 +187,20 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
               </CardHeader>
               {!copy.html.includes("Error") && (
                 <>
-                  {copy.unsubData && (
-                    <p>
-                      <TextTitle>Unsub Text:</TextTitle>{" "}
-                      {copy.unsubData.unsubscribeText}
-                      <TextTitle>Unsub Link:</TextTitle>{" "}
-                      {copy.unsubData.unsubscribeUrl}
-                    </p>
+                  {copy.unsubData && copy.unsubData?.unsubscribeText && (
+                    <>
+                      <TextTitle>
+                        Unsub Text:
+                        <Text>  {copy.unsubData.unsubscribeText}</Text>
+                      </TextTitle>
+
+                      {copy.unsubData.unsubscribeUrl && (
+                        <TextTitle>
+                          Unsub Link:
+                          <Text>  {copy.unsubData.unsubscribeUrl}</Text>
+                        </TextTitle>
+                      )}
+                    </>
                   )}
                   {copy.subjects && (
                     <p>

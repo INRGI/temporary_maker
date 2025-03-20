@@ -107,10 +107,16 @@ export const CardHeader = styled.div`
   margin: 0;
 `;
 
-export const TextTitle = styled.span`
+export const TextTitle = styled.p`
   font-weight: bold;
   font-size: 18px;
 `;
+
+export const Text = styled.span`
+  font-size: 17px;
+  font-weight: normal;
+`;
+
 
 export const TextSpaceDivider = styled.div`
   display: flex;

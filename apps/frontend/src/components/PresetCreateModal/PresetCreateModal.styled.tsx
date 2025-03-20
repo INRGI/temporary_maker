@@ -97,3 +97,11 @@ export const BlockHeader = styled.div`
     }
   }
 `;
+
+export const CenterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 40px
+`;

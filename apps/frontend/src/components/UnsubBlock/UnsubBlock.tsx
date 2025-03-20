@@ -72,7 +72,7 @@ const UnsubBlock: React.FC<Props> = ({ preset }) => {
               ...p,
               copyWhatToReplace: {
                 ...p.copyWhatToReplace,
-                isUnsubLinkUrl,
+                isUnsubLink: isUnsubLinkUrl,
               },
               unsubLinkUrl,
             }
