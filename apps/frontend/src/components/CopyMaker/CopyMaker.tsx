@@ -72,9 +72,10 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
 
       setImagesSource(imageSourceData);
       setCopies(response.data);
-      toastSuccess("Copies made successfully");
+      toastSuccess(`Copies made successfully (${response.data.length})`);
     } catch (error) {
       toastError("Something went wrong");
+      console.error(error);
     }
   };
 
@@ -138,6 +139,27 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
     }
   };
 
+  const handleDownloadImage = async (imageUrl?: string) => {
+    if (!imageUrl) {
+      toastError("Failed to download image");
+      return;
+    }
+  
+    const correctedUrl = imageUrl.replace("/preview", "/download");
+  
+    try {
+      const link = document.createElement("a");
+      link.href = correctedUrl;
+      link.download = "downloaded_image.jpg";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      toastError("Error downloading image");
+      console.error("Download error:", error);
+    }
+  };
+  
   const handleCloseModal = () => {
     setAddImageModal(false);
     setActiveAddImageCopy(undefined);
@@ -218,13 +240,11 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                         {copy.imageLinks?.map((image) => (
                           <ImageCard key={image}>
                             <ImagePreviewContainer>
-                              <img src={image} alt="image" />
+                              <img src={image} alt="preview" />
                             </ImagePreviewContainer>
 
                             <DownloadButton
-                              href={image}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                              onClick={() => handleDownloadImage(image)}
                             >
                               <GrDownload color="white" />
                             </DownloadButton>

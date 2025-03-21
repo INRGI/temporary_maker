@@ -196,14 +196,11 @@ export const DownloadButton = styled.a`
   min-width: 30px;
   position: relative;
   text-align: left;
-  text-decoration: none;
   transition: box-shadow 0.15s, transform 0.15s;
   user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
   white-space: nowrap;
-  will-change: box-shadow, transform;
   font-size: 18px;
+  
   &:focus {
     box-shadow: #5941a9 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
       rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #5941a9 0 -3px 0 inset;
