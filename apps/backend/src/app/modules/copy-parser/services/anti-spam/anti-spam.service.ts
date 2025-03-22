@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { Injectable } from '@nestjs/common';
 import { JSDOM } from 'jsdom';
 import spamWords from './spam-words.json';

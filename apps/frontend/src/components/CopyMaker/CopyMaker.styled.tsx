@@ -25,6 +25,11 @@ export const HeaderContainer = styled.div`
   margin: 0;
 `;
 
+export const ButtonsHeaderContainer = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
 export const Button = styled.button`
   display: flex;
   justify-content: center;

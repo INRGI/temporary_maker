@@ -5,6 +5,7 @@ import {
   AddButton,
   Button,
   ButtonContainer,
+  ButtonsHeaderContainer,
   CardHeader,
   Container,
   CopiesList,
@@ -31,6 +32,7 @@ import FloatingLabelInput from "../FloatingLabelInput/FloatingLabelInput";
 import AddImageModal from "../AddImageModal/AddImageModal";
 import { ResponseCopy } from "../../types/copy-response";
 import PreviewModal from "../PreviewModal";
+import DownloadHtmlZipButton from "../DownloadHtmlZipButton";
 
 interface Props {
   preset: Preset;
@@ -144,9 +146,9 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
       toastError("Failed to download image");
       return;
     }
-  
+
     const correctedUrl = imageUrl.replace("/preview", "/download");
-  
+
     try {
       const link = document.createElement("a");
       link.href = correctedUrl;
@@ -159,7 +161,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
       console.error("Download error:", error);
     }
   };
-  
+
   const handleCloseModal = () => {
     setAddImageModal(false);
     setActiveAddImageCopy(undefined);
@@ -175,10 +177,12 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
         <ServicesBlockHeader>
           <h2>{preset.name}</h2>
         </ServicesBlockHeader>
-
-        <Button onClick={() => handleMakeCopies()}>
-          <VscDebugStart />
-        </Button>
+        <ButtonsHeaderContainer>
+          {copies.length > 0 && <DownloadHtmlZipButton copies={copies} />}
+          <Button onClick={() => handleMakeCopies()}>
+            <VscDebugStart />
+          </Button>
+        </ButtonsHeaderContainer>
       </HeaderContainer>
       {loading ? (
         <Loader />
@@ -213,13 +217,13 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                     <>
                       <TextTitle>
                         Unsub Text:
-                        <Text>  {copy.unsubData.unsubscribeText}</Text>
+                        <Text> {copy.unsubData.unsubscribeText}</Text>
                       </TextTitle>
 
                       {copy.unsubData.unsubscribeUrl && (
                         <TextTitle>
                           Unsub Link:
-                          <Text>  {copy.unsubData.unsubscribeUrl}</Text>
+                          <Text> {copy.unsubData.unsubscribeUrl}</Text>
                         </TextTitle>
                       )}
                     </>
