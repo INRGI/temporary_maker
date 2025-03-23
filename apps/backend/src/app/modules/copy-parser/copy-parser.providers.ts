@@ -10,6 +10,7 @@ import { ChangeUrlLinkService } from './services/change-url-link/change-url-link
 import { AntiSpamService } from './services/anti-spam/anti-spam.service';
 import { GetImageLinksService } from './services/get-image-links/get-image-links.service';
 import { AddBotTrapService } from './services/add-bot-trap/add-bot-trap.service';
+import { HtmlFormatterService } from './services/html-formatter/html-formatter.service';
 
 export const applicationProviders: Provider[] = [];
 
@@ -25,4 +26,5 @@ export const serviceProviders: Provider[] = [
   AntiSpamService,
   GetImageLinksService,
   AddBotTrapService,
+  HtmlFormatterService
 ];

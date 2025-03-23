@@ -1,16 +1,17 @@
 import {
   MakeCopyResponseDto,
   UnsubData,
-} from '@epc-services/interface-adapters';
-import { Injectable, Logger } from '@nestjs/common';
-import { GetSubjectService } from '../get-subject/get-subject.service';
-import { GetCopyFromDriveService } from '../get-copy-from-drive/get-copy-from-drive.service';
-import { ApplyChangesOnCopyService } from '../apply-changes-on-copy/apply-changes-on-copy.service';
-import { BuildLinkService } from '../build-link/build-link.service';
-import { GetPriorityService } from '../../../priority-products/services/get-priority/get-priority.service';
-import { AntiSpamService } from '../../../copy-parser/services/anti-spam/anti-spam.service';
-import { GetImageLinksService } from '../../../copy-parser/services/get-image-links/get-image-links.service';
-import { MakeCopyPayload } from './make-copy.payload';
+} from "@epc-services/interface-adapters";
+import { Injectable, Logger } from "@nestjs/common";
+import { GetSubjectService } from "../get-subject/get-subject.service";
+import { GetCopyFromDriveService } from "../get-copy-from-drive/get-copy-from-drive.service";
+import { ApplyChangesOnCopyService } from "../apply-changes-on-copy/apply-changes-on-copy.service";
+import { BuildLinkService } from "../build-link/build-link.service";
+import { GetPriorityService } from "../../../priority-products/services/get-priority/get-priority.service";
+import { AntiSpamService } from "../../../copy-parser/services/anti-spam/anti-spam.service";
+import { GetImageLinksService } from "../../../copy-parser/services/get-image-links/get-image-links.service";
+import { MakeCopyPayload } from "./make-copy.payload";
+import { HtmlFormatterService } from "../../../copy-parser/services/html-formatter/html-formatter.service";
 
 @Injectable()
 export class MakeCopyService {
@@ -26,6 +27,7 @@ export class MakeCopyService {
     private readonly getSubjectService: GetSubjectService,
     private readonly antiSpamService: AntiSpamService,
     private readonly getImageLinks: GetImageLinksService,
+    private readonly htmlFormatterService: HtmlFormatterService
   ) {}
 
   public async makeCopy(
@@ -39,11 +41,10 @@ export class MakeCopyService {
     const product = copyName.match(/^[a-zA-Z]+/)[0];
     const productLift = copyName.match(/[a-zA-Z]+(\d+)/)
       ? copyName.match(/[a-zA-Z]+(\d+)/)[1]
-      : '';
+      : "";
     const productImage = copyName.match(/\d+([a-zA-Z].*)/)
       ? copyName.match(/\d+([a-zA-Z].*)/)[1]
-      : '';
-
+      : "";
 
     const presetProps = preset;
 
@@ -52,14 +53,14 @@ export class MakeCopyService {
       productLift,
     });
 
-    if(html.includes('Error reading file')) {
+    if (html.includes("Error reading file")) {
       return {
         copyName,
         html: html,
         unsubData,
         subjects,
         imageLinks: [],
-        buildedLink: 'urlhere',
+        buildedLink: "urlhere",
       };
     }
 
@@ -84,11 +85,11 @@ export class MakeCopyService {
         product,
         productLift,
       });
-      if (presetProps.subjectLine.subjectLine === 'Spam Words Only')
+      if (presetProps.subjectLine.subjectLine === "Spam Words Only")
         subjects = await this.antiSpamService.changeSpamWords({
           html: subjects,
         });
-      if (presetProps.subjectLine.subjectLine === 'Full Anti Spam')
+      if (presetProps.subjectLine.subjectLine === "Full Anti Spam")
         subjects = await this.antiSpamService.changeAllWords({
           html: subjects,
         });
@@ -102,17 +103,21 @@ export class MakeCopyService {
       }
     );
 
+    const formattedHtml = await this.htmlFormatterService.formatHtml({
+      html: updatedHtml,
+    });
+
     const links = await this.getImageLinks.getLinks({
       html: updatedHtml,
     });
 
     return {
       copyName,
-      html: updatedHtml,
+      html: formattedHtml,
       unsubData,
       subjects,
       imageLinks: links,
-      buildedLink: link || 'urlhere',
+      buildedLink: link || "urlhere",
     };
   }
 }
