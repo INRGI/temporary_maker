@@ -7,9 +7,10 @@ import { FaDownload } from "react-icons/fa6";
 
 interface Props {
     copies: ResponseCopy[];
+    presetName: string;
 }
 
-const DownloadHtmlZipButton: React.FC<Props> = ({ copies }) => {
+const DownloadHtmlZipButton: React.FC<Props> = ({ copies, presetName }) => {
   const handleDownloadZip = async () => {
     if (!copies || copies.length === 0) {
       toastError("No copies available to download.");
@@ -23,7 +24,7 @@ const DownloadHtmlZipButton: React.FC<Props> = ({ copies }) => {
     });
 
     const zipBlob = await zip.generateAsync({ type: "blob" });
-    saveAs(zipBlob, "copies_archive.zip");
+    saveAs(zipBlob, `${presetName}.zip`);
   };
 
   return <DownloadButton onClick={handleDownloadZip}><FaDownload /></DownloadButton>;

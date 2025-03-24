@@ -178,7 +178,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           <h2>{preset.name}</h2>
         </ServicesBlockHeader>
         <ButtonsHeaderContainer>
-          {copies.length > 0 && <DownloadHtmlZipButton copies={copies} />}
+          {copies.length > 0 && <DownloadHtmlZipButton copies={copies} presetName={preset.name} />}
           <Button onClick={() => handleMakeCopies()}>
             <VscDebugStart />
           </Button>
