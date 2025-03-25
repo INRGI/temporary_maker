@@ -122,6 +122,13 @@ export const Text = styled.span`
   font-weight: normal;
 `;
 
+export const Subject = styled.p`
+  font-size: 17px;
+  font-weight: normal;
+  padding: 0;
+  margin: 0;
+`;
+
 
 export const TextSpaceDivider = styled.div`
   display: flex;

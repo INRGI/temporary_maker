@@ -4,21 +4,21 @@ import {
   MakeCopyResponseDto,
   MakeMulitpleCopiesRequestDto,
   MakeMultipleCopiesResponseDto,
-} from '@epc-services/interface-adapters';
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { MakeCopyService } from '../services/make-copy/make-copy.service';
-import { MakeMultipleCopiesService } from '../services/make-multiple-copies/make-multiple-copies.service';
-import { GetMondayTrackingsService } from '../services/get-monday-trackings/get-monday-trackings.service';
+} from "@epc-services/interface-adapters";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { MakeCopyService } from "../services/make-copy/make-copy.service";
+import { MakeMultipleCopiesService } from "../services/make-multiple-copies/make-multiple-copies.service";
+import { GetMondayTrackingsService } from "../services/get-monday-trackings/get-monday-trackings.service";
+import { GetAllCopiesForProductService } from "../services/get-all-copies-for-product/get-all-copies-for-product.service";
 
-
-@Controller('copy')
+@Controller("copy")
 export class CopyMessageController {
   constructor(
     private readonly makeCopyService: MakeCopyService,
     private readonly makeMultipleCopiesService: MakeMultipleCopiesService,
-    private readonly getTrackingsService: GetMondayTrackingsService
+    private readonly getTrackingsService: GetMondayTrackingsService,
+    private readonly getAllCopiesForProductService: GetAllCopiesForProductService
   ) {}
-
 
   public async makeCopy(
     request: MakeCopyRequestDto
@@ -27,7 +27,7 @@ export class CopyMessageController {
     return result;
   }
 
-  @Post('make-multiple-copies')
+  @Post("make-multiple-copies")
   public async makeMultipleCopies(
     @Body() request: MakeMulitpleCopiesRequestDto
   ): Promise<MakeMultipleCopiesResponseDto> {
@@ -44,9 +44,17 @@ export class CopyMessageController {
     return await result;
   }
 
-  @Get('trackings')
+  @Get("trackings")
   public async getTrackings(): Promise<GetMondayTrackingsResponseDto> {
     const result = await this.getTrackingsService.geTrackings();
+    return await result;
+  }
+
+  @Get("all-copies/:product")
+  public async get(@Param("product") product: string): Promise<any> {
+    const result = await this.getAllCopiesForProductService.getAllCopies({
+      product,
+    });
     return await result;
   }
 }

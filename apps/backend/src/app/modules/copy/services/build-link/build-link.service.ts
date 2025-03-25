@@ -9,14 +9,21 @@ export class BuildLinkService {
 
   public async buildLink(payload: BuildLinkPayload): Promise<string> {
     const { product, productLift, linkUrl, productImage } = payload;
+    let trackingData: { trackingData: string; imgData: string };
 
-    const trackingData = await this.getMondayDataService.getRedtrackData({
+    trackingData = await this.getMondayDataService.getRedtrackData({
       product,
       trackingType: linkUrl.trackingType,
     });
 
     if (!trackingData) {
-      return 'urlhere';
+      trackingData = await this.getMondayDataService.getRedtrackData({
+        product: `*${product}`,
+        trackingType: linkUrl.trackingType,
+      })
+      if (!trackingData) {
+        return 'urlhere';
+      }
     }
 
     if (linkUrl.productCode === 'PRODUCT#IMAGE') {

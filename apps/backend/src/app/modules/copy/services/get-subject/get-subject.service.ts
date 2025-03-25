@@ -85,32 +85,30 @@ export class GetSubjectService {
   private extractTextFromDocx(buffer: Buffer): string {
     try {
       const zip = new AdmZip(buffer);
-
       const documentXml = zip.getEntry('word/document.xml');
       if (!documentXml) {
         throw new Error('document.xml not found in DOCX file');
       }
-
-      let content = documentXml.getData().toString('utf8');
-
-      const textMatches = content.match(/<w:t[^>]*>(.*?)<\/w:t>/g) || [];
-      if (textMatches.length > 0) {
-        content = textMatches
+  
+      const content = documentXml.getData().toString('utf8');
+  
+      const paragraphs = content.match(/<w:p[^>]*>.*?<\/w:p>/gs) || [];
+  
+      const lines: string[] = [];
+  
+      for (const p of paragraphs) {
+        const textMatches = p.match(/<w:t[^>]*>(.*?)<\/w:t>/g) || [];
+  
+        const line = textMatches
           .map((match) => match.replace(/<w:t[^>]*>|<\/w:t>/g, ''))
-          .join(' ');
-      } else {
-        content = content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+          .join('');
+  
+        if (line.trim()) {
+          lines.push(line.trim());
+        }
       }
-
-      content = content
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&amp;/g, '&')
-        .replace(/&quot;/g, '"')
-        .replace(/&apos;/g, "'")
-        .trim();
-
-      return content;
+  
+      return lines.join('\n');
     } catch (error) {
       return 'Error extracting text';
     }

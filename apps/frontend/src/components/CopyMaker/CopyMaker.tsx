@@ -18,6 +18,7 @@ import {
   ImagesList,
   PreviewButton,
   ReplaceButton,
+  Subject,
   Text,
   TextSpaceDivider,
   TextTitle,
@@ -178,7 +179,9 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           <h2>{preset.name}</h2>
         </ServicesBlockHeader>
         <ButtonsHeaderContainer>
-          {copies.length > 0 && <DownloadHtmlZipButton copies={copies} presetName={preset.name} />}
+          {copies.length > 0 && (
+            <DownloadHtmlZipButton copies={copies} presetName={preset.name} />
+          )}
           <Button onClick={() => handleMakeCopies()}>
             <VscDebugStart />
           </Button>
@@ -229,9 +232,12 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                     </>
                   )}
                   {copy.subjects && (
-                    <p>
-                      <TextTitle>Subjects:</TextTitle> {copy.subjects}
-                    </p>
+                    <>
+                      <TextTitle>Subjects:</TextTitle>
+                        {copy.subjects.split("\n").map((subject, index) => (
+                          <Subject key={index}>{subject}</Subject>
+                        ))}
+                    </>
                   )}
                   {copy.imageLinks && copy.imageLinks?.length > 0 && (
                     <>

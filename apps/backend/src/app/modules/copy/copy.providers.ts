@@ -17,6 +17,7 @@ import { ChangeUrlLinkService } from '../copy-parser/services/change-url-link/ch
 import { GetMondayTrackingsService } from './services/get-monday-trackings/get-monday-trackings.service';
 import { GetSubjectService } from './services/get-subject/get-subject.service';
 import { HtmlFormatterService } from '../copy-parser/services/html-formatter/html-formatter.service';
+import { GetAllCopiesForProductService } from './services/get-all-copies-for-product/get-all-copies-for-product.service';
 
 export const messageControllers = [CopyMessageController];
 
@@ -39,5 +40,6 @@ export const serviceProviders: Provider[] = [
   ChangeUrlLinkService,
   GetMondayTrackingsService,
   GetSubjectService,
-  HtmlFormatterService
+  HtmlFormatterService,
+  GetAllCopiesForProductService,
 ];
