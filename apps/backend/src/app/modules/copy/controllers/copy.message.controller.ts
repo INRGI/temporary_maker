@@ -5,7 +5,7 @@ import {
   MakeMulitpleCopiesRequestDto,
   MakeMultipleCopiesResponseDto,
 } from "@epc-services/interface-adapters";
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
 import { MakeCopyService } from "../services/make-copy/make-copy.service";
 import { MakeMultipleCopiesService } from "../services/make-multiple-copies/make-multiple-copies.service";
 import { GetMondayTrackingsService } from "../services/get-monday-trackings/get-monday-trackings.service";
@@ -51,10 +51,16 @@ export class CopyMessageController {
   }
 
   @Get("all-copies/:product")
-  public async get(@Param("product") product: string): Promise<any> {
+  public async get(
+    @Param("product") product: string,
+    @Query("minLift") minLift?: number,
+    @Query("maxLift") maxLift?: number
+  ) {
     const result = await this.getAllCopiesForProductService.getAllCopies({
       product,
+      minLift,
+      maxLift,
     });
-    return await result;
+    return result;
   }
 }
