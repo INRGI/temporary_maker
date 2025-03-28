@@ -20,27 +20,33 @@ export class GetAllCopiesForProductService {
     @InjectMondayApiService()
     private readonly mondayApiService: MondayApiServicePort,
     private readonly getCopyFromDriveService: GetCopyFromDriveService,
-    private readonly getSubjectService: GetSubjectService,
+    private readonly getSubjectService: GetSubjectService
   ) {}
 
-  private parseLiftsRange(liftsString: string, minLift?: number, maxLift?: number): number[] {
+  private parseLiftsRange(
+    liftsString: string,
+    minLift?: number,
+    maxLift?: number
+  ): number[] {
     if (!liftsString || liftsString.trim() === "") {
       return [];
     }
-  
+
     const lifts: number[] = [];
-  
+
     const segments = liftsString.split(",").map((seg) => seg.trim());
-  
+
     for (const segment of segments) {
       if (segment.includes("-")) {
         const [start, end] = segment
           .split("-")
           .map((num) => parseInt(num.trim().replace(/[^\d]/g, ""), 10));
-  
-        const effectiveStart = minLift !== undefined ? Math.max(start, minLift) : start;
-        const effectiveEnd = maxLift !== undefined ? Math.min(end, maxLift) : end;
-  
+
+        const effectiveStart =
+          minLift !== undefined ? Math.max(start, minLift) : start;
+        const effectiveEnd =
+          maxLift !== undefined ? Math.min(end, maxLift) : end;
+
         if (!isNaN(effectiveStart) && !isNaN(effectiveEnd)) {
           for (let i = effectiveStart; i <= effectiveEnd; i++) {
             lifts.push(i);
@@ -68,68 +74,78 @@ export class GetAllCopiesForProductService {
         }
       }
     }
-  
+
     return [...new Set(lifts)].sort((a, b) => a - b);
   }
-  
+
   public async getAllCopies(
-    payload: GetAllCopiesForProductPayload,
-  ): Promise<{ html: string; copyName: string, subjects?: string }[]> {
+    payload: GetAllCopiesForProductPayload
+  ): Promise<{ html: string; copyName: string; subjects?: string }[]> {
     const { product, minLift, maxLift } = payload;
-  
+    let mondayData;
     try {
-      const mondayData = await this.mondayApiService.getProductData(
+      mondayData = await this.mondayApiService.getProductData(
         product,
         803747785
       );
-      
+
       if (!mondayData.length) {
-        throw new Error("Product not found");
+        mondayData = await this.mondayApiService.getProductData(
+          `*${product}`,
+          803747785
+        );
+        if (!mondayData.length) {
+          throw new Error("Product not found");
+        }
       }
-  
+
       const liftsColumn = mondayData[0].column_values.find(
         (column) => column.column.title === "(B)Broadcast Copies"
       );
-  
+
       if (!liftsColumn || !liftsColumn.text) {
         this.logger.warn(`No lifts found for product ${product}`);
         return [];
       }
-  
-      const liftsArray = this.parseLiftsRange(liftsColumn.text, minLift, maxLift);
-  
-      const results: { html: string; copyName: string, subjects?: string }[] = [];
-  
+
+      const liftsArray = this.parseLiftsRange(
+        liftsColumn.text,
+        minLift,
+        maxLift
+      );
+
+      const results: { html: string; copyName: string; subjects?: string }[] =
+        [];
+
       for (const liftNumber of liftsArray) {
         try {
           const copy = await this.getCopyFromDriveService.getCopyFromDrive({
             product,
             productLift: `${liftNumber}`,
           });
-  
+
           if (copy) {
             results.push({
               html: copy,
               copyName: `${product}${liftNumber}`,
             });
-  
+
             const subjects = await this.getSubjectService.getSubject({
               product: product,
               productLift: `${liftNumber}`,
             });
-  
+
             if (subjects) {
               results[results.length - 1].subjects = subjects;
             }
           }
-  
         } catch (error) {
           this.logger.error(
             `Error fetching copy for ${product}${liftNumber}: ${error.message}`
           );
         }
       }
-  
+
       return results;
     } catch (error) {
       this.logger.error(
