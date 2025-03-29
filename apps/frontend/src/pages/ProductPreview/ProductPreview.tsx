@@ -32,7 +32,9 @@ const ProductPreview: React.FC = () => {
     if (!product) return toastError("Please enter a product name.");
     try {
       setLoading(true);
-      const result = await axios.get(`/api/copy/all-copies/${product}?minLift=${minLift}&maxLift=${maxLift}`);
+      const result = await axios.get(
+        `/api/copy/all-copies/${product}?minLift=${minLift}&maxLift=${maxLift}`
+      );
       setCopies(result.data);
       toastSuccess("Copies fetched successfully.");
     } catch (error) {
@@ -83,16 +85,20 @@ const ProductPreview: React.FC = () => {
                 <CardHeader>
                   <h2>{copy.copyName}</h2>
 
-                  <PreviewButton
-                    onClick={() => {
-                      setPreviewHtml(copy.html);
-                      setPreviewModal(true);
-                    }}
-                  >
-                    Preview
-                  </PreviewButton>
+                  {copy.html.includes("Error reading file") ? (
+                    <TextTitle>HTML not found</TextTitle>
+                  ) : (
+                    <PreviewButton
+                      onClick={() => {
+                        setPreviewHtml(copy.html);
+                        setPreviewModal(true);
+                      }}
+                    >
+                      Preview
+                    </PreviewButton>
+                  )}
                 </CardHeader>
-                {copy.subjects && (
+                {copy.subjects && !copy.html.includes("Error reading file") && (
                   <>
                     <TextTitle>Subjects:</TextTitle>
                     {copy.subjects.split("\n").map((subject, index) => (
