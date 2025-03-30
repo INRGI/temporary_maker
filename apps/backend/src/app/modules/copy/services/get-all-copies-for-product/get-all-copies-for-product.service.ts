@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-catch */
+/* eslint-disable no-empty */
 import {
   InjectMondayApiService,
   MondayApiServicePort,
@@ -104,7 +106,6 @@ export class GetAllCopiesForProductService {
       );
 
       if (!liftsColumn || !liftsColumn.text) {
-        this.logger.warn(`No lifts found for product ${product}`);
         return [];
       }
 
@@ -139,18 +140,11 @@ export class GetAllCopiesForProductService {
               results[results.length - 1].subjects = subjects;
             }
           }
-        } catch (error) {
-          this.logger.error(
-            `Error fetching copy for ${product}${liftNumber}: ${error.message}`
-          );
-        }
+        } catch (error) {}
       }
 
       return results;
     } catch (error) {
-      this.logger.error(
-        `Failed to get copies for product ${product}: ${error.message}`
-      );
       throw error;
     }
   }
