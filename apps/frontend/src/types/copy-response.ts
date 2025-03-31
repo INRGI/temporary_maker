@@ -4,7 +4,7 @@ export interface ResponseCopy {
   copyName: string;
   html: string;
   unsubData?: UnsubData;
-  subjects?: string;
+  subjects?: string[];
   imageLinks?: string[];
   buildedLink: string;
 }

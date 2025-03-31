@@ -13,7 +13,7 @@ export class GetSubjectService {
     private readonly gdriveApiService: GDriveApiServicePort
   ) {}
 
-  public async getSubject(payload: GetSubjectPayload): Promise<string> {
+  public async getSubject(payload: GetSubjectPayload): Promise<string[]> {
     const { product, productLift } = payload;
 
     const exactFileName = `${product} ${productLift} SL`;
@@ -53,7 +53,7 @@ export class GetSubjectService {
     }
 
     if (!files.files.length) {
-      return 'Subject not found';
+      return [];
     }
 
     const exactMatch = files.files.find((file) => file.name === exactFileName);
@@ -76,9 +76,11 @@ export class GetSubjectService {
       }
 
       const text = this.extractTextFromDocx(fileBuffer);
-      return text || 'No text found in document';
+      const subjects = text.split('\n');
+
+      return subjects || [];
     } catch (error) {
-      return `Error reading file: ${error.message}`;
+      return [];
     }
   }
 

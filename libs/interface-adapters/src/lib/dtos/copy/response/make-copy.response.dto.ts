@@ -4,7 +4,7 @@ export class MakeCopyResponseDto {
   html: string;
   copyName: string;
   unsubData: UnsubData;
-  subjects: string;
+  subjects: string[];
   imageLinks: string[];
   buildedLink: string;
 }

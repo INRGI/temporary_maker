@@ -82,7 +82,7 @@ export class GetAllCopiesForProductService {
 
   public async getAllCopies(
     payload: GetAllCopiesForProductPayload
-  ): Promise<{ html: string; copyName: string; subjects?: string }[]> {
+  ): Promise<{ html: string; copyName: string; subjects?: string[] }[]> {
     const { product, minLift, maxLift } = payload;
     let mondayData;
     try {
@@ -115,7 +115,7 @@ export class GetAllCopiesForProductService {
         maxLift
       );
 
-      const results: { html: string; copyName: string; subjects?: string }[] =
+      const results: { html: string; copyName: string; subjects?: string[] }[] =
         [];
 
       for (const liftNumber of liftsArray) {

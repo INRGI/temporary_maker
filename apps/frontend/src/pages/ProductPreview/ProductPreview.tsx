@@ -80,7 +80,7 @@ const ProductPreview: React.FC = () => {
       ) : (
         <CopiesList>
           {copies.map(
-            (copy: { copyName: string; html: string; subjects?: string }) => (
+            (copy: { copyName: string; html: string; subjects?: string[] }) => (
               <CopyCard key={copy.copyName}>
                 <CardHeader>
                   <h2>{copy.copyName}</h2>
@@ -101,7 +101,7 @@ const ProductPreview: React.FC = () => {
                 {copy.subjects && !copy.html.includes("Error reading file") && (
                   <>
                     <TextTitle>Subjects:</TextTitle>
-                    {copy.subjects.split("\n").map((subject, index) => (
+                    {copy.subjects.map((subject, index) => (
                       <Subject key={index}>{subject}</Subject>
                     ))}
                   </>

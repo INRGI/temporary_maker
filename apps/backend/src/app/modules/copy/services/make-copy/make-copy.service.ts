@@ -34,7 +34,7 @@ export class MakeCopyService {
     payload: MakeCopyPayload
   ): Promise<MakeCopyResponseDto> {
     let link: string;
-    let subjects: string;
+    let subjects: string[];
     let unsubData: UnsubData;
     const { copyName, preset } = payload;
 
@@ -85,14 +85,21 @@ export class MakeCopyService {
         product,
         productLift,
       });
-      if (presetProps.subjectLine.subjectLine === "Spam Words Only")
-        subjects = await this.antiSpamService.changeSpamWords({
-          html: subjects,
-        });
-      if (presetProps.subjectLine.subjectLine === "Full Anti Spam")
-        subjects = await this.antiSpamService.changeAllWords({
-          html: subjects,
-        });
+      if (presetProps.subjectLine.subjectLine === "Spam Words Only") {
+        for (let i = 0; i < subjects.length; i++) {
+          subjects[i] = await this.antiSpamService.changeSpamWords({
+            html: subjects[i],
+          });
+        }
+      }
+
+      if (presetProps.subjectLine.subjectLine === "Full Anti Spam") {
+        for (let i = 0; i < subjects.length; i++) {
+          subjects[i] = await this.antiSpamService.changeAllWords({
+            html: subjects[i],
+          });
+        }
+      }
     }
 
     const updatedHtml = await this.applyChangesOnCopyService.applyChangesOnCopy(

@@ -234,7 +234,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                   {copy.subjects && (
                     <>
                       <TextTitle>Subjects:</TextTitle>
-                        {copy.subjects.split("\n").map((subject, index) => (
+                        {copy.subjects.map((subject, index) => (
                           <Subject key={index}>{subject}</Subject>
                         ))}
                     </>
