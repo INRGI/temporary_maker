@@ -31,14 +31,17 @@ export class BuildLinkService {
     }
 
     if (linkUrl.productCode === 'IMG0000_#IMAGE') {
+      if(!trackingData.imgData) return 'urlhere';
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}IMG${trackingData.imgData}_${productLift}${productImage}`;
     }
 
     if (linkUrl.productCode === '0000_#IMAGE') {
+      if(!trackingData.imgData) return 'urlhere';
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.imgData}_${productLift}${productImage}`;
     }
 
     if (linkUrl.productCode === '000_#IMAGE') {
+      if(!trackingData.imgData) return 'urlhere';
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.imgData.slice(1)}_${productLift}${productImage}`;
     }
 

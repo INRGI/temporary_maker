@@ -38,14 +38,14 @@ export class GetMondayDataService {
     if (!trackingData) return;
 
     const imgData = mondayData[0].column_values.find(
-      (column) => column.column.title === 'Voluum (IT3)'
+      (column) => column.column.title === 'IMG-IT'
     ).text;
-
+    const cleanedImgData = imgData.replace(/IMG/g, '');
     // if (!imgData) return;
 
     return {
       trackingData,
-      imgData,
+      imgData: cleanedImgData,
     };
   } catch (error) {
     return;

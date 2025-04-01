@@ -148,6 +148,13 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
       return;
     }
 
+    const hasPreview = imageUrl.includes("/preview");
+
+    if (!hasPreview) {
+      window.open(imageUrl, "_blank");
+      return;
+    }
+
     const correctedUrl = imageUrl.replace("/preview", "/download");
 
     try {
@@ -159,7 +166,6 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
       document.body.removeChild(link);
     } catch (error) {
       toastError("Error downloading image");
-      console.error("Download error:", error);
     }
   };
 
@@ -234,9 +240,9 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                   {copy.subjects && (
                     <>
                       <TextTitle>Subjects:</TextTitle>
-                        {copy.subjects.map((subject, index) => (
-                          <Subject key={index}>{subject}</Subject>
-                        ))}
+                      {copy.subjects.map((subject, index) => (
+                        <Subject key={index}>{subject}</Subject>
+                      ))}
                     </>
                   )}
                   {copy.imageLinks && copy.imageLinks?.length > 0 && (
