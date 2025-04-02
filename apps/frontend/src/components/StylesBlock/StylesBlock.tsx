@@ -182,7 +182,7 @@ const StylesBlock: React.FC<Props> = ({ preset }) => {
           />
           <InputContainer>
             <FloatingLabelInput
-              placeholder="Font Size(ex: 16)"
+              placeholder="Font Size(ex: 16px)"
               value={styles.fontSize}
               onChange={(e) => handleChange("fontSize", e.target.value)}
             />

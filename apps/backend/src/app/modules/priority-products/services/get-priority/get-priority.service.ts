@@ -92,7 +92,7 @@ export class GetPriorityService {
             if (
               cell &&
               typeof cell === 'string' &&
-              cell.toString() === unsubType
+              cell.toString().trim().toLowerCase() === unsubType.trim().toLowerCase()
             ) {
               customUnsubColIdx = colIdx;
               break;

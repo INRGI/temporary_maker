@@ -66,7 +66,7 @@ const AddImageModal: React.FC<Props> = ({
       const sentenceEndRegex =
         /([.!?…]["']?|\b<br\s*\/?>)[\s\r\n]*(?=<br\s*\/?>|<\/?[a-zA-Z\s]*>|$)/i;
 
-      let matchResult = sentenceEndRegex.exec(updatedCopy.html);
+      const matchResult = sentenceEndRegex.exec(updatedCopy.html);
 
       if (matchResult) {
         const endPosition = matchResult.index + matchResult[0].length;
@@ -84,7 +84,7 @@ const AddImageModal: React.FC<Props> = ({
         updatedCopy.imageLinks = [...updatedCopy.imageLinks, newImageSrc];
       } else {
         updatedCopy.imageLinks = [newImageSrc];
-      }
+      }      
 
       const newCopies = [...copies];
       newCopies[copyIndex] = updatedCopy;
