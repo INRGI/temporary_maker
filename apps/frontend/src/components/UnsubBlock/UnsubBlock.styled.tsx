@@ -114,3 +114,11 @@ export const StyledInput = styled.input`
     outline: none;
   }
 `;
+
+export const OverflowContainer = styled.div`
+  overflow-y: scroll;
+  height: calc(100vh - 420px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;

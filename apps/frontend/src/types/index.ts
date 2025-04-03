@@ -10,3 +10,6 @@ export * from "./subject-line.types";
 export * from "./bot-trap.types";
 export * from "./preset.types";
 export * from "./unsub-sheet.types";
+export * from "./unsub-html-block.types";
+export * from "./custom-unsub-block.types";
+export * from "./default-unsub-block.types";

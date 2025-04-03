@@ -1,183 +1,169 @@
-import {
-  GDriveApiServicePort,
-  InjectGDriveApiService,
-} from '@epc-services/gdrive-api';
+/* eslint-disable no-useless-escape */
 import { Injectable } from '@nestjs/common';
-import { GetPriorityPayload } from './get-priority.payload';
-import * as XLSX from 'xlsx';
 import { UnsubData } from '@epc-services/interface-adapters';
+import {
+  GSpreadsheetApiServicePort,
+  InjectGSpreadsheetApiService,
+} from '@epc-services/gspreadsheet-api';
+import { BuildCustomUnsubBlockService } from '../build-custom-unsub-block/build-custom-unsub-block.service';
+import { BuildDefaultUnsubBlockService } from '../build-default-unsub-block/build-default-unsub-block.service';
+import { GetPriorityPayload } from './get-priority.payload';
 
 @Injectable()
 export class GetPriorityService {
   constructor(
-    @InjectGDriveApiService()
-    private readonly gdriveApiService: GDriveApiServicePort
+    @InjectGSpreadsheetApiService()
+    private readonly spreadsheetService: GSpreadsheetApiServicePort,
+    private readonly customUnsubBlockService: BuildCustomUnsubBlockService,
+    private readonly defaultUnsubBlockService: BuildDefaultUnsubBlockService
   ) {}
 
   public async getPriorityDetails(
     payload: GetPriorityPayload
   ): Promise<UnsubData> {
     const { product, unsubLinkUrl } = payload;
-    const { sheetName, unsubType, linkStart, linkEnd } = unsubLinkUrl || {};
+    const { linkStart, linkEnd } = unsubLinkUrl || {};
+    const { sheetName, unsubType } = unsubLinkUrl || {};
+    const spreadsheetId = '1e40khWM1dKTje_vZi4K4fL-RA8-D6jhp2wmZSXurQH0';
 
     try {
-      const fileContent = await this.gdriveApiService.getContentLikeBuffer(
-        '1e40khWM1dKTje_vZi4K4fL-RA8-D6jhp2wmZSXurQH0',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      const sheet = await this.spreadsheetService.getSheetWithRichText(
+        spreadsheetId,
+        sheetName
       );
-      const workbook = await XLSX.read(fileContent, { type: 'buffer' });
 
-      if (sheetName && !workbook.SheetNames.includes(sheetName)) {
+      if (!sheet?.data?.[0]?.rowData) {
         return {
           unsubscribeText: '',
           unsubscribeUrl: '',
+          unsubscribeBuildedBlock: '',
         };
       }
 
-      const sheetsToSearch = sheetName ? [sheetName] : workbook.SheetNames;
+      const rows = sheet.data[0].rowData;
+      let headerRow: string[] = [];
+      let headerRowIdx = -1;
 
-      for (const currentSheetName of sheetsToSearch) {
-        const worksheet = workbook.Sheets[currentSheetName];
-        const aoa = XLSX.utils.sheet_to_json<any[]>(worksheet, { header: 1 });
+      for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+        const row = rows[rowIndex];
+        const cells = row.values || [];
+        const potentialHeaders = cells.map(
+          (c) => c.formattedValue?.toLowerCase() || ''
+        );
 
-        if (aoa.length === 0) continue;
-
-        let headerRowIdx = -1;
-        let productColIdx = -1;
-
-        for (let rowIdx = 0; rowIdx < aoa.length; rowIdx++) {
-          const row = aoa[rowIdx] as any[];
-
-          if (!Array.isArray(row)) continue;
-
-          for (let colIdx = 0; colIdx < row.length; colIdx++) {
-            const cell = row[colIdx];
-            if (
-              cell &&
-              typeof cell === 'string' &&
-              cell.toString() === 'PRODUCT'
-            ) {
-              headerRowIdx = rowIdx;
-              productColIdx = colIdx;
-              break;
-            }
-          }
-
-          if (headerRowIdx !== -1) break;
+        if (potentialHeaders.includes('product')) {
+          headerRow = potentialHeaders;
+          headerRowIdx = rowIndex;
+          break;
         }
+      }
 
-        if (headerRowIdx === -1 || productColIdx === -1) {
-          continue;
-        }
+      if (headerRowIdx === -1) {
+        return {
+          unsubscribeText: '',
+          unsubscribeUrl: '',
+          unsubscribeBuildedBlock: '',
+        };
+      }
 
-        let unsubTextColIdx = -1;
-        const headerRow = aoa[headerRowIdx] as any[];
+      const productColIdx = headerRow.findIndex((h) => h === 'product');
+      const unsubTextColIdx = headerRow.findIndex((h) => h === 'unsub text');
+      const unsubUrlColIdx = headerRow.findIndex((h) => h === 'unsub url');
+      const customUnsubColIdx = unsubType
+        ? headerRow.findIndex((h) => h === unsubType.trim().toLowerCase())
+        : -1;
 
-        for (let colIdx = 0; colIdx < headerRow.length; colIdx++) {
-          const cell = headerRow[colIdx];
-          if (
-            cell &&
-            typeof cell === 'string' &&
-            cell.toString() === 'UNSUB TEXT'
-          ) {
-            unsubTextColIdx = colIdx;
+      for (
+        let rowIndex = headerRowIdx + 1;
+        rowIndex < rows.length;
+        rowIndex++
+      ) {
+        const row = rows[rowIndex];
+        const cells = row.values || [];
+
+        const productCell = cells[productColIdx]?.formattedValue || '';
+        const products = productCell.split(/[\s\/\\]+/);
+
+        if (!products.includes(product)) continue;
+
+        const unsubTextCell = cells[unsubTextColIdx];
+        const unsubUrlCell =
+          customUnsubColIdx !== -1
+            ? cells[customUnsubColIdx]
+            : cells[unsubUrlColIdx];
+
+        const unsubText = unsubTextCell?.formattedValue || '';
+        const unsubUrl = unsubUrlCell?.formattedValue || '';
+
+        let linkedText = '';
+        let urlFromLink = '';
+        const runs = unsubTextCell?.textFormatRuns || [];
+
+        for (let i = 0; i < runs.length; i++) {
+          const start = runs[i].startIndex;
+          const end = runs[i + 1]?.startIndex || unsubText.length;
+          const fragment = unsubText.substring(start, end);
+          const url = runs[i].format?.link?.uri;
+
+          if (url) {
+            linkedText = fragment;
+            urlFromLink = url;
             break;
           }
         }
 
-        let customUnsubColIdx = -1;
-        if (unsubType) {
-          for (let colIdx = 0; colIdx < headerRow.length; colIdx++) {
-            const cell = headerRow[colIdx];
-            if (
-              cell &&
-              typeof cell === 'string' &&
-              cell.toString().trim().toLowerCase() === unsubType.trim().toLowerCase()
-            ) {
-              customUnsubColIdx = colIdx;
-              break;
-            }
+        let unsubscribeUrl: string;
+        if (
+          linkStart !== undefined &&
+          linkEnd !== undefined &&
+          !unsubUrl.includes('http')
+          && unsubUrl
+        ) {
+          unsubscribeUrl = `${linkStart}${unsubUrl}${linkEnd}`;
+        } else {
+          unsubscribeUrl = unsubUrl || urlFromLink;
+        }
+
+        let unsubscribeBuildedBlock = '';
+        if (unsubLinkUrl.unsubHtmlBlock && unsubLinkUrl.unsubHtmlBlock.isUnsubHtmlBlock) {
+          if (unsubLinkUrl.unsubHtmlBlock.htmlType === 'custom') {
+            unsubscribeBuildedBlock =
+              await this.customUnsubBlockService.buildCustomUnsubBlock({
+                customUnsubBlock: unsubLinkUrl.unsubHtmlBlock.customHtmlBlock,
+                unsubscribeText: unsubText,
+                linkedText,
+                unsubscribeUrl: unsubscribeUrl,
+              });
+          }
+          if (unsubLinkUrl.unsubHtmlBlock.htmlType === 'default') {
+            unsubscribeBuildedBlock =
+              await this.defaultUnsubBlockService.buildDefaultUnsubBlock({
+                defaultUnsubBlock: unsubLinkUrl.unsubHtmlBlock.defaultHtmlBlock,
+                unsubscribeText: unsubText,
+                linkedText,
+                unsubscribeUrl: unsubscribeUrl,
+              });
           }
         }
 
-        let unsubUrlColIdx = -1;
-        for (let colIdx = 0; colIdx < headerRow.length; colIdx++) {
-          const cell = headerRow[colIdx];
-
-          if (
-            cell &&
-            typeof cell === 'string' &&
-            cell.toString().trim().toLowerCase() === 'unsub url'
-          ) {
-            unsubUrlColIdx = colIdx;
-            break;
-          }
-        }
-
-        for (let rowIdx = headerRowIdx + 1; rowIdx < aoa.length; rowIdx++) {
-          const row = aoa[rowIdx] as any[];
-
-          if (!Array.isArray(row) || row.length <= productColIdx) continue;
-
-          const cellProduct = row[productColIdx];
-
-          const products = cellProduct.split(/[\s\/\\]+/);
-          if (products.includes(product)) {
-            let unsubscribeText = null;
-            let unsubscribeUrl = null;
-
-            if (unsubTextColIdx !== -1 && row.length > unsubTextColIdx) {
-              unsubscribeText = row[unsubTextColIdx];
-            }
-
-            let unsubTypeValue = null;
-
-            if (
-              customUnsubColIdx !== -1 &&
-              row.length > customUnsubColIdx &&
-              row[customUnsubColIdx]
-            ) {
-              unsubTypeValue = row[customUnsubColIdx];
-            } else if (unsubUrlColIdx !== -1 && row.length >= unsubUrlColIdx) {
-              unsubTypeValue = row[unsubUrlColIdx];
-            }
-
-            if (unsubTypeValue) {
-              if (
-                linkStart !== undefined &&
-                linkEnd !== undefined &&
-                !unsubTypeValue.includes('http')
-              ) {
-                unsubscribeUrl = `${linkStart}${unsubTypeValue}${linkEnd}`;
-              } else {
-                unsubscribeUrl = unsubTypeValue;
-              }
-            }
-
-            return {
-              unsubscribeText: unsubscribeText
-                ? this.processUnsubText(unsubscribeText)
-                : '',
-              unsubscribeUrl: unsubscribeUrl || '',
-            };
-          }
-        }
+        return {
+          unsubscribeText: unsubText,
+          unsubscribeUrl: unsubscribeUrl,
+          unsubscribeBuildedBlock: unsubscribeBuildedBlock,
+        };
       }
 
       return {
         unsubscribeText: '',
         unsubscribeUrl: '',
+        unsubscribeBuildedBlock: '',
       };
     } catch (error) {
       return {
         unsubscribeText: '',
         unsubscribeUrl: '',
+        unsubscribeBuildedBlock: '',
       };
     }
-  }
-
-  private processUnsubText(text: string): string {
-    if (!text || typeof text !== 'string') return '';
-    return text.replace(/\s+/g, ' ').trim();
   }
 }

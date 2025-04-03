@@ -29,6 +29,7 @@ export class MakeMultipleCopiesService {
 
     for (const item of domainBroadcast.broadcast) {
       for (const copy of item.copies) {
+        if(copy.startsWith("+")) continue
         const result = await this.makeCopyService.makeCopy({
           copyName: copy,
           preset,

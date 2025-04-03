@@ -235,6 +235,36 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                           <Text> {copy.unsubData.unsubscribeUrl}</Text>
                         </TextTitle>
                       )}
+                      {copy.unsubData.unsubscribeBuildedBlock && (
+                        <ButtonContainer>
+                          <TextTitle>Unsub Builded Block</TextTitle>
+                          <ButtonContainer>
+                            <CopyButton
+                              onClick={() => {
+                                navigator.clipboard.writeText(
+                                  copy.unsubData
+                                    ?.unsubscribeBuildedBlock as string
+                                );
+                                toastSuccess("Copied to clipboard");
+                              }}
+                              type="button"
+                            >
+                              <BsCopy />
+                            </CopyButton>
+                            <PreviewButton
+                              onClick={() => {
+                                setPreviewHtml(
+                                  copy.unsubData
+                                    ?.unsubscribeBuildedBlock as string
+                                );
+                                setPreviewModal(true);
+                              }}
+                            >
+                              Preview
+                            </PreviewButton>
+                          </ButtonContainer>
+                        </ButtonContainer>
+                      )}
                     </>
                   )}
                   {copy.subjects && (
