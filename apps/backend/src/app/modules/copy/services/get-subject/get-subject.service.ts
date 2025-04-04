@@ -56,7 +56,7 @@ export class GetSubjectService {
       return [];
     }
 
-    const exactMatch = files.files.find((file) => file.name === exactFileName);
+    const exactMatch = files.files.find((file) => file.name.trim() === exactFileName.trim());
     const fileToUse = exactMatch || files.files[0];
 
     try {

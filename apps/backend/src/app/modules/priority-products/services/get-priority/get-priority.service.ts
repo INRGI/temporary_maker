@@ -1,13 +1,13 @@
 /* eslint-disable no-useless-escape */
-import { Injectable } from '@nestjs/common';
-import { UnsubData } from '@epc-services/interface-adapters';
+import { Injectable } from "@nestjs/common";
+import { UnsubData } from "@epc-services/interface-adapters";
 import {
   GSpreadsheetApiServicePort,
   InjectGSpreadsheetApiService,
-} from '@epc-services/gspreadsheet-api';
-import { BuildCustomUnsubBlockService } from '../build-custom-unsub-block/build-custom-unsub-block.service';
-import { BuildDefaultUnsubBlockService } from '../build-default-unsub-block/build-default-unsub-block.service';
-import { GetPriorityPayload } from './get-priority.payload';
+} from "@epc-services/gspreadsheet-api";
+import { BuildCustomUnsubBlockService } from "../build-custom-unsub-block/build-custom-unsub-block.service";
+import { BuildDefaultUnsubBlockService } from "../build-default-unsub-block/build-default-unsub-block.service";
+import { GetPriorityPayload } from "./get-priority.payload";
 
 @Injectable()
 export class GetPriorityService {
@@ -22,9 +22,8 @@ export class GetPriorityService {
     payload: GetPriorityPayload
   ): Promise<UnsubData> {
     const { product, unsubLinkUrl } = payload;
-    const { linkStart, linkEnd } = unsubLinkUrl || {};
-    const { sheetName, unsubType } = unsubLinkUrl || {};
-    const spreadsheetId = '1e40khWM1dKTje_vZi4K4fL-RA8-D6jhp2wmZSXurQH0';
+    const { linkStart, linkEnd, sheetName, unsubType } = unsubLinkUrl || {};
+    const spreadsheetId = "1e40khWM1dKTje_vZi4K4fL-RA8-D6jhp2wmZSXurQH0";
 
     try {
       const sheet = await this.spreadsheetService.getSheetWithRichText(
@@ -34,9 +33,9 @@ export class GetPriorityService {
 
       if (!sheet?.data?.[0]?.rowData) {
         return {
-          unsubscribeText: '',
-          unsubscribeUrl: '',
-          unsubscribeBuildedBlock: '',
+          unsubscribeText: "",
+          unsubscribeUrl: "",
+          unsubscribeBuildedBlock: "",
         };
       }
 
@@ -48,10 +47,10 @@ export class GetPriorityService {
         const row = rows[rowIndex];
         const cells = row.values || [];
         const potentialHeaders = cells.map(
-          (c) => c.formattedValue?.toLowerCase() || ''
+          (c) => c.formattedValue?.toLowerCase() || ""
         );
 
-        if (potentialHeaders.includes('product')) {
+        if (potentialHeaders.includes("product")) {
           headerRow = potentialHeaders;
           headerRowIdx = rowIndex;
           break;
@@ -60,17 +59,20 @@ export class GetPriorityService {
 
       if (headerRowIdx === -1) {
         return {
-          unsubscribeText: '',
-          unsubscribeUrl: '',
-          unsubscribeBuildedBlock: '',
+          unsubscribeText: "",
+          unsubscribeUrl: "",
+          unsubscribeBuildedBlock: "",
         };
       }
 
-      const productColIdx = headerRow.findIndex((h) => h === 'product');
-      const unsubTextColIdx = headerRow.findIndex((h) => h === 'unsub text');
-      const unsubUrlColIdx = headerRow.findIndex((h) => h === 'unsub url');
+      const productColIdx = headerRow.findIndex((h) => h === "product");
+      const unsubTextColIdx = headerRow.findIndex((h) => h === "unsub text");
+      const unsubUrlColIdx = headerRow.findIndex((h) => h === "unsub url");
+
       const customUnsubColIdx = unsubType
-        ? headerRow.findIndex((h) => h === unsubType.trim().toLowerCase())
+        ? headerRow.findIndex(
+            (h) => h.trim().toLowerCase() === unsubType.trim().toLowerCase()
+          )
         : -1;
 
       for (
@@ -81,7 +83,7 @@ export class GetPriorityService {
         const row = rows[rowIndex];
         const cells = row.values || [];
 
-        const productCell = cells[productColIdx]?.formattedValue || '';
+        const productCell = cells[productColIdx]?.formattedValue || "";
         const products = productCell.split(/[\s\/\\]+/);
 
         if (!products.includes(product)) continue;
@@ -92,11 +94,11 @@ export class GetPriorityService {
             ? cells[customUnsubColIdx]
             : cells[unsubUrlColIdx];
 
-        const unsubText = unsubTextCell?.formattedValue || '';
-        const unsubUrl = unsubUrlCell?.formattedValue || '';
+        const unsubText = unsubTextCell?.formattedValue || "";
+        const unsubUrl = unsubUrlCell?.formattedValue || "";
 
-        let linkedText = '';
-        let urlFromLink = '';
+        let linkedText = "";
+        let urlFromLink = "";
         const runs = unsubTextCell?.textFormatRuns || [];
 
         for (let i = 0; i < runs.length; i++) {
@@ -113,56 +115,51 @@ export class GetPriorityService {
         }
 
         let unsubscribeUrl: string;
-        if (
-          linkStart !== undefined &&
-          linkEnd !== undefined &&
-          !unsubUrl.includes('http')
-          && unsubUrl
-        ) {
+        if (linkStart && linkEnd && unsubUrl && !unsubUrl.includes("http")) {
           unsubscribeUrl = `${linkStart}${unsubUrl}${linkEnd}`;
         } else {
           unsubscribeUrl = unsubUrl || urlFromLink;
         }
 
-        let unsubscribeBuildedBlock = '';
-        if (unsubLinkUrl.unsubHtmlBlock && unsubLinkUrl.unsubHtmlBlock.isUnsubHtmlBlock) {
-          if (unsubLinkUrl.unsubHtmlBlock.htmlType === 'custom') {
+        let unsubscribeBuildedBlock = "";
+        if (unsubLinkUrl.unsubHtmlBlock?.isUnsubHtmlBlock) {
+          if (unsubLinkUrl.unsubHtmlBlock.htmlType === "custom") {
             unsubscribeBuildedBlock =
               await this.customUnsubBlockService.buildCustomUnsubBlock({
                 customUnsubBlock: unsubLinkUrl.unsubHtmlBlock.customHtmlBlock,
                 unsubscribeText: unsubText,
                 linkedText,
-                unsubscribeUrl: unsubscribeUrl,
+                unsubscribeUrl,
               });
           }
-          if (unsubLinkUrl.unsubHtmlBlock.htmlType === 'default') {
+          if (unsubLinkUrl.unsubHtmlBlock.htmlType === "default") {
             unsubscribeBuildedBlock =
               await this.defaultUnsubBlockService.buildDefaultUnsubBlock({
                 defaultUnsubBlock: unsubLinkUrl.unsubHtmlBlock.defaultHtmlBlock,
                 unsubscribeText: unsubText,
                 linkedText,
-                unsubscribeUrl: unsubscribeUrl,
+                unsubscribeUrl,
               });
           }
         }
 
         return {
           unsubscribeText: unsubText,
-          unsubscribeUrl: unsubscribeUrl,
-          unsubscribeBuildedBlock: unsubscribeBuildedBlock,
+          unsubscribeUrl,
+          unsubscribeBuildedBlock,
         };
       }
 
       return {
-        unsubscribeText: '',
-        unsubscribeUrl: '',
-        unsubscribeBuildedBlock: '',
+        unsubscribeText: "",
+        unsubscribeUrl: "",
+        unsubscribeBuildedBlock: "",
       };
     } catch (error) {
       return {
-        unsubscribeText: '',
-        unsubscribeUrl: '',
-        unsubscribeBuildedBlock: '',
+        unsubscribeText: "",
+        unsubscribeUrl: "",
+        unsubscribeBuildedBlock: "",
       };
     }
   }
