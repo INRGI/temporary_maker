@@ -6,4 +6,6 @@ export interface DefaultUnsubBlock {
   linkColor: string;
   fontFamily: string;
   padding: Padding;
+  fontWeight?: string;
+  textAlign?: 'center' | 'left' | 'right';
 }

@@ -312,6 +312,8 @@ const UnsubBlock: React.FC<Props> = ({ preset }) => {
                         fontSize: "",
                         fontFamily: "",
                         textColor: "",
+                        textAlign: "center",
+                        fontWeight: "400",
                         padding: {
                           top: "",
                           right: "",

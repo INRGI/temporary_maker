@@ -7,9 +7,15 @@ const DropdownWrapper = styled.div`
   width: 100%;
 `;
 
+const DropdownContainer = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
 const DropdownButton = styled.button`
   width: 100%;
   padding: 15px;
+  padding-top: 20px;
   border: 1px solid #4f4f4f;
   border-radius: 8px;
   font-size: 16px;
@@ -25,6 +31,23 @@ const DropdownButton = styled.button`
     box-shadow: 0 0 8px rgba(106, 90, 205, 0.5);
     outline: none;
   }
+`;
+
+const FloatingLabel = styled.span<{ active: boolean }>`
+  position: absolute;
+  top: ${({ active }) => (active ? "-8px" : "50%")};
+  left: 15px;
+  transform: translateY(${({ active }) => (active ? "0" : "-50%")});
+  font-size: ${({ active }) => (active ? "12px" : "16px")};
+  color: ${({ active }) => (active ? "#6a5acd" : "#b0b0b0")};
+  pointer-events: none;
+  background-color: #2b2b2b;
+  padding: 0 5px;
+  transition: all 0.3s ease;
+  z-index: 1;
+
+  border: ${({ active }) => (active ? "1px solid #6a5acd" : "none")};
+  border-radius: 4px;
 `;
 
 const DropdownList = styled.ul`
@@ -66,33 +89,48 @@ const Dropdown = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+
+  const hasValue = selected !== "";
+  const showFloatingLabel = isFocused || hasValue;
 
   const filteredOptions = options.filter((option) =>
     option.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleButtonClick = () => {
+    setIsOpen(!isOpen);
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    if (!hasValue && !isOpen) {
+      setIsFocused(false);
+    }
+  };
+
+  const handleSelect = (option: string) => {
+    onSelect(option);
+    setIsOpen(false);
+  };
+
   return (
     <DropdownWrapper>
-      <DropdownButton
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {selected || placeholder}
-      </DropdownButton>
+      <DropdownContainer>
+        <FloatingLabel active={showFloatingLabel}>{placeholder}</FloatingLabel>
+        <DropdownButton onClick={handleButtonClick} onBlur={handleBlur}>
+          {hasValue ? selected : ""}
+        </DropdownButton>
+      </DropdownContainer>
       {isOpen && (
         <DropdownList>
-           <SearchInput
-              placeholder="Search"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          <SearchInput
+            placeholder="Search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
           {filteredOptions.map((option) => (
-            <DropdownItem
-              key={option}
-              onClick={() => {
-                onSelect(option);
-                setIsOpen(false);
-              }}
-            >
+            <DropdownItem key={option} onClick={() => handleSelect(option)}>
               {option}
             </DropdownItem>
           ))}

@@ -109,6 +109,7 @@ export const CloseButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 9999;
   cursor: pointer;
   transition: background-color 0.3s ease;
 

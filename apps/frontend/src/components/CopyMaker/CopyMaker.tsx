@@ -32,8 +32,8 @@ import Loader from "../Loader";
 import FloatingLabelInput from "../FloatingLabelInput/FloatingLabelInput";
 import AddImageModal from "../AddImageModal/AddImageModal";
 import { ResponseCopy } from "../../types/copy-response";
-import PreviewModal from "../PreviewModal";
 import DownloadHtmlZipButton from "../DownloadHtmlZipButton";
+import PreviewAndEditModal from "../PreviewAndEditModal";
 
 interface Props {
   preset: Preset;
@@ -52,7 +52,9 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
 
   const [activeAddImageCopy, setActiveAddImageCopy] = useState<ResponseCopy>();
   const [previewModal, setPreviewModal] = useState(false);
+  const [previewUnsubModal, setPreviewUnsubModal] = useState(false);
   const [previewHtml, setPreviewHtml] = useState("");
+  const [previewUnsubHtml, setPreviewUnsubHtml] = useState("");
 
   useEffect(() => {
     setCopies([]);
@@ -178,6 +180,38 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
     setPreviewModal(false);
   };
 
+  const handleHtmlUpdate = (newHtml: string) => {
+    const updatedCopies = [...copies];
+    const index = updatedCopies.findIndex((copy) => copy.html === previewHtml);
+    if (index !== -1) {
+      updatedCopies[index].html = newHtml;
+      setCopies(updatedCopies);
+      setPreviewHtml(newHtml);
+    }
+  };
+  
+  const handleUnsubHtmlUpdate = (newHtml: string) => {
+    const updatedCopies = copies.map((copy) => {
+      if (
+        copy.unsubData &&
+        copy.unsubData.unsubscribeBuildedBlock === previewUnsubHtml
+      ) {
+        return {
+          ...copy,
+          unsubData: {
+            ...copy.unsubData,
+            unsubscribeBuildedBlock: newHtml,
+          },
+        };
+      }
+      return copy;
+    });
+  
+    setCopies(updatedCopies);
+    setPreviewUnsubHtml(newHtml);
+  };
+  
+
   return (
     <Container>
       <HeaderContainer>
@@ -253,11 +287,11 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                             </CopyButton>
                             <PreviewButton
                               onClick={() => {
-                                setPreviewHtml(
+                                setPreviewUnsubHtml(
                                   copy.unsubData
                                     ?.unsubscribeBuildedBlock as string
                                 );
-                                setPreviewModal(true);
+                                setPreviewUnsubModal(true);
                               }}
                             >
                               Preview
@@ -360,11 +394,22 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
         />
       )}
       {previewModal && (
-        <PreviewModal
-          html={previewHtml}
-          onClose={handleClosePreviewModal}
-          isOpen={previewModal}
-        />
+        <PreviewAndEditModal
+        html={previewHtml}
+        onClose={handleClosePreviewModal}
+        isOpen={previewModal}
+        onChange={handleHtmlUpdate}
+      />
+      
+      )}
+      {previewUnsubModal && (
+        <PreviewAndEditModal
+        html={previewUnsubHtml}
+        onClose={() => setPreviewUnsubModal(false)}
+        isOpen={previewUnsubModal}
+        onChange={handleUnsubHtmlUpdate}
+      />
+      
       )}
     </Container>
   );

@@ -1,4 +1,4 @@
-import { Padding } from './padding.types';
+import { Padding } from "./padding.types";
 
 export interface DefaultUnsubBlock {
   fontSize: string;
@@ -6,4 +6,6 @@ export interface DefaultUnsubBlock {
   linkColor: string;
   fontFamily: string;
   padding: Padding;
+  fontWeight?: string;
+  textAlign?: 'center' | 'left' | 'right';
 }

@@ -6,6 +6,7 @@ import {
   InputContainer,
   OverflowContainer,
 } from "../UnsubBlock/UnsubBlock.styled";
+import Dropdown from "../Dropdown/Dropdown";
 
 interface Props {
   value?: DefaultUnsubBlock;
@@ -18,6 +19,8 @@ const DefaultUnsubBlockBuilder: React.FC<Props> = ({ value, onChange }) => {
     fontFamily: value?.fontFamily || "",
     textColor: value?.textColor || "",
     linkColor: value?.linkColor || "",
+    fontWeight: value?.fontWeight || "400",
+    textAlign: value?.textAlign || "center",
     padding: {
       top: value?.padding?.top || "",
       right: value?.padding?.right || "",
@@ -63,6 +66,34 @@ const DefaultUnsubBlockBuilder: React.FC<Props> = ({ value, onChange }) => {
             onChange={(e) => handleChange("fontFamily", e.target.value)}
           />
         </InputContainer>
+      </InputGroup>
+
+      <InputGroup>
+        <Dropdown
+          placeholder="Font Weight"
+          options={[
+            "100",
+            "200",
+            "300",
+            "400",
+            "500",
+            "600",
+            "700",
+            "800",
+            "900",
+          ]}
+          selected={safeValue.fontWeight as string}
+          onSelect={(option: string) => handleChange("fontWeight", option)}
+        />
+      </InputGroup>
+
+      <InputGroup>
+        <Dropdown
+          placeholder="Text Align"
+          options={["center", "left", "right"]}
+          selected={safeValue.textAlign as string}
+          onSelect={(option: string) => handleChange("textAlign", option)}
+        />
       </InputGroup>
 
       <InputGroup>
