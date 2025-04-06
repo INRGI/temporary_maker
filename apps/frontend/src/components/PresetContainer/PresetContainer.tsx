@@ -19,6 +19,8 @@ import PresetUpdateModal from "../PresetUpdateModal/PresetUpdateModal";
 import CopyMaker from "../CopyMaker/CopyMaker";
 import { toastError, toastSuccess } from "../../helpers/toastify";
 import { FaRegCopy } from "react-icons/fa6";
+import { MdEdit } from "react-icons/md";
+import { MdDeleteForever } from "react-icons/md";
 
 const PresetContainer: React.FC = () => {
   const [presets, setPresets] = useState<Preset[]>([]);
@@ -122,10 +124,10 @@ const PresetContainer: React.FC = () => {
                     <FaRegCopy />
                   </DublicateButton>
                   <EditButton onClick={() => handleUpdatePreset(preset)}>
-                    Edit
+                  <MdEdit />
                   </EditButton>
                   <DeleteButton onClick={() => handleDeletePreset(preset)}>
-                    Delete
+                  <MdDeleteForever />
                   </DeleteButton>
                 </div>
               </PresetCard>

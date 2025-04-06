@@ -105,7 +105,7 @@ export const PresetCard = styled.li<{ isActive: boolean }>`
   }
 
   button {
-    min-width: 80px;
+    min-width: 50px;
   }
 `;
 
@@ -127,8 +127,8 @@ export const DeleteButton = styled.button`
   line-height: 1;
   list-style: none;
   overflow: hidden;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: 5px;
+  padding-right: 5px;
   position: relative;
   text-align: left;
   text-decoration: none;
@@ -139,6 +139,7 @@ export const DeleteButton = styled.button`
   white-space: nowrap;
   will-change: box-shadow, transform;
   font-size: 18px;
+  width: 50px;
   &:focus {
     box-shadow: #b22b36 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
       rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #b22b36 0 -3px 0 inset;
@@ -174,8 +175,8 @@ export const EditButton = styled.button`
   line-height: 1;
   list-style: none;
   overflow: hidden;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: 5px;
+  padding-right: 5px;
   position: relative;
   text-align: left;
   text-decoration: none;
@@ -186,6 +187,7 @@ export const EditButton = styled.button`
   white-space: nowrap;
   will-change: box-shadow, transform;
   font-size: 18px;
+  width: 50px;
   &:focus {
     box-shadow: #e19110 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
       rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #e19110 0 -3px 0 inset;
