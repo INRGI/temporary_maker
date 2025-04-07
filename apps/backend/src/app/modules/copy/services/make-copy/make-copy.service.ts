@@ -90,7 +90,9 @@ export class MakeCopyService {
           subjects[i] = await this.antiSpamService.changeSpamWords({
             html: subjects[i],
           });
-          subjects[i] = subjects[i].replace(/&amp;/g, '&');
+          subjects[i] = await this.antiSpamService.optimizeSubject({
+            html: subjects[i],
+          });
         }
       }
 
@@ -99,7 +101,9 @@ export class MakeCopyService {
           subjects[i] = await this.antiSpamService.changeAllWords({
             html: subjects[i],
           });
-          subjects[i] = subjects[i].replace(/&amp;/g, '&');
+          subjects[i] = await this.antiSpamService.optimizeSubject({
+            html: subjects[i],
+          });
         }
       }
     }

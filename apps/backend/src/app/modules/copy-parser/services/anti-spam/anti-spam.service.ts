@@ -58,6 +58,12 @@ export class AntiSpamService {
     return root?.innerHTML || "";
   }
 
+  public async optimizeSubject(payload: AntiSpamPayload): Promise<string> {
+    const { html } = payload;
+    const response = html.replace(/&amp;/g, "&");
+    return response;
+  }
+
   private processNode(node: Node): void {
     if (node.nodeType === node.TEXT_NODE) {
       const text = node.textContent || "";
