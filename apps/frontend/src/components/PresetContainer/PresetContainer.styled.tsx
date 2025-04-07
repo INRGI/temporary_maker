@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 
 export const RootContainer = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 10px;
   width: 100%;
 `;
 
@@ -12,7 +12,6 @@ export const Container = styled.div`
   gap: 20px;
   background-color: #3a3a3a;
   padding: 25px;
-  margin-left: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
   max-width: 470px;

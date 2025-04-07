@@ -59,7 +59,7 @@ export const BlockHeader = styled.div`
   align-content: center;
 
   h2 {
-    font-size: 30px;
+    font-size: 24px;
     line-height: 1.2;
     color: #fff;
     margin: 0;

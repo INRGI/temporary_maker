@@ -9,7 +9,7 @@ export const Container = styled.div`
   margin-left: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
-  max-width: 570px;
+  max-width: calc(100%);
   width: 100%;
 
   @media (max-width: 768px) {
@@ -78,7 +78,6 @@ export const CopyCard = styled.li`
   width: calc(100% - 40px);
   color: #fff;
   gap: 15px;
-  cursor: pointer;
   transition: all 0.3s ease;
 
   h2 {
@@ -122,13 +121,28 @@ export const Text = styled.span`
   font-weight: normal;
 `;
 
+export const SubjectContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  background-color: #2b2b2b;
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+`;
+
+export const UnsubContainer = styled(SubjectContainer)``;
+
 export const Subject = styled.p`
   font-size: 17px;
   font-weight: normal;
   padding: 0;
   margin: 0;
+  cursor: pointer;
 `;
-
 
 export const TextSpaceDivider = styled.div`
   display: flex;
@@ -212,7 +226,7 @@ export const DownloadButton = styled.a`
   user-select: none;
   white-space: nowrap;
   font-size: 18px;
-  
+
   &:focus {
     box-shadow: #5941a9 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
       rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #5941a9 0 -3px 0 inset;

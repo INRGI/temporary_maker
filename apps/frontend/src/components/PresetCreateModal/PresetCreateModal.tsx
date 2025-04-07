@@ -22,6 +22,7 @@ interface PresetCreateModalProps {
 
 const teams: Broadcast["team"][] = [
   "Blue",
+  "Warsaw",
   "Red",
   "Green",
   "Purple",
@@ -113,7 +114,7 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
           />
 
           <Dropdown
-            placeholder="Team"
+            placeholder="Broadcast"
             options={teams}
             selected={presetData.broadcast.team}
             onSelect={(team) =>

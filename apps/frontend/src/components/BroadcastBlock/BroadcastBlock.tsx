@@ -14,6 +14,7 @@ interface Props {
 const teams: Broadcast["team"][] = [
   "Blue",
   "Red",
+  "Warsaw",
   "Green",
   "Purple",
   "Jade",
@@ -82,7 +83,7 @@ const BroadcastBlock: React.FC<Props> = ({ preset }) => {
 
       <InputGroup>
         <Dropdown
-          placeholder="Team"
+          placeholder="Broadcast"
           options={teams}
           selected={currentPreset.broadcast.team}
           onSelect={(team) =>

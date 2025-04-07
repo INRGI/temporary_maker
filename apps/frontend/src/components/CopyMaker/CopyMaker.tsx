@@ -19,9 +19,11 @@ import {
   PreviewButton,
   ReplaceButton,
   Subject,
+  SubjectContainer,
   Text,
   TextSpaceDivider,
   TextTitle,
+  UnsubContainer,
 } from "./CopyMaker.styled";
 import { VscDebugStart } from "react-icons/vsc";
 import { GrDownload } from "react-icons/gr";
@@ -189,7 +191,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
       setPreviewHtml(newHtml);
     }
   };
-  
+
   const handleUnsubHtmlUpdate = (newHtml: string) => {
     const updatedCopies = copies.map((copy) => {
       if (
@@ -206,11 +208,10 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
       }
       return copy;
     });
-  
+
     setCopies(updatedCopies);
     setPreviewUnsubHtml(newHtml);
   };
-  
 
   return (
     <Container>
@@ -234,7 +235,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           {copies.map((copy) => (
             <CopyCard key={copy.copyName}>
               <CardHeader>
-                <h2>{copy.copyName}</h2>
+                <h2>{copy.copyName}{copy.buildedLink.includes('IMG') && (` (${copy.buildedLink.match(/(IMG.*)/)?.[0] || ""})`)}</h2>
                 <div>
                   {copy.html.includes("Error") ? (
                     <TextTitle>Html not found</TextTitle>
@@ -257,7 +258,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
               {!copy.html.includes("Error") && (
                 <>
                   {copy.unsubData && copy.unsubData?.unsubscribeText && (
-                    <>
+                    <UnsubContainer>
                       <TextTitle>
                         Unsub Text:
                         <Text> {copy.unsubData.unsubscribeText}</Text>
@@ -271,7 +272,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                       )}
                       {copy.unsubData.unsubscribeBuildedBlock && (
                         <ButtonContainer>
-                          <TextTitle>Unsub Builded Block</TextTitle>
+                          <TextTitle>Unsub Builded Block:</TextTitle>
                           <ButtonContainer>
                             <CopyButton
                               onClick={() => {
@@ -299,15 +300,23 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                           </ButtonContainer>
                         </ButtonContainer>
                       )}
-                    </>
+                    </UnsubContainer>
                   )}
                   {copy.subjects && (
-                    <>
+                    <SubjectContainer>
                       <TextTitle>Subjects:</TextTitle>
                       {copy.subjects.map((subject, index) => (
-                        <Subject key={index}>{subject}</Subject>
+                        <Subject
+                          onClick={() => {
+                            navigator.clipboard.writeText(subject);
+                            toastSuccess("Copied to clipboard");
+                          }}
+                          key={index}
+                        >
+                          {subject}
+                        </Subject>
                       ))}
-                    </>
+                    </SubjectContainer>
                   )}
                   {copy.imageLinks && copy.imageLinks?.length > 0 && (
                     <>
@@ -395,21 +404,19 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
       )}
       {previewModal && (
         <PreviewAndEditModal
-        html={previewHtml}
-        onClose={handleClosePreviewModal}
-        isOpen={previewModal}
-        onChange={handleHtmlUpdate}
-      />
-      
+          html={previewHtml}
+          onClose={handleClosePreviewModal}
+          isOpen={previewModal}
+          onChange={handleHtmlUpdate}
+        />
       )}
       {previewUnsubModal && (
         <PreviewAndEditModal
-        html={previewUnsubHtml}
-        onClose={() => setPreviewUnsubModal(false)}
-        isOpen={previewUnsubModal}
-        onChange={handleUnsubHtmlUpdate}
-      />
-      
+          html={previewUnsubHtml}
+          onClose={() => setPreviewUnsubModal(false)}
+          isOpen={previewUnsubModal}
+          onChange={handleUnsubHtmlUpdate}
+        />
       )}
     </Container>
   );
