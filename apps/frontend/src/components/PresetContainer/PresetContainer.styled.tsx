@@ -4,6 +4,7 @@ export const RootContainer = styled.div`
   display: flex;
   gap: 10px;
   width: 100%;
+  height: calc(100vh);
 `;
 
 export const Container = styled.div`
@@ -61,8 +62,8 @@ export const PresetsContainer = styled.ul`
   width: 100%;
   padding: 0;
   height: auto;
-  max-height: 400px;
-  min-height: 400px;
+  max-height: calc(100vh - 330px);
+  min-height: calc(100vh - 330px);
   overflow-y: auto;
 
   @media (max-width: 768px) {

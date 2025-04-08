@@ -23,6 +23,7 @@ import {
   Text,
   TextSpaceDivider,
   TextTitle,
+  TitleCopy,
   UnsubContainer,
 } from "./CopyMaker.styled";
 import { VscDebugStart } from "react-icons/vsc";
@@ -36,6 +37,8 @@ import AddImageModal from "../AddImageModal/AddImageModal";
 import { ResponseCopy } from "../../types/copy-response";
 import DownloadHtmlZipButton from "../DownloadHtmlZipButton";
 import PreviewAndEditModal from "../PreviewAndEditModal";
+import { FaLink } from "react-icons/fa";
+import BuildSpaceAdLink from "../BuildSpaceAdLink/BuildSpaceAdLink";
 
 interface Props {
   preset: Preset;
@@ -57,6 +60,8 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
   const [previewUnsubModal, setPreviewUnsubModal] = useState(false);
   const [previewHtml, setPreviewHtml] = useState("");
   const [previewUnsubHtml, setPreviewUnsubHtml] = useState("");
+
+  const [buildLinkModal, setBuildLinkModal] = useState(false);
 
   useEffect(() => {
     setCopies([]);
@@ -127,6 +132,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
       newCopies[copyIndex] = updatedCopy;
       setCopies(newCopies);
 
+      // Update imagesSource
       setImagesSource((prevImagesSource) =>
         prevImagesSource.map((img) =>
           img.copyName === copyName && img.imageLink === oldImageLink
@@ -136,6 +142,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
       );
 
       const newLinks = { ...newImageLinks };
+      newLinks[`${copyName}-${newImageLink}`] = newImageLink;
       delete newLinks[`${copyName}-${oldImageLink}`];
       setNewImageLinks(newLinks);
 
@@ -220,6 +227,11 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           <h2>{preset.name}</h2>
         </ServicesBlockHeader>
         <ButtonsHeaderContainer>
+          {preset.linkUrl && (
+            <Button onClick={() => setBuildLinkModal(true)}>
+              <FaLink />
+            </Button>
+          )}
           {copies.length > 0 && (
             <DownloadHtmlZipButton copies={copies} presetName={preset.name} />
           )}
@@ -235,7 +247,21 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           {copies.map((copy) => (
             <CopyCard key={copy.copyName}>
               <CardHeader>
-                <h2>{copy.copyName}{copy.buildedLink.includes('IMG') && (` (${copy.buildedLink.match(/(IMG.*)/)?.[0] || ""})`)}</h2>
+                <h2>
+                  {copy.copyName}
+                  {copy.buildedLink.includes("IMG") && (
+                    <TitleCopy
+                      onClick={() => {
+                        navigator.clipboard.writeText(
+                          copy.buildedLink.match(/(IMG.*)/)?.[0] || ""
+                        );
+                        toastSuccess("Copied to clipboard");
+                      }}
+                    >
+                      ({copy.buildedLink.match(/(IMG.*)/)?.[0] || ""})
+                    </TitleCopy>
+                  )}
+                </h2>
                 <div>
                   {copy.html.includes("Error") ? (
                     <TextTitle>Html not found</TextTitle>
@@ -416,6 +442,14 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           onClose={() => setPreviewUnsubModal(false)}
           isOpen={previewUnsubModal}
           onChange={handleUnsubHtmlUpdate}
+        />
+      )}
+
+      {preset.linkUrl && buildLinkModal && (
+        <BuildSpaceAdLink
+          onClose={() => setBuildLinkModal(false)}
+          isOpen={buildLinkModal}
+          linkUrl={preset.linkUrl}
         />
       )}
     </Container>

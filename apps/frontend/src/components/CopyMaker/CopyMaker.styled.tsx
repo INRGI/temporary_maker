@@ -61,8 +61,8 @@ export const CopiesList = styled.ul`
   width: 100%;
   padding: 0;
   height: auto;
-  max-height: 500px;
-  min-height: 500px;
+  max-height: calc(100vh - 215px);
+  min-height: calc(100vh - 215px);
   overflow-y: auto;
 `;
 
@@ -119,6 +119,10 @@ export const TextTitle = styled.p`
 export const Text = styled.span`
   font-size: 17px;
   font-weight: normal;
+`;
+
+export const TitleCopy = styled.span`
+  cursor: pointer;
 `;
 
 export const SubjectContainer = styled.div`

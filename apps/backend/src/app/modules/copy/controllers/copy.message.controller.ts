@@ -1,31 +1,23 @@
 import {
   GetMondayTrackingsResponseDto,
-  MakeCopyRequestDto,
-  MakeCopyResponseDto,
   MakeMulitpleCopiesRequestDto,
   MakeMultipleCopiesResponseDto,
 } from "@epc-services/interface-adapters";
 import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
-import { MakeCopyService } from "../services/make-copy/make-copy.service";
 import { MakeMultipleCopiesService } from "../services/make-multiple-copies/make-multiple-copies.service";
 import { GetMondayTrackingsService } from "../services/get-monday-trackings/get-monday-trackings.service";
 import { GetAllCopiesForProductService } from "../services/get-all-copies-for-product/get-all-copies-for-product.service";
+import { SpaceAdBuildLinkService } from "../services/space-ad-build-link/space-ad-build-link.service";
+import { SpaceAdBuildLinkPayload } from "../services/space-ad-build-link/space-ad-build-link.payload";
 
 @Controller("copy")
 export class CopyMessageController {
   constructor(
-    private readonly makeCopyService: MakeCopyService,
     private readonly makeMultipleCopiesService: MakeMultipleCopiesService,
     private readonly getTrackingsService: GetMondayTrackingsService,
-    private readonly getAllCopiesForProductService: GetAllCopiesForProductService
+    private readonly getAllCopiesForProductService: GetAllCopiesForProductService,
+    private readonly buildSpaceAdLinkService: SpaceAdBuildLinkService,
   ) {}
-
-  public async makeCopy(
-    request: MakeCopyRequestDto
-  ): Promise<MakeCopyResponseDto> {
-    const result = await this.makeCopyService.makeCopy(request);
-    return result;
-  }
 
   @Post("make-multiple-copies")
   public async makeMultipleCopies(
@@ -61,6 +53,13 @@ export class CopyMessageController {
       minLift,
       maxLift,
     });
+    return result;
+  }
+
+  @Post("space-ad-build-link")
+  public async buildLink(@Body() payload: SpaceAdBuildLinkPayload) {
+    const result = await this.buildSpaceAdLinkService.buildLink(payload);
+
     return result;
   }
 }
