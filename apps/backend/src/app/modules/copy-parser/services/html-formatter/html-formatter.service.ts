@@ -28,7 +28,6 @@ export class HtmlFormatterService {
       const formattedHtml = await prettier.format(html, prettierOptions);
       return formattedHtml;
     } catch (error) {
-      this.logger.error(`Error formatting HTML with Prettier: ${error.message}`, error.stack);
       return html;
     }
   }

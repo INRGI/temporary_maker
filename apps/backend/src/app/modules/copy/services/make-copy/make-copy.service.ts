@@ -38,13 +38,25 @@ export class MakeCopyService {
     let unsubData: UnsubData;
     const { copyName, preset } = payload;
 
-    const product = copyName.match(/^[a-zA-Z]+/)[0];
-    const productLift = copyName.match(/[a-zA-Z]+(\d+)/)
-      ? copyName.match(/[a-zA-Z]+(\d+)/)[1]
-      : "";
-    const productImage = copyName.match(/\d+([a-zA-Z].*)/)
-      ? copyName.match(/\d+([a-zA-Z].*)/)[1]
-      : "";
+    const nameMatch = copyName.match(/^[a-zA-Z]+/);
+    const product = nameMatch ? nameMatch[0] : "";
+
+    const liftMatch = copyName.match(/[a-zA-Z]+(\d+)/);
+    const productLift = liftMatch ? liftMatch[1] : "";
+
+    const imageMatch = copyName.match(/\d+([a-zA-Z].*)/);
+    const productImage = imageMatch ? imageMatch[1] : "";
+
+    if (!product || !productLift) {
+      return {
+        copyName,
+        html: "",
+        unsubData,
+        subjects,
+        imageLinks: [],
+        buildedLink: "urlhere",
+      };
+    }
 
     const presetProps = preset;
 
@@ -85,7 +97,7 @@ export class MakeCopyService {
         product,
         productLift,
       });
-      if (presetProps.subjectLine.subjectLine === 'Spam Words Only') {
+      if (presetProps.subjectLine.subjectLine === "Spam Words Only") {
         for (let i = 0; i < subjects.length; i++) {
           subjects[i] = await this.antiSpamService.changeSpamWords({
             html: subjects[i],
@@ -96,7 +108,7 @@ export class MakeCopyService {
         }
       }
 
-      if (presetProps.subjectLine.subjectLine === 'Full Anti Spam') {
+      if (presetProps.subjectLine.subjectLine === "Full Anti Spam") {
         for (let i = 0; i < subjects.length; i++) {
           subjects[i] = await this.antiSpamService.changeAllWords({
             html: subjects[i],

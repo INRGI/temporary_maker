@@ -85,7 +85,7 @@ const ProductPreview: React.FC = () => {
                 <CardHeader>
                   <h2>{copy.copyName}</h2>
 
-                  {copy.html.includes("Error reading file") ? (
+                  {copy.html.includes("Error reading file") || !copy.html ? (
                     <TextTitle>HTML not found</TextTitle>
                   ) : (
                     <PreviewButton
@@ -98,7 +98,7 @@ const ProductPreview: React.FC = () => {
                     </PreviewButton>
                   )}
                 </CardHeader>
-                {copy.subjects && !copy.html.includes("Error reading file") && (
+                {copy.subjects && !copy.html.includes("Error reading file") && copy.html && (
                   <>
                     <TextTitle>Subjects:</TextTitle>
                     {copy.subjects.map((subject, index) => (

@@ -114,7 +114,6 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
         toastError("Copy not found");
         return;
       }
-
       const updatedCopy = { ...copies[copyIndex] };
 
       updatedCopy.html = updatedCopy.html.replace(
@@ -129,10 +128,16 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
       }
 
       const newCopies = [...copies];
-      newCopies[copyIndex] = updatedCopy;
+
+      newCopies.map((copy) => {
+        if (copy.copyName === copyName) {
+          copy.html = updatedCopy.html;
+          copy.imageLinks = updatedCopy.imageLinks;
+        }
+        return copy;
+      })
       setCopies(newCopies);
 
-      // Update imagesSource
       setImagesSource((prevImagesSource) =>
         prevImagesSource.map((img) =>
           img.copyName === copyName && img.imageLink === oldImageLink
@@ -263,7 +268,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                   )}
                 </h2>
                 <div>
-                  {copy.html.includes("Error") ? (
+                  {copy.html.includes("Error") || !copy.html ? (
                     <TextTitle>Html not found</TextTitle>
                   ) : (
                     <TextSpaceDivider>
@@ -281,7 +286,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                   )}
                 </div>
               </CardHeader>
-              {!copy.html.includes("Error") && (
+              {!copy.html.includes("Error") && copy.html && (
                 <>
                   {copy.unsubData && copy.unsubData?.unsubscribeText && (
                     <UnsubContainer>
@@ -352,8 +357,8 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                         </TextTitle>
                       </p>
                       <ImagesList>
-                        {copy.imageLinks?.map((image) => (
-                          <ImageCard key={image}>
+                        {copy.imageLinks.map((image, index) => (
+                          <ImageCard key={`${copy.copyName}-${image}-${index}`}>
                             <ImagePreviewContainer>
                               <img src={image} alt="preview" />
                             </ImagePreviewContainer>
