@@ -62,7 +62,6 @@ export const CopiesList = styled.ul`
   padding: 0;
   height: auto;
   max-height: calc(100vh - 215px);
-  min-height: calc(100vh - 215px);
   overflow-y: auto;
 `;
 

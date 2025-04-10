@@ -48,9 +48,8 @@ export const Container = styled.div`
   gap: 10px;
   width: 100%;
   flex-direction: column;
-  justify-content: center;
   align-content: center;
-  /* align-items: center; */
+  overflow-y: scroll;
 `;
 
 
