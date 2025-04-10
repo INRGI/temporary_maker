@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import Layout from "../Layout";
+import Layout from "../Common/Layout";
 import { lazy } from "react";
 import NotFound from "../../pages/NotFound";
 

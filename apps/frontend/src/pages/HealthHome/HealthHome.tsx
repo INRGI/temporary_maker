@@ -1,7 +1,11 @@
 import PresetContainer from "../../components/Finance/PresetContainer/PresetContainer";
-import { Container, LinkNotification, TextNotification } from "./Home.styled";
+import {
+  Container,
+  LinkNotification,
+  TextNotification,
+} from "./HealthHome.styled";
 
-const Home: React.FC = () => {
+const HealthHome: React.FC = () => {
   return (
     <Container>
       <PresetContainer />
@@ -9,7 +13,7 @@ const Home: React.FC = () => {
         Copies not found? Add missed ones{" "}
         <LinkNotification
           target="_blank"
-          href="https://docs.google.com/spreadsheets/d/1kJT1_YLuDKwYcwpxTMm38JClRUH3f7XPY0P4MUhEPNk/edit?gid=0#gid=0"
+          href="https://docs.google.com/spreadsheets/d/1kJT1_YLuDKwYcwpxTMm38JClRUH3f7XPY0P4MUhEPNk/edit?gid=2066845096#gid=2066845096"
         >
           here
         </LinkNotification>
@@ -18,4 +22,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default HealthHome;

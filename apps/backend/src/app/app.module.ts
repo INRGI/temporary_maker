@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { BroadcastModule } from './modules/broadcast/broadcast.module';
-import { PriorityProductsModule } from './modules/priority-products/priority-products.module';
-import { CopyModule } from './modules/copy/copy.module';
+import { FinancesModule } from './modules/finances/finances.module';
 
 @Module({
   imports: [    
@@ -14,9 +12,7 @@ import { CopyModule } from './modules/copy/copy.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    BroadcastModule,
-    PriorityProductsModule,
-    CopyModule,
+    FinancesModule
   ],
   controllers: [],
   providers: [],

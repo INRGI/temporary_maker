@@ -10,14 +10,16 @@ import {
 } from "./ProductPreview.styled";
 import { useState } from "react";
 import { toastError, toastSuccess } from "../../helpers/toastify";
-import Loader from "../../components/Loader";
-import PreviewModal from "../../components/PreviewModal";
+
+
 import {
   PreviewButton,
   Subject,
   TextTitle,
-} from "../../components/CopyMaker/CopyMaker.styled";
-import FloatingLabelInput from "../../components/FloatingLabelInput/FloatingLabelInput";
+} from "../../components/Finance/CopyMaker/CopyMaker.styled";
+import FloatingLabelInput from "../../components/Common/FloatingLabelInput/FloatingLabelInput";
+import Loader from "../../components/Common/Loader";
+import PreviewModal from "../../components/Common/PreviewModal";
 
 const ProductPreview: React.FC = () => {
   const [product, setProduct] = useState("");
@@ -33,7 +35,7 @@ const ProductPreview: React.FC = () => {
     try {
       setLoading(true);
       const result = await axios.get(
-        `/api/copy/all-copies/${product}?minLift=${minLift}&maxLift=${maxLift}`
+        `/api/finances/copy/all-copies/${product}?minLift=${minLift}&maxLift=${maxLift}`
       );
       setCopies(result.data);
       toastSuccess("Copies fetched successfully.");
