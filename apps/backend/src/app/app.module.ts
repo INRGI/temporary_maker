@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { FinancesModule } from './modules/finances/finances.module';
+// import { HealthModule } from './modules/health/health.module';
 
 @Module({
   imports: [    
@@ -12,7 +13,8 @@ import { FinancesModule } from './modules/finances/finances.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    FinancesModule
+    FinancesModule,
+    // HealthModule
   ],
   controllers: [],
   providers: [],

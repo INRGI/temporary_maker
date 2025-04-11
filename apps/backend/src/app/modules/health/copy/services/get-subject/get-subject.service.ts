@@ -77,7 +77,6 @@ export class GetSubjectService {
 
       let text = this.extractTextFromDocx(fileBuffer);
       text = text.replace(/&amp;/g, "&");
-      
       const subjects = text.split('\n');
 
       return subjects || [];

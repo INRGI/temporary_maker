@@ -241,7 +241,7 @@ const AddImageModal: React.FC<Props> = ({
             suppressContentEditableWarning
             dangerouslySetInnerHTML={{ __html: localHtml }}
             onInput={(e) => setLocalHtml((e.target as HTMLElement).innerHTML)}
-            style={{ maxWidth: "600px", margin: "0 auto", cursor: "pointer" }}
+            style={{ maxWidth: "600px", margin: "0 auto", cursor: "crosshair" }}
           />
         </PreviewContainer>
       </AddImageContainer>
