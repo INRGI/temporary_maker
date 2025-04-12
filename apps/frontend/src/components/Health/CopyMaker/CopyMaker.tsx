@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Preset } from "../../../types/finance";
+import { Preset } from "../../../types/health";
 import { ServicesBlockHeader } from "../PresetContainer/PresetContainer.styled";
 import {
   AddButton,
@@ -20,11 +20,9 @@ import {
   ReplaceButton,
   Subject,
   SubjectContainer,
-  Text,
   TextSpaceDivider,
   TextTitle,
   TitleCopy,
-  UnsubContainer,
 } from "./CopyMaker.styled";
 import { VscDebugStart } from "react-icons/vsc";
 import { GrDownload } from "react-icons/gr";
@@ -34,7 +32,7 @@ import { toastError, toastSuccess } from "../../../helpers/toastify";
 import Loader from "../../Common/Loader";
 import FloatingLabelInput from "../../Common/FloatingLabelInput/FloatingLabelInput";
 import AddImageModal from "../../Common/AddImageModal/AddImageModal";
-import { ResponseCopy } from "../../../types/finance/copy-response";
+import { ResponseCopy } from "../../../types/health/copy-response";
 import DownloadHtmlZipButton from "../../Common/DownloadHtmlZipButton";
 import PreviewAndEditModal from "../../Common/PreviewAndEditModal";
 import { FaLink } from "react-icons/fa";
@@ -57,9 +55,9 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
 
   const [activeAddImageCopy, setActiveAddImageCopy] = useState<ResponseCopy>();
   const [previewModal, setPreviewModal] = useState(false);
-  const [previewUnsubModal, setPreviewUnsubModal] = useState(false);
+
   const [previewHtml, setPreviewHtml] = useState("");
-  const [previewUnsubHtml, setPreviewUnsubHtml] = useState("");
+
 
   const [buildLinkModal, setBuildLinkModal] = useState(false);
 
@@ -204,27 +202,6 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
     }
   };
 
-  const handleUnsubHtmlUpdate = (newHtml: string) => {
-    const updatedCopies = copies.map((copy) => {
-      if (
-        copy.unsubData &&
-        copy.unsubData.unsubscribeBuildedBlock === previewUnsubHtml
-      ) {
-        return {
-          ...copy,
-          unsubData: {
-            ...copy.unsubData,
-            unsubscribeBuildedBlock: newHtml,
-          },
-        };
-      }
-      return copy;
-    });
-
-    setCopies(updatedCopies);
-    setPreviewUnsubHtml(newHtml);
-  };
-
   return (
     <Container>
       <HeaderContainer>
@@ -288,51 +265,6 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
               </CardHeader>
               {!copy.html.includes("Error") && copy.html && (
                 <>
-                  {copy.unsubData && copy.unsubData?.unsubscribeText && (
-                    <UnsubContainer>
-                      <TextTitle>
-                        Unsub Text:
-                        <Text> {copy.unsubData.unsubscribeText}</Text>
-                      </TextTitle>
-
-                      {copy.unsubData.unsubscribeUrl && (
-                        <TextTitle>
-                          Unsub Link:
-                          <Text> {copy.unsubData.unsubscribeUrl}</Text>
-                        </TextTitle>
-                      )}
-                      {copy.unsubData.unsubscribeBuildedBlock && (
-                        <ButtonContainer>
-                          <TextTitle>Unsub Builded Block:</TextTitle>
-                          <ButtonContainer>
-                            <CopyButton
-                              onClick={() => {
-                                navigator.clipboard.writeText(
-                                  copy.unsubData
-                                    ?.unsubscribeBuildedBlock as string
-                                );
-                                toastSuccess("Copied to clipboard");
-                              }}
-                              type="button"
-                            >
-                              <BsCopy />
-                            </CopyButton>
-                            <PreviewButton
-                              onClick={() => {
-                                setPreviewUnsubHtml(
-                                  copy.unsubData
-                                    ?.unsubscribeBuildedBlock as string
-                                );
-                                setPreviewUnsubModal(true);
-                              }}
-                            >
-                              Preview
-                            </PreviewButton>
-                          </ButtonContainer>
-                        </ButtonContainer>
-                      )}
-                    </UnsubContainer>
-                  )}
                   {copy.subjects && (
                     <SubjectContainer>
                       <TextTitle>Subjects:</TextTitle>
@@ -439,14 +371,6 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           onClose={handleClosePreviewModal}
           isOpen={previewModal}
           onChange={handleHtmlUpdate}
-        />
-      )}
-      {previewUnsubModal && (
-        <PreviewAndEditModal
-          html={previewUnsubHtml}
-          onClose={() => setPreviewUnsubModal(false)}
-          isOpen={previewUnsubModal}
-          onChange={handleUnsubHtmlUpdate}
         />
       )}
 

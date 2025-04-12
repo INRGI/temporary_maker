@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Preset, BotTrap } from "../../../types/finance";
+import { Preset, BotTrap } from "../../../types/health";
 import { toastSuccess, toastError } from "../../../helpers/toastify";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import {
@@ -35,7 +35,7 @@ const BotTrapBlock: React.FC<Props> = ({ preset }) => {
   );
 
   useEffect(() => {
-    const savedPreset = JSON.parse(localStorage.getItem("presets") || "[]");
+    const savedPreset = JSON.parse(localStorage.getItem("health-presets") || "[]");
     const presetFromStorage = savedPreset.find(
       (p: Preset) => p.name === preset.name
     );
@@ -56,7 +56,7 @@ const BotTrapBlock: React.FC<Props> = ({ preset }) => {
         toastError("Bot trap URL is required.");
         return 
       }
-      const savedPresets = JSON.parse(localStorage.getItem("presets") || "[]");
+      const savedPresets = JSON.parse(localStorage.getItem("health-presets") || "[]");
       const updatedPresets = savedPresets.map((p: Preset) =>
         p.name === preset.name
           ? {
@@ -70,7 +70,7 @@ const BotTrapBlock: React.FC<Props> = ({ preset }) => {
           : p
       );
 
-      localStorage.setItem("presets", JSON.stringify(updatedPresets));
+      localStorage.setItem("health-presets", JSON.stringify(updatedPresets));
       toastSuccess("Preset updated successfully.");
     } catch (error) {
       toastError("Error saving preset.");

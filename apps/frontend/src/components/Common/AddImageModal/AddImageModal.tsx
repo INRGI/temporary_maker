@@ -8,7 +8,7 @@ import {
 } from "react-icons/fi";
 import FloatingLabelInput from "../FloatingLabelInput/FloatingLabelInput";
 import { toastError, toastSuccess } from "../../../helpers/toastify";
-import { ResponseCopy } from "../../../types/copy-response";
+import { ResponseCopy } from "../../../types/finance/copy-response";
 import AdminModal from "../AdminModal";
 import {
   AddImageContainer,

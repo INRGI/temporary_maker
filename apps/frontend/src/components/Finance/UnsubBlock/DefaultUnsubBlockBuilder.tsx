@@ -1,5 +1,5 @@
 import React from "react";
-import { DefaultUnsubBlock } from "../../../types";
+import { DefaultUnsubBlock } from "../../../types/finance";
 import FloatingLabelInput from "../../Common/FloatingLabelInput/FloatingLabelInput";
 import {
   InputGroup,

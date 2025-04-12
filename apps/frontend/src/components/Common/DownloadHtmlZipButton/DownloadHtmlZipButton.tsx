@@ -1,6 +1,6 @@
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
-import { ResponseCopy } from "../../../types/copy-response";
+import { ResponseCopy } from "../../../types/finance/copy-response";
 import { toastError } from "../../../helpers/toastify";
 import { DownloadButton } from "./DownloadHtmlZipButton.styled";
 import { FaDownload } from "react-icons/fa6";

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import AdminModal from "../../Common/AdminModal";
-import { Preset, Broadcast } from "../../../types/finance";
+import { Preset, Broadcast } from "../../../types/health";
 import { toastError, toastSuccess } from "../../../helpers/toastify";
 import {
   BlockHeader,
@@ -20,17 +20,6 @@ interface PresetCreateModalProps {
   initialData: Preset | null;
 }
 
-const teams: Broadcast["team"][] = [
-  "Blue",
-  "Warsaw",
-  "Red",
-  "Green",
-  "Purple",
-  "Jade",
-  "Tiffany",
-  "Orange",
-];
-
 const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
   isOpen,
   onClose,
@@ -39,7 +28,7 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
   const [presetData, setPresetData] = useState<Preset>(
     initialData || {
       name: "",
-      broadcast: { team: "Select Team", domain: "" },
+      broadcast: { domain: "" },
     }
   );
 
@@ -47,15 +36,13 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (presetData.broadcast.team !== "Select Team") {
-      fetchDomains(presetData.broadcast.team);
-    }
-  }, [presetData.broadcast.team]);
+    fetchDomains();
+  }, []);
 
-  const fetchDomains = async (team: string) => {
+  const fetchDomains = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`/api/finances/broadcast/${team}`);
+      const response = await axios.get(`/api/health/broadcast`);
       setDomains(response.data.domains);
     } catch (error) {
       toastError("Error fetching domains.");
@@ -64,18 +51,14 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
   };
 
   const handleSavePreset = () => {
-    if (
-      !presetData.name ||
-      !presetData.broadcast.domain ||
-      presetData.broadcast.team === "Select Team"
-    ) {
+    if (!presetData.name || !presetData.broadcast.domain) {
       toastError("Please fill in all fields.");
       return;
     }
 
     try {
       const savedPresets: Preset[] = JSON.parse(
-        localStorage.getItem("presets") || "[]"
+        localStorage.getItem("health-presets") || "[]"
       );
 
       const isDuplicate = savedPresets.some(
@@ -88,7 +71,7 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
       }
 
       localStorage.setItem(
-        "presets",
+        "health-presets",
         JSON.stringify([...savedPresets, presetData])
       );
       toastSuccess("Preset saved successfully.");
@@ -113,35 +96,24 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
             placeholder="Preset Name"
           />
 
-          <Dropdown
-            placeholder="Broadcast"
-            options={teams}
-            selected={presetData.broadcast.team}
-            onSelect={(team) =>
-              setPresetData({
-                ...presetData,
-                broadcast: {
-                  ...presetData.broadcast,
-                  team: team as Broadcast["team"],
-                },
-              })
-            }
-          />
-          {loading && <CenterContainer><SmallLoader /></CenterContainer>}
-          {presetData.broadcast.team !== "Select Team" &&
-            domains.length > 0 && (
-              <Dropdown
-                placeholder="Domain"
-                options={domains}
-                selected={presetData.broadcast.domain}
-                onSelect={(domain) =>
-                  setPresetData({
-                    ...presetData,
-                    broadcast: { ...presetData.broadcast, domain },
-                  })
-                }
-              />
-            )}
+          {loading && (
+            <CenterContainer>
+              <SmallLoader />
+            </CenterContainer>
+          )}
+          {domains &&domains.length > 0 && (
+            <Dropdown
+              placeholder="Domain"
+              options={domains}
+              selected={presetData.broadcast.domain}
+              onSelect={(domain) =>
+                setPresetData({
+                  ...presetData,
+                  broadcast: { ...presetData.broadcast, domain },
+                })
+              }
+            />
+          )}
 
           <SaveButton onClick={handleSavePreset}>Save</SaveButton>
         </Container>

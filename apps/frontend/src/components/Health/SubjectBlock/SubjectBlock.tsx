@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { SubjectLine, Preset } from "../../../types/finance";
+import { SubjectLine, Preset } from "../../../types/health";
 import { toastSuccess, toastError } from "../../../helpers/toastify";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import {
@@ -22,7 +22,7 @@ const SubjectBlock: React.FC<Props> = ({ preset }) => {
   });
 
   useEffect(() => {
-    const savedPreset = JSON.parse(localStorage.getItem("presets") || "[]");
+    const savedPreset = JSON.parse(localStorage.getItem("health-presets") || "[]");
     const presetFromStorage = savedPreset.find(
       (p: Preset) => p.name === preset.name
     );
@@ -40,14 +40,14 @@ const SubjectBlock: React.FC<Props> = ({ preset }) => {
 
   const handleSave = () => {
     try {
-      const savedPresets = JSON.parse(localStorage.getItem("presets") || "[]");
+      const savedPresets = JSON.parse(localStorage.getItem("health-presets") || "[]");
       const updatedPresets = savedPresets.map((p: Preset) =>
         p.name === preset.name
           ? { ...p, subjectLine: subject }
           : p
       );
 
-      localStorage.setItem("presets", JSON.stringify(updatedPresets));
+      localStorage.setItem("health-presets", JSON.stringify(updatedPresets));
       toastSuccess("Preset updated successfully.");
     } catch (error) {
       toastError("Error saving preset.");

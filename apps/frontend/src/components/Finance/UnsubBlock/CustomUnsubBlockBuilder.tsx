@@ -1,5 +1,5 @@
 import React from "react";
-import { CustomUnsubBlock } from "../../../types";
+import { CustomUnsubBlock } from "../../../types/finance";
 import FloatingLabelInput from "../../Common/FloatingLabelInput/FloatingLabelInput";
 import { InputGroup, InputContainer } from "../UnsubBlock/UnsubBlock.styled";
 

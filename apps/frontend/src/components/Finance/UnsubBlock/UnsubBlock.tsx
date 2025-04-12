@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Preset, UnsubLinkUrl, UnsubSheet } from "../../../types";
+import { Preset, UnsubLinkUrl, UnsubSheet } from "../../../types/finance";
 import { toastSuccess, toastError } from "../../../helpers/toastify";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import {

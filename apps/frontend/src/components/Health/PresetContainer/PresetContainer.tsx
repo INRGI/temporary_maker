@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Preset } from "../../../types/finance";
+import { Preset } from "../../../types/health";
 import {
   Button,
   Container,
@@ -31,7 +31,7 @@ const PresetContainer: React.FC = () => {
 
   const [activePreset, setActivePreset] = useState<Preset | null>(null);
   const getPresets = async () => {
-    const savedPresets = JSON.parse(localStorage.getItem("presets") || "[]");
+    const savedPresets = JSON.parse(localStorage.getItem("health-presets") || "[]");
     setPresets(savedPresets);
   };
 
@@ -48,17 +48,17 @@ const PresetContainer: React.FC = () => {
   }, [presets]);
 
   const handleDeletePreset = async (preset: Preset) => {
-    const savedPresets = JSON.parse(localStorage.getItem("presets") || "[]");
+    const savedPresets = JSON.parse(localStorage.getItem("health-presets") || "[]");
     const updatedPresets = savedPresets.filter(
       (p: Preset) => p.name !== preset.name
     );
-    localStorage.setItem("presets", JSON.stringify(updatedPresets));
+    localStorage.setItem("health-presets", JSON.stringify(updatedPresets));
     getPresets();
     toastSuccess("Preset deleted successfully");
   };
 
   const handleDuplicatePreset = async (preset: Preset) => {
-    const presets = JSON.parse(localStorage.getItem("presets") || "[]");
+    const presets = JSON.parse(localStorage.getItem("health-presets") || "[]");
     const newPresetName = `${preset.name}_copy`;
     const existingPreset = presets.find(
       (p: Preset) => p.name === newPresetName
@@ -71,7 +71,7 @@ const PresetContainer: React.FC = () => {
 
     const newPreset = { ...preset, name: newPresetName };
     presets.push(newPreset);
-    localStorage.setItem("presets", JSON.stringify(presets));
+    localStorage.setItem("health-presets", JSON.stringify(presets));
     getPresets();
     toastSuccess("Preset duplicated successfully");
   };

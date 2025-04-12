@@ -9,10 +9,9 @@ import {
 } from "./PresetUpdateModal.styled";
 import StylesBlock from "../StylesBlock/StylesBlock";
 import LinkBlock from "../LinkBlock/LinkBlock";
-import UnsubBlock from "../UnsubBlock/UnsubBlock";
 import SubjectBlock from "../SubjectBlock/SubjectBlock";
 import BotTrapBlock from "../BotTrapBlock/BotTrapBlock";
-import { Preset } from "../../../types/finance";
+import { Preset } from "../../../types/health";
 import BroadcastBlock from "../BroadcastBlock/BroadcastBlock";
 
 interface PresetUpdateModalProps {
@@ -35,8 +34,6 @@ const PresetUpdateModal: React.FC<PresetUpdateModalProps> = ({
         return <StylesBlock preset={currentPreset} />;
       case "link":
         return <LinkBlock preset={currentPreset}/>;
-      case "unsub":
-        return <UnsubBlock preset={currentPreset}/>;
       case "subject":
         return <SubjectBlock preset={currentPreset} />;
       case "bottrap":
@@ -66,12 +63,6 @@ const PresetUpdateModal: React.FC<PresetUpdateModalProps> = ({
               onClick={() => setActiveTab("link")}
             >
               Link
-            </TabButton>
-            <TabButton
-              active={activeTab === "unsub"}
-              onClick={() => setActiveTab("unsub")}
-            >
-              Unsub
             </TabButton>
             <TabButton
               active={activeTab === "subject"}

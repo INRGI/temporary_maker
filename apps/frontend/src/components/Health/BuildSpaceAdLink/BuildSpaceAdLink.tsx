@@ -2,7 +2,7 @@ import { useState } from "react";
 import FloatingLabelInput from "../../Common/FloatingLabelInput/FloatingLabelInput";
 import axios from "axios";
 import { toastError, toastSuccess } from "../../../helpers/toastify";
-import { LinkUrl } from "../../../types/finance";
+import { LinkUrl } from "../../../types/health";
 import {
   InputContainer,
   InputGroup,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Preset, LinkUrl } from "../../../types/finance";
+import { Preset, LinkUrl } from "../../../types/health";
 import { toastSuccess, toastError } from "../../../helpers/toastify";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import {
@@ -42,7 +42,7 @@ const LinkBlock: React.FC<Props> = ({ preset }) => {
 
   useEffect(() => {
     setLoading(true);
-    const savedPreset = JSON.parse(localStorage.getItem("presets") || "[]");
+    const savedPreset = JSON.parse(localStorage.getItem("health-presets") || "[]");
     const presetFromStorage = savedPreset.find(
       (p: Preset) => p.name === preset.name
     );
@@ -72,7 +72,7 @@ const LinkBlock: React.FC<Props> = ({ preset }) => {
         toastError("All inputs are required.");
         return;
       }
-      const savedPresets = JSON.parse(localStorage.getItem("presets") || "[]");
+      const savedPresets = JSON.parse(localStorage.getItem("health-presets") || "[]");
       const updatedPresets = savedPresets.map((p: Preset) =>
         p.name === preset.name
           ? {
@@ -86,7 +86,7 @@ const LinkBlock: React.FC<Props> = ({ preset }) => {
           : p
       );
 
-      localStorage.setItem("presets", JSON.stringify(updatedPresets));
+      localStorage.setItem("health-presets", JSON.stringify(updatedPresets));
       toastSuccess("Preset updated successfully.");
     } catch (error) {
       toastError("Error saving preset.");

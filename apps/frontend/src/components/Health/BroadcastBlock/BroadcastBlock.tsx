@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Preset, Broadcast } from "../../../types/finance";
+import { Preset } from "../../../types/health";
 import { toastSuccess, toastError } from "../../../helpers/toastify";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import { Container, SaveButton, InputGroup } from "./BroadcastBlock.styled";
@@ -11,26 +11,15 @@ interface Props {
   preset: Preset;
 }
 
-const teams: Broadcast["team"][] = [
-  "Blue",
-  "Red",
-  "Warsaw",
-  "Green",
-  "Purple",
-  "Jade",
-  "Tiffany",
-  "Orange",
-];
-
 const BroadcastBlock: React.FC<Props> = ({ preset }) => {
   const [domains, setDomains] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentPreset, setCurrentPreset] = useState<Preset>(preset);
 
-  const fetchDomains = async (team: string) => {
+  const fetchDomains = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`/api/finances/broadcast/${team}`);
+      const response = await axios.get(`/api/health/broadcast`);
       setDomains(response.data.domains || []);
     } catch (error) {
       toastError("Error fetching domains.");
@@ -40,25 +29,27 @@ const BroadcastBlock: React.FC<Props> = ({ preset }) => {
   };
 
   useEffect(() => {
-    if (currentPreset.broadcast.team && currentPreset.broadcast.team !== "Select Team") {
-      fetchDomains(currentPreset.broadcast.team);
-    }
-  }, [currentPreset.broadcast.team]);
+    fetchDomains();
+  }, []);
 
   const handleSave = () => {
     try {
-      if (!currentPreset.broadcast || !currentPreset.name) {
+      if (!currentPreset.name) {
         toastError("All data required");
         return;
       }
-      const savedPresets = JSON.parse(localStorage.getItem("presets") || "[]");
+      const savedPresets = JSON.parse(localStorage.getItem("health-presets") || "[]");
       const updatedPresets = savedPresets.map((p: Preset) =>
         p.name === preset.name
-          ? { ...p, broadcast: currentPreset.broadcast, name: currentPreset.name }
+          ? {
+              ...p,
+              broadcast: currentPreset.broadcast,
+              name: currentPreset.name,
+            }
           : p
       );
 
-      localStorage.setItem("presets", JSON.stringify(updatedPresets));
+      localStorage.setItem("health-presets", JSON.stringify(updatedPresets));
       toastSuccess("Preset updated successfully.");
     } catch (error) {
       toastError("Error saving preset.");
@@ -81,24 +72,8 @@ const BroadcastBlock: React.FC<Props> = ({ preset }) => {
         />
       </InputGroup>
 
-      <InputGroup>
-        <Dropdown
-          placeholder="Broadcast"
-          options={teams}
-          selected={currentPreset.broadcast.team}
-          onSelect={(team) =>
-            setCurrentPreset({
-              ...currentPreset,
-              broadcast: {
-                ...currentPreset.broadcast,
-                team: team as Broadcast["team"],
-              },
-            })
-          }
-        />
-      </InputGroup>
 
-      {currentPreset.broadcast.team !== "Select Team" && domains.length > 0 && (
+      {domains && domains.length > 0 && (
         <InputGroup>
           <Dropdown
             placeholder="Domain"
