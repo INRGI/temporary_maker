@@ -164,7 +164,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
       return;
     }
 
-    const hasPreview = imageUrl.includes("/preview");
+    const hasPreview = imageUrl.endsWith("/preview");
 
     if (!hasPreview) {
       window.open(imageUrl, "_blank");
