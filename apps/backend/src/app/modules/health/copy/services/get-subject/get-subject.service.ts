@@ -16,7 +16,7 @@ export class GetSubjectService {
   public async getSubject(payload: GetSubjectPayload): Promise<string[]> {
     const { product, productLift } = payload;
 
-    const exactFileName = `${product} ${productLift} SL`;
+    const exactFileName = `Subject lines:${product}${productLift}`;
 
     const googleDocs = await this.gdriveApiService.searchFileWithQuery(
       `name = '${exactFileName}' and mimeType = 'application/vnd.google-apps.document'`,
@@ -28,29 +28,9 @@ export class GetSubjectService {
       10
     );
 
-    let files = {
+    const files = {
       files: [...(googleDocs.files || []), ...(wordDocs.files || [])],
     };
-
-    if (!files.files.length) {
-      const googleDocsContains =
-        await this.gdriveApiService.searchFileWithQuery(
-          `name contains '${product} ${productLift} SL' and mimeType = 'application/vnd.google-apps.document'`,
-          10
-        );
-
-      const wordDocsContains = await this.gdriveApiService.searchFileWithQuery(
-        `name contains '${product} ${productLift} SL' and mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'`,
-        10
-      );
-
-      files = {
-        files: [
-          ...(googleDocsContains.files || []),
-          ...(wordDocsContains.files || []),
-        ],
-      };
-    }
 
     if (!files.files.length) {
       return [];

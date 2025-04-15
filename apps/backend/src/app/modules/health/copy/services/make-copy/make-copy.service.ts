@@ -1,7 +1,4 @@
-import {
-  MakeCopyResponseDto,
-  UnsubData,
-} from "@epc-services/interface-adapters";
+import { HealthMakeCopyResponseDto, HealthUnsubData } from "@epc-services/interface-adapters";
 import { Injectable, Logger } from "@nestjs/common";
 import { GetSubjectService } from "../get-subject/get-subject.service";
 import { GetCopyFromDriveService } from "../get-copy-from-drive/get-copy-from-drive.service";
@@ -11,6 +8,7 @@ import { AntiSpamService } from "../../../../finances/copy-parser/services/anti-
 import { GetImageLinksService } from "../../../../finances/copy-parser/services/get-image-links/get-image-links.service";
 import { MakeCopyPayload } from "./make-copy.payload";
 import { HtmlFormatterService } from "../../../../finances/copy-parser/services/html-formatter/html-formatter.service";
+import { GetPriorityService } from "../../../priority-products/services/get-priority/get-priority.service";
 
 @Injectable()
 export class MakeCopyService {
@@ -25,25 +23,24 @@ export class MakeCopyService {
     private readonly getSubjectService: GetSubjectService,
     private readonly antiSpamService: AntiSpamService,
     private readonly getImageLinks: GetImageLinksService,
-    private readonly htmlFormatterService: HtmlFormatterService
+    private readonly htmlFormatterService: HtmlFormatterService,
+    private readonly getPriorityService: GetPriorityService,
   ) {}
 
   public async makeCopy(
     payload: MakeCopyPayload
-  ): Promise<MakeCopyResponseDto> {
+  ): Promise<HealthMakeCopyResponseDto> {
     let link: string;
     let subjects: string[];
-    let unsubData: UnsubData;
+    let unsubData: HealthUnsubData;
+
     const { copyName, preset } = payload;
 
-    const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : "";
+    const match = copyName.match(/^([a-zA-Z]+)(\d+)?_?(\d+)?$/);
 
-    const liftMatch = copyName.match(/[a-zA-Z]+(\d+)/);
-    const productLift = liftMatch ? liftMatch[1] : "";
-
-    const imageMatch = copyName.match(/\d+([a-zA-Z].*)/);
-    const productImage = imageMatch ? imageMatch[1] : "";
+    const product = match?.[1] || "";
+    const productLift = match?.[2] || "";
+    const productImage = match?.[3] || "";
 
     if (!product || !productLift) {
       return {
@@ -80,6 +77,13 @@ export class MakeCopyService {
         productLift,
         productImage,
         linkUrl: presetProps.linkUrl,
+      });
+    }
+
+    if (presetProps.copyWhatToReplace?.isUnsubLink) {
+      unsubData = await this.getPriorityService.getPriorityDetails({
+        product,
+        unsubLinkUrl: presetProps.unsubLinkUrl,
       });
     }
 
@@ -130,8 +134,8 @@ export class MakeCopyService {
     return {
       copyName,
       html: formattedHtml,
-      unsubData,
       subjects,
+      unsubData,
       imageLinks: links,
       buildedLink: link || "urlhere",
     };

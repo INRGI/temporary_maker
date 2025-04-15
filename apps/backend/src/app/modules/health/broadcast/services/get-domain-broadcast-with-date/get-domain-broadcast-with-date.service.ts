@@ -20,16 +20,34 @@ export class GetDomainBroadcastWithDateService {
           domain,
         }
       );
-
-    const filteredBroadcast = broadcast.broadcast.filter((item) => {
-      const itemDate = new Date(item.date);
-      const fromDateValue = new Date(fromDate);
-
-      if (!toDate) return itemDate >= fromDateValue;
       
-      const toDateValue = new Date(toDate);
-      return itemDate >= fromDateValue && itemDate <= toDateValue;
-    });
+      const filteredBroadcast = broadcast.broadcast.filter((item) => {
+        const itemDate = new Date(item.date);
+        const from = new Date(fromDate);
+        const to = toDate ? new Date(toDate) : null;
+      
+        const itemDay = itemDate.getDate();
+        const itemMonth = itemDate.getMonth();
+      
+        const fromDay = from.getDate();
+        const fromMonth = from.getMonth();
+      
+        const isAfterFrom =
+          itemMonth > fromMonth ||
+          (itemMonth === fromMonth && itemDay >= fromDay);
+      
+        if (!to) return isAfterFrom;
+      
+        const toDay = to.getDate();
+        const toMonth = to.getMonth();
+      
+        const isBeforeTo =
+          itemMonth < toMonth ||
+          (itemMonth === toMonth && itemDay <= toDay);
+      
+        return isAfterFrom && isBeforeTo;
+      });
+      
 
     return { broadcast: filteredBroadcast };
   }

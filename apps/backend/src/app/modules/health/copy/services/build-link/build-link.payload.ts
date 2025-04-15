@@ -1,8 +1,8 @@
-import { LinkUrl } from '@epc-services/interface-adapters';
+import { HealthLinkUrl } from '@epc-services/interface-adapters';
 
 export interface BuildLinkPayload {
   product: string;
   productLift: string;
-  linkUrl: LinkUrl;
+  linkUrl: HealthLinkUrl;
   productImage?: string;
 }

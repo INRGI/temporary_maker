@@ -9,13 +9,11 @@ export class SpaceAdBuildLinkService {
   public async buildLink(payload: SpaceAdBuildLinkPayload): Promise<string> {
     const { copyName, linkUrl } = payload;
 
-    const product = copyName.match(/^[a-zA-Z]+/)[0];
-    const productLift = copyName.match(/[a-zA-Z]+(\d+)/)
-      ? copyName.match(/[a-zA-Z]+(\d+)/)[1]
-      : "";
-    const productImage = copyName.match(/\d+([a-zA-Z].*)/)
-      ? copyName.match(/\d+([a-zA-Z].*)/)[1]
-      : "";
+    const match = copyName.match(/^([a-zA-Z]+)(\d+)?_?(\d+)?$/);
+
+    const product = match?.[1] || "";
+    const productLift = match?.[2] || "";
+    const productImage = match?.[3] || "";
 
     const link = await this.buildLinkService.buildLink({
       product,

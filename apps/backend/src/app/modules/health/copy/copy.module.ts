@@ -11,11 +11,13 @@ import { MondayApiOptionsFactoryService } from '../../../infrastructure/options-
 import { applicationProviders, messageControllers, serviceProviders } from './copy.providers';
 import { CopyParserModule } from '../../finances/copy-parser/copy-parser.module';
 import { HealthGdriveApiOptionsFactoryService } from '../../../infrastructure/options-factory/health-gdrive-api.options-factory.service';
+import { PriorityProductsModule } from '../priority-products/priority-products.module';
 
 @Module({
   imports: [
     CopyParserModule,
     BroadcastModule,
+    PriorityProductsModule,
     GDriveApiModule.registerAsync({
       imports: [GdriveConfigModule],
       useClass: HealthGdriveApiOptionsFactoryService,

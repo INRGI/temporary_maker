@@ -1,7 +1,7 @@
-import { Preset } from "@epc-services/interface-adapters";
+import { HealthPreset } from "@epc-services/interface-adapters";
 
 export interface ApplyChangesOnCopyPayload {
   html: string;
-  presetProps: Preset;
+  presetProps: HealthPreset;
   linkUrl?: string;
 }

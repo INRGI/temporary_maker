@@ -3,6 +3,7 @@ import { GDriveApiModule } from '@epc-services/gdrive-api';
 import { Module } from '@nestjs/common';
 import { applicationProviders, messageControllers, serviceProviders } from './broadcast.providers';
 import { HealthGdriveApiOptionsFactoryService } from '../../../infrastructure/options-factory/health-gdrive-api.options-factory.service';
+import { GSpreadsheetApiModule } from '@epc-services/gspreadsheet-api';
 
 @Module({
   imports: [
@@ -10,6 +11,10 @@ import { HealthGdriveApiOptionsFactoryService } from '../../../infrastructure/op
       imports: [GdriveConfigModule],
       useClass: HealthGdriveApiOptionsFactoryService,
     }),
+    GSpreadsheetApiModule.registerAsync({
+          imports: [GdriveConfigModule],
+          useClass: HealthGdriveApiOptionsFactoryService,
+        })
   ],
   controllers: [...messageControllers],
   providers: [...serviceProviders, ...applicationProviders],

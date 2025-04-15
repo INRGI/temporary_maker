@@ -7,3 +7,7 @@ export * from "./broadcast.types";
 export * from "./subject-line.types";
 export * from "./bot-trap.types";
 export * from "./preset.types";
+export * from "./custom-unsub-block.types";
+export * from "./default-unsub-block.types";
+export * from "./unsub-link-url.types";
+export * from "./unsubData.types";

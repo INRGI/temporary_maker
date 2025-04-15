@@ -23,7 +23,7 @@ export class MakeMultipleCopiesService {
         fromDate,
         toDate,
       });
-
+      
     const copies = [];
 
     for (const item of domainBroadcast.broadcast) {

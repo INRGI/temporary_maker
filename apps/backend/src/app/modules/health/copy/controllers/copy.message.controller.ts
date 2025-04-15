@@ -1,14 +1,10 @@
-import {
-  GetMondayTrackingsResponseDto,
-  MakeMulitpleCopiesRequestDto,
-  MakeMultipleCopiesResponseDto,
-} from "@epc-services/interface-adapters";
 import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
 import { MakeMultipleCopiesService } from "../services/make-multiple-copies/make-multiple-copies.service";
 import { GetMondayTrackingsService } from "../services/get-monday-trackings/get-monday-trackings.service";
 import { GetAllCopiesForProductService } from "../services/get-all-copies-for-product/get-all-copies-for-product.service";
 import { SpaceAdBuildLinkService } from "../services/space-ad-build-link/space-ad-build-link.service";
 import { SpaceAdBuildLinkPayload } from "../services/space-ad-build-link/space-ad-build-link.payload";
+import { HealthGetMondayTrackingsResponseDto, HealthMakeMulitpleCopiesRequestDto, HealthMakeMultipleCopiesResponseDto } from "@epc-services/interface-adapters";
 
 @Controller("health/copy")
 export class CopyMessageController {
@@ -21,8 +17,8 @@ export class CopyMessageController {
 
   @Post("make-multiple-copies")
   public async makeMultipleCopies(
-    @Body() request: MakeMulitpleCopiesRequestDto
-  ): Promise<MakeMultipleCopiesResponseDto> {
+    @Body() request: HealthMakeMulitpleCopiesRequestDto
+  ): Promise<HealthMakeMultipleCopiesResponseDto> {
     const today = new Date();
     today.setDate(today.getDate() - 1);
     const threeDaysFromNow = new Date();
@@ -37,7 +33,7 @@ export class CopyMessageController {
   }
 
   @Get("trackings")
-  public async getTrackings(): Promise<GetMondayTrackingsResponseDto> {
+  public async getTrackings(): Promise<HealthGetMondayTrackingsResponseDto> {
     const result = await this.getTrackingsService.geTrackings();
     return await result;
   }

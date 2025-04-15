@@ -13,4 +13,9 @@ export interface MondayApiServicePort {
     domainName: string,
     boardId: number
   ): Promise<MondayApiDomainBoardData[]>;
+
+  getProductDataByEndsWith(
+    productName: string,
+    boardId: number
+  ): Promise<MondayApiProductBoardData[]>;
 }

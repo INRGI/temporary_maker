@@ -18,13 +18,13 @@ export class GetMondayTrackingsService {
   ) {}
 
   public async geTrackings(): Promise<GetMondayTrackingsResponseDto> {
-    const mondayData = await this.mondayApiService.getProductData(
-      'BTUA',
-      803747785
+    const mondayData = await this.mondayApiService.getProductDataByEndsWith(
+      'RHITC',
+      3858647032
     );
 
     if (!mondayData.length) {
-      throw new Error('Redtracks not found');
+      throw new Error('Trackings not found');
     }
 
     const trackings: string[] = mondayData[0].column_values
@@ -40,7 +40,19 @@ export class GetMondayTrackingsService {
           column.column.title !== 'Copy Location' &&
           column.column.title !== 'Expires' &&
           column.column.title !== 'WarmUp' &&
-          column.column.title !== 'Abbreviation'
+          column.column.title !== 'Abbreviation' &&
+           column.column.title !== 'Parent Company' &&
+          column.column.title !== 'Offer group' &&
+          column.column.title !== 'AP' &&
+          column.column.title !== '📊 clck / conv' && 
+          column.column.title !== 'Google Drive' &&
+          column.column.title !== 'Comment' &&
+          column.column.title !== 'Bad copies' &&
+          column.column.title !== 'Broadcast copies' &&
+          column.column.title !== 'Number of leads' &&
+          column.column.title !== 'Leads from Max' &&
+          column.column.title !== 'Reason' &&
+          column.column.title !== 'Date' 
         ) {
           return column.column.title;
         }

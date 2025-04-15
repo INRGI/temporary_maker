@@ -1,7 +1,7 @@
-import { Preset } from "@epc-services/interface-adapters";
+import { HealthPreset } from "@epc-services/interface-adapters";
 
 export interface MakeMultipleCopiesPayload {
-  preset: Preset;
+  preset: HealthPreset;
   fromDate: Date;
   toDate?: Date;
 }

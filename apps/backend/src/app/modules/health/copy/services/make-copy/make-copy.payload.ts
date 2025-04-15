@@ -1,6 +1,6 @@
-import { Preset } from "@epc-services/interface-adapters";
+import { HealthPreset } from "@epc-services/interface-adapters";
 
 export interface MakeCopyPayload {
   copyName: string;
-  preset: Preset;
+  preset: HealthPreset;
 }

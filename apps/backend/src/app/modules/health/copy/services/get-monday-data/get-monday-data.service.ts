@@ -18,11 +18,11 @@ export class GetMondayDataService {
 
   public async getRedtrackData(
     payload: GetRedTrackDataPayload
-  ): Promise<{ trackingData: string; imgData: string }> {
+  ): Promise<{ trackingData: string }> {
     const { product, trackingType } = payload;
 
     try{
-    const mondayData = await this.mondayApiService.getProductData(
+    const mondayData = await this.mondayApiService.getProductDataByEndsWith(
       product,
       803747785
     );
@@ -37,15 +37,8 @@ export class GetMondayDataService {
 
     if (!trackingData) return;
 
-    const imgData = mondayData[0].column_values.find(
-      (column) => column.column.title === 'IMG-IT'
-    ).text;
-    const cleanedImgData = imgData.replace(/IMG/g, '');
-    // if (!imgData) return;
-
     return {
       trackingData,
-      imgData: cleanedImgData,
     };
   } catch (error) {
     return;

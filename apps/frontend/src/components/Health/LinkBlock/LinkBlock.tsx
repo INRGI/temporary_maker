@@ -18,21 +18,12 @@ interface Props {
   preset: Preset;
 }
 
-const productCodeOptions: LinkUrl["productCode"][] = [
-  "PRODUCT#IMAGE",
-  "IMG0000_#IMAGE",
-  "0000_#IMAGE",
-  "000_#IMAGE",
-  "TRACKINGID_#IMAGE",
-];
-
 const LinkBlock: React.FC<Props> = ({ preset }) => {
   const [loading, setLoading] = useState(false);
   const [linkUrl, setLinkUrl] = useState<LinkUrl>({
     linkStart: preset?.linkUrl?.linkStart || "",
     linkEnd: preset?.linkUrl?.linkEnd || "",
     trackingType: preset?.linkUrl?.trackingType || "",
-    productCode: preset?.linkUrl?.productCode || productCodeOptions[0],
   });
 
   const [isLinkUrl, setIsLinkUrl] = useState(
@@ -66,8 +57,7 @@ const LinkBlock: React.FC<Props> = ({ preset }) => {
       if (
         (isLinkUrl && !linkUrl.linkEnd) ||
         !linkUrl.linkStart ||
-        !linkUrl.trackingType ||
-        !linkUrl.productCode
+        !linkUrl.trackingType
       ) {
         toastError("All inputs are required.");
         return;
@@ -95,7 +85,7 @@ const LinkBlock: React.FC<Props> = ({ preset }) => {
 
   const fetchTrackings = async () => {
     try {
-      const response = await axios.get(`/api/finances/copy/trackings`);
+      const response = await axios.get(`/api/health/copy/trackings`);
       setTrackings(response.data.trackings);
     } catch (error) {
       toastError("Error fetching trackings");
@@ -146,14 +136,6 @@ const LinkBlock: React.FC<Props> = ({ preset }) => {
         </InputContainer>
       </InputGroup>
 
-      <InputGroup>
-        <Dropdown
-          placeholder="Product code type ex: BTUA1OS1"
-          options={productCodeOptions}
-          selected={linkUrl.productCode}
-          onSelect={(value) => handleChange("productCode", value as string)}
-        />
-      </InputGroup>
 
       <InputGroup>
         <SaveButton onClick={handleSave}>Save</SaveButton>

@@ -19,7 +19,8 @@ export interface GDriveApiServicePort {
   searchFileWithQuery(
     query: string,
     pageSize: number,
-    pageToken?: string
+    pageToken?: string,
+    driveId?: string
   ): Promise<drive_v3.Schema$FileList>;
 
   getContentLikeBuffer(fileId: string, mimeType: string): Promise<Buffer>;

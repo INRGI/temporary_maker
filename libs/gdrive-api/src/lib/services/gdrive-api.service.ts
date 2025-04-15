@@ -1,9 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { drive_v3, google } from 'googleapis';
-import { GDriveApiServicePort } from './gdrive-api.service..port';
-import { GDriveApiConnectionOptions } from '../interfaces';
-import { GDriveApiTokens } from '../gdrive-api.tokens';
-import { GDRIVE_API_SCOPE_URL } from '../constants';
+import { Inject, Injectable } from "@nestjs/common";
+import { drive_v3, google } from "googleapis";
+import { GDriveApiServicePort } from "./gdrive-api.service..port";
+import { GDriveApiConnectionOptions } from "../interfaces";
+import { GDriveApiTokens } from "../gdrive-api.tokens";
+import { GDRIVE_API_SCOPE_URL } from "../constants";
 
 @Injectable()
 export class GDriveApiService implements GDriveApiServicePort {
@@ -43,9 +43,9 @@ export class GDriveApiService implements GDriveApiServicePort {
     const response = await client.files.get(
       {
         fileId: fileId,
-        alt: 'media',
+        alt: "media",
       },
-      { responseType: 'arraybuffer' }
+      { responseType: "arraybuffer" }
     );
 
     return Buffer.from(response.data as ArrayBuffer);
@@ -54,7 +54,8 @@ export class GDriveApiService implements GDriveApiServicePort {
   public async searchFileWithQuery(
     query: string,
     pageSize: number,
-    pageToken?: string
+    pageToken?: string,
+    driveId?: string
   ): Promise<drive_v3.Schema$FileList> {
     const client = await this.createClient();
     const { data } = await client.files.list({
@@ -63,6 +64,8 @@ export class GDriveApiService implements GDriveApiServicePort {
       pageToken: pageToken,
       includeItemsFromAllDrives: true,
       supportsAllDrives: true,
+      corpora: driveId ? "drive" : "allDrives",
+      driveId: driveId,
     });
     return data;
   }
@@ -93,7 +96,7 @@ export class GDriveApiService implements GDriveApiServicePort {
         fileId: fileId,
         mimeType,
       },
-      { responseType: 'arraybuffer' }
+      { responseType: "arraybuffer" }
     );
 
     return Buffer.from(response.data as ArrayBuffer);
@@ -110,7 +113,7 @@ export class GDriveApiService implements GDriveApiServicePort {
     await jwtAuth.authorize();
 
     const drive: drive_v3.Drive = google.drive({
-      version: 'v3',
+      version: "v3",
       auth: jwtAuth,
     });
     return drive;

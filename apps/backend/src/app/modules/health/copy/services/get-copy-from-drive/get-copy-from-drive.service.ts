@@ -1,9 +1,9 @@
 import {
   GDriveApiServicePort,
   InjectGDriveApiService,
-} from '@epc-services/gdrive-api';
-import { Injectable, Logger } from '@nestjs/common';
-import { GetCopyFromDrivePayload } from './get-copy-from-drive.payload';
+} from "@epc-services/gdrive-api";
+import { Injectable, Logger } from "@nestjs/common";
+import { GetCopyFromDrivePayload } from "./get-copy-from-drive.payload";
 
 @Injectable()
 export class GetCopyFromDriveService {
@@ -19,26 +19,37 @@ export class GetCopyFromDriveService {
     payload: GetCopyFromDrivePayload
   ): Promise<string> {
     const { product, productLift } = payload;
-
+    const driveId = "0AKbon7yApGBvUk9PVA";
+    let html;
     try {
-      const files = await this.gdriveApiService.searchFileWithQuery(
+      let files = await this.gdriveApiService.searchFileWithQuery(
         `name = '${product}${productLift}_html.html' and mimeType = 'text/html'`,
-        10
+        10,
+        undefined,
+        driveId
       );
-      
+
       if (!files.files.length) {
-        throw new Error('Files not found');
+        files = await this.gdriveApiService.searchFileWithQuery(
+          `name = '${product}${productLift}_html(Approve needed).html' and mimeType = 'text/html'`,
+          10,
+          undefined,
+          driveId
+        );
+
+        if (!files.files.length) {
+          throw new Error("Files not found");
+        }
       }
 
       const fileId = files.files[0].id;
+      html = await this.gdriveApiService.getFile(fileId, "media");
 
-      const html = await this.gdriveApiService.getFile(fileId, 'media');
-
-      return await html
+      return html
         .toString()
-        .replace(/\n/g, '')
-        .replace(/\n/g, '')
-        .replace(/\s+/g, ' ');
+        .replace(/\n/g, "")
+        .replace(/\n/g, "")
+        .replace(/\s+/g, " ");
     } catch (error) {
       return `Error reading file: ${error.message}`;
     }

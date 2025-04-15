@@ -70,6 +70,9 @@ const StylesBlock: React.FC<Props> = ({ preset }) => {
     },
     isLinkUrl:
       (preset.copyWhatToReplace && preset.copyWhatToReplace?.isLinkUrl) || false,
+    isUnsubLink:
+      (preset.copyWhatToReplace && preset.copyWhatToReplace?.isUnsubLink) ||
+      false,
     isAntiSpam:
       (preset.copyWhatToReplace && preset.copyWhatToReplace?.isAntiSpam) ||
       "None",
@@ -78,7 +81,7 @@ const StylesBlock: React.FC<Props> = ({ preset }) => {
   });
 
   useEffect(() => {
-    const savedPreset = JSON.parse(localStorage.getItem("health-presets") || "[]");
+    const savedPreset = JSON.parse(localStorage.getItem("presets") || "[]");
     const presetFromStorage = savedPreset.find(
       (p: Preset) => p.name === preset.name
     );
@@ -115,7 +118,7 @@ const StylesBlock: React.FC<Props> = ({ preset }) => {
 
   const handleSave = () => {
     try {
-      const savedPresets = JSON.parse(localStorage.getItem("health-presets") || "[]");
+      const savedPresets = JSON.parse(localStorage.getItem("presets") || "[]");
       const updatedPresets = savedPresets.map((p: Preset) =>
         p.name === preset.name
           ? { ...p, copyStyles: styles, copyWhatToReplace: replaceOptions }
@@ -146,7 +149,7 @@ const StylesBlock: React.FC<Props> = ({ preset }) => {
         toastError("Error saving preset.");
         return;
       }
-      localStorage.setItem("health-presets", JSON.stringify(updatedPresets));
+      localStorage.setItem("presets", JSON.stringify(updatedPresets));
       toastSuccess("Preset updated successfully.");
     } catch (error) {
       toastError("Error saving preset.");
