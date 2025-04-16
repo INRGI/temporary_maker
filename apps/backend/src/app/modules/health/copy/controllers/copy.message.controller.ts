@@ -4,7 +4,8 @@ import { GetMondayTrackingsService } from "../services/get-monday-trackings/get-
 import { GetAllCopiesForProductService } from "../services/get-all-copies-for-product/get-all-copies-for-product.service";
 import { SpaceAdBuildLinkService } from "../services/space-ad-build-link/space-ad-build-link.service";
 import { SpaceAdBuildLinkPayload } from "../services/space-ad-build-link/space-ad-build-link.payload";
-import { HealthGetMondayTrackingsResponseDto, HealthMakeMulitpleCopiesRequestDto, HealthMakeMultipleCopiesResponseDto } from "@epc-services/interface-adapters";
+import { HealthGetMondayTrackingsResponseDto, HealthMakeCopyRequestDto, HealthMakeCopyResponseDto, HealthMakeMulitpleCopiesRequestDto, HealthMakeMultipleCopiesResponseDto } from "@epc-services/interface-adapters";
+import { MakeCopyService } from "../services/make-copy/make-copy.service";
 
 @Controller("health/copy")
 export class CopyMessageController {
@@ -13,6 +14,7 @@ export class CopyMessageController {
     private readonly getTrackingsService: GetMondayTrackingsService,
     private readonly getAllCopiesForProductService: GetAllCopiesForProductService,
     private readonly buildSpaceAdLinkService: SpaceAdBuildLinkService,
+    private readonly makeCopyService: MakeCopyService,
   ) {}
 
   @Post("make-multiple-copies")
@@ -31,6 +33,20 @@ export class CopyMessageController {
     });
     return await result;
   }
+
+   @Post("make-copy")
+    public async makeCopy(
+      @Body() request: HealthMakeCopyRequestDto
+    ): Promise<HealthMakeCopyResponseDto> {
+      const today = new Date();
+      today.setDate(today.getDate());
+  
+      const result = await this.makeCopyService.makeCopy({
+        ...request,
+        sendingDate: today,
+      });
+      return await result;
+    }
 
   @Get("trackings")
   public async getTrackings(): Promise<HealthGetMondayTrackingsResponseDto> {

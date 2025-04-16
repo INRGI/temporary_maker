@@ -7,4 +7,5 @@ export interface ResponseCopy {
   subjects?: string[];
   imageLinks?: string[];
   buildedLink: string;
+  sendingDate: Date;
 }

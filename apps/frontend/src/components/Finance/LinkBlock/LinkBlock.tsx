@@ -95,10 +95,13 @@ const LinkBlock: React.FC<Props> = ({ preset }) => {
 
   const fetchTrackings = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(`/api/finances/copy/trackings`);
       setTrackings(response.data.trackings);
+      setLoading(false);
     } catch (error) {
       toastError("Error fetching trackings");
+      setLoading(false);
     }
   };
 

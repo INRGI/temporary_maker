@@ -34,6 +34,7 @@ export class MakeMultipleCopiesService {
         const result = await this.makeCopyService.makeCopy({
           copyName: copy,
           preset,
+          sendingDate: item.date,
         });
 
         copies.push(result);

@@ -7,4 +7,5 @@ export class MakeCopyResponseDto {
   subjects: string[];
   imageLinks: string[];
   buildedLink: string;
+  sendingDate: Date;
 }

@@ -39,6 +39,10 @@ import DownloadHtmlZipButton from "../../Common/DownloadHtmlZipButton";
 import PreviewAndEditModal from "../../Common/PreviewAndEditModal";
 import { FaLink } from "react-icons/fa";
 import BuildSpaceAdLink from "../BuildSpaceAdLink/BuildSpaceAdLink";
+import { LinkIndicator } from "../../Common/LinkIndicator/LinkIndicator";
+import { DateBadge } from "../../Common/DateBadge";
+import { TbRepeatOnce } from "react-icons/tb";
+import MakeCopyModal from "../MakeCopyModal/MakeCopyModal";
 
 interface Props {
   preset: Preset;
@@ -62,6 +66,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
   const [previewUnsubHtml, setPreviewUnsubHtml] = useState("");
 
   const [buildLinkModal, setBuildLinkModal] = useState(false);
+  const [makeCopyModal, setMakeCopyModal] = useState(false);
 
   useEffect(() => {
     setCopies([]);
@@ -69,9 +74,12 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
 
   const makeCopies = async () => {
     try {
-      const response = await axios.post(`/api/finances/copy/make-multiple-copies`, {
-        preset: preset,
-      });
+      const response = await axios.post(
+        `/api/finances/copy/make-multiple-copies`,
+        {
+          preset: preset,
+        }
+      );
 
       const imageSourceData: { copyName: string; imageLink: string }[] = [];
       response.data.forEach((copy: ResponseCopy) => {
@@ -135,7 +143,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           copy.imageLinks = updatedCopy.imageLinks;
         }
         return copy;
-      })
+      });
       setCopies(newCopies);
 
       setImagesSource((prevImagesSource) =>
@@ -225,6 +233,20 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
     setPreviewUnsubHtml(newHtml);
   };
 
+  const handleNewSingleCopy = (newCopy: ResponseCopy) => {
+    setCopies((prev) => [...prev, newCopy]);
+
+    const imageSourceData: { copyName: string; imageLink: string }[] = [];
+
+    if (newCopy.imageLinks && newCopy.imageLinks.length > 0) {
+      newCopy.imageLinks.forEach((imageLink) => {
+        imageSourceData.push({ copyName: newCopy.copyName, imageLink });
+      });
+    }
+
+    setImagesSource(imageSourceData);
+  };
+
   return (
     <Container>
       <HeaderContainer>
@@ -237,6 +259,9 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
               <FaLink />
             </Button>
           )}
+          <Button onClick={() => setMakeCopyModal(true)}>
+            <TbRepeatOnce />
+          </Button>
           {copies.length > 0 && (
             <DownloadHtmlZipButton copies={copies} presetName={preset.name} />
           )}
@@ -252,6 +277,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           {copies.map((copy) => (
             <CopyCard key={copy.copyName}>
               <CardHeader>
+                <LinkIndicator link={copy.buildedLink} />
                 <h2>
                   {copy.copyName}
                   {copy.buildedLink.includes("IMG") && (
@@ -267,6 +293,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                     </TitleCopy>
                   )}
                 </h2>
+                <DateBadge date={copy.sendingDate} />
                 <div>
                   {copy.html.includes("Error") || !copy.html ? (
                     <TextTitle>Html not found</TextTitle>
@@ -455,6 +482,14 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           onClose={() => setBuildLinkModal(false)}
           isOpen={buildLinkModal}
           linkUrl={preset.linkUrl}
+        />
+      )}
+      {preset && makeCopyModal && (
+        <MakeCopyModal
+          onClose={() => setMakeCopyModal(false)}
+          isOpen={makeCopyModal}
+          preset={preset}
+          onCopyMade={handleNewSingleCopy}
         />
       )}
     </Container>

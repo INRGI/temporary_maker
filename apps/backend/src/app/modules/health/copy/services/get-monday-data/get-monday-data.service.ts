@@ -24,7 +24,7 @@ export class GetMondayDataService {
     try{
     const mondayData = await this.mondayApiService.getProductDataByEndsWith(
       product,
-      803747785
+      3858647032
     );
 
     if (!mondayData.length) {

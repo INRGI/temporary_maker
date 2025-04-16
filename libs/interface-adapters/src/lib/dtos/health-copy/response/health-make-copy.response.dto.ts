@@ -7,4 +7,5 @@ export class HealthMakeCopyResponseDto {
   subjects: string[];
   imageLinks: string[];
   buildedLink: string;
+  sendingDate: Date;
 }

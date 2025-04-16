@@ -34,7 +34,7 @@ export class MakeCopyService {
     let subjects: string[];
     let unsubData: HealthUnsubData;
 
-    const { copyName, preset } = payload;
+    const { copyName, preset, sendingDate } = payload;
 
     const match = copyName.match(/^([a-zA-Z]+)(\d+)?_?(\d+)?$/);
 
@@ -48,6 +48,7 @@ export class MakeCopyService {
         html: "",
         unsubData,
         subjects,
+        sendingDate,
         imageLinks: [],
         buildedLink: "urlhere",
       };
@@ -65,6 +66,7 @@ export class MakeCopyService {
         copyName,
         html: html,
         unsubData,
+        sendingDate,
         subjects,
         imageLinks: [],
         buildedLink: "urlhere",
@@ -136,6 +138,7 @@ export class MakeCopyService {
       html: formattedHtml,
       subjects,
       unsubData,
+      sendingDate,
       imageLinks: links,
       buildedLink: link || "urlhere",
     };

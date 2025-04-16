@@ -12,15 +12,66 @@ import {
   RootContainer,
   ServicesBlockHeader,
 } from "./PresetContainer.styled";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaRegCopy } from "react-icons/fa6";
+import { MdEdit, MdDeleteForever } from "react-icons/md";
+import { LiaGripVerticalSolid } from "react-icons/lia";
 import SearchInput from "../../Common/SearchInput/SearchInput";
 import PresetCreateModal from "../PresetCreateModal/PresetCreateModal";
 import PresetUpdateModal from "../PresetUpdateModal/PresetUpdateModal";
 import CopyMaker from "../CopyMaker/CopyMaker";
 import { toastError, toastSuccess } from "../../../helpers/toastify";
-import { FaRegCopy } from "react-icons/fa6";
-import { MdEdit } from "react-icons/md";
-import { MdDeleteForever } from "react-icons/md";
+
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+
+const SortablePresetCard = ({
+  preset,
+  activePreset,
+  onClick,
+  children,
+}: any) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: preset.name,
+    });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    display: "flex",
+    alignItems: "center",
+  };
+
+  return (
+    <PresetCard
+      ref={setNodeRef}
+      style={style}
+      isActive={activePreset?.name === preset.name}
+      onClick={() => onClick(preset)}
+    >
+      <div
+        {...attributes}
+        {...listeners}
+        style={{ cursor: "grab", paddingRight: 10 }}
+      >
+        <LiaGripVerticalSolid size={20} />
+      </div>
+      {children}
+    </PresetCard>
+  );
+};
 
 const PresetContainer: React.FC = () => {
   const [presets, setPresets] = useState<Preset[]>([]);
@@ -28,8 +79,8 @@ const PresetContainer: React.FC = () => {
   const [presetCreateModalOpen, setPresetCreateModalOpen] = useState(false);
   const [presetEditModalOpen, setPresetEditModalOpen] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState<Preset | null>(null);
-
   const [activePreset, setActivePreset] = useState<Preset | null>(null);
+
   const getPresets = async () => {
     const savedPresets = JSON.parse(localStorage.getItem("health-presets") || "[]");
     setPresets(savedPresets);
@@ -42,41 +93,32 @@ const PresetContainer: React.FC = () => {
   useEffect(() => {
     if (presets.length && activePreset) {
       setActivePreset(
-        presets.filter((preset) => preset.name === activePreset.name)[0]
+        presets.find((preset) => preset.name === activePreset.name) || null
       );
     }
   }, [presets]);
 
   const handleDeletePreset = async (preset: Preset) => {
-    const savedPresets = JSON.parse(localStorage.getItem("health-presets") || "[]");
-    const updatedPresets = savedPresets.filter(
-      (p: Preset) => p.name !== preset.name
-    );
+    const updatedPresets = presets.filter((p) => p.name !== preset.name);
     localStorage.setItem("health-presets", JSON.stringify(updatedPresets));
-    getPresets();
+    setPresets(updatedPresets);
     toastSuccess("Preset deleted successfully");
   };
 
   const handleDuplicatePreset = async (preset: Preset) => {
-    const presets = JSON.parse(localStorage.getItem("health-presets") || "[]");
     const newPresetName = `${preset.name}_copy`;
-    const existingPreset = presets.find(
-      (p: Preset) => p.name === newPresetName
-    );
-
-    if (existingPreset) {
+    if (presets.some((p) => p.name === newPresetName)) {
       toastError("Preset with this name already exists");
       return;
     }
-
     const newPreset = { ...preset, name: newPresetName };
-    presets.push(newPreset);
-    localStorage.setItem("health-presets", JSON.stringify(presets));
-    getPresets();
+    const updatedPresets = [...presets, newPreset];
+    localStorage.setItem("health-presets", JSON.stringify(updatedPresets));
+    setPresets(updatedPresets);
     toastSuccess("Preset duplicated successfully");
   };
 
-  const handleUpdatePreset = async (preset: Preset) => {
+  const handleUpdatePreset = (preset: Preset) => {
     setSelectedPreset(preset);
     setPresetEditModalOpen(true);
   };
@@ -91,6 +133,19 @@ const PresetContainer: React.FC = () => {
     preset.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
+  const sensors = useSensors(useSensor(PointerSensor));
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    if (active.id !== over?.id) {
+      const oldIndex = filteredPresets.findIndex((p) => p.name === active.id);
+      const newIndex = filteredPresets.findIndex((p) => p.name === over?.id);
+      const newOrder = arrayMove(filteredPresets, oldIndex, newIndex);
+      setPresets(newOrder);
+      localStorage.setItem("health-presets", JSON.stringify(newOrder));
+    }
+  };
+
   return (
     <RootContainer>
       <Container>
@@ -103,57 +158,68 @@ const PresetContainer: React.FC = () => {
             <FaPlus />
           </Button>
         </HeaderContainer>
+
         <SearchInput
-          value={searchText || ""}
+          value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
           placeholder="Search presets by name"
         />
-        <PresetsContainer>
-          {filteredPresets?.length > 0 ? (
-            filteredPresets.map((preset) => (
-              <PresetCard
-                key={preset.name}
-                onClick={() => setActivePreset(preset)}
-                isActive={activePreset?.name === preset.name}
-              >
-                <h2>{preset.name}</h2>
-                <div>
-                  <DublicateButton
-                    onClick={() => handleDuplicatePreset(preset)}
+
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={filteredPresets.map((p) => p.name)}
+            strategy={verticalListSortingStrategy}
+          >
+            <PresetsContainer>
+              {filteredPresets.length ? (
+                filteredPresets.map((preset) => (
+                  <SortablePresetCard
+                    key={preset.name}
+                    preset={preset}
+                    activePreset={activePreset}
+                    onClick={setActivePreset}
                   >
-                    <FaRegCopy />
-                  </DublicateButton>
-                  <EditButton onClick={() => handleUpdatePreset(preset)}>
-                  <MdEdit />
-                  </EditButton>
-                  <DeleteButton onClick={() => handleDeletePreset(preset)}>
-                  <MdDeleteForever />
-                  </DeleteButton>
-                </div>
-              </PresetCard>
-            ))
-          ) : (
-            <PresetCard isActive={false}>
-              Presets not found. Create one
-            </PresetCard>
-          )}
-        </PresetsContainer>
+                    <h2>{preset.name}</h2>
+                    <div>
+                      <DublicateButton
+                        onClick={() => handleDuplicatePreset(preset)}
+                      >
+                        <FaRegCopy />
+                      </DublicateButton>
+                      <EditButton onClick={() => handleUpdatePreset(preset)}>
+                        <MdEdit />
+                      </EditButton>
+                      <DeleteButton onClick={() => handleDeletePreset(preset)}>
+                        <MdDeleteForever />
+                      </DeleteButton>
+                    </div>
+                  </SortablePresetCard>
+                ))
+              ) : (
+                <PresetCard isActive={false}>
+                  Presets not found. Create one
+                </PresetCard>
+              )}
+            </PresetsContainer>
+          </SortableContext>
+        </DndContext>
 
         {presetCreateModalOpen && (
           <PresetCreateModal
             isOpen={presetCreateModalOpen}
-            onClose={() => {
-              handleCloseModal();
-            }}
+            onClose={handleCloseModal}
             initialData={null}
           />
         )}
+
         {presetEditModalOpen && selectedPreset && (
           <PresetUpdateModal
             isOpen={presetEditModalOpen}
-            onClose={() => {
-              handleCloseModal();
-            }}
+            onClose={handleCloseModal}
             preset={selectedPreset}
           />
         )}

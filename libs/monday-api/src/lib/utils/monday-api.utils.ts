@@ -31,7 +31,7 @@ export class MondayApiUtils {
       query: `
         query ($boardId: ID!, $value: CompareValue!) {
           boards(ids: [$boardId]) {
-            items_page(query_params: {rules: [{column_id: "name", compare_value: $value, operator: ends_with} ]}) {
+            items_page(query_params: {rules: [{column_id: "name", compare_value: $value, operator: contains_text} ]}) {
               items {
                 id
                 name
@@ -48,7 +48,7 @@ export class MondayApiUtils {
         `,
       variables: {
         boardId: boardId,
-        value: `${searchName}`,
+        value: `/${searchName}`,
       },
     };
   }

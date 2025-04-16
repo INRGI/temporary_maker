@@ -19,7 +19,7 @@ export class GetMondayTrackingsService {
 
   public async geTrackings(): Promise<GetMondayTrackingsResponseDto> {
     const mondayData = await this.mondayApiService.getProductDataByEndsWith(
-      'RHITC',
+      'DFFH',
       3858647032
     );
 
