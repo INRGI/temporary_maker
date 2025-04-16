@@ -25,7 +25,7 @@ export class ChangeMaxWidthService {
         element.setAttribute('style', `max-width: ${maxWidth}px;`);
       }
     };
-    ['table', 'td', 'tbody'].forEach((tag) => {
+    ['table', 'td', 'tbody', 'div'].forEach((tag) => {
       const elements = container?.getElementsByTagName(tag) || [];
       for (const element of elements) {
         // if (element.hasAttribute('width')) {

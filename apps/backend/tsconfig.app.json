@@ -15,6 +15,7 @@
       "@epc-services/core": ["libs/core/src/index.ts"],
       "@epc-services/monday-api": ["libs/monday-api/src/index.ts"],
       "@epc-services/gdrive-api": ["libs/gdrive-api/src/index.ts"],
+      "@epc-services/gdoc-api": ["libs/gdoc-api/src/index.ts"],
       "@epc-services/gspreadsheet-api": ["libs/gspreadsheet-api/src/index.ts"],
       "@epc-services/interface-adapters": [
         "libs/interface-adapters/src/index.ts"

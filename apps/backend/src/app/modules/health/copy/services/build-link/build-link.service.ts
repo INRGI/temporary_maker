@@ -19,6 +19,6 @@ export class BuildLinkService {
       return "urlhere";
     }
 
-    return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${product}${productLift}_${productImage}`;
+    return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${product}${productLift}${(productImage && productImage.length > 0 ? `_${productImage}` : ``)}/${product}/`;
   }
 }

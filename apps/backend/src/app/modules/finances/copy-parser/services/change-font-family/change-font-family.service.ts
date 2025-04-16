@@ -30,7 +30,7 @@ export class ChangeFontFamilyService {
       }
     };
 
-    ['table', 'td', 'p', 'a', 'span'].forEach((tag) => {
+    ['table', 'td', 'p', 'a', 'span', 'div'].forEach((tag) => {
       const elements = container?.getElementsByTagName(tag) || [];
       for (const element of elements) {
         updateStyles(element);
