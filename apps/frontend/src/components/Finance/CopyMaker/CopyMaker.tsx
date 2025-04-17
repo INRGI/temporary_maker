@@ -43,6 +43,7 @@ import { LinkIndicator } from "../../Common/LinkIndicator/LinkIndicator";
 import { DateBadge } from "../../Common/DateBadge";
 import { TbRepeatOnce } from "react-icons/tb";
 import MakeCopyModal from "../MakeCopyModal/MakeCopyModal";
+import { DateRangeButton } from "../../Common/DateRangeButton/DateRangeButton";
 
 interface Props {
   preset: Preset;
@@ -68,16 +69,25 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
   const [buildLinkModal, setBuildLinkModal] = useState(false);
   const [makeCopyModal, setMakeCopyModal] = useState(false);
 
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+
   useEffect(() => {
     setCopies([]);
   }, [preset]);
 
   const makeCopies = async () => {
     try {
+      const [fromDate, toDate] = dateRange;
+
       const response = await axios.post(
         `/api/finances/copy/make-multiple-copies`,
         {
-          preset: preset,
+          preset,
+          fromDate: fromDate ?? null,
+          toDate: toDate ?? null,
         }
       );
 
@@ -265,6 +275,8 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           {copies.length > 0 && (
             <DownloadHtmlZipButton copies={copies} presetName={preset.name} />
           )}
+          <DateRangeButton onDateRangeChange={setDateRange} />
+
           <Button onClick={() => handleMakeCopies()}>
             <VscDebugStart />
           </Button>

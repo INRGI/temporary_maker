@@ -1,6 +1,7 @@
-import React from 'react';
-import styled from '@emotion/styled';
-import { FiLink } from 'react-icons/fi';
+import React from "react";
+import styled from "@emotion/styled";
+import { FiLink } from "react-icons/fi";
+import { toastSuccess } from "../../../helpers/toastify";
 
 type LinkIndicatorProps = {
   link: string;
@@ -10,7 +11,7 @@ const Indicator = styled.div<{ isValid: boolean }>`
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: ${({ isValid }) => (isValid ? '#4caf50' : '#f44336')};
+  background-color: ${({ isValid }) => (isValid ? "#4caf50" : "#f44336")};
   color: white;
   display: flex;
   align-items: center;
@@ -22,6 +23,7 @@ const Indicator = styled.div<{ isValid: boolean }>`
   &:focus,
   &:hover {
     outline: none;
+    scale: 1.01;
 
     &::after {
       content: attr(data-tooltip);
@@ -41,7 +43,7 @@ const Indicator = styled.div<{ isValid: boolean }>`
 `;
 
 export const LinkIndicator: React.FC<LinkIndicatorProps> = ({ link }) => {
-  const isValid = link !== 'urlhere';
+  const isValid = link !== "urlhere";
 
   return (
     <Indicator
@@ -49,6 +51,11 @@ export const LinkIndicator: React.FC<LinkIndicatorProps> = ({ link }) => {
       isValid={isValid}
       data-tooltip={link}
       aria-label={link}
+      onClick={() => {
+        if(!isValid) return;
+        navigator.clipboard.writeText(link);
+        toastSuccess("Copied to clipboard");
+      }}
     >
       <FiLink size={12} />
     </Indicator>
