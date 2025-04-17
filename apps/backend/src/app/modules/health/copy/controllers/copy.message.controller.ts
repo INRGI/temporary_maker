@@ -23,13 +23,21 @@ export class CopyMessageController {
   ): Promise<HealthMakeMultipleCopiesResponseDto> {
     const today = new Date();
     today.setDate(today.getDate() - 1);
-    const threeDaysFromNow = new Date();
-    threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 2);
+
+    const fiveDaysFromNow = new Date();
+    fiveDaysFromNow.setDate(fiveDaysFromNow.getDate() + 5);
+
+    const fromDate = request.fromDate ||today;
+    const toDate = request.toDate || request.fromDate || fiveDaysFromNow;
+   
+    // const threeDaysFromNow = new Date();
+    // threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 2);
+    
 
     const result = await this.makeMultipleCopiesService.makeMultipleCopies({
       ...request,
-      fromDate: today,
-      toDate: threeDaysFromNow,
+      fromDate,
+      toDate,
     });
     return await result;
   }
