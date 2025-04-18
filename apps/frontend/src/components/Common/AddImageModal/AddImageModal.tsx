@@ -156,27 +156,35 @@ const AddImageModal: React.FC<Props> = ({
     }
   };
 
+  const decodeHrefEntities = (html: string) => {
+    return html.replace(/&amp;/g, '&');
+  };
+  
   const handleSaveToParent = () => {
     if (!copy) return;
-    const updatedCopy = { ...copy, html: localHtml };
-
+  
+    const cleanedHtml = decodeHrefEntities(localHtml);
+    const updatedCopy = { ...copy, html: cleanedHtml };
+  
     if (updatedCopy.imageLinks) {
       updatedCopy.imageLinks = [...updatedCopy.imageLinks, newImageSrc];
     } else {
       updatedCopy.imageLinks = [newImageSrc];
     }
+  
     const index = copies.findIndex((c) => c.copyName === copy.copyName);
     const newCopies = [...copies];
     newCopies[index] = updatedCopy;
     setCopies(newCopies);
-
+  
     setImagesSource([
       ...imagesSource,
       { copyName: copy.copyName, imageLink: newImageSrc },
     ]);
-
+  
     toastSuccess("Changes saved");
   };
+  
 
   return (
     <AdminModal isOpen={isOpen} onClose={onClose}>

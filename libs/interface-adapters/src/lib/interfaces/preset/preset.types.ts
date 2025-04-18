@@ -15,4 +15,5 @@ export interface Preset {
   broadcast: Broadcast;
   subjectLine?: SubjectLine;
   botTrap?: BotTrap;
+  format?: 'html' | 'mjml';
 }

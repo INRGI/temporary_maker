@@ -18,11 +18,11 @@ export class GetCopyFromDriveService {
   public async getCopyFromDrive(
     payload: GetCopyFromDrivePayload
   ): Promise<string> {
-    const { product, productLift } = payload;
+    const { product, productLift, format } = payload;
 
     try {
       const files = await this.gdriveApiService.searchFileWithQuery(
-        `name = '${product}${productLift}_html.html' and mimeType = 'text/html'`,
+        `name = '${product}${productLift}_${format || 'html'}.html' and mimeType = 'text/html'`,
         10
       );
       

@@ -6,6 +6,7 @@ import { Container, SaveButton, InputGroup } from "./BroadcastBlock.styled";
 import FloatingLabelInput from "../../Common/FloatingLabelInput/FloatingLabelInput";
 import axios from "axios";
 import Loader from "../../Common/Loader";
+import { SpanWhite, StyledCheckbox } from "../UnsubBlock/UnsubBlock.styled";
 
 interface Props {
   preset: Preset;
@@ -40,7 +41,10 @@ const BroadcastBlock: React.FC<Props> = ({ preset }) => {
   };
 
   useEffect(() => {
-    if (currentPreset.broadcast.team && currentPreset.broadcast.team !== "Select Team") {
+    if (
+      currentPreset.broadcast.team &&
+      currentPreset.broadcast.team !== "Select Team"
+    ) {
       fetchDomains(currentPreset.broadcast.team);
     }
   }, [currentPreset.broadcast.team]);
@@ -54,7 +58,12 @@ const BroadcastBlock: React.FC<Props> = ({ preset }) => {
       const savedPresets = JSON.parse(localStorage.getItem("presets") || "[]");
       const updatedPresets = savedPresets.map((p: Preset) =>
         p.name === preset.name
-          ? { ...p, broadcast: currentPreset.broadcast, name: currentPreset.name }
+          ? {
+              ...p,
+              broadcast: currentPreset.broadcast,
+              name: currentPreset.name,
+              format: currentPreset.format || "html",
+            }
           : p
       );
 
@@ -113,6 +122,20 @@ const BroadcastBlock: React.FC<Props> = ({ preset }) => {
           />
         </InputGroup>
       )}
+
+      <InputGroup>
+        <StyledCheckbox
+          type="checkbox"
+          checked={currentPreset.format === "mjml"}
+          onChange={(e) =>
+            setCurrentPreset({
+              ...currentPreset,
+              format: e.target.checked ? "mjml" : "html",
+            })
+          }
+        />
+        <SpanWhite>Use mjml? [EXPERIMENTAL]</SpanWhite>
+      </InputGroup>
 
       <InputGroup>
         <SaveButton onClick={handleSave}>Save</SaveButton>

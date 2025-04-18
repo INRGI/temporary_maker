@@ -59,6 +59,7 @@ export class MakeCopyService {
     const html = await this.getCopyFromDriveService.getCopyFromDrive({
       product,
       productLift,
+      format: presetProps.format,
     });
 
     if (html.includes("Error reading file")) {

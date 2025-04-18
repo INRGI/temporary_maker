@@ -6,6 +6,7 @@ import { Container, SaveButton, InputGroup } from "./BroadcastBlock.styled";
 import FloatingLabelInput from "../../Common/FloatingLabelInput/FloatingLabelInput";
 import axios from "axios";
 import Loader from "../../Common/Loader";
+import { SpanWhite, StyledCheckbox } from "../UnsubBlock/UnsubBlock.styled";
 
 interface Props {
   preset: Preset;
@@ -38,13 +39,16 @@ const BroadcastBlock: React.FC<Props> = ({ preset }) => {
         toastError("All data required");
         return;
       }
-      const savedPresets = JSON.parse(localStorage.getItem("health-presets") || "[]");
+      const savedPresets = JSON.parse(
+        localStorage.getItem("health-presets") || "[]"
+      );
       const updatedPresets = savedPresets.map((p: Preset) =>
         p.name === preset.name
           ? {
               ...p,
               broadcast: currentPreset.broadcast,
               name: currentPreset.name,
+              format: currentPreset.format || "html",
             }
           : p
       );
@@ -72,7 +76,6 @@ const BroadcastBlock: React.FC<Props> = ({ preset }) => {
         />
       </InputGroup>
 
-
       {domains && domains.length > 0 && (
         <InputGroup>
           <Dropdown
@@ -88,6 +91,20 @@ const BroadcastBlock: React.FC<Props> = ({ preset }) => {
           />
         </InputGroup>
       )}
+
+      <InputGroup>
+        <StyledCheckbox
+          type="checkbox"
+          checked={currentPreset.format === "mjml"}
+          onChange={(e) =>
+            setCurrentPreset({
+              ...currentPreset,
+              format: e.target.checked ? "mjml" : "html",
+            })
+          }
+        />
+        <SpanWhite>Use mjml? [EXPERIMENTAL]</SpanWhite>
+      </InputGroup>
 
       <InputGroup>
         <SaveButton onClick={handleSave}>Save</SaveButton>

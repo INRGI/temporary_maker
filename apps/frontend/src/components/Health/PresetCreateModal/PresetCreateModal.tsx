@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import AdminModal from "../../Common/AdminModal";
-import { Preset, Broadcast } from "../../../types/health";
+import { Preset } from "../../../types/health";
 import { toastError, toastSuccess } from "../../../helpers/toastify";
 import {
   BlockHeader,
@@ -13,6 +13,11 @@ import FloatingLabelInput from "../../Common/FloatingLabelInput/FloatingLabelInp
 import axios from "axios";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import { SmallLoader } from "../../Common/Loader";
+import {
+  InputGroup,
+  SpanWhite,
+  StyledCheckbox,
+} from "../UnsubBlock/UnsubBlock.styled";
 
 interface PresetCreateModalProps {
   isOpen: boolean;
@@ -101,7 +106,7 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
               <SmallLoader />
             </CenterContainer>
           )}
-          {domains &&domains.length > 0 && (
+          {domains && domains.length > 0 && (
             <Dropdown
               placeholder="Domain"
               options={domains}
@@ -114,6 +119,20 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
               }
             />
           )}
+
+          <InputGroup style={{ width: "100%", maxWidth: `calc(100% - 25px)` }}>
+            <StyledCheckbox
+              type="checkbox"
+              checked={presetData.format === "mjml"}
+              onChange={(e) =>
+                setPresetData({
+                  ...presetData,
+                  format: e.target.checked ? "mjml" : "html",
+                })
+              }
+            />
+            <SpanWhite>Use mjml? [EXPERIMENTAL]</SpanWhite>
+          </InputGroup>
 
           <SaveButton onClick={handleSavePreset}>Save</SaveButton>
         </Container>

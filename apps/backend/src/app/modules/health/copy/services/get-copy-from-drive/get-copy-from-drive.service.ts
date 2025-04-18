@@ -18,12 +18,12 @@ export class GetCopyFromDriveService {
   public async getCopyFromDrive(
     payload: GetCopyFromDrivePayload
   ): Promise<string> {
-    const { product, productLift } = payload;
+    const { product, productLift, format } = payload;
     const driveId = "0AKbon7yApGBvUk9PVA";
     let html;
     try {
       let files = await this.gdriveApiService.searchFileWithQuery(
-        `name = '${product}${productLift}_html.html' and mimeType = 'text/html'`,
+        `name = '${product}${productLift}_${format || 'html'}.html' and mimeType = 'text/html'`,
         10,
         undefined,
         driveId
@@ -31,7 +31,7 @@ export class GetCopyFromDriveService {
 
       if (!files.files.length) {
         files = await this.gdriveApiService.searchFileWithQuery(
-          `name = '${product}${productLift}_html(Approve needed).html' and mimeType = 'text/html'`,
+          `name = '${product}${productLift}_${format || 'html'}(Approve needed).html' and mimeType = 'text/html'`,
           10,
           undefined,
           driveId

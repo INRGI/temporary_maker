@@ -15,4 +15,5 @@ export interface HealthPreset {
   broadcast: HealthBroadcast;
   subjectLine?: HealthSubjectLine;
   botTrap?: HealthBotTrap;
+  format?: 'html' | 'mjml';
 }

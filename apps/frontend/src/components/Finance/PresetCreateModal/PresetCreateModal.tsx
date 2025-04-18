@@ -13,6 +13,8 @@ import FloatingLabelInput from "../../Common/FloatingLabelInput/FloatingLabelInp
 import axios from "axios";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import { SmallLoader } from "../../Common/Loader";
+import { InputGroup } from "../StylesBlock/StylesBlock.styled";
+import { SpanWhite, StyledCheckbox } from "../UnsubBlock/UnsubBlock.styled";
 
 interface PresetCreateModalProps {
   isOpen: boolean;
@@ -40,6 +42,7 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
     initialData || {
       name: "",
       broadcast: { team: "Select Team", domain: "" },
+      format: "html",
     }
   );
 
@@ -127,7 +130,11 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
               })
             }
           />
-          {loading && <CenterContainer><SmallLoader /></CenterContainer>}
+          {loading && (
+            <CenterContainer>
+              <SmallLoader />
+            </CenterContainer>
+          )}
           {presetData.broadcast.team !== "Select Team" &&
             domains.length > 0 && (
               <Dropdown
@@ -142,6 +149,20 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
                 }
               />
             )}
+
+          <InputGroup style={{ width: "100%", maxWidth: `calc(100% - 25px)` }}>
+            <StyledCheckbox
+              type="checkbox"
+              checked={presetData.format === "mjml"}
+              onChange={(e) =>
+                setPresetData({
+                  ...presetData,
+                  format: e.target.checked ? "mjml" : "html",
+                })
+              }
+            />
+            <SpanWhite>Use mjml? [EXPERIMENTAL]</SpanWhite>
+          </InputGroup>
 
           <SaveButton onClick={handleSavePreset}>Save</SaveButton>
         </Container>

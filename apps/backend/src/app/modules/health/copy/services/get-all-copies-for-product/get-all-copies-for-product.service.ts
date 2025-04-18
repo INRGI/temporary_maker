@@ -123,6 +123,7 @@ export class GetAllCopiesForProductService {
           const copy = await this.getCopyFromDriveService.getCopyFromDrive({
             product,
             productLift: `${liftNumber}`,
+            format: "html",
           });
 
           if (copy) {

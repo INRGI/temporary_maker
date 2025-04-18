@@ -82,25 +82,31 @@ export const DateRangeButton = ({
 
   const handleChange = (update: [Date | null, Date | null]) => {
     const [start, end] = update;
-
+  
     if (start && !end) {
       setDates([start, null]);
       onDateRangeChange([start, null]);
       return;
     }
-
+  
     if (start && end && end.getTime() < start.getTime()) return;
-
+  
     const diffInDays =
       start && end
         ? (end.getTime() - start.getTime()) / (1000 * 3600 * 24) + 1
         : 0;
     if (diffInDays > MAX_SELECTION_DAYS) return;
-
+  
+    const inclusiveEnd = end
+      ? new Date(end.setHours(23, 59, 59, 999))
+      : null;
+  
     setDates([start, end]);
-    onDateRangeChange([start, end]);
+    onDateRangeChange([start, inclusiveEnd]);
+  
     if (start && end) setOpen(false);
   };
+  
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Escape") {
