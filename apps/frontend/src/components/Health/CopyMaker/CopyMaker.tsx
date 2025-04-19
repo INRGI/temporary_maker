@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useEffect, useState } from "react";
 import { Preset } from "../../../types/health";
 import { ServicesBlockHeader } from "../PresetContainer/PresetContainer.styled";
@@ -74,9 +76,44 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
     null,
   ]);
 
-  useEffect(() => {
-    setCopies([]);
-  }, [preset]);
+  const [hasLoadedFromStorage, setHasLoadedFromStorage] = useState(false);
+  
+    const STORAGE_KEY = "health-last-copies";
+  
+    const loadAllCopies = (): Record<string, ResponseCopy[]> => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : {};
+      } catch {
+        return {};
+      }
+    };
+  
+    const saveAllCopies = (data: Record<string, ResponseCopy[]>) => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    };
+  
+    const saveCopiesForPreset = (presetName: string, copies: ResponseCopy[]) => {
+      const all = loadAllCopies();
+      all[presetName] = copies;
+      saveAllCopies(all);
+    };
+  
+    const loadCopiesForPreset = (presetName: string): ResponseCopy[] => {
+      const all = loadAllCopies();
+      return all[presetName] || [];
+    };
+  
+    useEffect(() => {
+      const stored = loadCopiesForPreset(preset.name);
+      setCopies(stored);
+      setHasLoadedFromStorage(true);
+    }, [preset.name]);
+  
+    useEffect(() => {
+      if (!hasLoadedFromStorage) return;
+      saveCopiesForPreset(preset.name, copies);
+    }, [copies, preset.name, hasLoadedFromStorage]);
 
   const makeCopies = async () => {
     try {
@@ -102,6 +139,8 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
 
       setImagesSource(imageSourceData);
       setCopies(response.data);
+
+      saveCopiesForPreset(preset.name, response.data);
       toastSuccess(`Copies made successfully (${response.data.length})`);
     } catch (error) {
       toastError("Something went wrong");
