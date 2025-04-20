@@ -21,6 +21,13 @@ export const Container = styled.div`
   @media (max-width: 768px) {
     max-width: 100%;
   }
+  min-width: 0;
+  transition: all 0.3s ease;
+
+  &.collapsed {
+    max-width: 270px;
+    padding: 15px;
+  }
 `;
 
 export const HeaderContainer = styled.div`
@@ -29,6 +36,7 @@ export const HeaderContainer = styled.div`
   align-items: center;
   padding: 0;
   margin: 0;
+  gap: 10px;
 `;
 
 export const Button = styled.button`
@@ -83,7 +91,7 @@ export const PresetCard = styled.li<{ isActive: boolean }>`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   height: auto;
   min-height: 50px;
-  width: 92%;
+  /* width: 92%; */
   max-width: 440px;
   color: #fff;
   cursor: pointer;

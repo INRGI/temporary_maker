@@ -35,6 +35,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 
 const SortablePresetCard = ({
   preset,
@@ -80,6 +81,16 @@ const PresetContainer: React.FC = () => {
   const [presetEditModalOpen, setPresetEditModalOpen] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState<Preset | null>(null);
   const [activePreset, setActivePreset] = useState<Preset | null>(null);
+
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
+    return localStorage.getItem("preset_sidebar_collapsed") === "true";
+  });
+
+  const toggleSidebar = () => {
+    const newState = !isCollapsed;
+    setIsCollapsed(newState);
+    localStorage.setItem("preset_sidebar_collapsed", String(newState));
+  };
 
   const getPresets = async () => {
     const savedPresets = JSON.parse(localStorage.getItem("presets") || "[]");
@@ -148,12 +159,23 @@ const PresetContainer: React.FC = () => {
 
   return (
     <RootContainer>
-      <Container>
+      <Container className={isCollapsed ? "collapsed" : ""}>
         <HeaderContainer>
           <ServicesBlockHeader>
             <h2>Presets</h2>
-            <p>All presets below</p>
           </ServicesBlockHeader>
+          <Button
+            onClick={toggleSidebar}
+            title="Toggle sidebar"
+            style={{ marginLeft: "auto" }}
+          >
+            {isCollapsed ? (
+              <BsArrowRightShort size={20} />
+            ) : (
+              <BsArrowLeftShort size={20} />
+            )}
+          </Button>
+
           <Button onClick={() => setPresetCreateModalOpen(true)}>
             <FaPlus />
           </Button>
@@ -184,19 +206,23 @@ const PresetContainer: React.FC = () => {
                     onClick={setActivePreset}
                   >
                     <h2>{preset.name}</h2>
-                    <div>
-                      <DublicateButton
-                        onClick={() => handleDuplicatePreset(preset)}
-                      >
-                        <FaRegCopy />
-                      </DublicateButton>
-                      <EditButton onClick={() => handleUpdatePreset(preset)}>
-                        <MdEdit />
-                      </EditButton>
-                      <DeleteButton onClick={() => handleDeletePreset(preset)}>
-                        <MdDeleteForever />
-                      </DeleteButton>
-                    </div>
+                    {!isCollapsed && (
+                      <div className="preset-actions">
+                        <DublicateButton
+                          onClick={() => handleDuplicatePreset(preset)}
+                        >
+                          <FaRegCopy />
+                        </DublicateButton>
+                        <EditButton onClick={() => handleUpdatePreset(preset)}>
+                          <MdEdit />
+                        </EditButton>
+                        <DeleteButton
+                          onClick={() => handleDeletePreset(preset)}
+                        >
+                          <MdDeleteForever />
+                        </DeleteButton>
+                      </div>
+                    )}
                   </SortablePresetCard>
                 ))
               ) : (

@@ -21,6 +21,13 @@ export const Container = styled.div`
   @media (max-width: 768px) {
     max-width: 100%;
   }
+  min-width: 0;
+  transition: all 0.3s ease;
+
+  &.collapsed {
+    max-width: 270px;
+    padding: 15px;
+  }
 `;
 
 export const HeaderContainer = styled.div`
@@ -29,6 +36,7 @@ export const HeaderContainer = styled.div`
   align-items: center;
   padding: 0;
   margin: 0;
+  gap: 10px;
 `;
 
 export const Button = styled.button`
@@ -210,7 +218,7 @@ export const DublicateButton = styled(EditButton)`
   box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
     rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #6a5acd 0 -3px 0 inset;
 
-    &:focus {
+  &:focus {
     box-shadow: #6a5acd 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
       rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #6a5acd 0 -3px 0 inset;
   }
@@ -223,7 +231,7 @@ export const DublicateButton = styled(EditButton)`
   &:active {
     box-shadow: #6a5acd 0 3px 7px inset;
   }
-`
+`;
 
 export const ServicesBlockHeader = styled.div`
   text-align: left;
