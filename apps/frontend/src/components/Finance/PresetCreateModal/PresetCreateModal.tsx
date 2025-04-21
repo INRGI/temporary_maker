@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from "react";
 import AdminModal from "../../Common/AdminModal";
 import { Preset, Broadcast } from "../../../types/finance";
@@ -15,6 +16,7 @@ import Dropdown from "../../Common/Dropdown/Dropdown";
 import { SmallLoader } from "../../Common/Loader";
 import { InputGroup } from "../StylesBlock/StylesBlock.styled";
 import { SpanWhite, StyledCheckbox } from "../UnsubBlock/UnsubBlock.styled";
+import ImportPresetButton from "../../Common/ImportPresetButton/ImportPresetButton";
 
 interface PresetCreateModalProps {
   isOpen: boolean;
@@ -101,11 +103,36 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
     }
   };
 
+  const handleImportedPreset = (imported: Preset) => {
+    try {
+      const savedPresets: Preset[] = JSON.parse(
+        localStorage.getItem("presets") || "[]"
+      );
+  
+      const isDuplicate = savedPresets.some(
+        (preset) => preset.name.toLowerCase() === imported.name.toLowerCase()
+      );
+  
+      if (isDuplicate) {
+        toastError("A preset with this name already exists.");
+        return;
+      }
+  
+      const updatedPresets = [...savedPresets, imported];
+      localStorage.setItem("presets", JSON.stringify(updatedPresets));
+      toastSuccess("Preset imported and saved.");
+      onClose();
+    } catch (error) {
+      toastError("Failed to import preset.");
+    }
+  };
+  
   return (
     <AdminModal isOpen={isOpen} onClose={onClose}>
       <CreatePresetContainer>
         <BlockHeader>
           <h2>Create Preset</h2>
+          <ImportPresetButton onImport={handleImportedPreset} />
         </BlockHeader>
         <Container>
           <FloatingLabelInput

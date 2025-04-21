@@ -18,6 +18,7 @@ import {
   SpanWhite,
   StyledCheckbox,
 } from "../UnsubBlock/UnsubBlock.styled";
+import ImportPresetButton from "../../Common/ImportPresetButton/ImportPresetButton";
 
 interface PresetCreateModalProps {
   isOpen: boolean;
@@ -86,12 +87,38 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
     }
   };
 
+  const handleImportedPreset = (imported: Preset) => {
+    try {
+      const savedPresets: Preset[] = JSON.parse(
+        localStorage.getItem("health-presets") || "[]"
+      );
+
+      const isDuplicate = savedPresets.some(
+        (preset) => preset.name.toLowerCase() === imported.name.toLowerCase()
+      );
+
+      if (isDuplicate) {
+        toastError("A preset with this name already exists.");
+        return;
+      }
+
+      const updatedPresets = [...savedPresets, imported];
+      localStorage.setItem("health-presets", JSON.stringify(updatedPresets));
+      toastSuccess("Preset imported and saved.");
+      onClose();
+    } catch (error) {
+      toastError("Failed to import preset.");
+    }
+  };
+
   return (
     <AdminModal isOpen={isOpen} onClose={onClose}>
       <CreatePresetContainer>
         <BlockHeader>
           <h2>Create Preset</h2>
+          <ImportPresetButton onImport={handleImportedPreset} />
         </BlockHeader>
+        <ImportPresetButton onImport={handleImportedPreset} />
         <Container>
           <FloatingLabelInput
             value={presetData.name}

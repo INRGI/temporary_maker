@@ -14,6 +14,7 @@ import SubjectBlock from "../SubjectBlock/SubjectBlock";
 import BotTrapBlock from "../BotTrapBlock/BotTrapBlock";
 import { Preset } from "../../../types/finance";
 import BroadcastBlock from "../BroadcastBlock/BroadcastBlock";
+import ExportPresetButton from "../../Common/ExportPresetButton/ExportPresetButton";
 
 interface PresetUpdateModalProps {
   isOpen: boolean;
@@ -34,9 +35,9 @@ const PresetUpdateModal: React.FC<PresetUpdateModalProps> = ({
       case "styles":
         return <StylesBlock preset={currentPreset} />;
       case "link":
-        return <LinkBlock preset={currentPreset}/>;
+        return <LinkBlock preset={currentPreset} />;
       case "unsub":
-        return <UnsubBlock preset={currentPreset}/>;
+        return <UnsubBlock preset={currentPreset} />;
       case "subject":
         return <SubjectBlock preset={currentPreset} />;
       case "bottrap":
@@ -55,45 +56,46 @@ const PresetUpdateModal: React.FC<PresetUpdateModalProps> = ({
           <h2>Add Styles and more</h2>
         </BlockHeader>
         <TabsContainer>
-            <TabButton
-              active={activeTab === "styles"}
-              onClick={() => setActiveTab("styles")}
-            >
-              Styles
-            </TabButton>
-            <TabButton
-              active={activeTab === "link"}
-              onClick={() => setActiveTab("link")}
-            >
-              Link
-            </TabButton>
-            <TabButton
-              active={activeTab === "unsub"}
-              onClick={() => setActiveTab("unsub")}
-            >
-              Unsub
-            </TabButton>
-            <TabButton
-              active={activeTab === "subject"}
-              onClick={() => setActiveTab("subject")}
-            >
-              Subject
-            </TabButton>
-            <TabButton
-              active={activeTab === "bottrap"}
-              onClick={() => setActiveTab("bottrap")}
-            >
-              Bot Trap
-            </TabButton>
-            <TabButton
-              active={activeTab === "broadcast"}
-              onClick={() => setActiveTab("broadcast")}
-            >
-              Preset
-            </TabButton>
-          </TabsContainer>
+          <TabButton
+            active={activeTab === "styles"}
+            onClick={() => setActiveTab("styles")}
+          >
+            Styles
+          </TabButton>
+          <TabButton
+            active={activeTab === "link"}
+            onClick={() => setActiveTab("link")}
+          >
+            Link
+          </TabButton>
+          <TabButton
+            active={activeTab === "unsub"}
+            onClick={() => setActiveTab("unsub")}
+          >
+            Unsub
+          </TabButton>
+          <TabButton
+            active={activeTab === "subject"}
+            onClick={() => setActiveTab("subject")}
+          >
+            Subject
+          </TabButton>
+          <TabButton
+            active={activeTab === "bottrap"}
+            onClick={() => setActiveTab("bottrap")}
+          >
+            Bot Trap
+          </TabButton>
+          <TabButton
+            active={activeTab === "broadcast"}
+            onClick={() => setActiveTab("broadcast")}
+          >
+            Preset
+          </TabButton>
+          <ExportPresetButton preset={preset} />
+        </TabsContainer>
         <Container>
-        {renderContent()}
+          {renderContent()}
         </Container>
       </UpdatePresetContainer>
     </AdminModal>

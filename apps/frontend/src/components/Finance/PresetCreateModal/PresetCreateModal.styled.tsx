@@ -48,16 +48,15 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-content: center;
-  /* align-items: center; */
 `;
 
 
 export const BlockHeader = styled.div`
   text-align: left;
   display: flex;
-  flex-direction: column;
   align-items: flex-start;
   align-content: center;
+  gap: 20px;
 
   h2 {
     font-size: 30px;
