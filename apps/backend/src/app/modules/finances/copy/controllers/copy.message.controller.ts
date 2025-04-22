@@ -30,15 +30,11 @@ export class CopyMessageController {
     const today = new Date();
     today.setDate(today.getDate() - 1);
 
-    const fiveDaysFromNow = new Date();
-    fiveDaysFromNow.setDate(fiveDaysFromNow.getDate() + 5);
+    const threeDaysFromNow = new Date();
+    threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 2);
 
     const fromDate = request.fromDate ||today;
-    const toDate = request.toDate || request.fromDate || fiveDaysFromNow;
-   
-    // const threeDaysFromNow = new Date();
-    // threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 2);
-    
+    const toDate = request.toDate || request.fromDate || threeDaysFromNow;
 
     const result = await this.makeMultipleCopiesService.makeMultipleCopies({
       ...request,

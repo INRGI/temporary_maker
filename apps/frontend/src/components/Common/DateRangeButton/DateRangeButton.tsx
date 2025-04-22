@@ -5,7 +5,7 @@ import { FaCalendarAlt } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const MAX_SELECTION_DAYS = 5;
+const MAX_SELECTION_DAYS = 3;
 
 const rotate = keyframes`
   from {
