@@ -161,7 +161,7 @@ const PresetContainer: React.FC = () => {
 
   return (
     <RootContainer>
-      <Container>
+      <Container className={isCollapsed ? "collapsed" : ""}>
         <HeaderContainer>
           <ServicesBlockHeader>
             <h2>Presets</h2>
