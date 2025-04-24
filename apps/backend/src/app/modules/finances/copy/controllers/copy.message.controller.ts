@@ -33,7 +33,7 @@ export class CopyMessageController {
     const threeDaysFromNow = new Date();
     threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 2);
 
-    const fromDate = request.fromDate ||today;
+    const fromDate = request.fromDate || today;
     const toDate = request.toDate || request.fromDate || threeDaysFromNow;
 
     const result = await this.makeMultipleCopiesService.makeMultipleCopies({
