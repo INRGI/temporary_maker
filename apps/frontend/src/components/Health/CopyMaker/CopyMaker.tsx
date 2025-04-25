@@ -46,6 +46,7 @@ import { DateBadge } from "../../Common/DateBadge";
 import MakeCopyModal from "../MakeCopyModal/MakeCopyModal";
 import { TbRepeatOnce } from "react-icons/tb";
 import { DateRangeButton } from "../../Common/DateRangeButton/DateRangeButton";
+import { FaTrash } from "react-icons/fa6";
 
 interface Props {
   preset: Preset;
@@ -77,43 +78,43 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
   ]);
 
   const [hasLoadedFromStorage, setHasLoadedFromStorage] = useState(false);
-  
-    const STORAGE_KEY = "health-last-copies";
-  
-    const loadAllCopies = (): Record<string, ResponseCopy[]> => {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        return raw ? JSON.parse(raw) : {};
-      } catch {
-        return {};
-      }
-    };
-  
-    const saveAllCopies = (data: Record<string, ResponseCopy[]>) => {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    };
-  
-    const saveCopiesForPreset = (presetName: string, copies: ResponseCopy[]) => {
-      const all = loadAllCopies();
-      all[presetName] = copies;
-      saveAllCopies(all);
-    };
-  
-    const loadCopiesForPreset = (presetName: string): ResponseCopy[] => {
-      const all = loadAllCopies();
-      return all[presetName] || [];
-    };
-  
-    useEffect(() => {
-      const stored = loadCopiesForPreset(preset.name);
-      setCopies(stored);
-      setHasLoadedFromStorage(true);
-    }, [preset.name]);
-  
-    useEffect(() => {
-      if (!hasLoadedFromStorage) return;
-      saveCopiesForPreset(preset.name, copies);
-    }, [copies, preset.name, hasLoadedFromStorage]);
+
+  const STORAGE_KEY = "health-last-copies";
+
+  const loadAllCopies = (): Record<string, ResponseCopy[]> => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
+  };
+
+  const saveAllCopies = (data: Record<string, ResponseCopy[]>) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  };
+
+  const saveCopiesForPreset = (presetName: string, copies: ResponseCopy[]) => {
+    const all = loadAllCopies();
+    all[presetName] = copies;
+    saveAllCopies(all);
+  };
+
+  const loadCopiesForPreset = (presetName: string): ResponseCopy[] => {
+    const all = loadAllCopies();
+    return all[presetName] || [];
+  };
+
+  useEffect(() => {
+    const stored = loadCopiesForPreset(preset.name);
+    setCopies(stored);
+    setHasLoadedFromStorage(true);
+  }, [preset.name]);
+
+  useEffect(() => {
+    if (!hasLoadedFromStorage) return;
+    saveCopiesForPreset(preset.name, copies);
+  }, [copies, preset.name, hasLoadedFromStorage]);
 
   const makeCopies = async () => {
     try {
@@ -296,6 +297,15 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
     setImagesSource(imageSourceData);
   };
 
+  const handleClear = () => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+      setCopies([]);
+    } catch (error) {
+      toastError("Failed to clear");
+    }
+  };
+
   return (
     <Container>
       <HeaderContainer>
@@ -303,6 +313,11 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           <h2>{preset.name}</h2>
         </ServicesBlockHeader>
         <ButtonsHeaderContainer>
+          {copies.length > 0 && (
+            <Button onClick={handleClear}>
+              <FaTrash />
+            </Button>
+          )}
           {preset.linkUrl && (
             <Button onClick={() => setBuildLinkModal(true)}>
               <FaLink />

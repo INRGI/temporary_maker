@@ -45,6 +45,7 @@ import { DateBadge } from "../../Common/DateBadge";
 import { TbRepeatOnce } from "react-icons/tb";
 import MakeCopyModal from "../MakeCopyModal/MakeCopyModal";
 import { DateRangeButton } from "../../Common/DateRangeButton/DateRangeButton";
+import { FaTrash } from "react-icons/fa6";
 
 interface Props {
   preset: Preset;
@@ -295,6 +296,15 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
     setImagesSource(imageSourceData);
   };
 
+  const handleClear = () => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+      setCopies([]);
+    } catch (error) {
+      toastError("Failed to clear");
+    }
+  };
+
   return (
     <Container>
       <HeaderContainer>
@@ -302,6 +312,11 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           <h2>{preset.name}</h2>
         </ServicesBlockHeader>
         <ButtonsHeaderContainer>
+          {copies.length > 0 && (
+            <Button onClick={handleClear}>
+              <FaTrash />
+            </Button>
+          )}
           {preset.linkUrl && (
             <Button onClick={() => setBuildLinkModal(true)}>
               <FaLink />
