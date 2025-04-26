@@ -28,7 +28,7 @@ export class CopyMessageController {
     @Body() request: HealthMakeMulitpleCopiesRequestDto
   ): Promise<HealthMakeMultipleCopiesResponseDto> {
     const today = new Date();
-    today.setDate(today.getDate() - 1);
+    today.setDate(today.getDate());
 
     const threeDaysFromNow = new Date();
     threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 2);
