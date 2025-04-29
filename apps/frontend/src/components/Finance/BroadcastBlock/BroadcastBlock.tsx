@@ -16,7 +16,6 @@ const teams: Broadcast["team"][] = [
   "Blue",
   "Red",
   "Warsaw",
-  "OptimizedWarsaw",
   "Green",
   "Purple",
   "Jade",

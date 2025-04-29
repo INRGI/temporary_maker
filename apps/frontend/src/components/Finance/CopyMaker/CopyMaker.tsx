@@ -357,6 +357,18 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                       ({copy.buildedLink.match(/(IMG.*)/)?.[0] || ""})
                     </TitleCopy>
                   )}
+                   {preset.linkUrl?.productCode === '0000_#IMAGE' && (
+                    <TitleCopy
+                      onClick={() => {
+                        navigator.clipboard.writeText(
+                          copy.buildedLink.match(/product=([^&]*)/)?.[1] || ""
+                        );
+                        toastSuccess("Copied to clipboard");
+                      }}
+                    >
+                      ({copy.buildedLink.match(/product=([^&]*)/)?.[1] || ""})
+                    </TitleCopy>
+                  )}
                 </h2>
                 <DateBadge date={copy.sendingDate} />
                 <div>

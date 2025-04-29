@@ -344,21 +344,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
             <CopyCard key={copy.copyName}>
               <CardHeader>
                 <LinkIndicator link={copy.buildedLink} />
-                <h2>
-                  {copy.copyName}
-                  {copy.buildedLink.includes("IMG") && (
-                    <TitleCopy
-                      onClick={() => {
-                        navigator.clipboard.writeText(
-                          copy.buildedLink.match(/(IMG.*)/)?.[0] || ""
-                        );
-                        toastSuccess("Copied to clipboard");
-                      }}
-                    >
-                      ({copy.buildedLink.match(/(IMG.*)/)?.[0] || ""})
-                    </TitleCopy>
-                  )}
-                </h2>
+                <h2>{copy.copyName}</h2>
                 <DateBadge date={copy.sendingDate} />
                 <div>
                   {copy.html.includes("Error") || !copy.html ? (

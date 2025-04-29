@@ -32,7 +32,7 @@ export class GetDomainBroadcastFromDriveService {
     try {
       const broadcastTableSearchResult =
         await this.gdriveApiService.searchFileWithQuery(
-          `name contains 'Broadcast ${team}' and mimeType = 'application/vnd.google-apps.spreadsheet'`,
+          `name contains 'Broadcast ${team} team' and mimeType = 'application/vnd.google-apps.spreadsheet'`,
           10
         );
 
