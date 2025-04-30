@@ -332,3 +332,29 @@ export const ButtonContainer = styled.div`
   gap: 10px;
   justify-content: space-between;
 `;
+export const FormatButtonWrapper = styled.div`
+  position: relative;
+`;
+
+export const FormatDropdown = styled.div`
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background-color: #1f1f1f;
+  border: 1px solid #444;
+  border-radius: 6px;
+  z-index: 20;
+  width: 140px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+`;
+
+export const FormatDropdownItem = styled.div`
+  padding: 10px;
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #333;
+  }
+`;

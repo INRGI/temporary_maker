@@ -82,13 +82,22 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
   const STORAGE_KEY = "health-last-copies";
 
   const loadAllCopies = (): Record<string, ResponseCopy[]> => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : {};
-    } catch {
-      return {};
-    }
-  };
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        const parsed = raw ? JSON.parse(raw) : {};
+  
+        if (
+          typeof parsed !== "object" ||
+          Array.isArray(parsed) ||
+          parsed === null
+        ) {
+          return {};
+        }
+        return parsed;
+      } catch {
+        return {};
+      }
+    };
 
   const saveAllCopies = (data: Record<string, ResponseCopy[]>) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -113,8 +122,9 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
 
   useEffect(() => {
     if (!hasLoadedFromStorage) return;
+    if (copies.length === 0) return;
     saveCopiesForPreset(preset.name, copies);
-  }, [copies, preset.name, hasLoadedFromStorage]);
+  }, [copies]);
 
   const makeCopies = async () => {
     try {

@@ -13,6 +13,9 @@ import {
   CopyButton,
   CopyCard,
   DownloadButton,
+  FormatButtonWrapper,
+  FormatDropdown,
+  FormatDropdownItem,
   HeaderContainer,
   ImageCard,
   ImagePreviewContainer,
@@ -83,7 +86,16 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
   const loadAllCopies = (): Record<string, ResponseCopy[]> => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : {};
+      const parsed = raw ? JSON.parse(raw) : {};
+
+      if (
+        typeof parsed !== "object" ||
+        Array.isArray(parsed) ||
+        parsed === null
+      ) {
+        return {};
+      }
+      return parsed;
     } catch {
       return {};
     }
@@ -107,13 +119,16 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
   useEffect(() => {
     const stored = loadCopiesForPreset(preset.name);
     setCopies(stored);
+    const savedFormat = loadFormatForPreset(preset.name);
+    setFormat(savedFormat);
     setHasLoadedFromStorage(true);
   }, [preset.name]);
 
   useEffect(() => {
     if (!hasLoadedFromStorage) return;
+    if (copies.length === 0) return;
     saveCopiesForPreset(preset.name, copies);
-  }, [copies, preset.name, hasLoadedFromStorage]);
+  }, [copies]);
 
   const makeCopies = async () => {
     try {
@@ -298,12 +313,50 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
 
   const handleClear = () => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+      const allCopies = loadAllCopies();
+      delete allCopies[preset.name];
+      saveAllCopies(allCopies);
       setCopies([]);
+      toastSuccess("Cleared successfully");
     } catch (error) {
       toastError("Failed to clear");
     }
   };
+
+  const FORMAT_STORAGE_KEY = "finance-format-preferences";
+  const [format, setFormat] = useState<"underscore" | "slash">("underscore");
+  const [formatDropdownOpen, setFormatDropdownOpen] = useState(false);
+
+  const loadFormatForPreset = (presetName: string): "underscore" | "slash" => {
+    const raw = localStorage.getItem(FORMAT_STORAGE_KEY);
+    const formats = raw ? JSON.parse(raw) : {};
+    return formats[presetName] || "underscore";
+  };
+
+  const saveFormatForPreset = (
+    presetName: string,
+    format: "underscore" | "slash"
+  ) => {
+    const raw = localStorage.getItem(FORMAT_STORAGE_KEY);
+    const formats = raw ? JSON.parse(raw) : {};
+    formats[presetName] = format;
+    localStorage.setItem(FORMAT_STORAGE_KEY, JSON.stringify(formats));
+  };
+
+  const formatProductCode = (
+    productCode: string,
+    format: "underscore" | "slash"
+  ) => {
+    return format === "slash" ? productCode.replace("_", "/") : productCode;
+  };
+
+  useEffect(() => {
+    const stored = loadCopiesForPreset(preset.name);
+    setCopies(stored);
+    const savedFormat = loadFormatForPreset(preset.name);
+    setFormat(savedFormat);
+    setHasLoadedFromStorage(true);
+  }, [preset.name]);
 
   return (
     <Container>
@@ -312,6 +365,38 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           <h2>{preset.name}</h2>
         </ServicesBlockHeader>
         <ButtonsHeaderContainer>
+          {preset.linkUrl?.productCode === "0000_#IMAGE" && (
+            <FormatButtonWrapper>
+              <Button
+                onClick={() => setFormatDropdownOpen(!formatDropdownOpen)}
+              >
+                {format === "underscore" ? "_" : "/"}
+              </Button>
+              {formatDropdownOpen && (
+                <FormatDropdown>
+                  <FormatDropdownItem
+                    onClick={() => {
+                      setFormat("underscore");
+                      saveFormatForPreset(preset.name, "underscore");
+                      setFormatDropdownOpen(false);
+                    }}
+                  >
+                    0000_IMAGE
+                  </FormatDropdownItem>
+                  <FormatDropdownItem
+                    onClick={() => {
+                      setFormat("slash");
+                      saveFormatForPreset(preset.name, "slash");
+                      setFormatDropdownOpen(false);
+                    }}
+                  >
+                    0000/IMAGE
+                  </FormatDropdownItem>
+                </FormatDropdown>
+              )}
+            </FormatButtonWrapper>
+          )}
+
           {copies.length > 0 && (
             <Button onClick={handleClear}>
               <FaTrash />
@@ -357,16 +442,25 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                       ({copy.buildedLink.match(/(IMG.*)/)?.[0] || ""})
                     </TitleCopy>
                   )}
-                   {preset.linkUrl?.productCode === '0000_#IMAGE' && (
+                  {preset.linkUrl?.productCode === "0000_#IMAGE" && (
                     <TitleCopy
                       onClick={() => {
-                        navigator.clipboard.writeText(
-                          copy.buildedLink.match(/product=([^&]*)/)?.[1] || ""
+                        const rawProductCode =
+                          copy.buildedLink.match(/product=([^&]*)/)?.[1] || "";
+                        const formatted = formatProductCode(
+                          rawProductCode,
+                          format
                         );
+                        navigator.clipboard.writeText(formatted);
                         toastSuccess("Copied to clipboard");
                       }}
                     >
-                      ({copy.buildedLink.match(/product=([^&]*)/)?.[1] || ""})
+                      (
+                      {formatProductCode(
+                        copy.buildedLink.match(/product=([^&]*)/)?.[1] || "",
+                        format
+                      )}
+                      )
                     </TitleCopy>
                   )}
                 </h2>
