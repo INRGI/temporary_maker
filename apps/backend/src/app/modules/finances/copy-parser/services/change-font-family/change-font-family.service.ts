@@ -22,11 +22,11 @@ export class ChangeFontFamilyService {
         element.setAttribute(
           'style',
           updatedStyle
-            ? `${updatedStyle}; font-family: ${fontFamily};`
-            : `font-family: ${fontFamily};`
+            ? `${updatedStyle}; font-family: '${fontFamily}', Arial, Helvetica, sans-serif;`
+            : `font-family: '${fontFamily}', Arial, Helvetica, sans-serif;`
         );
       } else {
-        element.setAttribute('style', `font-family: ${fontFamily};`);
+        element.setAttribute('style', `font-family: '${fontFamily}', Arial, Helvetica, sans-serif;`);
       }
     };
 

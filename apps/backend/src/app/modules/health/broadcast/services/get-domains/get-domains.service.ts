@@ -13,21 +13,47 @@ export class GetDomainsService {
     private readonly spreadsheetService: GSpreadsheetApiServicePort
   ) {}
 
-  private getCurrentMonthSheetName(): string {
-    const now = new Date();
+  private getSheetNameConsideringDate(date = new Date()): string {
+    const now = date;
+    const day = now.getDate();
+    const isWeekend = now.getDay() === 0 || now.getDay() === 6;
+
     const months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December",
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
-    const currentMonth = months[now.getMonth()];
-    const currentYear = now.getFullYear().toString().slice(-2);
-    return `${currentMonth}'${currentYear}`;
+
+    let monthIndex = now.getMonth();
+    let year = now.getFullYear();
+
+    if (day < 14 || (isWeekend && day <= 16)) {
+      monthIndex -= 1;
+      if (monthIndex < 0) {
+        monthIndex = 11;
+        year -= 1;
+      }
+    }
+
+    const monthName = months[monthIndex];
+    const yearShort = year.toString().slice(-2);
+
+    return `${monthName}'${yearShort}!1:1`;
   }
 
   public async getDomains(): Promise<GetDomainsByTeamResponseDto> {
     try {
       const broadcastTableId = "1GkfnmFKZYtf-B6gZJyPCdhrqy_GfBjpc5ql-qB0x02k";
-      const sheetName = "Marchʼ25!1:1";
+      const sheetName = this.getSheetNameConsideringDate();
 
       const rows = await this.spreadsheetService.getSheetValuesOnly(
         broadcastTableId,

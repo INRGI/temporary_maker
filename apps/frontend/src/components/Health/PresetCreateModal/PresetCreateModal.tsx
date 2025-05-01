@@ -118,7 +118,6 @@ const PresetCreateModal: React.FC<PresetCreateModalProps> = ({
           <h2>Create Preset</h2>
           <ImportPresetButton onImport={handleImportedPreset} />
         </BlockHeader>
-        <ImportPresetButton onImport={handleImportedPreset} />
         <Container>
           <FloatingLabelInput
             value={presetData.name}
