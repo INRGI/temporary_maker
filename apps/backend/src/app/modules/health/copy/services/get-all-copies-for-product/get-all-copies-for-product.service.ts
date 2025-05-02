@@ -102,7 +102,7 @@ export class GetAllCopiesForProductService {
       }
 
       const liftsColumn = mondayData[0].column_values.find(
-        (column) => column.column.title === "(B)Broadcast Copies"
+        (column) => column.column.title === "Broadcast Copies"
       );
 
       if (!liftsColumn || !liftsColumn.text) {

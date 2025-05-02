@@ -28,7 +28,7 @@ const BuildSpaceAdLink: React.FC<Props> = ({ linkUrl, onClose, isOpen }) => {
     }
 
     try {
-      const response = await axios.post("/api/finances/copy/space-ad-build-link", {
+      const response = await axios.post("/api/health/copy/space-ad-build-link", {
         copyName,
         linkUrl,
       });

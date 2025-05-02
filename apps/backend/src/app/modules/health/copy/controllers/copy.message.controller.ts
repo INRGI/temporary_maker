@@ -28,20 +28,40 @@ export class CopyMessageController {
     @Body() request: HealthMakeMulitpleCopiesRequestDto
   ): Promise<HealthMakeMultipleCopiesResponseDto> {
     const today = new Date();
-    today.setDate(today.getDate());
-
+    today.setHours(0, 0, 0, 0);
+  
     const threeDaysFromNow = new Date();
     threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 2);
-
-    const fromDate = request.fromDate || today;
-    const toDate = request.toDate || request.fromDate || threeDaysFromNow;
-
+    threeDaysFromNow.setHours(0, 0, 0, 0);
+  
+    let fromDate: Date;
+  
+    if (request.fromDate) {
+      const from = new Date(request.fromDate);
+      fromDate = new Date(
+        from.getFullYear(),
+        from.getMonth(),
+        from.getDate() + 1,
+        0,
+        0,
+        0,
+        0
+      );
+    } else {
+      fromDate = today;
+    }
+  
+    const toDate =
+      request.toDate ||
+      threeDaysFromNow;
+  
     const result = await this.makeMultipleCopiesService.makeMultipleCopies({
       ...request,
       fromDate,
       toDate,
     });
-    return await result;
+  
+    return result;
   }
 
   @Post("make-copy")
