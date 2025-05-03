@@ -64,6 +64,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
   const [newImageLinks, setNewImageLinks] = useState<Record<string, string>>(
     {}
   );
+  const [brokenImages, setBrokenImages] = useState<Set<string>>(new Set());
 
   const [activeAddImageCopy, setActiveAddImageCopy] = useState<ResponseCopy>();
   const [previewModal, setPreviewModal] = useState(false);
@@ -555,40 +556,82 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                         </TextTitle>
                       </p>
                       <ImagesList>
-                        {copy.imageLinks.map((image, index) => (
-                          <ImageCard key={`${copy.copyName}-${image}-${index}`}>
-                            <ImagePreviewContainer>
-                              <img src={image} alt="preview" />
-                            </ImagePreviewContainer>
+                      {copy.imageLinks.map((image, index) => {
+                          const imageKey = `${copy.copyName}-${image}-${index}`;
 
-                            <DownloadButton
-                              onClick={() => handleDownloadImage(image)}
-                            >
-                              <GrDownload color="white" />
-                            </DownloadButton>
+                          return (
+                            <ImageCard key={imageKey}>
+                              <ImagePreviewContainer
+                                style={{
+                                  border: brokenImages.has(imageKey)
+                                    ? "2px solid red"
+                                    : "none",
+                                }}
+                              >
+                                <img
+                                  src={image}
+                                  alt="preview"
+                                  onLoad={() =>
+                                    setBrokenImages((prev) => {
+                                      const newSet = new Set(prev);
+                                      newSet.delete(imageKey);
+                                      return newSet;
+                                    })
+                                  }
+                                  onError={() =>
+                                    setBrokenImages((prev) =>
+                                      new Set(prev).add(imageKey)
+                                    )
+                                  }
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    objectFit: "cover",
+                                    borderRadius: "8px",
+                                  }}
+                                />
+                              </ImagePreviewContainer>
 
-                            <FloatingLabelInput
-                              placeholder="Paste new image link"
-                              value={
-                                newImageLinks[`${copy.copyName}-${image}`] || ""
-                              }
-                              onChange={(e) => {
-                                setNewImageLinks({
-                                  ...newImageLinks,
-                                  [`${copy.copyName}-${image}`]: e.target.value,
-                                });
-                              }}
-                            />
+                              <DownloadButton
+                                onClick={() => {
+                                  if (!brokenImages.has(imageKey))
+                                    handleDownloadImage(image);
+                                }}
+                                style={{
+                                  cursor: brokenImages.has(imageKey)
+                                    ? "not-allowed"
+                                    : "pointer",
+                                  opacity: brokenImages.has(imageKey) ? 0.6 : 1,
+                                }}
+                              >
+                                <GrDownload color="white" />
+                              </DownloadButton>
 
-                            <ReplaceButton
-                              onClick={() =>
-                                handleImageSourceReplace(copy.copyName, image)
-                              }
-                            >
-                              Replace
-                            </ReplaceButton>
-                          </ImageCard>
-                        ))}
+                              <FloatingLabelInput
+                                placeholder="Paste new image link"
+                                value={
+                                  newImageLinks[`${copy.copyName}-${image}`] ||
+                                  ""
+                                }
+                                onChange={(e) => {
+                                  setNewImageLinks({
+                                    ...newImageLinks,
+                                    [`${copy.copyName}-${image}`]:
+                                      e.target.value,
+                                  });
+                                }}
+                              />
+
+                              <ReplaceButton
+                                onClick={() =>
+                                  handleImageSourceReplace(copy.copyName, image)
+                                }
+                              >
+                                Replace
+                              </ReplaceButton>
+                            </ImageCard>
+                          );
+                        })}
                       </ImagesList>
                     </>
                   )}
