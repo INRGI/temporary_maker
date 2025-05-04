@@ -6,6 +6,7 @@ import NotFound from "../../pages/NotFound";
 const Home = lazy(() => import("../../pages/Home/Home"));
 const HealthHome = lazy(() => import("../../pages/HealthHome/HealthHome"));
 const ProductPreview = lazy(() => import("../../pages/ProductPreview/ProductPreview"));
+const HealthProductPreview = lazy(() => import("../../pages/HealthProductPreview/HealthProductPreview"));
 
 export function App() {
   return (
@@ -14,7 +15,7 @@ export function App() {
         <Route index element={<Home />} />
         
         <Route path="/health" element={<HealthHome />} />
-
+        <Route path="/health/product-preview" element={<HealthProductPreview />} />
         <Route path="/product-preview" element={<ProductPreview />} />
 
         <Route path="/not-found" element={<NotFound />} />

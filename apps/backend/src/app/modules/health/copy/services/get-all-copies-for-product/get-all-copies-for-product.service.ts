@@ -86,23 +86,13 @@ export class GetAllCopiesForProductService {
     const { product, minLift, maxLift } = payload;
     let mondayData;
     try {
-      mondayData = await this.mondayApiService.getProductData(
+      mondayData = await this.mondayApiService.getProductDataByEndsWith(
         product,
-        803747785
+        3858647032
       );
 
-      if (!mondayData.length) {
-        mondayData = await this.mondayApiService.getProductData(
-          `*${product}`,
-          803747785
-        );
-        if (!mondayData.length) {
-          throw new Error("Product not found");
-        }
-      }
-
       const liftsColumn = mondayData[0].column_values.find(
-        (column) => column.column.title === "Broadcast Copies"
+        (column) => column.column.title === "Broadcast copies"
       );
 
       if (!liftsColumn || !liftsColumn.text) {
