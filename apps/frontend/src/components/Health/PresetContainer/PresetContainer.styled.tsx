@@ -91,7 +91,7 @@ export const PresetCard = styled.li<{ isActive: boolean }>`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   height: auto;
   min-height: 50px;
-  width: 92%;
+  /* width: 92%; */
   max-width: 440px;
   color: #fff;
   cursor: pointer;
