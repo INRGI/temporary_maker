@@ -15,6 +15,7 @@ import { Preset } from "../../../types/health";
 import BroadcastBlock from "../BroadcastBlock/BroadcastBlock";
 import UnsubBlock from "../UnsubBlock/UnsubBlock";
 import ExportPresetButton from "../../Common/ExportPresetButton/ExportPresetButton";
+import UploadImageBlock from "../UploadImageBlock/UploadImageBlock";
 
 interface PresetUpdateModalProps {
   isOpen: boolean;
@@ -43,6 +44,8 @@ const PresetUpdateModal: React.FC<PresetUpdateModalProps> = ({
         return <BotTrapBlock preset={currentPreset} />;
       case "broadcast":
         return <BroadcastBlock preset={currentPreset} />;
+      case "uploadImage":
+        return <UploadImageBlock preset={currentPreset} />;
       default:
         return null;
     }
@@ -84,6 +87,12 @@ const PresetUpdateModal: React.FC<PresetUpdateModalProps> = ({
             onClick={() => setActiveTab("bottrap")}
           >
             Bot Trap
+          </TabButton>
+          <TabButton
+            active={activeTab === "uploadImage"}
+            onClick={() => setActiveTab("uploadImage")}
+          >
+            Upload Image
           </TabButton>
           <TabButton
             active={activeTab === "broadcast"}

@@ -5,6 +5,7 @@ import { CopyWhatToReplace } from "./copy-what-to-replace.types";
 import { LinkUrl } from "./link-url.types";
 import { SubjectLine } from "./subject-line.types";
 import { UnsubLinkUrl } from "./unsub-link-url.types";
+import { UploadImage } from "./upload-image.types";
 
 export interface Preset {
   name: string;
@@ -16,4 +17,5 @@ export interface Preset {
   subjectLine?: SubjectLine;
   botTrap?: BotTrap;
   format?: "html" | "mjml";
+  uploadImage?: UploadImage;
 }

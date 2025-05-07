@@ -47,6 +47,7 @@ import MakeCopyModal from "../MakeCopyModal/MakeCopyModal";
 import { TbRepeatOnce } from "react-icons/tb";
 import { DateRangeButton } from "../../Common/DateRangeButton/DateRangeButton";
 import { FaTrash } from "react-icons/fa6";
+import UploadToWordpressButtonFromFile from "../UploadToWordpressButton/UploadToWordpressButtonFromFile";
 
 interface Props {
   preset: Preset;
@@ -520,6 +521,24 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                               >
                                 Replace
                               </ReplaceButton>
+                              {preset.uploadImage &&
+                                preset.uploadImage.isUploadImage && (
+                                  <UploadToWordpressButtonFromFile
+                                    onUploadMade={(url: string) =>
+                                      setNewImageLinks({
+                                        ...newImageLinks,
+                                        [`${copy.copyName}-${image}`]: url,
+                                      })
+                                    }
+                                    username={preset.uploadImage.username || ""}
+                                    appPassword={
+                                      preset.uploadImage.appPassword || ""
+                                    }
+                                    wordpressUrl={
+                                      preset.uploadImage.wordpressUrl || ""
+                                    }
+                                  />
+                                )}
                             </ImageCard>
                           );
                         })}

@@ -11,3 +11,4 @@ export * from "./custom-unsub-block.types";
 export * from "./default-unsub-block.types";
 export * from "./unsub-link-url.types";
 export * from "./unsubData.types";
+export * from "./upload-image.types";
