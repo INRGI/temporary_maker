@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { Preset } from "../../../types/finance";
+import { CopyStyles, Preset } from "../../../types/finance";
 import { ServicesBlockHeader } from "../PresetContainer/PresetContainer.styled";
 import {
   AddButton,
@@ -49,6 +49,7 @@ import { TbRepeatOnce } from "react-icons/tb";
 import MakeCopyModal from "../MakeCopyModal/MakeCopyModal";
 import { DateRangeButton } from "../../Common/DateRangeButton/DateRangeButton";
 import { FaTrash } from "react-icons/fa6";
+import AddButtonModal from "../../Common/AddButtonModal/AddButtonModal";
 
 interface Props {
   preset: Preset;
@@ -58,6 +59,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
   const [copies, setCopies] = useState<ResponseCopy[]>([]);
   const [loading, setLoading] = useState(false);
   const [addImageModal, setAddImageModal] = useState(false);
+  const [addButtonModal, setAddButtonModal] = useState(false);
   const [imagesSource, setImagesSource] = useState<
     { copyName: string; imageLink: string }[]
   >([]);
@@ -260,6 +262,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
 
   const handleCloseModal = () => {
     setAddImageModal(false);
+    setAddButtonModal(false);
     setActiveAddImageCopy(undefined);
   };
 
@@ -646,6 +649,15 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                       Add Image
                     </AddButton>
 
+                    {/* <AddButton
+                      onClick={() => {
+                        setActiveAddImageCopy(copy);
+                        setAddButtonModal(true);
+                      }}
+                    >
+                      Add Button
+                    </AddButton> */}
+
                     <PreviewButton
                       onClick={() => {
                         setPreviewHtml(copy.html);
@@ -671,6 +683,17 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           setImagesSource={setImagesSource}
           onClose={handleCloseModal}
           isOpen={addImageModal}
+          link={activeAddImageCopy.buildedLink}
+        />
+      )}
+      {addButtonModal && activeAddImageCopy && (
+        <AddButtonModal
+          copy={activeAddImageCopy}
+          copies={copies}
+          setCopies={setCopies}
+          copyStyles={preset.copyStyles as CopyStyles}
+          onClose={handleCloseModal}
+          isOpen={addButtonModal}
           link={activeAddImageCopy.buildedLink}
         />
       )}

@@ -123,11 +123,11 @@ const AddImageModal: React.FC<Props> = ({
     if (!editableRef.current) return;
     editableRef.current.focus();
 
-    const imgTag = `<table role="presentation" cellpadding="0" cellspacing="0" align="center">
+    const imgTag = `<table role="presentation" cellpadding="0" cellspacing="0" align="center" width="100%">
       <tr>
-        <td align="center" style="text-align: center; padding-top: ${paddingTop}px; padding-bottom: ${paddingBottom}px">
+        <td align="center" style="padding-top: ${paddingTop}px; padding-bottom: ${paddingBottom}px">
           <a href="${link}" style="font-weight: 900; text-decoration: none;">
-            <img src="${newImageSrc}" alt="${newImageAlt}" style="width: 100%; height: auto; border: 0; max-width: ${newImageWidth}px;" />
+            <img width="${newImageWidth}" src="${newImageSrc}" alt="${newImageAlt}" style="width: 100%; height: auto; border: 0; max-width: ${newImageWidth}px;" />
           </a>
         </td>
       </tr>

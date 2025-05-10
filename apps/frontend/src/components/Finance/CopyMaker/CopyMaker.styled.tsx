@@ -330,7 +330,7 @@ export const PreviewButton = styled(ReplaceButton)`
 export const ButtonContainer = styled.div`
   display: flex;
   gap: 10px;
-  justify-content: space-between;
+  justify-content: flex-end;
 `;
 export const FormatButtonWrapper = styled.div`
   position: relative;
