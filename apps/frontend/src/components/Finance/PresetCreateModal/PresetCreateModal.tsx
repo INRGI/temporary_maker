@@ -26,7 +26,7 @@ interface PresetCreateModalProps {
 
 const teams: Broadcast["team"][] = [
   "Blue",
-  "Warsaw",
+  "Yellow",
   "Red",
   "Green",
   "Purple",

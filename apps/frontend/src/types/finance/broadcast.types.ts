@@ -1,4 +1,4 @@
 export interface Broadcast {
-  team: 'Blue' | 'Warsaw'| 'Red' | 'Green' | 'Purple' | 'Jade' | 'Tiffany' | 'Orange' | 'Select Team';
+  team: 'Blue' | 'Yellow'| 'Red' | 'Green' | 'Purple' | 'Jade' | 'Tiffany' | 'Orange' | 'Select Team';
   domain: string;
 }

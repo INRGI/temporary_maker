@@ -15,7 +15,7 @@ interface Props {
 const teams: Broadcast["team"][] = [
   "Blue",
   "Red",
-  "Warsaw",
+  "Yellow",
   "Green",
   "Purple",
   "Jade",
