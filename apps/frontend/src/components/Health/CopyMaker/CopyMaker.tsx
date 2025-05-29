@@ -360,7 +360,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                 <DateBadge date={copy.sendingDate} />
                 <div>
                   {copy.html.includes("Error") || !copy.html ? (
-                    <TextTitle>Html not found</TextTitle>
+                    <TextTitle>{preset.format === "html" ? "Html not found" : "Mjml not found"}</TextTitle>
                   ) : (
                     <TextSpaceDivider>
                       <TextTitle>Copy your html here</TextTitle>
