@@ -15,9 +15,10 @@ export class ChangeLinkColorService {
     const updateStyles = (element: Element) => {
       const style = element.getAttribute('style');
       if (style) {
-        const hasBackgroundColor =
-          style.includes('background-color') || element.hasAttribute('bgcolor');
-        if (hasBackgroundColor) {
+        const hasBackgroundColor = (style: string): boolean =>
+          /background(-color)?\s*:\s*[^;]+/i.test(style);
+        const bgColor = hasBackgroundColor(style) || element.hasAttribute('bgcolor') || element.hasAttribute('background');
+        if (bgColor) {
           return;
         }
         const updatedStyle = style.replace(/color\s*:\s*[^;]+;?/gi, '').trim();
