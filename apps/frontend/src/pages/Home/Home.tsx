@@ -1,10 +1,14 @@
+import { useState } from "react";
 import PresetContainer from "../../components/Finance/PresetContainer/PresetContainer";
 import { Container, LinkNotification, TextNotification } from "./Home.styled";
+import ImageEditorModal from "../../components/Common/ImageEditorModal/ImageEditorModal";
 
 const Home: React.FC = () => {
+  const [imageEditorModalOpen, setImageEditorModalOpen] = useState(false);
   return (
     <Container>
       <PresetContainer />
+      <button onClick={() => setImageEditorModalOpen(true)}>Open Image Editor</button>
       <TextNotification>
         Copies not found? Add missed ones{" "}
         <LinkNotification
@@ -14,6 +18,7 @@ const Home: React.FC = () => {
           here
         </LinkNotification>
       </TextNotification>
+      <ImageEditorModal isOpen={imageEditorModalOpen} onClose={() => setImageEditorModalOpen(false)} />
     </Container>
   );
 };
