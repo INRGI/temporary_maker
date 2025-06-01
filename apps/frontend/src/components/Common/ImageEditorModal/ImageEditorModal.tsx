@@ -28,6 +28,7 @@ interface Props {
 const templates: Template[] = [
   { id: "yt", name: "YouTube Button", src: "/templates/youtube-button.png" },
   { id: "news", name: "News Badge", src: "/templates/news-badge.png" },
+  { id: "watch now", name: "Watch Now", src: "/templates/watch-now.png" },
 ];
 
 const ImageEditorModal: React.FC<Props> = ({ onClose, isOpen }) => {
@@ -68,14 +69,23 @@ const ImageEditorModal: React.FC<Props> = ({ onClose, isOpen }) => {
       if (template) {
         const overlay = new Image();
         overlay.src = template.src;
-        overlay.onload = () => {
-          const w = img.width / 3;
-          const h = overlay.height * (w / overlay.width);
-          const x = (img.width - w) / 2;
-          const y = (img.height - h) / 2;
+        if (template.id === "news") {
+          const scale = 1 / 7;
+          const w = overlay.width * scale;
+          const h = overlay.height * scale;
+          const padding = 20;
+          const x = img.width - w - padding;
+          const y = padding;
           ctx.drawImage(overlay, x, y, w, h);
-          toastSuccess("Template applied");
-        };
+        } else {
+          overlay.onload = () => {
+            const w = img.width / 2;
+            const h = overlay.height * (w / overlay.width);
+            const x = (img.width - w) / 2;
+            const y = (img.height - h) / 2;
+            ctx.drawImage(overlay, x, y, w, h);
+          };
+        }
       } else {
         toastSuccess("Image loaded");
       }
@@ -87,7 +97,7 @@ const ImageEditorModal: React.FC<Props> = ({ onClose, isOpen }) => {
     if (!canvas) return;
     const url = canvas.toDataURL("image/png");
     const a = document.createElement("a");
-    a.download = "image-edited.png";
+    a.download = `${Date.now()}.png`;
     a.href = url;
     a.click();
   };
