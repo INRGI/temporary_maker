@@ -8,7 +8,7 @@ const Home: React.FC = () => {
   return (
     <Container>
       <PresetContainer />
-      <button onClick={() => setImageEditorModalOpen(true)}>Open Image Editor</button>
+      {/* <button onClick={() => setImageEditorModalOpen(true)}>Open Image Editor</button> */}
       <TextNotification>
         Copies not found? Add missed ones{" "}
         <LinkNotification
