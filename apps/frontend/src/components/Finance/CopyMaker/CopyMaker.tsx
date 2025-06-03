@@ -50,6 +50,9 @@ import MakeCopyModal from "../MakeCopyModal/MakeCopyModal";
 import { DateRangeButton } from "../../Common/DateRangeButton/DateRangeButton";
 import { FaTrash } from "react-icons/fa6";
 import AddButtonModal from "../../Common/AddButtonModal/AddButtonModal";
+import { RiSpamLine } from "react-icons/ri";
+import AntiSpamModal from "../AntiSpamModal/AntiSpamModal";
+import { set } from "date-fns";
 
 interface Props {
   preset: Preset;
@@ -60,6 +63,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
   const [loading, setLoading] = useState(false);
   const [addImageModal, setAddImageModal] = useState(false);
   const [addButtonModal, setAddButtonModal] = useState(false);
+  const [antiSpamModal, setAntiSpamModal] = useState(false);
   const [imagesSource, setImagesSource] = useState<
     { copyName: string; imageLink: string }[]
   >([]);
@@ -406,6 +410,9 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
               <FaTrash />
             </Button>
           )}
+          <Button onClick={() => setAntiSpamModal(true)}>
+            <RiSpamLine />
+          </Button>
           {preset.linkUrl && (
             <Button onClick={() => setBuildLinkModal(true)}>
               <FaLink />
@@ -471,7 +478,11 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                 <DateBadge date={copy.sendingDate} />
                 <div>
                   {copy.html.includes("Error") || !copy.html ? (
-                    <TextTitle>{preset.format === "html" ? "Html not found" : "Mjml not found"}</TextTitle>
+                    <TextTitle>
+                      {preset.format === "html"
+                        ? "Html not found"
+                        : "Mjml not found"}
+                    </TextTitle>
                   ) : (
                     <TextSpaceDivider>
                       <TextTitle>Copy your html here</TextTitle>
@@ -559,7 +570,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                         </TextTitle>
                       </p>
                       <ImagesList>
-                      {copy.imageLinks.map((image, index) => {
+                        {copy.imageLinks.map((image, index) => {
                           const imageKey = `${copy.copyName}-${image}-${index}`;
 
                           return (
@@ -727,6 +738,12 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           isOpen={makeCopyModal}
           preset={preset}
           onCopyMade={handleNewSingleCopy}
+        />
+      )}
+      {antiSpamModal && (
+        <AntiSpamModal
+          onClose={() => setAntiSpamModal(false)}
+          isOpen={antiSpamModal}
         />
       )}
     </Container>

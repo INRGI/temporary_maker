@@ -12,6 +12,8 @@ import { GetAllCopiesForProductService } from "../services/get-all-copies-for-pr
 import { SpaceAdBuildLinkService } from "../services/space-ad-build-link/space-ad-build-link.service";
 import { SpaceAdBuildLinkPayload } from "../services/space-ad-build-link/space-ad-build-link.payload";
 import { MakeCopyService } from "../services/make-copy/make-copy.service";
+import { AntiSpamPayload } from "../../copy-parser/services/anti-spam/anti-spam.payload";
+import { AntiSpamService } from "../../copy-parser/services/anti-spam/anti-spam.service";
 
 @Controller("finances/copy")
 export class CopyMessageController {
@@ -20,7 +22,8 @@ export class CopyMessageController {
     private readonly getTrackingsService: GetMondayTrackingsService,
     private readonly getAllCopiesForProductService: GetAllCopiesForProductService,
     private readonly buildSpaceAdLinkService: SpaceAdBuildLinkService,
-    private readonly makeCopyService: MakeCopyService
+    private readonly makeCopyService: MakeCopyService,
+    private readonly antiSpamService: AntiSpamService,
   ) {}
 
   @Post("make-multiple-copies")
@@ -83,5 +86,16 @@ export class CopyMessageController {
     const result = await this.buildSpaceAdLinkService.buildLink(payload);
 
     return result;
+  }
+
+  @Post("anti-spam")
+  public async antiSpam(@Body() payload: { html: string, antiSpamType: 'Full Anti Spam' | 'Spam Words Only'; }) {
+    const{ html, antiSpamType } = payload;
+
+    if (antiSpamType === 'Full Anti Spam') {
+      return await this.antiSpamService.changeAllWords({ html });
+    } else if (antiSpamType === 'Spam Words Only') {
+      return await this.antiSpamService.changeSpamWords({ html });
+    }
   }
 }
