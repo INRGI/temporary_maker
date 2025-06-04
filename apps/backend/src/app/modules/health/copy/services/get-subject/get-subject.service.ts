@@ -25,7 +25,9 @@ export class GetSubjectService {
     const { product, productLift } = payload;
     const exactFileName = `Subject lines:${product}${productLift}`;
 
-    const files = await this.findRelevantFiles(exactFileName);
+    const exactFileName2 = `Subject lines ${product}${productLift} SL`;
+
+    const files = await this.findRelevantFiles(exactFileName, exactFileName2);
 
     if (!files.length) return [];
 
@@ -61,7 +63,7 @@ export class GetSubjectService {
     }
   }
 
-  private async findRelevantFiles(fileName: string) {
+  private async findRelevantFiles(fileName: string, fileName2: string) {
     const googleDocs = await this.gdriveApiService.searchFileWithQuery(
       `name = '${fileName}' and mimeType = 'application/vnd.google-apps.document'`,
       10
@@ -76,12 +78,12 @@ export class GetSubjectService {
 
     if (!files.length) {
       const googleDocsPartial = await this.gdriveApiService.searchFileWithQuery(
-        `name contains '${fileName}' and mimeType = 'application/vnd.google-apps.document'`,
+        `name = '${fileName2}' and mimeType = 'application/vnd.google-apps.document'`,
         10
       );
 
       const wordDocsPartial = await this.gdriveApiService.searchFileWithQuery(
-        `name contains '${fileName}' and mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'`,
+        `name = '${fileName2}' and mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'`,
         10
       );
 

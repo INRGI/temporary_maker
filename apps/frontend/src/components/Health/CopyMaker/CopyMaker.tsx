@@ -360,7 +360,11 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                 <DateBadge date={copy.sendingDate} />
                 <div>
                   {copy.html.includes("Error") || !copy.html ? (
-                    <TextTitle>{preset.format === "html" ? "Html not found" : "Mjml not found"}</TextTitle>
+                    <TextTitle>
+                      {preset.format === "html"
+                        ? "Html not found"
+                        : "Mjml not found"}
+                    </TextTitle>
                   ) : (
                     <TextSpaceDivider>
                       <TextTitle>Copy your html here</TextTitle>
@@ -424,7 +428,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                       )}
                     </UnsubContainer>
                   )}
-                  {copy.subjects && (
+                  {copy.subjects && copy.subjects.length > 0 ? (
                     <SubjectContainer>
                       <TextTitle>Subjects:</TextTitle>
                       {copy.subjects.map((subject, index) => (
@@ -438,6 +442,10 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                           {subject}
                         </Subject>
                       ))}
+                    </SubjectContainer>
+                  ) : copy.subjects &&  (
+                    <SubjectContainer>
+                      <TextTitle>Subjects Not Found</TextTitle>
                     </SubjectContainer>
                   )}
                   {copy.imageLinks && copy.imageLinks?.length > 0 && (
