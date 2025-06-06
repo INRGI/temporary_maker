@@ -48,6 +48,8 @@ import { TbRepeatOnce } from "react-icons/tb";
 import { DateRangeButton } from "../../Common/DateRangeButton/DateRangeButton";
 import { FaTrash } from "react-icons/fa6";
 import UploadToWordpressButtonFromFile from "../UploadToWordpressButton/UploadToWordpressButtonFromFile";
+import AntiSpamModal from "../AntiSpamModal/AntiSpamModal";
+import { RiSpamLine } from "react-icons/ri";
 
 interface Props {
   preset: Preset;
@@ -66,6 +68,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
   const [brokenImages, setBrokenImages] = useState<Set<string>>(new Set());
 
   const [activeAddImageCopy, setActiveAddImageCopy] = useState<ResponseCopy>();
+  const [antiSpamModal, setAntiSpamModal] = useState(false);
   const [previewModal, setPreviewModal] = useState(false);
 
   const [previewHtml, setPreviewHtml] = useState("");
@@ -330,6 +333,9 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
               <FaTrash />
             </Button>
           )}
+          <Button onClick={() => setAntiSpamModal(true)}>
+            <RiSpamLine />
+          </Button>
           {preset.linkUrl && (
             <Button onClick={() => setBuildLinkModal(true)}>
               <FaLink />
@@ -443,10 +449,12 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                         </Subject>
                       ))}
                     </SubjectContainer>
-                  ) : copy.subjects &&  (
-                    <SubjectContainer>
-                      <TextTitle>Subjects Not Found</TextTitle>
-                    </SubjectContainer>
+                  ) : (
+                    copy.subjects && (
+                      <SubjectContainer>
+                        <TextTitle>Subjects Not Found</TextTitle>
+                      </SubjectContainer>
+                    )
                   )}
                   {copy.imageLinks && copy.imageLinks?.length > 0 && (
                     <>
@@ -622,6 +630,12 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           isOpen={makeCopyModal}
           preset={preset}
           onCopyMade={handleNewSingleCopy}
+        />
+      )}
+      {antiSpamModal && (
+        <AntiSpamModal
+          onClose={() => setAntiSpamModal(false)}
+          isOpen={antiSpamModal}
         />
       )}
     </Container>

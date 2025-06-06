@@ -12,6 +12,7 @@ import {
   HealthMakeMultipleCopiesResponseDto,
 } from "@epc-services/interface-adapters";
 import { MakeCopyService } from "../services/make-copy/make-copy.service";
+import { AntiSpamService } from "../../../finances/copy-parser/services/anti-spam/anti-spam.service";
 
 @Controller("health/copy")
 export class CopyMessageController {
@@ -20,7 +21,8 @@ export class CopyMessageController {
     private readonly getTrackingsService: GetMondayTrackingsService,
     private readonly getAllCopiesForProductService: GetAllCopiesForProductService,
     private readonly buildSpaceAdLinkService: SpaceAdBuildLinkService,
-    private readonly makeCopyService: MakeCopyService
+    private readonly makeCopyService: MakeCopyService,
+    private readonly antiSpamService: AntiSpamService
   ) {}
 
   @Post("make-multiple-copies")
@@ -29,13 +31,13 @@ export class CopyMessageController {
   ): Promise<HealthMakeMultipleCopiesResponseDto> {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-  
+
     const threeDaysFromNow = new Date();
     threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 2);
     threeDaysFromNow.setHours(0, 0, 0, 0);
-  
+
     let fromDate: Date;
-  
+
     if (request.fromDate) {
       const from = new Date(request.fromDate);
       fromDate = new Date(
@@ -50,17 +52,15 @@ export class CopyMessageController {
     } else {
       fromDate = today;
     }
-  
-    const toDate =
-      request.toDate ||
-      threeDaysFromNow;
-  
+
+    const toDate = request.toDate || threeDaysFromNow;
+
     const result = await this.makeMultipleCopiesService.makeMultipleCopies({
       ...request,
       fromDate,
       toDate,
     });
-  
+
     return result;
   }
 
@@ -103,5 +103,22 @@ export class CopyMessageController {
     const result = await this.buildSpaceAdLinkService.buildLink(payload);
 
     return result;
+  }
+
+  @Post("anti-spam")
+  public async antiSpam(
+    @Body()
+    payload: {
+      html: string;
+      antiSpamType: "Full Anti Spam" | "Spam Words Only";
+    }
+  ) {
+    const { html, antiSpamType } = payload;
+
+    if (antiSpamType === "Full Anti Spam") {
+      return await this.antiSpamService.changeAllWords({ html });
+    } else if (antiSpamType === "Spam Words Only") {
+      return await this.antiSpamService.changeSpamWords({ html });
+    }
   }
 }

@@ -31,7 +31,7 @@ const AntiSpamModal: React.FC<AntiSpamModalProps> = ({ isOpen, onClose }) => {
   const runAntiSpam = async (option: string, text: string) => {
     try {
       setLoading(true);
-      const response = await axios.post(`/api/finances/copy/anti-spam`, {
+      const response = await axios.post(`/api/health/copy/anti-spam`, {
         antiSpamType: option,
         html: text,
       });
