@@ -6,6 +6,9 @@ import {
   MondayApiConnectionOptions,
   MondayApiGetProductDataResponse,
   MondayApiDomainBoardData,
+  MondayApiGetDataResponse,
+  MondayApiBoardData,
+  MondayApiQueryParams,
 } from "../interfaces";
 import { firstValueFrom } from "rxjs";
 import { MONDAY_API_BASE_URL } from "../constants";
@@ -54,6 +57,51 @@ export class MondayApiService implements MondayApiServicePort {
       );
 
     return await data.data.boards[0].items_page.items;
+  }
+
+  private async queryItemsWithCursor(
+    queryParams: MondayApiQueryParams
+  ): Promise<{
+    items: MondayApiBoardData[];
+    cursor: string | null;
+  }> {
+    const { data }: { data: MondayApiGetDataResponse } = await firstValueFrom(
+      this.httpService.post(`${MONDAY_API_BASE_URL}`, queryParams, {
+        headers: MondayApiUtils.auth(this.options.accessToken),
+      })
+    );
+
+    const itemsPage = data.data.boards[0].items_page;
+
+    return {
+      items: itemsPage.items,
+      cursor: itemsPage.cursor,
+    };
+  }
+  
+  public async getMultipleProductsData(
+    productNames: string[],
+    boardId: number
+  ): Promise<MondayApiProductBoardData[]> {
+    const { data }: { data: MondayApiGetProductDataResponse } =
+      await firstValueFrom(
+        this.httpService.post(
+          `${MONDAY_API_BASE_URL}`,
+          MondayApiUtils.queryMultipleItems(boardId, productNames),
+          {
+            headers: MondayApiUtils.auth(this.options.accessToken),
+          }
+        )
+      );
+      console.log(data);
+    return data.data.boards[0].items_page.items;
+  }
+  
+  public async getItemsWithCursor(queryParams: MondayApiQueryParams): Promise<{
+    items: MondayApiBoardData[];
+    cursor: string | null;
+  }> {
+    return await this.queryItemsWithCursor(queryParams);
   }
 
   public async getProductData(

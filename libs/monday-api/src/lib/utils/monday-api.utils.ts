@@ -53,11 +53,52 @@ export class MondayApiUtils {
     };
   }
 
+  public static queryMultipleItems(
+    boardId: number,
+    productNames: string[]
+  ): any {
+    const orRules = productNames
+      .map(
+        (name) =>
+          `{column_id: "name", compare_value: "${name}", operator: contains_text}`
+      )
+      .join(",");
+
+    return {
+      query: `
+        query ($boardId: ID!) {
+          boards(ids: [$boardId]) {
+            items_page(
+              limit: 100,
+              query_params: {
+                or: { rules: [${orRules}] }
+              }
+            ) {
+              items {
+                id
+                name
+                column_values {
+                  column {
+                    title
+                  }
+                  text
+                }
+              }
+            }
+          }
+        }
+      `,
+      variables: {
+        boardId,
+      },
+    };
+  }
+
   public static auth(token: string) {
     return {
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-      'API-Version': '2023-07',
+      "Content-Type": "application/json",
+      "API-Version": "2023-07",
     };
   }
 }

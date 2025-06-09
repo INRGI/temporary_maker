@@ -2,12 +2,14 @@ import { Injectable } from "@nestjs/common";
 import { MakeCopyService } from "../make-copy/make-copy.service";
 import { GetDomainBroadcastWithDateService } from "../../../broadcast/services/get-domain-broadcast-with-date/get-domain-broadcast-with-date.service";
 import { MakeMultipleCopiesPayload } from "./make-multiple-copies.payload";
+import { GetMondayDataService } from "../get-monday-data/get-monday-data.service";
 
 @Injectable()
 export class MakeMultipleCopiesService {
   constructor(
     private readonly makeCopyService: MakeCopyService,
-    private readonly getDomainBroadcastWithDateService: GetDomainBroadcastWithDateService
+    private readonly getDomainBroadcastWithDateService: GetDomainBroadcastWithDateService,
+    private readonly getMondayDataService: GetMondayDataService
   ) {}
 
   public async makeMultipleCopies(
@@ -25,22 +27,64 @@ export class MakeMultipleCopiesService {
         toDate,
       });
 
-    const copies = [];
+    if (presetProps.copyWhatToReplace?.isLinkUrl) {
+      const cleanCopyNames = [];
 
-    for (const item of domainBroadcast.broadcast) {
-      for (const copy of item.copies) {
-        if(copy.startsWith("+")) continue
-        if(copy.length < 3) continue
-        const result = await this.makeCopyService.makeCopy({
-          copyName: copy,
-          preset,
-          sendingDate: item.date,
-        });
+      for (const item of domainBroadcast.broadcast) {
+        for (const copy of item.copies) {
+          if (copy.startsWith("+")) continue;
+          if (copy.length < 3) continue;
 
-        copies.push(result);
+          const nameMatch = copy.match(/^[a-zA-Z]+/);
+          const product = nameMatch ? nameMatch[0] : "";
+
+          if (!product) continue;
+          cleanCopyNames.push(product);
+        }
       }
-    }
 
-    return copies;
+      const mondayProductsData =
+        await this.getMondayDataService.getAllRedtracksData(
+          cleanCopyNames,
+          preset.linkUrl.trackingType
+        );
+
+      const copies = [];
+
+      for (const item of domainBroadcast.broadcast) {
+        for (const copy of item.copies) {
+          if (copy.startsWith("+")) continue;
+          if (copy.length < 3) continue;
+          const result = await this.makeCopyService.makeCopyWithData({
+            copyName: copy,
+            preset,
+            sendingDate: item.date,
+            mondayProductsData,
+          });
+
+          copies.push(result);
+        }
+      }
+
+      return copies;
+    } else {
+      const copies = [];
+
+      for (const item of domainBroadcast.broadcast) {
+        for (const copy of item.copies) {
+          if (copy.startsWith("+")) continue;
+          if (copy.length < 3) continue;
+          const result = await this.makeCopyService.makeCopy({
+            copyName: copy,
+            preset,
+            sendingDate: item.date,
+          });
+
+          copies.push(result);
+        }
+      }
+
+      return copies;
+    }
   }
 }

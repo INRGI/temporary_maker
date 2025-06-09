@@ -5,4 +5,9 @@ export interface BuildLinkPayload {
   productLift: string;
   linkUrl: LinkUrl;
   productImage?: string;
+  mondayProductsData?: {
+    product: string;
+    trackingData: string;
+    imgData: string;
+  }[];
 }

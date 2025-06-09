@@ -21,4 +21,17 @@ export class BuildLinkService {
 
     return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${product}${productLift}${(productImage && productImage.length > 0 ? `_${productImage}` : ``)}/${product}/`;
   }
+
+  public async buildLinkWithDataProvided(payload: BuildLinkPayload): Promise<string> {
+      const { product, productLift, linkUrl, productImage, mondayProductsData } = payload;
+     
+     const  trackingData = mondayProductsData?.find((item) => item.product.endsWith(`/${product}`));
+      
+        if (!trackingData) {
+          return 'urlhere';
+        }
+      
+  
+      return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${product}${productLift}${(productImage && productImage.length > 0 ? `_${productImage}` : ``)}/${product}/`;
+    }
 }

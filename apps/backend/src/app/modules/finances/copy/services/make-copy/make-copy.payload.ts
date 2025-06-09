@@ -4,4 +4,9 @@ export interface MakeCopyPayload {
   copyName: string;
   preset: Preset;
   sendingDate: Date;
+  mondayProductsData?: {
+    product: string;
+    trackingData: string;
+    imgData: string;
+  }[];
 }

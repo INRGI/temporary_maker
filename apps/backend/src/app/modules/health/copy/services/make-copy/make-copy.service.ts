@@ -27,6 +27,125 @@ export class MakeCopyService {
     private readonly getPriorityService: GetPriorityService,
   ) {}
 
+  public async makeCopyWithData(
+    payload: MakeCopyPayload
+  ): Promise<HealthMakeCopyResponseDto> {
+    let link: string;
+    let subjects: string[];
+    let unsubData: HealthUnsubData;
+
+    const { copyName, preset, sendingDate, mondayProductsData } = payload;
+
+    const match = copyName.match(/^([a-zA-Z]+)(\d+)?_?(\d+)?$/);
+
+    const product = match?.[1] || "";
+    const productLift = match?.[2] || "";
+    const productImage = match?.[3] || "";
+
+    if (!product || !productLift) {
+      return {
+        copyName,
+        html: "",
+        unsubData,
+        subjects,
+        sendingDate,
+        imageLinks: [],
+        buildedLink: "urlhere",
+      };
+    }
+
+    const presetProps = preset;
+
+    const html = await this.getCopyFromDriveService.getCopyFromDrive({
+      product,
+      productLift,
+      format: presetProps.format,
+    });
+
+    if (html.includes("Error reading file")) {
+      return {
+        copyName,
+        html: html,
+        unsubData,
+        sendingDate,
+        subjects,
+        imageLinks: [],
+        buildedLink: "urlhere",
+      };
+    }
+
+    if (presetProps.copyWhatToReplace?.isLinkUrl) {
+      link = await this.buildLinkService.buildLinkWithDataProvided({
+        product,
+        productLift,
+        productImage,
+        linkUrl: presetProps.linkUrl,
+        mondayProductsData,
+      });
+    }
+
+    if (presetProps.copyWhatToReplace?.isUnsubLink) {
+      unsubData = await this.getPriorityService.getPriorityDetails({
+        product,
+        unsubLinkUrl: presetProps.unsubLinkUrl,
+      });
+    }
+
+    if (presetProps.subjectLine && presetProps.subjectLine?.isSubjectLine) {
+      subjects = await this.getSubjectService.getSubject({
+        product,
+        productLift,
+      });
+      if (presetProps.subjectLine.subjectLine === "Spam Words Only") {
+        for (let i = 0; i < subjects.length; i++) {
+          subjects[i] = await this.antiSpamService.changeSpamWords({
+            html: subjects[i],
+          });
+          subjects[i] = await this.antiSpamService.optimizeSubject({
+            html: subjects[i],
+          });
+        }
+      }
+
+      if (presetProps.subjectLine.subjectLine === "Full Anti Spam") {
+        for (let i = 0; i < subjects.length; i++) {
+          subjects[i] = await this.antiSpamService.changeAllWords({
+            html: subjects[i],
+          });
+          subjects[i] = await this.antiSpamService.optimizeSubject({
+            html: subjects[i],
+          });
+        }
+      }
+    }
+
+    const updatedHtml = await this.applyChangesOnCopyService.applyChangesOnCopy(
+      {
+        html,
+        presetProps,
+        linkUrl: link,
+      }
+    );
+
+    const formattedHtml = await this.htmlFormatterService.formatHtml({
+      html: updatedHtml,
+    });
+
+    const links = await this.getImageLinks.getLinks({
+      html: updatedHtml,
+    });
+
+    return {
+      copyName,
+      html: formattedHtml,
+      subjects,
+      unsubData,
+      sendingDate,
+      imageLinks: links,
+      buildedLink: link || "urlhere",
+    };
+  }
+
   public async makeCopy(
     payload: MakeCopyPayload
   ): Promise<HealthMakeCopyResponseDto> {

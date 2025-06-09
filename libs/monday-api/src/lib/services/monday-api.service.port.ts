@@ -1,7 +1,9 @@
 import {
   MondayApiProductBoardData,
   MondayApiDomainBoardData,
-} from '../interfaces';
+  MondayApiQueryParams,
+  MondayApiBoardData,
+} from "../interfaces";
 
 export interface MondayApiServicePort {
   getProductData(
@@ -18,4 +20,14 @@ export interface MondayApiServicePort {
     productName: string,
     boardId: number
   ): Promise<MondayApiProductBoardData[]>;
+
+  getMultipleProductsData(
+    productNames: string[],
+    boardId: number
+  ): Promise<MondayApiProductBoardData[]>;
+
+  getItemsWithCursor(queryParams: MondayApiQueryParams): Promise<{
+    items: MondayApiBoardData[];
+    cursor: string | null;
+  }>;
 }
