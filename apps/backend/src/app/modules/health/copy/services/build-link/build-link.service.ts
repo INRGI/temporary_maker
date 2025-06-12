@@ -27,7 +27,7 @@ export class BuildLinkService {
      
      const  trackingData = mondayProductsData?.find((item) => item.product.endsWith(`/${product}`));
       
-        if (!trackingData) {
+        if (!trackingData || !trackingData.trackingData) {
           return 'urlhere';
         }
       

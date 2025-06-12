@@ -61,11 +61,14 @@ export class BuildLinkService {
 
     if (!trackingData) {
       trackingData = mondayProductsData?.find((item) => item.product.startsWith(`*${product} -`));
-      if (!trackingData) {
+      if (!trackingData.trackingData) {
         return 'urlhere';
       }
     }
-
+    
+    if (!trackingData.trackingData) {
+      return 'urlhere';
+    }
     if (linkUrl.productCode === 'PRODUCT#IMAGE') {
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${product}${productLift}${productImage}`;
     }
