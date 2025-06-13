@@ -25,7 +25,7 @@ export class GetSubjectService {
     const { product, productLift } = payload;
     const exactFileName = `Subject lines:${product}${productLift}`;
 
-    const exactFileName2 = `Subject lines ${product}${productLift} SL`;
+    const exactFileName2 = `Subject lines ${product}${productLift}`;
 
     const files = await this.findRelevantFiles(exactFileName, exactFileName2);
 
@@ -84,6 +84,40 @@ export class GetSubjectService {
 
       const wordDocsPartial = await this.gdriveApiService.searchFileWithQuery(
         `name = '${fileName2}' and mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'`,
+        10
+      );
+
+      files = [
+        ...(googleDocsPartial.files || []),
+        ...(wordDocsPartial.files || []),
+      ];
+    }
+
+    if (!files.length) {
+      const googleDocsPartial = await this.gdriveApiService.searchFileWithQuery(
+        `name = '${fileName}.docx' and mimeType = 'application/vnd.google-apps.document'`,
+        10
+      );
+
+      const wordDocsPartial = await this.gdriveApiService.searchFileWithQuery(
+        `name = '${fileName}.docx' and mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'`,
+        10
+      );
+
+      files = [
+        ...(googleDocsPartial.files || []),
+        ...(wordDocsPartial.files || []),
+      ];
+    }
+
+    if (!files.length) {
+      const googleDocsPartial = await this.gdriveApiService.searchFileWithQuery(
+        `name = '${fileName2}.docx' and mimeType = 'application/vnd.google-apps.document'`,
+        10
+      );
+
+      const wordDocsPartial = await this.gdriveApiService.searchFileWithQuery(
+        `name = '${fileName2}.docx' and mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'`,
         10
       );
 

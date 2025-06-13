@@ -91,6 +91,23 @@ export class GetSubjectService {
       ];
     }
 
+    if (!files.length) {
+      const googleDocsPartial = await this.gdriveApiService.searchFileWithQuery(
+        `name = '${fileName}.docx' and mimeType = 'application/vnd.google-apps.document'`,
+        10
+      );
+
+      const wordDocsPartial = await this.gdriveApiService.searchFileWithQuery(
+        `name = '${fileName}.docx' and mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'`,
+        10
+      );
+
+      files = [
+        ...(googleDocsPartial.files || []),
+        ...(wordDocsPartial.files || []),
+      ];
+    }
+
     return files;
   }
 
