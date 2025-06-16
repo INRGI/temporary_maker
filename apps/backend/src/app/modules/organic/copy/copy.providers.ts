@@ -1,4 +1,6 @@
-export const messageControllers = [];
+import { CopyController } from "./controllers/copy.controller";
+
+export const messageControllers = [CopyController];
 
 export const applicationProviders = [];
 
