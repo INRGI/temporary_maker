@@ -1,6 +1,5 @@
 import { Provider } from "@nestjs/common";
 import { GetAllDataService } from "./services/get-all-data/get-all-data.service";
-import { BigQueryController } from "./controllers/bigQuery.message.controller";
 import { GetAllDataByIntervalService } from "./services/get-all-data-by-interval/get-all-data-by-interval.service";
 import { GetDomainClicksService } from "./services/get-domain-clicks/get-domain-clicks.service";
 import { GetCopyClicksService } from "./services/get-copy-clicks/get-copy-clicks.service";
@@ -10,7 +9,7 @@ import { GetDomainsRevenueService } from "./services/get-domains-revenue/get-dom
 import { GetCopiesWarmupService } from "./services/get-copies-warmup/get-copies-warmup.service";
 import { GetCopiesForTestService } from "./services/get-copies-for-test/get-copies-for-test.service";
 
-export const messageControllers = [BigQueryController];
+export const messageControllers = [];
 
 export const applicationProviders: Provider[] = [];
 
