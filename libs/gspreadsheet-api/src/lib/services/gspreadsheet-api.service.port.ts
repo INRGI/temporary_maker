@@ -17,5 +17,18 @@ export interface GSpreadsheetApiServicePort {
 
   getSpreadsheetWithData(
     spreadsheetId: string
-  ): Promise<sheets_v4.Schema$Spreadsheet | undefined>
+  ): Promise<sheets_v4.Schema$Spreadsheet | undefined>;
+
+  updateCell(
+    spreadsheetId: string,
+    sheetName: string,
+    rowIndex: number,
+    columnIndex: number,
+    value: string
+  ): Promise<sheets_v4.Schema$UpdateValuesResponse>;
+
+  batchUpdateCells(
+    spreadsheetId: string,
+    updates: { range: string; values: string[][] }[]
+  ): Promise<sheets_v4.Schema$BatchUpdateValuesResponse>;
 }
