@@ -30,4 +30,8 @@ export interface MondayApiServicePort {
     items: MondayApiBoardData[];
     cursor: string | null;
   }>;
+
+  getItemsByQuery(
+    queryParams: MondayApiQueryParams
+  ): Promise<MondayApiBoardData[]>;
 }

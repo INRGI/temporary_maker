@@ -23,6 +23,16 @@ export class MondayApiService implements MondayApiServicePort {
     private readonly options: MondayApiConnectionOptions
   ) {}
 
+  private async queryWithParams(queryParams: MondayApiQueryParams): Promise<[]> {
+    const { data }: { data: MondayApiGetDataResponse } = await firstValueFrom(
+      this.httpService.post(`${MONDAY_API_BASE_URL}`, queryParams, {
+        headers: MondayApiUtils.auth(this.options.accessToken),
+      })
+    );
+
+    return data.data.boards[0].items_page.items;
+  }
+
   private async queryItems(
     boardId: number,
     searchName: string
@@ -123,5 +133,11 @@ export class MondayApiService implements MondayApiServicePort {
     boardId: number
   ): Promise<MondayApiDomainBoardData[]> {
     return await this.queryItems(boardId, domainName);
+  }
+
+  public async getItemsByQuery(
+    queryParams: MondayApiQueryParams
+  ): Promise<MondayApiBoardData[]> {
+    return await this.queryWithParams(queryParams);
   }
 }
