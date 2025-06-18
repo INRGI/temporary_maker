@@ -4,9 +4,10 @@ import {
   httpControllers,
 } from "./broadcast-tool-finances.providers";
 import { BigQueryModule } from "./bigQuery/bigQuery.module";
+import { PriorityModule } from "./priority/priority.module";
 
 @Module({
-  imports: [BigQueryModule],
+  imports: [BigQueryModule, PriorityModule],
   providers: [...appProviders],
   controllers: [...httpControllers],
 })
