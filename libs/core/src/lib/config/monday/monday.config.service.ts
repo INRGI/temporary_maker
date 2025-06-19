@@ -8,4 +8,12 @@ export class MondayConfigService {
   get accessToken(): string {
     return this.configService.get<string>('monday.accessToken');
   }
+
+  get productsBoardId(): string {
+    return this.configService.get<string>('monday.productsBoardId');
+  }
+
+  get domainsBoardId(): string {
+    return this.configService.get<string>('monday.domainsBoardId');
+  }
 }
