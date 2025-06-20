@@ -73,7 +73,7 @@ const Menu: React.FC = () => {
 
   const handleDeleteEntity = async (entity: BroadcastRulesEntity) => {
     try {
-        setIsLoading(true);
+      setIsLoading(true);
       await deleteBroadcastRules(entity.id);
       toastSuccess("Broadcast rule deleted successfully");
       fetchBroadcastRules();
@@ -84,29 +84,15 @@ const Menu: React.FC = () => {
     }
   };
 
-  const handleCreateBroadcastRule = async (
-    body: CreateBroadcastRulesRequest
-  ) => {
-    try {
-        setIsLoading(true);
-      const response = await createBroadcastRules(body);
-      if (response) {
-        toastSuccess("Broadcast rule created successfully");
-        fetchBroadcastRules();
-        setIsLoading(false);
-      }
-    } catch (error) {
-      toastError("Failed to create broadcast rule");
-      setIsLoading(false);
-    }
-  };
+  const filteredPresets =
+    broadcastEntities && broadcastEntities.length > 0
+      ? broadcastEntities.filter((entity) =>
+          entity.name.toLowerCase().includes(searchText.toLowerCase())
+        )
+      : [];
 
-  const filteredPresets = broadcastEntities && broadcastEntities.length > 0 ? broadcastEntities.filter((entity) =>
-    entity.name.toLowerCase().includes(searchText.toLowerCase())
-  ) : [];
-
-  if(isLoading) {
-    return <Loader />
+  if (isLoading) {
+    return <Loader />;
   }
 
   return (
@@ -168,8 +154,10 @@ const Menu: React.FC = () => {
         {createModalOpen && (
           <CreateBroadcastModal
             isOpen={createModalOpen}
-            onClose={() => setCreateModalOpen(false)}
-            onCreate={() => handleCreateBroadcastRule}
+            onClose={() => {
+              setCreateModalOpen(false);
+              fetchBroadcastRules();
+            }}
           />
         )}
       </Container>
