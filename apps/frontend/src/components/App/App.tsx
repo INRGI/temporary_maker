@@ -8,11 +8,15 @@ const HealthHome = lazy(() => import("../../pages/HealthHome/HealthHome"));
 const ProductPreview = lazy(() => import("../../pages/ProductPreview/ProductPreview"));
 const HealthProductPreview = lazy(() => import("../../pages/HealthProductPreview/HealthProductPreview"));
 
+const BroadcastTool = lazy(() => import("../../pages/BroadcastTool/BroadcastTool"));
+
 export function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
+
+        <Route path="/broadcast-tool" element={<BroadcastTool />}/>
         
         <Route path="/health" element={<HealthHome />} />
         <Route path="/health/product-preview" element={<HealthProductPreview />} />
