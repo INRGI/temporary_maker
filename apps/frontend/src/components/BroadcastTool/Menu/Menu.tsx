@@ -71,10 +71,11 @@ const Menu: React.FC = () => {
     }
   }, [broadcastEntities]);
 
-  const handleDeleteEntity = async (entity: BroadcastRulesEntity) => {
+  const handleDeleteEntity = async (id: string) => {
     try {
       setIsLoading(true);
-      await deleteBroadcastRules(entity.id);
+      console.log(id);
+      await deleteBroadcastRules(id);
       toastSuccess("Broadcast rule deleted successfully");
       fetchBroadcastRules();
       setIsLoading(false);
@@ -129,7 +130,7 @@ const Menu: React.FC = () => {
           {filteredPresets.length ? (
             filteredPresets.map((entity) => (
               <BroadcastRuleCard
-                id={entity.id}
+                id={entity._id}
                 key={entity.name}
                 isActive={entity.name === activeEntity?.name}
                 onClick={(event) => setActiveEntity(entity)}
@@ -137,7 +138,7 @@ const Menu: React.FC = () => {
                 <h2>{entity.name}</h2>
                 {!isCollapsed && (
                   <div className="preset-actions">
-                    <DeleteButton onClick={() => handleDeleteEntity(entity)}>
+                    <DeleteButton onClick={() => handleDeleteEntity(entity._id)}>
                       <MdDeleteForever />
                     </DeleteButton>
                   </div>

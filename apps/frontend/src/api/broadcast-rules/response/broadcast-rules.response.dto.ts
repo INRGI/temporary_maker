@@ -9,7 +9,7 @@ import {
 } from "../../../types/broadcast-tool";
 
 export interface BroadcastRulesResponse {
-  id: string;
+  _id: string;
   name: string;
   broadcastSpreadsheetId: string;
   usageRules: UsageRules;

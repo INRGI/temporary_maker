@@ -7,7 +7,7 @@ import { TestingRules } from "./testing-rules.interface";
 import { UsageRules } from "./usage-rules.interface";
 
 export interface BroadcastRulesEntity {
-  id: string;
+  _id: string;
   name: string;
   broadcastSpreadsheetId: string;
   usageRules: UsageRules;
