@@ -9,7 +9,7 @@ import {
 } from '@epc-services/interface-adapters';
 
 export interface UpdateBroadcastRulesPayload {
-  readonly broadcastId: string;
+  readonly _id: string;
   readonly broadcastSpreadsheetId: string;
   readonly name: string;
   readonly usageRules: UsageRules;

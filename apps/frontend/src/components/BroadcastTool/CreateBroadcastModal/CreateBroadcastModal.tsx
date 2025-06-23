@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AdminModal from "../../Common/AdminModal";
 import {
   BlockHeader,
@@ -11,7 +11,6 @@ import { CreateBroadcastRulesRequest } from "../../../api/broadcast-rules";
 import DomainRulesTab from "../DomainRulesTab";
 import Loader from "../../Common/Loader";
 import { toastError, toastSuccess } from "../../../helpers/toastify";
-import { getDomainStatuses, getProductStatuses } from "../../../api/monday.api";
 import {
   GetDomainStatusesResponse,
   GetProductStatusesResponse,
@@ -23,7 +22,6 @@ import ProductRulesTab from "../ProductRulesTab";
 import AnalyticSelectionRulesTab from "../AnalyticSelectionRulesTab";
 import CopyAssignmentStrategyRulesTab from "../CopyAssignmentStrategyRulesTab";
 import { BroadcastListItemResponse } from "../../../api/broadcast/response/broadcast-list-item.response.dto";
-import { getBroadcastsList } from "../../../api/broadcast.api";
 import GeneralTab from "../GeneralTab";
 import { createBroadcastRules } from "../../../api/broadcast-rules.api";
 import ConfirmCreateModal from "../ConfirmCreateModal";
@@ -31,11 +29,17 @@ import ConfirmCreateModal from "../ConfirmCreateModal";
 interface CreateModalProps {
   isOpen: boolean;
   onClose: () => void;
+  domainMondayStatuses: GetDomainStatusesResponse;
+  productMondayStatuses: GetProductStatusesResponse;
+  broadcastsSheets: BroadcastListItemResponse[];
 }
 
 const CreateBroadcastModal: React.FC<CreateModalProps> = ({
   isOpen,
   onClose,
+  domainMondayStatuses,
+  productMondayStatuses,
+  broadcastsSheets,
 }) => {
   const [activeTab, setActiveTab] = useState("domain-rules");
   const [broadcastRules, setBroadcastRules] =
@@ -83,68 +87,15 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
         strategies: [],
       },
     });
-  const [productMondayStatuses, setProductMondayStatuses] =
-    useState<GetProductStatusesResponse>({
-      productStatuses: [],
-      domainSendings: [],
-    });
-  const [domainMondayStatuses, setDomainMondayStatuses] =
-    useState<GetDomainStatusesResponse>({
-      uniqueDomainStatuses: [],
-      uniqueEsps: [],
-      uniqueParentCompanies: [],
-    });
-  const [broadcastsSheets, setBroadcastsSheets] = useState<
-    BroadcastListItemResponse[]
-  >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-
-  const fetchProductStatuses = async () => {
-    try {
-      const response = await getProductStatuses();
-      if (!response) throw new Error("Failed to fetch product statuses");
-      setProductMondayStatuses(response);
-    } catch (error) {
-      toastError("Failed to fetch product statuses");
-      setProductMondayStatuses({
-        productStatuses: [],
-        domainSendings: [],
-      });
-    }
-  };
-
-  const fetchDomainStatuses = async () => {
-    try {
-      const response = await getDomainStatuses();
-      if (!response) throw new Error("Failed to fetch domain statuses");
-      setDomainMondayStatuses(response);
-    } catch (error) {
-      toastError("Failed to fetch domain statuses");
-      setDomainMondayStatuses({
-        uniqueDomainStatuses: [],
-        uniqueEsps: [],
-        uniqueParentCompanies: [],
-      });
-    }
-  };
-
-  const fetchBroadcastsSheets = async () => {
-    try {
-      const response = await getBroadcastsList();
-      if (!response) throw new Error("Failed to fetch broadcasts sheets");
-      setBroadcastsSheets(response.sheets);
-    } catch (error) {
-      toastError("Failed to fetch broadcasts sheets");
-      setBroadcastsSheets([]);
-    }
-  };
 
   const createBroadcast = async () => {
     setIsLoading(true);
     try {
       if (!broadcastRules.name || !broadcastRules.broadcastSpreadsheetId) {
         toastError("Please enter name and select spreadsheet.");
+        setIsLoading(false);
         return;
       }
       const response = await createBroadcastRules(broadcastRules);
@@ -159,20 +110,6 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (isOpen) {
-      setIsLoading(true);
-
-      Promise.allSettled([
-        fetchProductStatuses(),
-        fetchDomainStatuses(),
-        fetchBroadcastsSheets(),
-      ]).finally(() => {
-        setIsLoading(false);
-      });
-    }
-  }, [isOpen]);
 
   const handleChange = (key: keyof CreateBroadcastRulesRequest, value: any) => {
     setBroadcastRules((prevBroadcastRules) => ({
@@ -331,7 +268,6 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
         isOpen={isConfirmOpen}
         onClose={() => setIsConfirmOpen(false)}
         onConfirm={() => {
-          setIsConfirmOpen(false);
           createBroadcast();
         }}
       />

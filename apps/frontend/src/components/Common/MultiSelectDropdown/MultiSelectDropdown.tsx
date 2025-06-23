@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import SearchInput from "../SearchInput/SearchInput";
 
 const DropdownWrapper = styled.div`
@@ -45,7 +46,6 @@ const FloatingLabel = styled.span<{ active: boolean }>`
   padding: 0 5px;
   transition: all 0.3s ease;
   z-index: 1;
-
   border: ${({ active }) => (active ? "1px solid #6a5acd" : "none")};
   border-radius: 4px;
 `;
@@ -56,13 +56,12 @@ const DropdownList = styled.ul`
   background-color: #2b2b2b;
   border: 1px solid #4f4f4f;
   border-radius: 8px;
-  margin-top: 5px;
   padding: 0;
   list-style: none;
   max-height: 200px;
   overflow-y: auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 991;
+  z-index: 9999;
 `;
 
 const DropdownItem = styled.li<{ selected: boolean }>`
@@ -107,11 +106,14 @@ const MultiSelectDropdown = ({
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownListRef = useRef<HTMLUListElement | null>(null);
+  const dropdownPortalRef = useRef<HTMLUListElement | null>(null);
 
   const hasValue = selected.length > 0;
   const showFloatingLabel = isFocused || hasValue;
 
-  const filteredOptions = options && options.filter((option) =>
+  const filteredOptions = options.filter((option) =>
     option.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -123,8 +125,55 @@ const MultiSelectDropdown = ({
     }
   };
 
+  const handleClickOutside = (e: MouseEvent) => {
+    const target = e.target as Node;
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(target) &&
+      dropdownPortalRef.current &&
+      !dropdownPortalRef.current.contains(target)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  const handleEscape = (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      setIsOpen(false);
+    }
+  };
+
+  const setDropdownRefs = (node: HTMLUListElement | null) => {
+    dropdownListRef.current = node;
+    dropdownPortalRef.current = node;
+  };
+  
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleEscape);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!dropdownRef.current || !dropdownListRef.current || !isOpen) return;
+    const buttonRect = dropdownRef.current.getBoundingClientRect();
+    dropdownListRef.current.style.position = "absolute";
+    dropdownListRef.current.style.top = `${buttonRect.bottom + window.scrollY}px`;
+    dropdownListRef.current.style.left = `${buttonRect.left + window.scrollX}px`;
+    dropdownListRef.current.style.width = `${buttonRect.width}px`;
+  }, [isOpen]);
+
   return (
-    <DropdownWrapper>
+    <DropdownWrapper ref={dropdownRef}>
       <DropdownContainer>
         <FloatingLabel active={showFloatingLabel}>{placeholder}</FloatingLabel>
         <DropdownButton
@@ -132,31 +181,30 @@ const MultiSelectDropdown = ({
             setIsOpen(!isOpen);
             setIsFocused(true);
           }}
-          onBlur={() => {
-            if (!hasValue && !isOpen) setIsFocused(false);
-          }}
         >
           {hasValue ? selected.join(", ") : ""}
         </DropdownButton>
       </DropdownContainer>
-      {isOpen && filteredOptions && (
-        <DropdownList>
-          <SearchInput
-            placeholder="Search"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          {filteredOptions.map((option) => (
-            <DropdownItem
-              key={option}
-              selected={selected.includes(option)}
-              onClick={() => handleSelect(option)}
-            >
-              {option}
-            </DropdownItem>
-          ))}
-        </DropdownList>
-      )}
+      {isOpen && filteredOptions &&
+        createPortal(
+          <DropdownList ref={setDropdownRefs}>
+            <SearchInput
+              placeholder="Search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {filteredOptions.map((option) => (
+              <DropdownItem
+                key={option}
+                selected={selected.includes(option)}
+                onClick={() => handleSelect(option)}
+              >
+                {option}
+              </DropdownItem>
+            ))}
+          </DropdownList>,
+          document.body
+        )}
       <SelectedTags>
         {selected.map((s) => (
           <Tag key={s}>{s}</Tag>

@@ -168,8 +168,8 @@ export const BroadcastRulesContainer = styled.ul`
   width: 100%;
   padding: 0;
   height: auto;
-  max-height: calc(100vh - 330px);
-  min-height: calc(100vh - 330px);
+  max-height: calc(100vh - 270px);
+  min-height: calc(100vh - 270px);
   overflow-y: auto;
 
   @media (max-width: 768px) {

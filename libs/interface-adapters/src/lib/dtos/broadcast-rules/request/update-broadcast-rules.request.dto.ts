@@ -8,7 +8,7 @@ import { AnalyticSelectionRulesRequestDto } from "./analytic-selection-rules.req
 import { CopyAssignmentStrategyRulesRequestDto } from "./copy-assignment-strategy-rules.request.dto";
 
 export class UpdateBroadcastRulesRequestDto {
-  public broadcastId: string;
+  public _id: string;
 
   @IsString()
   @Length(1, 50)

@@ -1,12 +1,263 @@
+import React, { useRef, useState, useEffect } from "react";
 import { BroadcastRulesEntity } from "../../../types/broadcast-tool/broadcast-rules-entity.interface";
-import { Container } from "./RulesContainer.styled";
+import { FiMinus, FiPlus } from "react-icons/fi";
+import UsageRulesTab from "../UsageRulesTab";
+import {
+  ButtonsHeaderContainer,
+  Container,
+  ListScrollContainer,
+  Section,
+  SectionContentWrapper,
+  SectionHeader,
+  SectionInner,
+} from "./RulesContainer.styled";
+import DomainRulesTab from "../DomainRulesTab";
+import {
+  GetDomainStatusesResponse,
+  GetProductStatusesResponse,
+} from "../../../api/monday";
+import TestingRulesTab from "../TestingRulesTab";
+import PartnerRulesTab from "../PartnerRulesTab";
+import ProductRulesTab from "../ProductRulesTab";
+import AnalyticSelectionRulesTab from "../AnalyticSelectionRulesTab";
+import CopyAssignmentStrategyRulesTab from "../CopyAssignmentStrategyRulesTab";
+import { BroadcastListItemResponse } from "../../../api/broadcast/response/broadcast-list-item.response.dto";
+import { VscDebugStart } from "react-icons/vsc";
+import { Button } from "../Menu/Menu.styled";
+import { LiaSaveSolid } from "react-icons/lia";
+import { updateBroadcastRules } from "../../../api/broadcast-rules.api";
+import { toastError, toastSuccess } from "../../../helpers/toastify";
+import Loader from "../../Common/Loader";
+import ConfirmUpdateModal from "../ConfirmUpdateModal";
+import {
+  InputContainer,
+  InputGroup,
+  RuleContainer,
+} from "../DomainRulesTab/DomainRulesTab.styled";
+import FloatingLabelInput from "../../Common/FloatingLabelInput/FloatingLabelInput";
+import Dropdown from "../../Common/Dropdown/Dropdown";
 
 interface RulesContainerProps {
-    broadcastEntity: BroadcastRulesEntity
+  onEntityUpdate: () => void;
+  broadcastEntity: BroadcastRulesEntity;
+  domainMondayStatuses: GetDomainStatusesResponse;
+  productMondayStatuses: GetProductStatusesResponse;
+  broadcastsSheets: BroadcastListItemResponse[];
 }
 
-const RulesContainer: React.FC<RulesContainerProps> = ({broadcastEntity}) => {
-  return <Container>RulesContainer</Container>;
+const RulesContainer: React.FC<RulesContainerProps> = ({
+  broadcastEntity,
+  domainMondayStatuses,
+  productMondayStatuses,
+  broadcastsSheets,
+  onEntityUpdate,
+}) => {
+  const [openSection, setOpenSection] = useState<string | null>(null);
+  const [broadcastRules, setBroadcastRules] = useState(broadcastEntity);
+  const contentRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const [heights, setHeights] = useState<Record<string, number>>({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+
+  useEffect(() => {
+    setBroadcastRules(broadcastEntity);
+  }, [broadcastEntity]);
+
+  const toggleSection = (key: string) => {
+    setOpenSection((prev) => (prev === key ? null : key));
+  };
+
+  const handleChange = <K extends keyof BroadcastRulesEntity>(
+    key: K,
+    value: BroadcastRulesEntity[K]
+  ) => {
+    setBroadcastRules((prevBroadcastRules) => ({
+      ...prevBroadcastRules,
+      [key]: value,
+    }));
+  };
+
+  useEffect(() => {
+    const newHeights: Record<string, number> = {};
+    Object.entries(contentRefs.current).forEach(([key, ref]) => {
+      if (ref) {
+        newHeights[key] = ref.scrollHeight;
+      }
+    });
+    setHeights(newHeights);
+  }, [broadcastRules, openSection]);
+
+  const handleUpdateEntity = async () => {
+    try {
+      setIsLoading(true);
+      await updateBroadcastRules(broadcastRules);
+      toastSuccess("Broadcast rule updated successfully");
+      setIsLoading(false);
+    } catch (error) {
+      toastError("Failed to update broadcast rule");
+      setIsLoading(false);
+    } finally {
+      onEntityUpdate();
+    }
+  };
+
+  const renderSection = (
+    label: string,
+    key: keyof BroadcastRulesEntity,
+    component: React.ReactNode
+  ) => (
+    <Section>
+      <SectionHeader
+        active={openSection === label}
+        onClick={() => toggleSection(label)}
+      >
+        {label}
+        {openSection === label ? <FiMinus size={18} /> : <FiPlus size={18} />}
+      </SectionHeader>
+      <SectionContentWrapper
+        isOpen={openSection === label}
+        maxHeight={heights[label] || 0}
+      >
+        <SectionInner ref={(el) => (contentRefs.current[label] = el)}>
+          {component}
+        </SectionInner>
+      </SectionContentWrapper>
+    </Section>
+  );
+
+  return (
+    <Container>
+      <ButtonsHeaderContainer>
+        <Button onClick={() => setIsUpdateModalOpen(true)}>
+          <LiaSaveSolid />
+        </Button>
+
+        <Button
+          onClick={() => {
+            return;
+          }}
+        >
+          <VscDebugStart />
+        </Button>
+      </ButtonsHeaderContainer>
+      {isLoading && <Loader />}
+      {!isLoading && (
+        <ListScrollContainer>
+          {renderSection(
+            "General Rules",
+            "name",
+            <RuleContainer>
+              <InputGroup>
+                <InputContainer>
+                  <FloatingLabelInput
+                    placeholder="Broadcast Name"
+                    value={broadcastRules.name}
+                    onChange={(e) => handleChange("name", e.target.value)}
+                  />
+                </InputContainer>
+              </InputGroup>
+
+              <InputGroup>
+                <Dropdown
+                  options={broadcastsSheets.map((item) => item.sheetName)}
+                  selected={
+                    broadcastsSheets.find(
+                      (b) => b.fileId === broadcastRules.broadcastSpreadsheetId
+                    )?.sheetName || ""
+                  }
+                  onSelect={(option) => {
+                    const selected = broadcastsSheets.find(
+                      (item) => item.sheetName === option
+                    );
+                    if (selected) {
+                      handleChange("broadcastSpreadsheetId", selected.fileId);
+                    }
+                  }}
+                  placeholder="Select Broadcast Sheet"
+                />
+              </InputGroup>
+            </RuleContainer>
+          )}
+          {renderSection(
+            "Domain Rules",
+            "domainRules",
+            <DomainRulesTab
+              domainRules={broadcastRules.domainRules}
+              onChange={(updated) => handleChange("domainRules", updated)}
+              domainMondayStatuses={domainMondayStatuses}
+            />
+          )}
+          {renderSection(
+            "Usage Rules",
+            "usageRules",
+            <UsageRulesTab
+              usageRules={broadcastRules.usageRules}
+              onChange={(updated) => handleChange("usageRules", updated)}
+            />
+          )}
+          {renderSection(
+            "Testing Rules",
+            "testingRules",
+            <TestingRulesTab
+              testingRules={broadcastRules.testingRules}
+              onChange={(updated) => handleChange("testingRules", updated)}
+            />
+          )}
+          {renderSection(
+            "Partner Rules",
+            "partnerRules",
+            <PartnerRulesTab
+              partnerRules={broadcastRules.partnerRules}
+              onChange={(updated) => handleChange("partnerRules", updated)}
+            />
+          )}
+          {renderSection(
+            "Product Rules",
+            "productRules",
+            <ProductRulesTab
+              productRules={broadcastRules.productRules}
+              onChange={(updated) => handleChange("productRules", updated)}
+              domainMondayStatuses={domainMondayStatuses}
+              productMondayStatuses={productMondayStatuses}
+            />
+          )}
+          {renderSection(
+            "Analytic Selection Rules",
+            "analyticSelectionRules",
+            <AnalyticSelectionRulesTab
+              analyticSelectionRules={broadcastRules.analyticSelectionRules}
+              onChange={(updated) =>
+                handleChange("analyticSelectionRules", updated)
+              }
+            />
+          )}
+          {renderSection(
+            "Copy Assignment Strategy Rules",
+            "copyAssignmentStrategyRules",
+            <CopyAssignmentStrategyRulesTab
+              copyAssignmentStrategyRules={
+                broadcastRules.copyAssignmentStrategyRules
+              }
+              onChange={(updated) =>
+                handleChange("copyAssignmentStrategyRules", updated)
+              }
+            />
+          )}
+        </ListScrollContainer>
+      )}
+
+      {isUpdateModalOpen && (
+        <ConfirmUpdateModal
+          isOpen={isUpdateModalOpen}
+          onClose={() => {
+            setIsUpdateModalOpen(false);
+          }}
+          onConfirm={handleUpdateEntity}
+        />
+      )}
+    </Container>
+  );
 };
 
 export default RulesContainer;

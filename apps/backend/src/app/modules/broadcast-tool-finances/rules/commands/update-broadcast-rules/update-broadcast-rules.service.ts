@@ -13,7 +13,7 @@ export class UpdateBroadcastRulesService {
     payload: UpdateBroadcastRulesPayload
   ): Promise<UpdateBroadcastRulesProps> {
     const broadcastRules = await this.broadcastRulesRepository.findById(
-      payload.broadcastId
+      payload._id
     );
 
     if (!broadcastRules) {
@@ -21,7 +21,7 @@ export class UpdateBroadcastRulesService {
     }
 
     const updatedBroadcastRules = await this.broadcastRulesRepository.update(
-      payload.broadcastId,
+      payload._id,
       {
         name: payload.name,
         broadcastSpreadsheetId: payload.broadcastSpreadsheetId,

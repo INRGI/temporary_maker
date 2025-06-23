@@ -23,6 +23,13 @@ import {
 import CreateBroadcastModal from "../CreateBroadcastModal";
 import Loader from "../../Common/Loader";
 import ConfirmDeleteModal from "../ConfirmDeleteModal";
+import {
+  GetDomainStatusesResponse,
+  GetProductStatusesResponse,
+} from "../../../api/monday";
+import { BroadcastListItemResponse } from "../../../api/broadcast/response/broadcast-list-item.response.dto";
+import { getDomainStatuses, getProductStatuses } from "../../../api/monday.api";
+import { getBroadcastsList } from "../../../api/broadcast.api";
 
 const Menu: React.FC = () => {
   const [broadcastEntities, setBroadcastEntities] = useState<
@@ -40,42 +47,105 @@ const Menu: React.FC = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [entityToDeleteId, setEntityToDeleteId] = useState<string | null>(null);
 
+  const [productMondayStatuses, setProductMondayStatuses] =
+    useState<GetProductStatusesResponse>({
+      productStatuses: [],
+      domainSendings: [],
+    });
+  const [domainMondayStatuses, setDomainMondayStatuses] =
+    useState<GetDomainStatusesResponse>({
+      uniqueDomainStatuses: [],
+      uniqueEsps: [],
+      uniqueParentCompanies: [],
+    });
+  const [broadcastsSheets, setBroadcastsSheets] = useState<
+    BroadcastListItemResponse[]
+  >([]);
+
   const toggleSidebar = () => {
     const newState = !isCollapsed;
     setIsCollapsed(newState);
     localStorage.setItem("preset_sidebar_collapsed", String(newState));
   };
 
+  useEffect(() => {
+    setIsLoading(true);
+
+    Promise.allSettled([
+      fetchProductStatuses(),
+      fetchDomainStatuses(),
+      fetchBroadcastsSheets(),
+      fetchBroadcastRules(),
+    ]).finally(() => {
+      setIsLoading(false);
+    });
+  }, []);
+
   const fetchBroadcastRules = async () => {
     try {
-      setIsLoading(true);
       const response = await getPaginatedBroadcastRules();
       setBroadcastEntities(response.items);
-      setIsLoading(false);
     } catch (error) {
       toastError("Failed to fetch broadcast rules");
       setBroadcastEntities([]);
-      setIsLoading(false);
+    }
+  };
+
+  const fetchProductStatuses = async () => {
+    try {
+      const response = await getProductStatuses();
+      if (!response) throw new Error("Failed to fetch product statuses");
+      setProductMondayStatuses(response);
+    } catch (error) {
+      toastError("Failed to fetch product statuses");
+      setProductMondayStatuses({
+        productStatuses: [],
+        domainSendings: [],
+      });
+    }
+  };
+
+  const fetchDomainStatuses = async () => {
+    try {
+      const response = await getDomainStatuses();
+      if (!response) throw new Error("Failed to fetch domain statuses");
+      setDomainMondayStatuses(response);
+    } catch (error) {
+      toastError("Failed to fetch domain statuses");
+      setDomainMondayStatuses({
+        uniqueDomainStatuses: [],
+        uniqueEsps: [],
+        uniqueParentCompanies: [],
+      });
+    }
+  };
+
+  const fetchBroadcastsSheets = async () => {
+    try {
+      const response = await getBroadcastsList();
+      if (!response) throw new Error("Failed to fetch broadcasts sheets");
+      setBroadcastsSheets(response.sheets);
+    } catch (error) {
+      toastError("Failed to fetch broadcasts sheets");
+      setBroadcastsSheets([]);
     }
   };
 
   useEffect(() => {
-    fetchBroadcastRules();
-  }, []);
-
-  useEffect(() => {
-    if (broadcastEntities && broadcastEntities.length && activeEntity) {
-      setActiveEntity(
-        broadcastEntities.find((entity) => entity.name === activeEntity.name) ||
-          null
-      );
+    if (!broadcastEntities.length) return;
+  
+    const stillExists = broadcastEntities.find(e => e._id === activeEntity?._id);
+    if (!stillExists) {
+      setActiveEntity(broadcastEntities[0]);
+    } else {
+      setActiveEntity(stillExists);
     }
   }, [broadcastEntities]);
+  
 
   const handleDeleteEntity = async (id: string) => {
     try {
       setIsLoading(true);
-      console.log(id);
       await deleteBroadcastRules(id);
       toastSuccess("Broadcast rule deleted successfully");
       fetchBroadcastRules();
@@ -85,6 +155,24 @@ const Menu: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  const onEntityUpdate = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getPaginatedBroadcastRules();
+      setBroadcastEntities(response.items);
+  
+      const updated = response.items.find((e) => e._id === activeEntity?._id);
+      if (updated) {
+        setActiveEntity({ ...updated });
+      }
+    } catch (error) {
+      toastError("Failed to fetch broadcast rules");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
 
   const filteredPresets =
     broadcastEntities && broadcastEntities.length > 0
@@ -165,20 +253,31 @@ const Menu: React.FC = () => {
               setCreateModalOpen(false);
               fetchBroadcastRules();
             }}
+            domainMondayStatuses={domainMondayStatuses}
+            productMondayStatuses={productMondayStatuses}
+            broadcastsSheets={broadcastsSheets}
+          />
+        )}
+        {deleteModalOpen && entityToDeleteId && (
+          <ConfirmDeleteModal
+            isOpen={deleteModalOpen}
+            onClose={() => setDeleteModalOpen(false)}
+            onConfirm={() => {
+              handleDeleteEntity(entityToDeleteId);
+              setDeleteModalOpen(false);
+            }}
           />
         )}
       </Container>
 
-      {activeEntity && <RulesContainer broadcastEntity={activeEntity} />}
-
-      {deleteModalOpen && entityToDeleteId && (
-        <ConfirmDeleteModal
-          isOpen={deleteModalOpen}
-          onClose={() => setDeleteModalOpen(false)}
-          onConfirm={() => {
-            handleDeleteEntity(entityToDeleteId);
-            setDeleteModalOpen(false);
-          }}
+      {activeEntity && (
+        <RulesContainer
+        key={activeEntity._id}
+          onEntityUpdate={onEntityUpdate}
+          broadcastEntity={activeEntity}
+          domainMondayStatuses={domainMondayStatuses}
+          productMondayStatuses={productMondayStatuses}
+          broadcastsSheets={broadcastsSheets}
         />
       )}
     </RootContainer>
