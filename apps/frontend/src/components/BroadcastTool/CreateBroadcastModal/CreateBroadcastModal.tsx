@@ -24,7 +24,7 @@ import CopyAssignmentStrategyRulesTab from "../CopyAssignmentStrategyRulesTab";
 import { BroadcastListItemResponse } from "../../../api/broadcast/response/broadcast-list-item.response.dto";
 import GeneralTab from "../GeneralTab";
 import { createBroadcastRules } from "../../../api/broadcast-rules.api";
-import ConfirmCreateModal from "../ConfirmCreateModal";
+import ConfirmationModal from "../ConfirmationModal";
 
 interface CreateModalProps {
   isOpen: boolean;
@@ -264,7 +264,11 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
         </TabsContainer>
         <Container>{renderContent()}</Container>
       </CreateContainer>
-      <ConfirmCreateModal
+      <ConfirmationModal
+        title="Confirm Creation"
+        message="Are you sure you filled out all the fields?"
+        confirmButtonText="Create"
+        cancelButtonText="Cancel"
         isOpen={isConfirmOpen}
         onClose={() => setIsConfirmOpen(false)}
         onConfirm={() => {

@@ -22,7 +22,6 @@ import {
 } from "../../../api/broadcast-rules.api";
 import CreateBroadcastModal from "../CreateBroadcastModal";
 import Loader from "../../Common/Loader";
-import ConfirmDeleteModal from "../ConfirmDeleteModal";
 import {
   GetDomainStatusesResponse,
   GetProductStatusesResponse,
@@ -30,6 +29,7 @@ import {
 import { BroadcastListItemResponse } from "../../../api/broadcast/response/broadcast-list-item.response.dto";
 import { getDomainStatuses, getProductStatuses } from "../../../api/monday.api";
 import { getBroadcastsList } from "../../../api/broadcast.api";
+import ConfirmationModal from "../ConfirmationModal";
 
 const Menu: React.FC = () => {
   const [broadcastEntities, setBroadcastEntities] = useState<
@@ -132,7 +132,9 @@ const Menu: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!broadcastEntities.length) return;
+    if ( !broadcastEntities || !broadcastEntities.length) {
+      return;
+    };
   
     const stillExists = broadcastEntities.find(e => e._id === activeEntity?._id);
     if (!stillExists) {
@@ -259,7 +261,11 @@ const Menu: React.FC = () => {
           />
         )}
         {deleteModalOpen && entityToDeleteId && (
-          <ConfirmDeleteModal
+          <ConfirmationModal
+            title="Delete broadcast rule"
+            message="Are you sure you want to delete this broadcast rule?"
+            confirmButtonText="Delete"
+            cancelButtonText="Cancel"
             isOpen={deleteModalOpen}
             onClose={() => setDeleteModalOpen(false)}
             onConfirm={() => {

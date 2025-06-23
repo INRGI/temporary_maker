@@ -93,8 +93,8 @@ const Tag = styled.div`
 `;
 
 const MultiSelectDropdown = ({
-  options,
-  selected,
+  options = [],
+  selected = [],
   onChange,
   placeholder,
 }: {

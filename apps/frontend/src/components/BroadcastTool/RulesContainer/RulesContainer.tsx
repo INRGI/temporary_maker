@@ -28,7 +28,6 @@ import { LiaSaveSolid } from "react-icons/lia";
 import { updateBroadcastRules } from "../../../api/broadcast-rules.api";
 import { toastError, toastSuccess } from "../../../helpers/toastify";
 import Loader from "../../Common/Loader";
-import ConfirmUpdateModal from "../ConfirmUpdateModal";
 import {
   InputContainer,
   InputGroup,
@@ -36,6 +35,7 @@ import {
 } from "../DomainRulesTab/DomainRulesTab.styled";
 import FloatingLabelInput from "../../Common/FloatingLabelInput/FloatingLabelInput";
 import Dropdown from "../../Common/Dropdown/Dropdown";
+import ConfirmationModal from "../ConfirmationModal";
 
 interface RulesContainerProps {
   onEntityUpdate: () => void;
@@ -248,7 +248,11 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
       )}
 
       {isUpdateModalOpen && (
-        <ConfirmUpdateModal
+        <ConfirmationModal
+          title="Update Broadcast Rules"
+          message="Are you sure you want to update the broadcast rules?"
+          confirmButtonText="Update"
+          cancelButtonText="Cancel"
           isOpen={isUpdateModalOpen}
           onClose={() => {
             setIsUpdateModalOpen(false);
