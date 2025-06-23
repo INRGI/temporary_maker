@@ -17,13 +17,12 @@ import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa6";
 import { MdDeleteForever } from "react-icons/md";
 import {
-  createBroadcastRules,
   deleteBroadcastRules,
   getPaginatedBroadcastRules,
 } from "../../../api/broadcast-rules.api";
-import { CreateBroadcastRulesRequest } from "../../../api/broadcast-rules";
 import CreateBroadcastModal from "../CreateBroadcastModal";
 import Loader from "../../Common/Loader";
+import ConfirmDeleteModal from "../ConfirmDeleteModal";
 
 const Menu: React.FC = () => {
   const [broadcastEntities, setBroadcastEntities] = useState<
@@ -38,6 +37,8 @@ const Menu: React.FC = () => {
     return localStorage.getItem("preset_sidebar_collapsed") === "true";
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [entityToDeleteId, setEntityToDeleteId] = useState<string | null>(null);
 
   const toggleSidebar = () => {
     const newState = !isCollapsed;
@@ -138,7 +139,12 @@ const Menu: React.FC = () => {
                 <h2>{entity.name}</h2>
                 {!isCollapsed && (
                   <div className="preset-actions">
-                    <DeleteButton onClick={() => handleDeleteEntity(entity._id)}>
+                    <DeleteButton
+                      onClick={() => {
+                        setEntityToDeleteId(entity._id);
+                        setDeleteModalOpen(true);
+                      }}
+                    >
                       <MdDeleteForever />
                     </DeleteButton>
                   </div>
@@ -164,6 +170,17 @@ const Menu: React.FC = () => {
       </Container>
 
       {activeEntity && <RulesContainer broadcastEntity={activeEntity} />}
+
+      {deleteModalOpen && entityToDeleteId && (
+        <ConfirmDeleteModal
+          isOpen={deleteModalOpen}
+          onClose={() => setDeleteModalOpen(false)}
+          onConfirm={() => {
+            handleDeleteEntity(entityToDeleteId);
+            setDeleteModalOpen(false);
+          }}
+        />
+      )}
     </RootContainer>
   );
 };
