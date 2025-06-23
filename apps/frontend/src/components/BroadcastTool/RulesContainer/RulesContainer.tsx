@@ -36,6 +36,7 @@ import {
 import FloatingLabelInput from "../../Common/FloatingLabelInput/FloatingLabelInput";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import ConfirmationModal from "../ConfirmationModal";
+import LaunchBroadcastModal from "../LaunchBroadcastModal";
 
 interface RulesContainerProps {
   onEntityUpdate: () => void;
@@ -59,6 +60,7 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isLaunchModalOpen, setIsLaunchModalOpen] = useState(false);
 
   useEffect(() => {
     setBroadcastRules(broadcastEntity);
@@ -133,11 +135,7 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
           <LiaSaveSolid />
         </Button>
 
-        <Button
-          onClick={() => {
-            return;
-          }}
-        >
+        <Button onClick={() => setIsLaunchModalOpen(true)}>
           <VscDebugStart />
         </Button>
       </ButtonsHeaderContainer>
@@ -258,6 +256,15 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
             setIsUpdateModalOpen(false);
           }}
           onConfirm={handleUpdateEntity}
+        />
+      )}
+      {isLaunchModalOpen && (
+        <LaunchBroadcastModal
+          isOpen={isLaunchModalOpen}
+          broadcastEntity={broadcastRules}
+          onClose={() => {
+            setIsLaunchModalOpen(false);
+          }}
         />
       )}
     </Container>

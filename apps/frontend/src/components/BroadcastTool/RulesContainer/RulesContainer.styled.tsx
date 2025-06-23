@@ -43,6 +43,7 @@ export const SectionHeader = styled.button<{ active: boolean }>`
   width: 100%;
   text-align: left;
   padding: 16px;
+  border-radius: 8px;
   background-color: ${({ active }) => (active ? "#2b2b2b" : "#232323")};
   color: white;
   border: none;
@@ -57,6 +58,11 @@ export const SectionHeader = styled.button<{ active: boolean }>`
     background-color: #333;
   }
 `;
+export const SectionInner = styled.div`
+  padding: 16px;
+  background-color: #2b2b2b;
+  color: white;
+`;
 
 export const SectionContentWrapper = styled.div<{
   maxHeight: number;
@@ -66,10 +72,4 @@ export const SectionContentWrapper = styled.div<{
   opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
   overflow: hidden;
   transition: all 0.3s ease;
-`;
-
-export const SectionInner = styled.div`
-  padding: 16px;
-  background-color: #2b2b2b;
-  color: white;
 `;
