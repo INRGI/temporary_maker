@@ -7,6 +7,7 @@ import { makeBroadcast } from "../../../api/broadcast.api";
 import { BroadcastRulesEntity } from "../../../types/broadcast-tool";
 import { toastError, toastSuccess } from "../../../helpers/toastify";
 import Loader from "../../Common/Loader";
+import { GetAllDomainsResponse } from "../../../api/broadcast";
 
 const ModalBody = styled.div`
   background-color: #181818;
@@ -111,12 +112,14 @@ interface LaunchBroadcastModalProps {
   isOpen: boolean;
   onClose: () => void;
   broadcastEntity: BroadcastRulesEntity;
+  onSuccess: (result: GetAllDomainsResponse) => void;
 }
 
 const LaunchBroadcastModal: React.FC<LaunchBroadcastModalProps> = ({
   isOpen,
   onClose,
   broadcastEntity,
+  onSuccess
 }) => {
   const [fromDate, setFromDate] = useState<Date | null>(null);
   const [toDate, setToDate] = useState<Date | null>(null);
@@ -136,14 +139,19 @@ const LaunchBroadcastModal: React.FC<LaunchBroadcastModalProps> = ({
 
     try {
       setIsLoading(true);
-      await makeBroadcast({
-        ...broadcastEntity,
+      const result = await makeBroadcast({
         broadcastRuleId: broadcastEntity._id,
         fromDate: formatDateToYYYYMMDD(fromDate),
         toDate: formatDateToYYYYMMDD(toDate),
       });
+      if (!result || !result.sheets || !result.sheets.length) {
+        return toastError("Failed to make broadcast");
+      }
+      
       toastSuccess("Broadcast made successfully");
       setIsLoading(false);
+
+      onSuccess(result);
     } catch (error) {
       toastError("Failed to make broadcast");
       setIsLoading(false);

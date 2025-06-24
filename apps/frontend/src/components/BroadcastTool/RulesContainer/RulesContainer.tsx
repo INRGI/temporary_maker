@@ -37,6 +37,8 @@ import FloatingLabelInput from "../../Common/FloatingLabelInput/FloatingLabelInp
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import ConfirmationModal from "../ConfirmationModal";
 import LaunchBroadcastModal from "../LaunchBroadcastModal";
+import { GetAllDomainsResponse } from "../../../api/broadcast";
+import BroadcastTableModal from "../BroadcastTableModal";
 
 interface RulesContainerProps {
   onEntityUpdate: () => void;
@@ -61,6 +63,9 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
 
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isLaunchModalOpen, setIsLaunchModalOpen] = useState(false);
+
+  const [broadcastResult, setBroadcastResult] =
+    useState<GetAllDomainsResponse | null>(null);
 
   useEffect(() => {
     setBroadcastRules(broadcastEntity);
@@ -265,6 +270,18 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
           onClose={() => {
             setIsLaunchModalOpen(false);
           }}
+          onSuccess={(result) => {
+            setIsLaunchModalOpen(false);
+            setBroadcastResult(result);
+          }}
+        />
+      )}
+      {broadcastResult && (
+        <BroadcastTableModal
+          isOpen={!!broadcastResult}
+          onClose={() => setBroadcastResult(null)}
+          broadcast={broadcastResult}
+          spreadSheetId={broadcastRules.broadcastSpreadsheetId}
         />
       )}
     </Container>

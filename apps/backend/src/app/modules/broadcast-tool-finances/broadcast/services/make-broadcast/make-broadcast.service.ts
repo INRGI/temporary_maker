@@ -41,82 +41,82 @@ export class MakeBroadcastService {
       fromDate,
     });
 
-    // const domainsRevenue = await this.getDomainsRevenueService.execute({
-    //   days: broadcastRule.analyticSelectionRules.domainRevenueDaysInterval,
-    // });
+    const domainsRevenue = await this.getDomainsRevenueService.execute({
+      days: broadcastRule.analyticSelectionRules.domainRevenueDaysInterval,
+    });
 
-    // const clickableCopies = await this.getClickableCopiesService.execute({
-    //   daysBeforeInterval:
-    //     broadcastRule.analyticSelectionRules.clickableCopiesDaysInterval,
-    // });
+    const clickableCopies = await this.getClickableCopiesService.execute({
+      daysBeforeInterval:
+        broadcastRule.analyticSelectionRules.clickableCopiesDaysInterval,
+    });
 
-    // const convertibleCopies = await this.getConvertableCopiesService.execute({
-    //   daysBeforeInterval:
-    //     broadcastRule.analyticSelectionRules.convertibleCopiesDaysInterval,
-    // });
+    const convertibleCopies = await this.getConvertableCopiesService.execute({
+      daysBeforeInterval:
+        broadcastRule.analyticSelectionRules.convertibleCopiesDaysInterval,
+    });
 
-    // const testableCopies = await this.getTestableCopiesService.execute({
-    //   daysBeforeInterval:
-    //     broadcastRule.analyticSelectionRules.testCopiesDaysInterval,
-    // });
+    const testableCopies = await this.getTestableCopiesService.execute({
+      daysBeforeInterval:
+        broadcastRule.analyticSelectionRules.testCopiesDaysInterval,
+    });
 
-    // const warmupCopies = await this.getWarmupCopiesService.execute({
-    //   daysBeforeInterval:
-    //     broadcastRule.analyticSelectionRules.warmUpCopiesDaysInterval,
-    // });
+    const warmupCopies = await this.getWarmupCopiesService.execute({
+      daysBeforeInterval:
+        broadcastRule.analyticSelectionRules.warmUpCopiesDaysInterval,
+    });
 
-    // const copiesWithoutQueue = broadcastRule.productRules.copyMinLimitPerDay;
+    const copiesWithoutQueue = broadcastRule.productRules.copyMinLimitPerDay;
 
-    // const domainsData = await this.getAllMondayDomainsDataService.execute();
+    const domainsData = await this.getAllMondayDomainsDataService.execute();
 
-    // const productsData = await this.getAllMondayProductsDataService.execute();
+    const productsData = await this.getAllMondayProductsDataService.execute();
 
-    // const CLICK_WEIGHT = 1;
-    // const CONVERSION_WEIGHT = 50;
+    const CLICK_WEIGHT = 1;
+    const CONVERSION_WEIGHT = 50;
 
-    // const domainPriorityMap = new Map<string, number>();
+    const domainPriorityMap = new Map<string, number>();
 
-    // domainsRevenue.data.forEach((entry) => {
-    //   const key = this.normalizeDomain(entry.Domain ?? "");
-    //   const clicks = Number(entry.UC ?? 0);
-    //   const conversions = Number(entry.Conversion ?? 0);
+    domainsRevenue.data.forEach((entry) => {
+      const key = this.normalizeDomain(entry.Domain ?? "");
+      const clicks = Number(entry.UC ?? 0);
+      const conversions = Number(entry.Conversion ?? 0);
 
-    //   const score = CLICK_WEIGHT * clicks + CONVERSION_WEIGHT * conversions;
+      const score = CLICK_WEIGHT * clicks + CONVERSION_WEIGHT * conversions;
 
-    //   if (key) {
-    //     domainPriorityMap.set(key, score);
-    //   }
-    // });
+      if (key) {
+        domainPriorityMap.set(key, score);
+      }
+    });
 
-    // for (const date of this.getDateRange(fromDate, toDate)) {
-    //   for (const sheet of broadcast.sheets) {
-    //     sheet.domains.sort((a, b) => {
-    //       const priorityA =
-    //         domainPriorityMap.get(this.normalizeDomain(a.domain)) ?? 0;
-    //       const priorityB =
-    //         domainPriorityMap.get(this.normalizeDomain(b.domain)) ?? 0;
-    //       return priorityB - priorityA;
-    //     });
+    for (const date of this.getDateRange(fromDate, toDate)) {
+      for (const sheet of broadcast.sheets) {
+        sheet.domains.sort((a, b) => {
+          const priorityA =
+            domainPriorityMap.get(this.normalizeDomain(a.domain)) ?? 0;
+          const priorityB =
+            domainPriorityMap.get(this.normalizeDomain(b.domain)) ?? 0;
+          return priorityB - priorityA;
+        });
 
-    //     for (let i = 0; i < sheet.domains.length; i++) {
-    //       const updatedDomain = await this.broadcastAssignerService.execute({
-    //         domain: sheet.domains[i],
-    //         broadcastRules: broadcastRule,
-    //         broadcast,
-    //         date,
-    //         clickableCopies,
-    //         convertibleCopies,
-    //         warmupCopies,
-    //         testCopies: [],
-    //         domainsData,
-    //         productsData,
-    //         copiesWithoutQueue,
-    //       });
+        for (let i = 0; i < sheet.domains.length; i++) {
+          const updatedDomain = await this.broadcastAssignerService.execute({
+            domain: sheet.domains[i],
+            broadcastRules: broadcastRule,
+            broadcast,
+            date,
+            clickableCopies,
+            convertibleCopies,
+            warmupCopies,
+            testCopies: [],
+            domainsData,
+            productsData,
+            copiesWithoutQueue,
+          });
 
-    //       sheet.domains[i] = updatedDomain;
-    //     }
-    //   }
-    // }
+          sheet.domains[i] = updatedDomain;
+        }
+      }
+    }
 
     return broadcast;
   }

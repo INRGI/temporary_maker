@@ -19,8 +19,7 @@ export class MondayController {
   @CacheTTL(900000)
   @Get("product-statuses")
   public async getProductStatuses(): Promise<GetProductStatusesResponseDto> {
-    // const result = await this.getProductStatusesService.execute();
-    const result = { productStatuses: [], domainSendings: [] };
+    const result = await this.getProductStatusesService.execute();
     return result;
   }
 
@@ -28,8 +27,7 @@ export class MondayController {
   @CacheTTL(900000)
   @Get("domain-statuses")
   public async getDomainStatuses(): Promise<GetDomainStatusesResponseDto> {
-    // const result = await this.getDomainStatusesService.execute();
-    const result = { uniqueDomainStatuses: [], uniqueEsps: [], uniqueParentCompanies: [] };
+    const result = await this.getDomainStatusesService.execute();
     return result;
   }
 }
