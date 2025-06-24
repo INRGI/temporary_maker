@@ -55,10 +55,10 @@ export class MakeBroadcastService {
         broadcastRule.analyticSelectionRules.convertibleCopiesDaysInterval,
     });
 
-    const testableCopies = await this.getTestableCopiesService.execute({
-      daysBeforeInterval:
-        broadcastRule.analyticSelectionRules.testCopiesDaysInterval,
-    });
+    // const testableCopies = await this.getTestableCopiesService.execute({
+    //   daysBeforeInterval:
+    //     broadcastRule.analyticSelectionRules.testCopiesDaysInterval,
+    // });
 
     const warmupCopies = await this.getWarmupCopiesService.execute({
       daysBeforeInterval:

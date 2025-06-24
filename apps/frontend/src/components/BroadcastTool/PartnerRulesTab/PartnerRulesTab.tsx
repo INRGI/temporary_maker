@@ -29,7 +29,7 @@ const PartnerRulesTab: React.FC<PartnerRulesTabProps> = ({
 }) => {
   return (
     <RuleContainer>
-      <InputGroup>
+      <InputGroup disabled={true}>
         <InputContainer>
           <FloatingLabelNumberInput
             placeholder="Days Sending For New Partners"
@@ -44,7 +44,7 @@ const PartnerRulesTab: React.FC<PartnerRulesTabProps> = ({
         </InputContainer>
       </InputGroup>
 
-      <InputGroup>
+      <InputGroup disabled={true}>
         <CheckboxWithLabel>
           <StyledCheckbox
             type="checkbox"
@@ -62,7 +62,7 @@ const PartnerRulesTab: React.FC<PartnerRulesTabProps> = ({
         </CheckboxWithLabel>
       </InputGroup>
 
-      <InputGroup>
+      <InputGroup disabled={true}>
         <InputContainer>
           <MultiSelectDropdown
             options={allowedIspsForNewPartnersOptions}

@@ -23,7 +23,7 @@ export const RightContainer = styled.div`
   width: 100%;
 `;
 
-export const InputGroup = styled.div`
+export const InputGroup = styled.div<{ disabled?: boolean }>`
   display: flex;
   max-width: 400px;
   align-items: center;
@@ -33,6 +33,13 @@ export const InputGroup = styled.div`
   border-radius: 8px;
   border: 2px solid transparent;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  ${(props) =>
+    props.disabled &&
+    `
+      opacity: 0.5;
+      pointer-events: none;
+      background-color: #666;
+    `}
 `;
 
 export const InputContainer = styled.div`

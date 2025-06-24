@@ -17,7 +17,7 @@ const TestingRulesTab: React.FC<TestingRulesTabProps> = ({
 }) => {
   return (
     <RuleContainer>
-      <InputGroup>
+      <InputGroup disabled={true}>
         <InputContainer>
           <FloatingLabelNumberInput
             placeholder="Max Test Copies For Domain"
@@ -31,7 +31,7 @@ const TestingRulesTab: React.FC<TestingRulesTabProps> = ({
           />
         </InputContainer>
       </InputGroup>
-      <InputGroup>
+      <InputGroup disabled={true}>
         <InputContainer>
           <FloatingLabelNumberInput
             placeholder="Max Clicks To Be Test Copy"

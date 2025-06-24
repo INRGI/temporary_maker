@@ -21,7 +21,7 @@ const DomainRulesTab: React.FC<DomainRulesTabProps> = ({
 }) => {
   return (
     <RuleContainer>
-      <InputGroup>
+      <InputGroup disabled={true}>
         <InputContainer>
           <FloatingLabelNumberInput
             placeholder="Min Clicks To Be Live"
@@ -35,7 +35,7 @@ const DomainRulesTab: React.FC<DomainRulesTabProps> = ({
           />
         </InputContainer>
       </InputGroup>
-      <InputGroup>
+      <InputGroup disabled={true}>
         <InputContainer>
           <FloatingLabelNumberInput
             placeholder="Average Clicks Per Day"

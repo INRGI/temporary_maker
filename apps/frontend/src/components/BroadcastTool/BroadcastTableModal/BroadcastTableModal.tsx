@@ -16,13 +16,18 @@ import {
   Td,
   Th,
 } from "./BroadcastTableModal.styled";
-import { ApproveBroadcastSheetRequest, GetAllDomainsResponse } from "../../../api/broadcast";
+import {
+  ApproveBroadcastSheetRequest,
+  GetAllDomainsResponse,
+} from "../../../api/broadcast";
 import {
   IoIosArrowRoundBack,
   IoMdCheckmarkCircleOutline,
 } from "react-icons/io";
 import { toastError, toastSuccess } from "../../../helpers/toastify";
 import { approveBroadcast } from "../../../api/broadcast.api";
+import Loader from "../../Common/Loader";
+import ConfirmationModal from "../ConfirmationModal";
 
 interface BroadcastTableModalProps {
   isOpen: boolean;
@@ -35,7 +40,7 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
   isOpen,
   onClose,
   broadcast,
-  spreadSheetId
+  spreadSheetId,
 }) => {
   const [broadcastData, setBroadcastData] = useState(broadcast);
   const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -45,6 +50,8 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
   } | null>(null);
   const [editValue, setEditValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
   const activeSheet = broadcastData.sheets[activeTabIndex];
   const domains = activeSheet.domains;
@@ -101,9 +108,11 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
   };
 
   const handleApproveBroadcast = async () => {
-      try {
-        setIsLoading(true);
-        const data: ApproveBroadcastSheetRequest[] = broadcastData.sheets.map((sheet) => ({
+    try {
+      setIsLoading(true);
+      setIsConfirmationModalOpen(false)
+      const data: ApproveBroadcastSheetRequest[] = broadcastData.sheets.map(
+        (sheet) => ({
           spreadsheetId: spreadSheetId,
           sheetName: sheet.sheetName,
           broadcast: sheet.domains.map((domain) => ({
@@ -111,118 +120,140 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
             esp: domain.esp,
             sendingCopiesPerDay: domain.sendingCopiesPerDay,
             broadcastCopies: domain.broadcastCopies,
-          }))
-        }))
-        const result = await approveBroadcast({
-          broadcast: data
-        });
-        if (!result) {
-          return toastError("Failed to approve broadcast");
-        }
-        
-        toastSuccess("Broadcast approved successfully");
-        setIsLoading(false);
-  
-        onClose();
-      } catch (error) {
-        toastError("Failed to approve broadcast");
-        setIsLoading(false);
+          })),
+        })
+      );
+      const result = await approveBroadcast({
+        broadcast: data,
+      });
+      if (!result) {
+        return toastError("Failed to approve broadcast");
       }
-    };
+
+      toastSuccess("Broadcast approved successfully");
+      setIsLoading(false);
+      onClose();
+    } catch (error) {
+      toastError("Failed to approve broadcast");
+      setIsLoading(false);
+    }
+  };
 
   return (
     <AdminModal isOpen={isOpen} onClose={onClose}>
-      <ModalBody>
-        <TabControls>
-          <TabHeader>
-            {broadcastData.sheets.map((sheet, index) => (
-              <TabButton
-                key={sheet.sheetName}
-                active={index === activeTabIndex}
-                onClick={() => setActiveTabIndex(index)}
-              >
-                {sheet.sheetName}
-              </TabButton>
-            ))}
-          </TabHeader>
-          <ControlsRight>
-            <ApproveButton>
-              <IoMdCheckmarkCircleOutline onClick={handleApproveBroadcast} /> Approve
-            </ApproveButton>
-            <BackButton>
-              <IoIosArrowRoundBack onClick={onClose} /> Back
-            </BackButton>
-          </ControlsRight>
-        </TabControls>
-
-        <TableWrapper key={activeSheet.sheetName}>
-          <Table>
-            <thead>
-              <tr>
-                <Th rotated>Domain</Th>
-                {domains.map((domain) => (
-                  <Th key={domain.domain} rotated>
-                    {domain.domain}
-                  </Th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {allDates.map((date) => (
-                <tr key={date}>
-                  <DomainTd>{formatDateToMMDD(new Date(date))}</DomainTd>
-                  {domains.map((domain) => {
-                    const entry = domain.broadcastCopies.find(
-                      (c) => c.date === date
-                    );
-                    const isEditing =
-                      editCell?.domain === domain.domain &&
-                      editCell?.date === date;
-
-                    return (
-                      <Td
-                        key={domain.domain + date}
-                        isHighlighted={entry?.isModdified}
-                        onDoubleClick={() => handleEdit(domain.domain, date)}
-                      >
-                        {isEditing ? (
-                          <input
-                            autoFocus
-                            value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
-                            onBlur={() => handleSave(domain.domain, date)}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter")
-                                handleSave(domain.domain, date);
-                              if (e.key === "Escape") setEditCell(null);
-                            }}
-                            style={{
-                              width: "100%",
-                              backgroundColor: "#2b2b2b",
-                              color: "white",
-                              border: "1px solid #666",
-                              borderRadius: 4,
-                              padding: "4px 8px",
-                            }}
-                          />
-                        ) : (
-                          <CopyBlock>
-                            {entry?.copies.map((copy, idx) => (
-                              <CopySpan key={idx} bold={copy.isPriority}>
-                                {copy.name}
-                              </CopySpan>
-                            ))}
-                          </CopyBlock>
-                        )}
-                      </Td>
-                    );
-                  })}
-                </tr>
+      {isLoading && (
+        <ModalBody>
+          <Loader />
+        </ModalBody>
+      )}
+      {!isLoading && (
+        <ModalBody>
+          <TabControls>
+            <TabHeader>
+              {broadcastData.sheets.map((sheet, index) => (
+                <TabButton
+                  key={sheet.sheetName}
+                  active={index === activeTabIndex}
+                  onClick={() => setActiveTabIndex(index)}
+                >
+                  {sheet.sheetName}
+                </TabButton>
               ))}
-            </tbody>
-          </Table>
-        </TableWrapper>
-      </ModalBody>
+            </TabHeader>
+            <ControlsRight>
+              <ApproveButton onClick={() => setIsConfirmationModalOpen(true)}>
+                <IoMdCheckmarkCircleOutline
+                />{" "}
+                Approve
+              </ApproveButton>
+              <BackButton onClick={() => onClose()}>
+                <IoIosArrowRoundBack /> Back
+              </BackButton>
+            </ControlsRight>
+          </TabControls>
+
+          <TableWrapper key={activeSheet.sheetName}>
+            <Table>
+              <thead>
+                <tr>
+                  <Th rotated>Domain</Th>
+                  {domains.map((domain) => (
+                    <Th key={domain.domain} rotated>
+                      {domain.domain}
+                    </Th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {allDates.map((date) => (
+                  <tr key={date}>
+                    <DomainTd>{formatDateToMMDD(new Date(date))}</DomainTd>
+                    {domains.map((domain) => {
+                      const entry = domain.broadcastCopies.find(
+                        (c) => c.date === date
+                      );
+                      const isEditing =
+                        editCell?.domain === domain.domain &&
+                        editCell?.date === date;
+
+                      return (
+                        <Td
+                          key={domain.domain + date}
+                          isHighlighted={entry?.isModdified}
+                          onDoubleClick={() => handleEdit(domain.domain, date)}
+                        >
+                          {isEditing ? (
+                            <input
+                              autoFocus
+                              value={editValue}
+                              onChange={(e) => setEditValue(e.target.value)}
+                              onBlur={() => handleSave(domain.domain, date)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter")
+                                  handleSave(domain.domain, date);
+                                if (e.key === "Escape") setEditCell(null);
+                              }}
+                              style={{
+                                width: "100%",
+                                backgroundColor: "#2b2b2b",
+                                color: "white",
+                                border: "1px solid #666",
+                                borderRadius: 4,
+                                padding: "4px 8px",
+                              }}
+                            />
+                          ) : (
+                            <CopyBlock>
+                              {entry?.copies.map((copy, idx) => (
+                                <CopySpan key={idx} bold={copy.isPriority}>
+                                  {copy.name}
+                                </CopySpan>
+                              ))}
+                            </CopyBlock>
+                          )}
+                        </Td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </TableWrapper>
+        </ModalBody>
+      )}
+      {isConfirmationModalOpen && (
+        <ConfirmationModal
+          title="Approve Broadcast Changes"
+          message="Are you sure you want to approve these changes? (It will make changes in the broadcast google sheet)"
+          confirmButtonText="Approve"
+          cancelButtonText="Cancel"
+          isOpen={isConfirmationModalOpen}
+          onClose={() => {
+            setIsConfirmationModalOpen(false);
+          }}
+          onConfirm={handleApproveBroadcast}
+        />
+      )}
     </AdminModal>
   );
 };

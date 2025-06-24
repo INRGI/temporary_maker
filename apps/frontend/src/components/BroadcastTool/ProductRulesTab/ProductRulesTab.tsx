@@ -82,7 +82,7 @@ const ProductRulesTab: React.FC<ProductRulesTabProps> = ({
           </InputContainer>
         </InputGroup>
 
-        <InputGroup>
+        <InputGroup disabled={true}>
           <CheckboxWithLabel>
             <StyledCheckbox
               type="checkbox"
@@ -166,7 +166,7 @@ const ProductRulesTab: React.FC<ProductRulesTabProps> = ({
             }
             title="Domain Sending Rules"
             parentCompanies={domainMondayStatuses.uniqueParentCompanies}
-            mondayStatuses={domainMondayStatuses.uniqueDomainStatuses}
+            mondayStatuses={productMondayStatuses.domainSendings}
           />
         </InputGroup>
 

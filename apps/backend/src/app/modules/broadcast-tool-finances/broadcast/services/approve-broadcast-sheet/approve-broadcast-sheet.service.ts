@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { ApproveBroadcastSheetPayload } from './approve-broadcast-sheet.payload';
+import { Injectable } from "@nestjs/common";
+import { ApproveBroadcastSheetPayload } from "./approve-broadcast-sheet.payload";
 import {
   ApproveBroadcastSheetResponseDto,
   UpdateCellResponseDto,
-} from '@epc-services/interface-adapters';
-import { GSpreadsheetApiServicePort, InjectGSpreadsheetApiService } from '@epc-services/gspreadsheet-api';
+} from "@epc-services/interface-adapters";
+import {
+  GSpreadsheetApiServicePort,
+  InjectGSpreadsheetApiService,
+} from "@epc-services/gspreadsheet-api";
 
 @Injectable()
 export class ApproveBroadcastSheetService {
@@ -19,7 +22,10 @@ export class ApproveBroadcastSheetService {
     const { spreadsheetId, sheetName, broadcast } = payload;
     const response: UpdateCellResponseDto[] = [];
 
-    const values = await this.spreadsheetService.getSheetValuesOnly(spreadsheetId, sheetName);
+    const values = await this.spreadsheetService.getSheetValuesOnly(
+      spreadsheetId,
+      sheetName
+    );
     const headerRow = values[0];
     const dateColIndex = 0;
 
@@ -51,16 +57,21 @@ export class ApproveBroadcastSheetService {
       if (colIndex === undefined) continue;
 
       for (const broadcastCopy of domain.broadcastCopies) {
-        if (!broadcastCopy.isModdified || !broadcastCopy.copies.length) continue;
+        if (!broadcastCopy.isModdified) continue;
 
-        const newValue = broadcastCopy.copies.map((copy) => copy.name).join(' ');
+        const newValue = broadcastCopy.copies
+          .map((copy) => copy.name)
+          .join(" ");
 
-        const dateParts = broadcastCopy.date.split('-');
+        const dateParts = broadcastCopy.date.split("-");
         const month = Number(dateParts[1]);
         const formattedDate = `${month}/${dateParts[2]}`;
 
         const rowIndex = rowIndexMap.get(formattedDate);
         if (rowIndex === undefined) continue;
+
+        const maxColIndex = Math.max(...values.map((row) => row.length));
+        if (rowIndex >= values.length || colIndex >= maxColIndex) continue;
 
         const columnLetter = this.columnToLetter(colIndex);
         const range = `${sheetName}!${columnLetter}${rowIndex + 1}`;
@@ -101,7 +112,7 @@ export class ApproveBroadcastSheetService {
   }
 
   private columnToLetter(col: number): string {
-    let letter = '';
+    let letter = "";
     while (col >= 0) {
       letter = String.fromCharCode((col % 26) + 65) + letter;
       col = Math.floor(col / 26) - 1;
