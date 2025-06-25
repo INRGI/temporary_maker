@@ -30,6 +30,7 @@ import { BroadcastListItemResponse } from "../../../api/broadcast/response/broad
 import { getDomainStatuses, getProductStatuses } from "../../../api/monday.api";
 import { getBroadcastsList } from "../../../api/broadcast.api";
 import ConfirmationModal from "../ConfirmationModal";
+import { getCachedData, setCachedData } from "../../../helpers/getCachedData";
 
 const Menu: React.FC = () => {
   const [broadcastEntities, setBroadcastEntities] = useState<
@@ -92,10 +93,18 @@ const Menu: React.FC = () => {
   };
 
   const fetchProductStatuses = async () => {
+    const cached = getCachedData<GetProductStatusesResponse>("product-statuses", 15 * 60 * 1000);
+    if (cached) {
+      setProductMondayStatuses(cached);
+      return;
+    }
+  
     try {
       const response = await getProductStatuses();
       if (!response) throw new Error("Failed to fetch product statuses");
+  
       setProductMondayStatuses(response);
+      setCachedData("product-statuses", response, 15 * 60 * 1000);
     } catch (error) {
       toastError("Failed to fetch product statuses");
       setProductMondayStatuses({
@@ -104,12 +113,21 @@ const Menu: React.FC = () => {
       });
     }
   };
+  
 
   const fetchDomainStatuses = async () => {
+    const cached = getCachedData<GetDomainStatusesResponse>("domain-statuses", 15 * 60 * 1000);
+    if (cached) {
+      setDomainMondayStatuses(cached);
+      return;
+    }
+  
     try {
       const response = await getDomainStatuses();
       if (!response) throw new Error("Failed to fetch domain statuses");
+  
       setDomainMondayStatuses(response);
+      setCachedData("domain-statuses", response, 15 * 60 * 1000);
     } catch (error) {
       toastError("Failed to fetch domain statuses");
       setDomainMondayStatuses({
@@ -119,6 +137,7 @@ const Menu: React.FC = () => {
       });
     }
   };
+  
 
   const fetchBroadcastsSheets = async () => {
     try {

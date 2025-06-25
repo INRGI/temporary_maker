@@ -67,7 +67,7 @@ const ProductRulesTab: React.FC<ProductRulesTabProps> = ({
           </InputContainer>
         </InputGroup>
 
-        <InputGroup>
+        <InputGroup disabled={true}>
           <InputContainer>
             <FloatingLabelNumberInput
               placeholder="Min Conversion For Clickable Copy"
@@ -170,7 +170,7 @@ const ProductRulesTab: React.FC<ProductRulesTabProps> = ({
           />
         </InputGroup>
 
-        <InputGroup>
+        <InputGroup disabled={true}>
           <ArrayInput
             items={productRules.copyMinLimitPerDay.map((item) => ({
               key: item.copyName,

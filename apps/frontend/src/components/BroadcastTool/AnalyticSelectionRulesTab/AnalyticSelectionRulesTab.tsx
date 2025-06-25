@@ -61,7 +61,7 @@ const AnalyticSelectionRulesTab: React.FC<AnalyticSelectionRulesTabProps> = ({
         </InputContainer>
       </InputGroup>
 
-      <InputGroup>
+      <InputGroup disabled={true}>
         <InputContainer>
           <FloatingLabelNumberInput
             placeholder="Days Interval For Test Copies"
