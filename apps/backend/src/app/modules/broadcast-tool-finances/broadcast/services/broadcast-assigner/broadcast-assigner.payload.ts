@@ -16,6 +16,7 @@ export interface BroadcastAssignerPayload {
   convertibleCopies: string[];
   warmupCopies: string[];
   testCopies: string[];
+  priorityCopiesData: string[];
   domainsData: GetDomainDataResponse[];
   productsData: GetProductDataResponse[];
   copiesWithoutQueue: CopyMinLimitPerDay[];

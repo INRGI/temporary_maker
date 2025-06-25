@@ -1,11 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { CheckIfDomainActivePayload } from "./check-if-domain-active.payload";
+import { CheckIfDomainWarmupPayload } from "./check-if-domain-warmup.payload";
 
 @Injectable()
-export class CheckIfDomainActiveService {
-  public async execute(payload: CheckIfDomainActivePayload): Promise<boolean> {
-    const { domainRules, broadcast, sendingDate, domain, domainsData } =
-      payload;
+export class CheckIfDomainWarmupService {
+  public async execute(payload: CheckIfDomainWarmupPayload): Promise<boolean> {
+    const { domain, domainsData } = payload;
 
     const domainData = domainsData.find(
       (domainName) =>
@@ -19,7 +18,7 @@ export class CheckIfDomainActiveService {
       return false;
     }
 
-    if (domainRules.allowedMondayStatuses.includes(domainData.domainStatus)) {
+    if (domainData.domainStatus === "Warm Up") {
       return true;
     }
 

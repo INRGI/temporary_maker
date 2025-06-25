@@ -11,6 +11,7 @@ import { BroadcastAssignerService } from "../broadcast-assigner/broadcast-assign
 import { GetAllDomainsDataService } from "../../../monday/services/get-all-domains-data/get-all-domains-data.service";
 import { GetAllProductsDataService } from "../../../monday/services/get-all-products-data/get-all-products-data.service";
 import { GetDomainsRevenueService } from "../../../bigQuery/services/get-domains-revenue/get-domains-revenue.service";
+import { GetAllPriorityProductsService } from "../../../priority/services/get-all-priority-products/get-all-priority-products.service";
 
 @Injectable()
 export class MakeBroadcastService {
@@ -24,7 +25,8 @@ export class MakeBroadcastService {
     private readonly broadcastAssignerService: BroadcastAssignerService,
     private readonly getAllMondayDomainsDataService: GetAllDomainsDataService,
     private readonly getAllMondayProductsDataService: GetAllProductsDataService,
-    private readonly getDomainsRevenueService: GetDomainsRevenueService
+    private readonly getDomainsRevenueService: GetDomainsRevenueService,
+    private readonly getAllPriorityProductsService: GetAllPriorityProductsService,
   ) {}
   public async execute(
     payload: MakeBroadcaastPayload
@@ -64,6 +66,8 @@ export class MakeBroadcastService {
       daysBeforeInterval:
         broadcastRule.analyticSelectionRules.warmUpCopiesDaysInterval,
     });
+
+    const priorityCopiesData = await this.getAllPriorityProductsService.execute();
 
     const copiesWithoutQueue = broadcastRule.productRules.copyMinLimitPerDay;
 
@@ -111,6 +115,7 @@ export class MakeBroadcastService {
             domainsData,
             productsData,
             copiesWithoutQueue,
+            priorityCopiesData,
           });
 
           sheet.domains[i] = updatedDomain;

@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { CheckIfProductCanBeSendPayload } from './check-if-product-can-be-send.payload';
+import { Injectable } from "@nestjs/common";
+import { CheckIfProductCanBeSendPayload } from "./check-if-product-can-be-send.payload";
 
 @Injectable()
 export class CheckIfProductCanBeSendService {
@@ -17,7 +17,8 @@ export class CheckIfProductCanBeSendService {
     } = payload;
 
     const productName = this.cleanProductName(copyName);
-    if (!productName || domainsData.length === 0 || productsData.length === 0) return false;
+    if (!productName || domainsData.length === 0 || productsData.length === 0)
+      return false;
 
     const productData = productsData.find(
       (product) =>
@@ -27,8 +28,10 @@ export class CheckIfProductCanBeSendService {
 
     const domainData = domainsData.find(
       (domainName) =>
-        this.normalizeDomain(domain) === this.normalizeDomain(domainName.domainName) ||
-        domainName.domainName.trim().endsWith(`_${domain}`)
+        this.normalizeDomain(domain) ===
+          this.normalizeDomain(domainName.domainName) ||
+        domainName.domainName.trim().endsWith(`_${domain}`) ||
+        domainName.domainName.trim().endsWith(`-${domain}`)
     );
 
     const isProductHasSendingLimits =
@@ -76,13 +79,13 @@ export class CheckIfProductCanBeSendService {
 
     if (isProductHasSendingRestrictions) {
       const daysOfWeek = [
-        'sunday',
-        'monday',
-        'tuesday',
-        'wednesday',
-        'thursday',
-        'friday',
-        'saturday',
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
       ];
       const dayOfWeek = daysOfWeek[new Date(sendingDate).getDay()];
       if (!isProductHasSendingRestrictions.allowedSendingDays[dayOfWeek]) {
@@ -117,7 +120,7 @@ export class CheckIfProductCanBeSendService {
 
   private cleanProductName(copyName: string): string {
     const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : '';
+    const product = nameMatch ? nameMatch[0] : "";
 
     return product;
   }

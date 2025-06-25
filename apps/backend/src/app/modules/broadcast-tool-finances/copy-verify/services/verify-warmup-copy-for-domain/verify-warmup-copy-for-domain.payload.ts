@@ -6,7 +6,7 @@ import {
 } from '@epc-services/interface-adapters';
 import { BroadcastRulesProps } from '../../../rules/domain/types/broadcast-rules.types';
 
-export interface VerifyCopyForDomainPayload {
+export interface VerifyWarmupCopyForDomainPayload {
   broadcast: GetAllDomainsResponseDto;
   broadcastDomain: BroadcastDomain;
   copyName: string;

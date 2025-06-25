@@ -1,16 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import { VerifyCopyForDomainPayload } from './verify-copy-for-domain.payload';
-import { CheckCopyLastSendService } from '../../../rules/services/check-copy-last-send/check-copy-last-send.service';
-import { CheckProductLastSendService } from '../../../rules/services/check-product-last-send/check-product-last-send.service';
-import { CheckIfProductCanBeSendService } from '../../../rules/services/check-if-product-can-be-send/check-if-product-can-be-send.service';
-import { CheckIfCopyCanBeSendService } from '../../../rules/services/check-if-copy-can-be-send/check-if-copy-can-be-send.service';
-import { CheckIfDomainActiveService } from '../../../rules/services/check-if-domain-active/check-if-domain-active.service';
-import { CheckIfCopyBlacklistedService } from '../../../rules/services/check-if-copy-blacklisted/check-if-copy-blacklisted.service';
-import { VerifyCopyForDomainResponseDto } from '@epc-services/interface-adapters';
-import { CheckIfProductPriorityService } from '../../../rules/services/check-if-product-priority/check-if-product-priority.service';
+import { Injectable } from "@nestjs/common";
+import { CheckForPriorityService } from "../../../priority/services/check-for-priority/check-for-priority.service";
+import { CheckCopyLastSendService } from "../../../rules/services/check-copy-last-send/check-copy-last-send.service";
+import { CheckProductLastSendService } from "../../../rules/services/check-product-last-send/check-product-last-send.service";
+import { CheckIfProductCanBeSendService } from "../../../rules/services/check-if-product-can-be-send/check-if-product-can-be-send.service";
+import { CheckIfCopyCanBeSendService } from "../../../rules/services/check-if-copy-can-be-send/check-if-copy-can-be-send.service";
+import { CheckIfDomainActiveService } from "../../../rules/services/check-if-domain-active/check-if-domain-active.service";
+import { CheckIfCopyBlacklistedService } from "../../../rules/services/check-if-copy-blacklisted/check-if-copy-blacklisted.service";
+import { VerifyCopyForDomainResponseDto } from "@epc-services/interface-adapters";
+import { VerifyWarmupCopyForDomainPayload } from "./verify-warmup-copy-for-domain.payload";
+import { CheckIfDomainWarmupService } from "../../../rules/services/check-if-domain-warmup/check-if-domain-warmup.service";
+import { CheckWarmupCopyLimitsService } from "../../../rules/services/check-warmup-copy-limits/check-warmup-copy-limits.service";
+import { CheckIfProductPriorityService } from "../../../rules/services/check-if-product-priority/check-if-product-priority.service";
 
 @Injectable()
-export class VerifyCopyForDomainService {
+export class VerifyWarmupCopyForDomainService {
   constructor(
     private readonly checkCopyLastSendService: CheckCopyLastSendService,
     private readonly checkProductLastSendService: CheckProductLastSendService,
@@ -18,10 +21,12 @@ export class VerifyCopyForDomainService {
     private readonly checkIfCopyCanBeSendService: CheckIfCopyCanBeSendService,
     private readonly checkIfDomainActiveService: CheckIfDomainActiveService,
     private readonly checkIfCopyBlacklistedService: CheckIfCopyBlacklistedService,
+    private readonly checkIfDomainWarmupService: CheckIfDomainWarmupService,
+    private readonly checkWarmupCopyLimitsService: CheckWarmupCopyLimitsService,
     private readonly checkIfProductPriorityService: CheckIfProductPriorityService
   ) {}
   public async execute(
-    payload: VerifyCopyForDomainPayload
+    payload: VerifyWarmupCopyForDomainPayload
   ): Promise<VerifyCopyForDomainResponseDto> {
     const {
       broadcastDomain,
@@ -54,6 +59,27 @@ export class VerifyCopyForDomainService {
       });
 
     if (!checkIfDomainActiveResult) {
+      return { isValid: false, broadcastDomain };
+    }
+
+    const checkWarmupCopyLimitsResult =
+      await this.checkWarmupCopyLimitsService.execute({
+        copyName,
+        broadcast,
+        sendingDate,
+      });
+
+    if (!checkWarmupCopyLimitsResult) {
+      return { isValid: false, broadcastDomain };
+    }
+
+    const checkIfDomainWarmupResult =
+      await this.checkIfDomainWarmupService.execute({
+        domain: broadcastDomain.domain,
+        domainsData,
+      });
+
+    if (!checkIfDomainWarmupResult) {
       return { isValid: false, broadcastDomain };
     }
 
@@ -172,7 +198,7 @@ export class VerifyCopyForDomainService {
 
   private cleanProductName(copyName: string): string {
     const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : '';
+    const product = nameMatch ? nameMatch[0] : "";
 
     return product;
   }

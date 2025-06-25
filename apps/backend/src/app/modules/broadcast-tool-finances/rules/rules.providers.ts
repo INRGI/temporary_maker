@@ -12,6 +12,9 @@ import { GetPaginatedBroadcastRulesQueryService } from './queries/get-paginated-
 import { CheckIfCopyCanBeSendService } from './services/check-if-copy-can-be-send/check-if-copy-can-be-send.service';
 import { CheckIfDomainActiveService } from './services/check-if-domain-active/check-if-domain-active.service';
 import { CheckIfCopyBlacklistedService } from './services/check-if-copy-blacklisted/check-if-copy-blacklisted.service';
+import { CheckIfDomainWarmupService } from './services/check-if-domain-warmup/check-if-domain-warmup.service';
+import { CheckWarmupCopyLimitsService } from './services/check-warmup-copy-limits/check-warmup-copy-limits.service';
+import { CheckIfProductPriorityService } from './services/check-if-product-priority/check-if-product-priority.service';
 
 export const messageControllers = [BroadcastRulesMessageController];
 
@@ -31,4 +34,7 @@ export const serviceProviders: Provider[] = [
   CheckIfCopyCanBeSendService,
   CheckIfDomainActiveService,
   CheckIfCopyBlacklistedService,
+  CheckIfDomainWarmupService,
+  CheckWarmupCopyLimitsService,
+  CheckIfProductPriorityService,
 ];

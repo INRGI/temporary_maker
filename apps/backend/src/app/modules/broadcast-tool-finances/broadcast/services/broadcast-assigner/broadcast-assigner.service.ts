@@ -3,6 +3,7 @@ import { BroadcastDomain } from "@epc-services/interface-adapters";
 import { Injectable } from "@nestjs/common";
 import { getCopyStrategyForDay } from "../../utils/getCopyStrategyForDay";
 import { VerifyCopyForDomainService } from "../../../copy-verify/services/verify-copy-for-domain/verify-copy-for-domain.service";
+import { VerifyWarmupCopyForDomainService } from "../../../copy-verify/services/verify-warmup-copy-for-domain/verify-warmup-copy-for-domain.service";
 
 @Injectable()
 export class BroadcastAssignerService {
@@ -10,7 +11,7 @@ export class BroadcastAssignerService {
     private readonly clickValidator: VerifyCopyForDomainService,
     private readonly conversionValidator: VerifyCopyForDomainService,
     private readonly testValidator: VerifyCopyForDomainService,
-    private readonly warmUpValidator: VerifyCopyForDomainService
+    private readonly warmUpValidator: VerifyWarmupCopyForDomainService
   ) {}
 
   public async execute(
@@ -28,6 +29,7 @@ export class BroadcastAssignerService {
       broadcast,
       warmupCopies,
       copiesWithoutQueue,
+      priorityCopiesData,
     } = payload;
 
     const strategy = getCopyStrategyForDay(
@@ -66,6 +68,7 @@ export class BroadcastAssignerService {
           sendingDate: date,
           productsData,
           domainsData,
+          priorityCopiesData,
         });
 
         if (updatedDomain.isValid) {
