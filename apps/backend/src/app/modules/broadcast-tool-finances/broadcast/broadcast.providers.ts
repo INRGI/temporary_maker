@@ -12,6 +12,7 @@ import { ApproveBroadcastSheetService } from './services/approve-broadcast-sheet
 import { ApproveBroadcastService } from './services/approve-broadcast/approve-broadcast.service';
 import { GetWarmupCopiesService } from './services/get-warmup-copies/get-warmup-copies.service';
 import { GetTestableCopiesService } from './services/get-testable-copies/get-testable-copies.service';
+import { AddPriorityCopyIndicatorService } from './services/add-priority-copy-indicator/add-priority-copy-indicator.service';
 
 export const messageControllers = [BroadcastController];
 
@@ -30,4 +31,5 @@ export const serviceProviders: Provider[] = [
   ApproveBroadcastService,
   GetWarmupCopiesService,
   GetTestableCopiesService,
+  AddPriorityCopyIndicatorService,
 ];

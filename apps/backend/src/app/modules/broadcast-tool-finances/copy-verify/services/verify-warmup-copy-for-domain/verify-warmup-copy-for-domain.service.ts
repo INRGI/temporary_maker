@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { CheckForPriorityService } from "../../../priority/services/check-for-priority/check-for-priority.service";
 import { CheckCopyLastSendService } from "../../../rules/services/check-copy-last-send/check-copy-last-send.service";
 import { CheckProductLastSendService } from "../../../rules/services/check-product-last-send/check-product-last-send.service";
 import { CheckIfProductCanBeSendService } from "../../../rules/services/check-if-product-can-be-send/check-if-product-can-be-send.service";

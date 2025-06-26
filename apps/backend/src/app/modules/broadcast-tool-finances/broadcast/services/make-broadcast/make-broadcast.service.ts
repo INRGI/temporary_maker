@@ -12,6 +12,7 @@ import { GetAllDomainsDataService } from "../../../monday/services/get-all-domai
 import { GetAllProductsDataService } from "../../../monday/services/get-all-products-data/get-all-products-data.service";
 import { GetDomainsRevenueService } from "../../../bigQuery/services/get-domains-revenue/get-domains-revenue.service";
 import { GetAllPriorityProductsService } from "../../../priority/services/get-all-priority-products/get-all-priority-products.service";
+import { AddPriorityCopyIndicatorService } from "../add-priority-copy-indicator/add-priority-copy-indicator.service";
 
 @Injectable()
 export class MakeBroadcastService {
@@ -27,6 +28,7 @@ export class MakeBroadcastService {
     private readonly getAllMondayProductsDataService: GetAllProductsDataService,
     private readonly getDomainsRevenueService: GetDomainsRevenueService,
     private readonly getAllPriorityProductsService: GetAllPriorityProductsService,
+    private readonly addPriorityCopyIndicatorService: AddPriorityCopyIndicatorService
   ) {}
   public async execute(
     payload: MakeBroadcaastPayload
@@ -67,7 +69,8 @@ export class MakeBroadcastService {
         broadcastRule.analyticSelectionRules.warmUpCopiesDaysInterval,
     });
 
-    const priorityCopiesData = await this.getAllPriorityProductsService.execute();
+    const priorityCopiesData =
+      await this.getAllPriorityProductsService.execute();
 
     const copiesWithoutQueue = broadcastRule.productRules.copyMinLimitPerDay;
 
@@ -123,7 +126,12 @@ export class MakeBroadcastService {
       }
     }
 
-    return broadcast;
+    const modifiedBroadcast =
+      await this.addPriorityCopyIndicatorService.execute({
+        broadcast: broadcast,
+        dateRange: this.getDateRange(fromDate, toDate),
+      });
+    return modifiedBroadcast;
   }
 
   private getDateRange(from: string, to: string): string[] {

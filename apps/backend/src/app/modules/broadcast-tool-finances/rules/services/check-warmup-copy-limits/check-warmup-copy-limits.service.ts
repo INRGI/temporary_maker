@@ -6,7 +6,7 @@ export class CheckWarmupCopyLimitsService {
   public async execute(
     payload: CheckWarmupCopyLimitsPayload
   ): Promise<boolean> {
-    const { copyName, broadcast, sendingDate } = payload;
+    const { copyName, broadcast } = payload;
 
     const cleanCopyName = this.cleanCopyName(copyName);
     if (!cleanCopyName) return false;
@@ -17,27 +17,16 @@ export class CheckWarmupCopyLimitsService {
 
     for (const sheet of broadcast.sheets) {
       for (const domain of sheet.domains) {
-        const sendingDateObj = domain.broadcastCopies.find(
-          (date) => date.date === sendingDate
-        );
-
-        if (
-          sendingDateObj &&
-          sendingDateObj.copies.find(
-            (copy) =>
-              this.cleanCopyName(copy.name) === this.cleanCopyName(copyName)
-          )
-        ) {
-          sendingCount++;
+        for (const copy of domain.broadcastCopies) {
+          const found = copy.copies.find(
+            (c) => this.cleanCopyName(c.name) === cleanCopyName
+          );
+          if (found) sendingCount++;
         }
       }
     }
 
-    if (sendingCount >= warmUpSendingLimit) {
-      return false;
-    }
-
-    return true;
+    return sendingCount < warmUpSendingLimit;
   }
 
   private cleanCopyName(copyName: string): string {

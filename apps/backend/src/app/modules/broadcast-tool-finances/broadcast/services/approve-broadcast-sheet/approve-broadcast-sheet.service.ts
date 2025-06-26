@@ -74,7 +74,13 @@ export class ApproveBroadcastSheetService {
         if (rowIndex >= values.length || colIndex >= maxColIndex) continue;
 
         const columnLetter = this.columnToLetter(colIndex);
-        const range = `${sheetName}!${columnLetter}${rowIndex + 1}`;
+
+        const safeSheetName =
+          sheetName.includes(" ") || sheetName.includes("'")
+            ? `'${sheetName.replace(/'/g, "''")}'`
+            : sheetName;
+
+        const range = `${safeSheetName}!${columnLetter}${rowIndex + 1}`;
 
         pendingUpdates.push({
           range,
