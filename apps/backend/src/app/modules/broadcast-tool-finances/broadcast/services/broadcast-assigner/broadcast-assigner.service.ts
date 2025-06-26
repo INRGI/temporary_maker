@@ -1,9 +1,9 @@
 import { BroadcastAssignerPayload } from "./broadcast-assigner.payload";
 import { BroadcastDomain } from "@epc-services/interface-adapters";
 import { Injectable } from "@nestjs/common";
-import { getCopyStrategyForDay } from "../../utils/getCopyStrategyForDay";
 import { VerifyCopyForDomainService } from "../../../copy-verify/services/verify-copy-for-domain/verify-copy-for-domain.service";
 import { VerifyWarmupCopyForDomainService } from "../../../copy-verify/services/verify-warmup-copy-for-domain/verify-warmup-copy-for-domain.service";
+import { getCopyStrategyForDomain } from "../../utils/getCopyStrategyForDomain";
 
 @Injectable()
 export class BroadcastAssignerService {
@@ -32,10 +32,11 @@ export class BroadcastAssignerService {
       priorityCopiesData,
     } = payload;
 
-    const strategy = getCopyStrategyForDay(
+    const strategy = getCopyStrategyForDomain(
       broadcastRules.copyAssignmentStrategyRules,
-      domain.sendingCopiesPerDay
+      domain.domain
     );
+    
     if (!strategy) return domain;
 
     const copiesQuantity =

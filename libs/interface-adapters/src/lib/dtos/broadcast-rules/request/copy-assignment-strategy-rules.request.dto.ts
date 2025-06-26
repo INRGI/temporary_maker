@@ -3,5 +3,5 @@ import { StrategyRequestDto } from "./strategy.request.dto";
 
 export class CopyAssignmentStrategyRulesRequestDto {
   @IsArray()
-  public strategies: StrategyRequestDto[];
+  public domainStrategies: StrategyRequestDto[];
 }

@@ -32,7 +32,7 @@ export class GetAllDomainsService {
   public async execute(
     payload: GetAllDomainsPayload
   ): Promise<GetAllDomainsResponseDto> {
-    const { broadcastId, usageRules, fromDate } = payload;
+    const { broadcastId, usageRules } = payload;
 
     const maxSelectedDays =
       usageRules.copyMinDelayPerDays > usageRules.productMinDelayPerDays

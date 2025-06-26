@@ -13,6 +13,7 @@ import { ApproveBroadcastService } from './services/approve-broadcast/approve-br
 import { GetWarmupCopiesService } from './services/get-warmup-copies/get-warmup-copies.service';
 import { GetTestableCopiesService } from './services/get-testable-copies/get-testable-copies.service';
 import { AddPriorityCopyIndicatorService } from './services/add-priority-copy-indicator/add-priority-copy-indicator.service';
+import { GetBroadcastDomainsListService } from './services/get-broadcast-domains-list/get-broadcast-domains-list.service';
 
 export const messageControllers = [BroadcastController];
 
@@ -20,6 +21,7 @@ export const applicationProviders: Provider[] = [];
 
 export const serviceProviders: Provider[] = [
   GetAllDomainsService,
+  GetBroadcastDomainsListService,
   GetBroadcastsListService,
   UpdateCellByDateAndDomainService,
   MakeBroadcastService,

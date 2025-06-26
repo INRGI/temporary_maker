@@ -42,7 +42,6 @@ export class MakeBroadcastService {
     const broadcast = await this.getBroadcastService.execute({
       broadcastId: broadcastRule.broadcastSpreadsheetId,
       usageRules: broadcastRule.usageRules,
-      fromDate,
     });
 
     const domainsRevenue = await this.getDomainsRevenueService.execute({
@@ -79,7 +78,7 @@ export class MakeBroadcastService {
     const productsData = await this.getAllMondayProductsDataService.execute();
 
     const CLICK_WEIGHT = 1;
-    const CONVERSION_WEIGHT = 50;
+    const CONVERSION_WEIGHT = 500;
 
     const domainPriorityMap = new Map<string, number>();
 
