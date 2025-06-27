@@ -42,7 +42,7 @@ export class BroadcastAssignerService {
     const copiesQuantity =
       domain.broadcastCopies.find((day) => day.date === date)?.copies.length ||
       0;
-    if (domain.sendingCopiesPerDay <= copiesQuantity) {
+    if (strategy.copiesTypes.length <= copiesQuantity) {
       return domain;
     }
 

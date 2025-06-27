@@ -8,9 +8,6 @@ export class BroadcastDomainRequestDto {
   @IsString()
   esp: string;
 
-  @IsString()
-  sendingCopiesPerDay: number;
-
   @IsArray()
   broadcastCopies: BroadcastSendingDayRequestDto[];
 }

@@ -53,10 +53,15 @@ export class GetBroadcastDomainsListService {
           }
         }
 
-        response.push({
-          sheetName: tabName,
-          domains,
-        });
+        if (
+          domains.length > 0 &&
+          domains.every((domain) => domain.includes("."))
+        ) {
+          response.push({
+            sheetName: tabName,
+            domains,
+          });
+        }
       }
 
       return {

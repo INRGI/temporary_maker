@@ -10,14 +10,12 @@ import {
 } from "@epc-services/interface-adapters";
 import { Injectable } from "@nestjs/common";
 import { GetAllDomainsPayload } from "./get-all-domains.payload";
-import { CalculateSendingCopiesService } from "../calculate-sending-copies/calculate-sending-copies.service";
 
 @Injectable()
 export class GetAllDomainsService {
   constructor(
     @InjectGSpreadsheetApiService()
     private readonly spreadsheetService: GSpreadsheetApiServicePort,
-    private readonly calculateSendingCopiesService: CalculateSendingCopiesService
   ) {}
 
   private parseDateToNumber(date: string): number {
@@ -148,10 +146,6 @@ export class GetAllDomainsService {
             domain,
             esp,
             broadcastCopies: filteredBroadcastCopies,
-            sendingCopiesPerDay:
-              await this.calculateSendingCopiesService.execute({
-                broadcastCopies: sortedBroadcastCopies,
-              }),
           });
         }
 

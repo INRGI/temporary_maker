@@ -6,7 +6,6 @@ import { UpdateCellByDateAndDomainService } from './services/update-cell-by-date
 import { MakeBroadcastService } from './services/make-broadcast/make-broadcast.service';
 import { GetClickableCopiesService } from './services/get-clickable-copies/get-clickable-copies.service';
 import { GetConvertableCopiesService } from './services/get-convertable-copies/get-convertable-copies.service';
-import { CalculateSendingCopiesService } from './services/calculate-sending-copies/calculate-sending-copies.service';
 import { BroadcastAssignerService } from './services/broadcast-assigner/broadcast-assigner.service';
 import { ApproveBroadcastSheetService } from './services/approve-broadcast-sheet/approve-broadcast-sheet.service';
 import { ApproveBroadcastService } from './services/approve-broadcast/approve-broadcast.service';
@@ -27,7 +26,6 @@ export const serviceProviders: Provider[] = [
   MakeBroadcastService,
   GetClickableCopiesService,
   GetConvertableCopiesService,
-  CalculateSendingCopiesService,
   BroadcastAssignerService,
   ApproveBroadcastSheetService,
   ApproveBroadcastService,

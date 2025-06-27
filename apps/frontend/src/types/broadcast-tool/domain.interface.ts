@@ -4,5 +4,4 @@ export interface BroadcastDomain {
   domain: string;
   esp: string;
   broadcastCopies: BroadcastSendingDay[];
-  sendingCopiesPerDay: number;
 }

@@ -44,32 +44,57 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
 
   useEffect(() => {
     if (!spreadsheetId) return;
-
+  
     const fetchDomains = async () => {
       setIsLoading(true);
-
-      try {
-        const data = await getBroadcastDomainsList(spreadsheetId);
-
-        const grouped = mergeDomainStrategies(
-          data.sheets,
-          copyAssignmentStrategyRules.domainStrategies
-        );
-
-        setStrategiesBySheet(grouped);
-
-        // Оновлюємо лише актуальні домени
-        const updated = Object.values(grouped).flat();
-        onChange({ domainStrategies: updated });
-      } catch (error) {
-        console.error("Failed to load broadcast domains", error);
-      } finally {
-        setIsLoading(false);
+      const cacheKey = `broadcast_domains_${spreadsheetId}`;
+      const cacheRaw = localStorage.getItem(cacheKey);
+  
+      let data;
+      const now = Date.now();
+  
+      if (cacheRaw) {
+        try {
+          const cached = JSON.parse(cacheRaw);
+          if (now - cached.timestamp < 30 * 60 * 1000) {
+            data = cached.data;
+          }
+        } catch {
+          localStorage.removeItem(cacheKey);
+        }
       }
+  
+      if (!data) {
+        try {
+          data = await getBroadcastDomainsList(spreadsheetId);
+          localStorage.setItem(
+            cacheKey,
+            JSON.stringify({
+              timestamp: now,
+              data,
+            })
+          );
+        } catch (error) {
+          console.error("Failed to fetch broadcast domains:", error);
+          setIsLoading(false);
+          return;
+        }
+      }
+  
+      const grouped = mergeDomainStrategies(
+        data.sheets,
+        copyAssignmentStrategyRules.domainStrategies
+      );
+  
+      setStrategiesBySheet(grouped);
+      const updated = Object.values(grouped).flat();
+      onChange({ domainStrategies: updated });
+      setIsLoading(false);
     };
-
+  
     fetchDomains();
   }, [spreadsheetId]);
+  
 
   function mergeDomainStrategies(
     sheets: SheetData[],
