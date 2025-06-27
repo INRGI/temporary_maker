@@ -118,7 +118,6 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
           broadcast: sheet.domains.map((domain) => ({
             domain: domain.domain,
             esp: domain.esp,
-            sendingCopiesPerDay: domain.sendingCopiesPerDay,
             broadcastCopies: domain.broadcastCopies,
           })),
         })

@@ -22,6 +22,7 @@ export class GetCopiesWithConversionsService {
         query: `
            SELECT MAX(Date) as Date, 
            Copy, 
+           SUM(UC) as UC,
            SUM(Conversion) as Conversion
            FROM \`delta-daylight-316213.developers.base\`
            WHERE Date >= DATE_SUB(CURRENT_DATE(), INTERVAL ${daysBefore} DAY) 

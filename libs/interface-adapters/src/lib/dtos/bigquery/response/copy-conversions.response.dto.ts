@@ -3,5 +3,7 @@ export class CopyConversionsResponseDto {
 
   public Copy: string;
 
+  public UC: number;
+
   public Conversion: number;
 }

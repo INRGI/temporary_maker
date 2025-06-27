@@ -93,7 +93,7 @@ const Menu: React.FC = () => {
   };
 
   const fetchProductStatuses = async () => {
-    const cached = getCachedData<GetProductStatusesResponse>("product-statuses", 15 * 60 * 1000);
+    const cached = getCachedData<GetProductStatusesResponse>("product-statuses", 30 * 60 * 1000);
     if (cached) {
       setProductMondayStatuses(cached);
       return;
@@ -116,7 +116,7 @@ const Menu: React.FC = () => {
   
 
   const fetchDomainStatuses = async () => {
-    const cached = getCachedData<GetDomainStatusesResponse>("domain-statuses", 15 * 60 * 1000);
+    const cached = getCachedData<GetDomainStatusesResponse>("domain-statuses", 30 * 60 * 1000);
     if (cached) {
       setDomainMondayStatuses(cached);
       return;
@@ -127,7 +127,7 @@ const Menu: React.FC = () => {
       if (!response) throw new Error("Failed to fetch domain statuses");
   
       setDomainMondayStatuses(response);
-      setCachedData("domain-statuses", response, 15 * 60 * 1000);
+      setCachedData("domain-statuses", response, 30 * 60 * 1000);
     } catch (error) {
       toastError("Failed to fetch domain statuses");
       setDomainMondayStatuses({

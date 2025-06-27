@@ -16,7 +16,26 @@ export const ModalBody = styled.div`
 export const TabHeader = styled.div`
   display: flex;
   gap: 10px;
-  justify-content: center;
+  max-width: calc(100% - 40px);
+  justify-content: flex-start;
+  white-space: nowrap;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: #666 #2b2b2b;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #2b2b2b;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #666;
+    border-radius: 3px;
+  }
 `;
 
 export const TabButton = styled.button<{ active: boolean }>`
@@ -36,6 +55,7 @@ export const TabButton = styled.button<{ active: boolean }>`
 
 export const TabControls = styled.div`
   display: flex;
+  gap: 10px;
   justify-content: space-between;
   align-items: center;
   padding: 0;

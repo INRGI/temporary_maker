@@ -42,17 +42,20 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
   const [openDomains, setOpenDomains] = useState<Record<string, boolean>>({});
   const [isLoading, setIsLoading] = useState(false);
 
+  const [bulkType, setBulkType] =
+    useState<DomainStrategy["copiesTypes"][number]>("click");
+
   useEffect(() => {
     if (!spreadsheetId) return;
-  
+
     const fetchDomains = async () => {
       setIsLoading(true);
       const cacheKey = `broadcast_domains_${spreadsheetId}`;
       const cacheRaw = localStorage.getItem(cacheKey);
-  
+
       let data;
       const now = Date.now();
-  
+
       if (cacheRaw) {
         try {
           const cached = JSON.parse(cacheRaw);
@@ -63,7 +66,7 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
           localStorage.removeItem(cacheKey);
         }
       }
-  
+
       if (!data) {
         try {
           data = await getBroadcastDomainsList(spreadsheetId);
@@ -80,21 +83,20 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
           return;
         }
       }
-  
+
       const grouped = mergeDomainStrategies(
         data.sheets,
         copyAssignmentStrategyRules.domainStrategies
       );
-  
+
       setStrategiesBySheet(grouped);
       const updated = Object.values(grouped).flat();
       onChange({ domainStrategies: updated });
       setIsLoading(false);
     };
-  
+
     fetchDomains();
   }, [spreadsheetId]);
-  
 
   function mergeDomainStrategies(
     sheets: SheetData[],
@@ -162,6 +164,21 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
     });
   };
 
+  const handleAddTypeForAll = (type: DomainStrategy["copiesTypes"][number]) => {
+    const updated: Record<string, DomainStrategy[]> = {};
+
+    for (const [sheetName, domains] of Object.entries(strategiesBySheet)) {
+      updated[sheetName] = domains.map((domain) => ({
+        ...domain,
+        copiesTypes: [...domain.copiesTypes, type],
+      }));
+    }
+
+    setStrategiesBySheet(updated);
+    const allUpdated = Object.values(updated).flat();
+    onChange({ domainStrategies: allUpdated });
+  };
+
   const handleChangeType = (
     sheet: string,
     domainIndex: number,
@@ -195,6 +212,36 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
   return (
     <Wrapper>
       {isLoading && <Loader />}
+      {!isLoading && (
+        <div
+          style={{
+            display: "flex",
+            gap: 10,
+            alignItems: "center",
+            marginBottom: 12,
+          }}
+        >
+          <SmallSelect
+            value={bulkType}
+            onChange={(e) =>
+              setBulkType(
+                e.target.value as DomainStrategy["copiesTypes"][number]
+              )
+            }
+            style={{ maxWidth: 180 }}
+          >
+            {["click", "conversion", "test", "warmup"].map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </SmallSelect>
+          <AddTypeButton onClick={() => handleAddTypeForAll(bulkType)}>
+            + Add {bulkType} to All
+          </AddTypeButton>
+        </div>
+      )}
+
       {!isLoading &&
         Object.entries(strategiesBySheet).map(([sheetName, strategies]) => (
           <CollapsibleTab key={sheetName}>
