@@ -1,4 +1,4 @@
 export interface Strategy {
-  copiesPerDay: number;
+  domain: string;
   copiesTypes: Array<'click' | 'conversion' | 'test' | 'warmup'>;
 }

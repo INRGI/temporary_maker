@@ -21,7 +21,7 @@ export class BroadcastController {
     private readonly getBroadcastDomainsListService: GetBroadcastDomainsListService
   ) {}
 
-  @Get("broadcasts-list/:spreadsheetId")
+  @Get("domains/:spreadsheetId")
   public async getBroadcastDomainsList(
     @Param("spreadsheetId") spreadsheetId: string
   ): Promise<GetBroadcastDomainsListResponseDto> {
@@ -30,7 +30,7 @@ export class BroadcastController {
     });
   }
 
-  @Get("broadcast-domain-list")
+  @Get("broadcasts-list")
   public async getBroadcastsList(): Promise<GetBroadcastsListResponseDto> {
     return await this.getBroadcastsListService.execute();
   }

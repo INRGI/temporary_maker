@@ -1,34 +1,256 @@
+import { useEffect, useState } from "react";
+import { getBroadcastDomainsList } from "../../../api/broadcast.api";
 import { CopyAssignmentStrategyRules } from "../../../types/broadcast-tool";
-import CopyAssignmentStrategiesEditor from "../CopyAssignmentStrategiesEditor";
+import Loader from "../../Common/Loader";
 import {
-  InputGroup,
-  RuleContainer,
-} from "../DomainRulesTab/DomainRulesTab.styled";
+  AddTypeButton,
+  CollapsibleTab,
+  Column,
+  RemoveButton,
+  ResetButton,
+  SmallSelect,
+  StrategyRow,
+  TabHeader,
+  Wrapper,
+} from "./CopyAssignmentStrategyRulesTab.styled";
 
-interface CopyAssignmentStrategyRulesTabProps {
-  copyAssignmentStrategyRules: CopyAssignmentStrategyRules;
-  onChange: (updated: CopyAssignmentStrategyRules) => void;
+interface DomainStrategy {
+  domain: string;
+  copiesTypes: ("click" | "conversion" | "test" | "warmup")[];
 }
 
-const CopyAssignmentStrategyRulesTab: React.FC<
-  CopyAssignmentStrategyRulesTabProps
-> = ({ copyAssignmentStrategyRules, onChange }) => {
+interface Props {
+  spreadsheetId: string;
+  copyAssignmentStrategyRules: CopyAssignmentStrategyRules;
+  onChange: (items: CopyAssignmentStrategyRules) => void;
+}
+
+type SheetData = {
+  sheetName: string;
+  domains: string[];
+};
+
+const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
+  spreadsheetId,
+  copyAssignmentStrategyRules,
+  onChange,
+}) => {
+  const [strategiesBySheet, setStrategiesBySheet] = useState<
+    Record<string, DomainStrategy[]>
+  >({});
+  const [openSheets, setOpenSheets] = useState<Record<string, boolean>>({});
+  const [openDomains, setOpenDomains] = useState<Record<string, boolean>>({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!spreadsheetId) return;
+
+    const fetchDomains = async () => {
+      setIsLoading(true);
+
+      try {
+        const data = await getBroadcastDomainsList(spreadsheetId);
+
+        const grouped = mergeDomainStrategies(
+          data.sheets,
+          copyAssignmentStrategyRules.domainStrategies
+        );
+
+        setStrategiesBySheet(grouped);
+
+        // Оновлюємо лише актуальні домени
+        const updated = Object.values(grouped).flat();
+        onChange({ domainStrategies: updated });
+      } catch (error) {
+        console.error("Failed to load broadcast domains", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDomains();
+  }, [spreadsheetId]);
+
+  function mergeDomainStrategies(
+    sheets: SheetData[],
+    existing: DomainStrategy[]
+  ): Record<string, DomainStrategy[]> {
+    const existingMap = new Map<string, DomainStrategy>();
+    existing.forEach((strategy) => {
+      existingMap.set(strategy.domain, strategy);
+    });
+
+    const grouped: Record<string, DomainStrategy[]> = {};
+
+    for (const sheet of sheets) {
+      grouped[sheet.sheetName] = sheet.domains.map((domain) => {
+        const found = existingMap.get(domain);
+        return {
+          domain,
+          copiesTypes: found?.copiesTypes || [],
+        };
+      });
+    }
+
+    return grouped;
+  }
+
+  const toggleSheet = (sheetName: string) => {
+    setOpenSheets((prev) => ({
+      ...prev,
+      [sheetName]: !prev[sheetName],
+    }));
+  };
+
+  const toggleDomain = (domain: string) => {
+    setOpenDomains((prev) => ({
+      ...prev,
+      [domain]: !prev[domain],
+    }));
+  };
+
+  const updateDomain = (
+    sheet: string,
+    domainIndex: number,
+    newData: DomainStrategy
+  ) => {
+    const updated = { ...strategiesBySheet };
+    updated[sheet][domainIndex] = newData;
+    setStrategiesBySheet(updated);
+
+    const allUpdated = Object.values(updated).flat();
+    onChange({ domainStrategies: allUpdated });
+  };
+
+  const handleReset = (sheet: string, index: number) => {
+    updateDomain(sheet, index, {
+      ...strategiesBySheet[sheet][index],
+      copiesTypes: [],
+    });
+  };
+
+  const handleAddType = (sheet: string, index: number) => {
+    const current = strategiesBySheet[sheet][index];
+    updateDomain(sheet, index, {
+      ...current,
+      copiesTypes: [...current.copiesTypes, "click"],
+    });
+  };
+
+  const handleChangeType = (
+    sheet: string,
+    domainIndex: number,
+    typeIndex: number,
+    value: string
+  ) => {
+    const domain = strategiesBySheet[sheet][domainIndex];
+    const updatedTypes = [...domain.copiesTypes];
+    updatedTypes[typeIndex] = value as DomainStrategy["copiesTypes"][number];
+
+    updateDomain(sheet, domainIndex, {
+      ...domain,
+      copiesTypes: updatedTypes,
+    });
+  };
+
+  const handleRemoveType = (
+    sheet: string,
+    domainIndex: number,
+    typeIndex: number
+  ) => {
+    const domain = strategiesBySheet[sheet][domainIndex];
+    const updatedTypes = domain.copiesTypes.filter((_, i) => i !== typeIndex);
+
+    updateDomain(sheet, domainIndex, {
+      ...domain,
+      copiesTypes: updatedTypes,
+    });
+  };
+
   return (
-    <RuleContainer>
-      <InputGroup>
-        <CopyAssignmentStrategiesEditor
-          items={copyAssignmentStrategyRules.strategies}
-          onChange={(strategies) =>
-            onChange({
-              ...copyAssignmentStrategyRules,
-              strategies,
-            })
-          }
-          title="Copy Assignment Strategies"
-        />
-      </InputGroup>
-    </RuleContainer>
+    <Wrapper>
+      {isLoading && <Loader />}
+      {!isLoading &&
+        Object.entries(strategiesBySheet).map(([sheetName, strategies]) => (
+          <CollapsibleTab key={sheetName}>
+            <TabHeader
+              active={!!openSheets[sheetName]}
+              onClick={() => toggleSheet(sheetName)}
+            >
+              {sheetName}
+            </TabHeader>
+
+            {openSheets[sheetName] &&
+              strategies.map((strategy, index) => (
+                <CollapsibleTab key={strategy.domain}>
+                  <TabHeader
+                    active={!!openDomains[strategy.domain]}
+                    onClick={() => toggleDomain(strategy.domain)}
+                  >
+                    {strategy.domain}
+                  </TabHeader>
+
+                  {openDomains[strategy.domain] && (
+                    <StrategyRow>
+                      <Column>
+                        {strategy.copiesTypes.map((type, typeIdx) => (
+                          <div
+                            key={typeIdx}
+                            style={{
+                              display: "flex",
+                              gap: 8,
+                              marginBottom: 6,
+                            }}
+                          >
+                            <SmallSelect
+                              value={type}
+                              onChange={(e) =>
+                                handleChangeType(
+                                  sheetName,
+                                  index,
+                                  typeIdx,
+                                  e.target.value
+                                )
+                              }
+                            >
+                              {["click", "conversion", "test", "warmup"].map(
+                                (t) => (
+                                  <option key={t} value={t}>
+                                    {t}
+                                  </option>
+                                )
+                              )}
+                            </SmallSelect>
+                            <RemoveButton
+                              onClick={() =>
+                                handleRemoveType(sheetName, index, typeIdx)
+                              }
+                            >
+                              ✕
+                            </RemoveButton>
+                          </div>
+                        ))}
+                        <AddTypeButton
+                          onClick={() => handleAddType(sheetName, index)}
+                        >
+                          + Add type
+                        </AddTypeButton>
+                      </Column>
+                      <Column style={{ maxWidth: 150 }}>
+                        <ResetButton
+                          onClick={() => handleReset(sheetName, index)}
+                        >
+                          Reset strategy
+                        </ResetButton>
+                      </Column>
+                    </StrategyRow>
+                  )}
+                </CollapsibleTab>
+              ))}
+          </CollapsibleTab>
+        ))}
+    </Wrapper>
   );
 };
 
-export default CopyAssignmentStrategyRulesTab;
+export default CopyAssignmentStrategiesEditor;

@@ -84,7 +84,7 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
         domainRevenueDaysInterval: 0,
       },
       copyAssignmentStrategyRules: {
-        strategies: [],
+        domainStrategies: [],
       },
     });
   const [isLoading, setIsLoading] = useState(false);
@@ -170,9 +170,8 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
       case "copy-assignment-strategy-rules":
         return (
           <CopyAssignmentStrategyRulesTab
-            copyAssignmentStrategyRules={
-              broadcastRules.copyAssignmentStrategyRules
-            }
+            spreadsheetId={broadcastRules.broadcastSpreadsheetId}
+            copyAssignmentStrategyRules={broadcastRules.copyAssignmentStrategyRules}
             onChange={(updated) =>
               handleChange("copyAssignmentStrategyRules", updated)
             }
@@ -214,6 +213,12 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
         </BlockHeader>
         <TabsContainer>
           <TabButton
+            active={activeTab === "general"}
+            onClick={() => setActiveTab("general")}
+          >
+            General
+          </TabButton>
+          <TabButton
             active={activeTab === "domain-rules"}
             onClick={() => setActiveTab("domain-rules")}
           >
@@ -249,18 +254,14 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
           >
             Analytic Selection Rules
           </TabButton>
-          <TabButton
-            active={activeTab === "copy-assignment-strategy-rules"}
-            onClick={() => setActiveTab("copy-assignment-strategy-rules")}
-          >
-            Copy Assignment Strategy Rules
-          </TabButton>
-          <TabButton
-            active={activeTab === "general"}
-            onClick={() => setActiveTab("general")}
-          >
-            General
-          </TabButton>
+          {broadcastRules.broadcastSpreadsheetId && (
+            <TabButton
+              active={activeTab === "copy-assignment-strategy-rules"}
+              onClick={() => setActiveTab("copy-assignment-strategy-rules")}
+            >
+              Copy Assignment Strategy Rules
+            </TabButton>
+          )}
         </TabsContainer>
         <Container>{renderContent()}</Container>
       </CreateContainer>

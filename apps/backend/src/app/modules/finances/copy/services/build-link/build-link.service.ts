@@ -22,31 +22,31 @@ export class BuildLinkService {
         trackingType: linkUrl.trackingType,
       })
     
-      if (!trackingData) {
+      if (!trackingData || !trackingData.trackingData) {
         return 'urlhere';
       }
     }
 
-    if (linkUrl.productCode === 'PRODUCT#IMAGE') {
+    if (linkUrl.productCode === 'PRODUCT#IMAGE' && trackingData.trackingData) {
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${product}${productLift}${productImage}`;
     }
 
-    if (linkUrl.productCode === 'IMG0000_#IMAGE') {
+    if (linkUrl.productCode === 'IMG0000_#IMAGE' && trackingData.trackingData) {
       if(!trackingData.imgData) return 'urlhere';
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}IMG${trackingData.imgData}_${productLift}${productImage}`;
     }
 
-    if (linkUrl.productCode === '0000_#IMAGE') {
+    if (linkUrl.productCode === '0000_#IMAGE' && trackingData.trackingData) {
       if(!trackingData.imgData) return 'urlhere';
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.imgData}_${productLift}${productImage}`;
     }
 
-    if (linkUrl.productCode === '000_#IMAGE') {
+    if (linkUrl.productCode === '000_#IMAGE' && trackingData.trackingData) {
       if(!trackingData.imgData) return 'urlhere';
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.imgData.slice(1)}_${productLift}${productImage}`;
     }
 
-    if (linkUrl.productCode === 'TRACKINGID_#IMAGE') {
+    if (linkUrl.productCode === 'TRACKINGID_#IMAGE' && trackingData.trackingData) {
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.trackingData}_${productLift}${productImage}`;
     }
 

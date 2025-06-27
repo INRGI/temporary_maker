@@ -239,6 +239,7 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
             "Copy Assignment Strategy Rules",
             "copyAssignmentStrategyRules",
             <CopyAssignmentStrategyRulesTab
+              spreadsheetId={broadcastRules.broadcastSpreadsheetId}
               copyAssignmentStrategyRules={
                 broadcastRules.copyAssignmentStrategyRules
               }
