@@ -14,6 +14,7 @@ import {
   Wrapper,
 } from "./CopyAssignmentStrategyRulesTab.styled";
 import ConfirmationModal from "../ConfirmationModal";
+import { toastError, toastSuccess } from "../../../helpers/toastify";
 
 interface DomainStrategy {
   domain: string;
@@ -80,7 +81,7 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
             })
           );
         } catch (error) {
-          console.error("Failed to fetch broadcast domains:", error);
+          toastError("Failed to fetch domains");
           setIsLoading(false);
           return;
         }
@@ -179,6 +180,7 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
     setStrategiesBySheet(updated);
     const allUpdated = Object.values(updated).flat();
     onChange({ domainStrategies: allUpdated });
+    toastSuccess("Added successfully");
   };
 
   const handleChangeType = (
@@ -230,7 +232,6 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
     <Wrapper>
       {isLoading && <Loader />}
       {!isLoading && (
-        <>
           <div
             style={{
               display: "flex",
@@ -257,9 +258,8 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
             <AddTypeButton onClick={() => handleAddTypeForAll(bulkType)}>
               + Add {bulkType} to All
             </AddTypeButton>
+            <ResetButton onClick={handleRemoveAllTypes}>Reset All</ResetButton>
           </div>
-          <ResetButton onClick={handleRemoveAllTypes}>Reset All</ResetButton>
-        </>
       )}
 
       {!isLoading &&

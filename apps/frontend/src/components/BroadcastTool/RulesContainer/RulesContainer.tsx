@@ -58,7 +58,6 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [broadcastRules, setBroadcastRules] = useState(broadcastEntity);
   const contentRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const [heights, setHeights] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(false);
 
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -84,16 +83,6 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
       [key]: value,
     }));
   };
-
-  useEffect(() => {
-    const newHeights: Record<string, number> = {};
-    Object.entries(contentRefs.current).forEach(([key, ref]) => {
-      if (ref) {
-        newHeights[key] = ref.scrollHeight;
-      }
-    });
-    setHeights(newHeights);
-  }, [broadcastRules, openSection]);
 
   const handleUpdateEntity = async () => {
     try {
@@ -122,10 +111,7 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
         {label}
         {openSection === label ? <FiMinus size={18} /> : <FiPlus size={18} />}
       </SectionHeader>
-      <SectionContentWrapper
-        isOpen={openSection === label}
-        maxHeight={heights[label] || 0}
-      >
+      <SectionContentWrapper isOpen={openSection === label}>
         <SectionInner ref={(el) => (contentRefs.current[label] = el)}>
           {component}
         </SectionInner>

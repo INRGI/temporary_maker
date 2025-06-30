@@ -41,7 +41,7 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
   productMondayStatuses,
   broadcastsSheets,
 }) => {
-  const [activeTab, setActiveTab] = useState("domain-rules");
+  const [activeTab, setActiveTab] = useState("general");
   const [broadcastRules, setBroadcastRules] =
     useState<CreateBroadcastRulesRequest>({
       name: "",

@@ -2,15 +2,20 @@ import styled from "@emotion/styled";
 
 export const Wrapper = styled.div`
   margin: 0;
-  width: calc(100% - 32px);
-  padding: 16px;
-  background-color: #2b2b2b;
-  border: 1px solid #4f4f4f;
-  border-radius: 8px;
+  padding: 0;
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  padding-bottom: 20px;
 `;
 
 export const CollapsibleTab = styled.div`
-  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `;
 
 export const TabHeader = styled.button<{ active: boolean }>`
@@ -32,11 +37,11 @@ export const TabHeader = styled.button<{ active: boolean }>`
 export const StrategyRow = styled.div`
   display: flex;
   gap: 10px;
-  margin-top: 10px;
   align-items: flex-start;
   background-color: #1f1f1f;
   padding: 10px;
   border-radius: 6px;
+  width: calc(100% - 52px);
 `;
 
 export const Column = styled.div`

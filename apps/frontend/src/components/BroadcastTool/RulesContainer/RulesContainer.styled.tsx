@@ -64,12 +64,9 @@ export const SectionInner = styled.div`
   color: white;
 `;
 
-export const SectionContentWrapper = styled.div<{
-  maxHeight: number;
-  isOpen: boolean;
-}>`
-  max-height: ${({ maxHeight, isOpen }) => (isOpen ? `${maxHeight}px` : "0")};
-  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+export const SectionContentWrapper = styled.div<{ isOpen: boolean }>`
+  height: ${({ isOpen }) => (isOpen ? "auto" : "0")};
   overflow: hidden;
-  transition: all 0.3s ease;
+  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+  transition: opacity 0.3s ease;
 `;
