@@ -7,6 +7,7 @@ import {
 export interface CheckIfCopyCanBeSendPayload {
   domain: string;
   copyName: string;
+  sheetName: string;
   broadcast: GetAllDomainsResponseDto;
   sendingDate: string;
   usageRules: UsageRules;

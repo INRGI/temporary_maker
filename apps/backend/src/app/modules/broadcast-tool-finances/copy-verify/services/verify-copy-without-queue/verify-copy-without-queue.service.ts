@@ -6,13 +6,11 @@ import { CheckIfCopyCanBeSendService } from "../../../rules/services/check-if-co
 import { CheckIfDomainActiveService } from "../../../rules/services/check-if-domain-active/check-if-domain-active.service";
 import { CheckIfCopyBlacklistedService } from "../../../rules/services/check-if-copy-blacklisted/check-if-copy-blacklisted.service";
 import { VerifyCopyForDomainResponseDto } from "@epc-services/interface-adapters";
-import { VerifyWarmupCopyForDomainPayload } from "./verify-warmup-copy-for-domain.payload";
-import { CheckIfDomainWarmupService } from "../../../rules/services/check-if-domain-warmup/check-if-domain-warmup.service";
-import { CheckWarmupCopyLimitsService } from "../../../rules/services/check-warmup-copy-limits/check-warmup-copy-limits.service";
 import { CheckIfProductPriorityService } from "../../../rules/services/check-if-product-priority/check-if-product-priority.service";
+import { VerifyCopyWithoutQueuePayload } from "./verify-copy-without-queue.payload";
 
 @Injectable()
-export class VerifyWarmupCopyForDomainService {
+export class VerifyCopyWithoutQueueService {
   constructor(
     private readonly checkCopyLastSendService: CheckCopyLastSendService,
     private readonly checkProductLastSendService: CheckProductLastSendService,
@@ -20,12 +18,10 @@ export class VerifyWarmupCopyForDomainService {
     private readonly checkIfCopyCanBeSendService: CheckIfCopyCanBeSendService,
     private readonly checkIfDomainActiveService: CheckIfDomainActiveService,
     private readonly checkIfCopyBlacklistedService: CheckIfCopyBlacklistedService,
-    private readonly checkIfDomainWarmupService: CheckIfDomainWarmupService,
-    private readonly checkWarmupCopyLimitsService: CheckWarmupCopyLimitsService,
     private readonly checkIfProductPriorityService: CheckIfProductPriorityService
   ) {}
   public async execute(
-    payload: VerifyWarmupCopyForDomainPayload
+    payload: VerifyCopyWithoutQueuePayload
   ): Promise<VerifyCopyForDomainResponseDto> {
     const {
       broadcastDomain,
@@ -62,27 +58,6 @@ export class VerifyWarmupCopyForDomainService {
       return { isValid: false, broadcastDomain };
     }
 
-    const checkWarmupCopyLimitsResult =
-      await this.checkWarmupCopyLimitsService.execute({
-        copyName,
-        broadcast,
-        sendingDate,
-      });
-
-    if (!checkWarmupCopyLimitsResult) {
-      return { isValid: false, broadcastDomain };
-    }
-
-    const checkIfDomainWarmupResult =
-      await this.checkIfDomainWarmupService.execute({
-        domain: broadcastDomain.domain,
-        domainsData,
-      });
-
-    if (!checkIfDomainWarmupResult) {
-      return { isValid: false, broadcastDomain };
-    }
-
     const checkIfProductCanBeSendResult =
       await this.checkIfProductCanBeSendService.execute({
         copyName,
@@ -98,19 +73,42 @@ export class VerifyWarmupCopyForDomainService {
       return { isValid: false, broadcastDomain };
     }
 
-    const checkIfCopyCanBeSendResult =
-      await this.checkIfCopyCanBeSendService.execute({
-        copyName,
-        broadcast,
-        sheetName,
-        usageRules: broadcastRules.usageRules,
-        domain: broadcastDomain.domain,
-        sendingDate,
-        productRules: broadcastRules.productRules,
-      });
+    const isCopyHasSendingLimits =
+      broadcastRules.productRules.copySendingLimitPerDay.find(
+        (copySendingLimitPerDay) => {
+          if (
+            this.cleanCopyName(copySendingLimitPerDay.copyName) ===
+            this.cleanCopyName(copyName)
+          ) {
+            return true;
+          }
+        }
+      );
 
-    if (!checkIfCopyCanBeSendResult) {
-      return { isValid: false, broadcastDomain };
+    if (isCopyHasSendingLimits) {
+      let sendingCount = 0;
+
+      for (const sheet of broadcast.sheets) {
+        for (const domain of sheet.domains) {
+          const sendingDateObj = domain.broadcastCopies.find(
+            (date) => date.date === sendingDate
+          );
+
+          if (
+            sendingDateObj &&
+            sendingDateObj.copies.find(
+              (copy) =>
+                this.cleanCopyName(copy.name) === this.cleanCopyName(copyName)
+            )
+          ) {
+            sendingCount++;
+          }
+        }
+      }
+
+      if (sendingCount >= isCopyHasSendingLimits.limit) {
+        return { isValid: false, broadcastDomain };
+      }
     }
 
     const checkCopyLastSendResult = await this.checkCopyLastSendService.execute(
@@ -202,5 +200,13 @@ export class VerifyWarmupCopyForDomainService {
     const product = nameMatch ? nameMatch[0] : "";
 
     return product;
+  }
+
+  private cleanCopyName(copyName: string): string {
+    const nameMatch = copyName.match(/^[a-zA-Z]+/);
+    const product = nameMatch ? nameMatch[0] : "";
+    const liftMatch = copyName.match(/[a-zA-Z]+(\d+)/);
+    const productLift = liftMatch ? liftMatch[1] : "";
+    return `${product}${productLift}`;
   }
 }

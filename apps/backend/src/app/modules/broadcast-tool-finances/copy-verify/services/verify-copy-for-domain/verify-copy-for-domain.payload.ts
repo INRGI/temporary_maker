@@ -9,6 +9,7 @@ import { BroadcastRulesProps } from '../../../rules/domain/types/broadcast-rules
 export interface VerifyCopyForDomainPayload {
   broadcast: GetAllDomainsResponseDto;
   broadcastDomain: BroadcastDomain;
+  sheetName: string;
   copyName: string;
   sendingDate: string;
   priorityCopiesData: string[];

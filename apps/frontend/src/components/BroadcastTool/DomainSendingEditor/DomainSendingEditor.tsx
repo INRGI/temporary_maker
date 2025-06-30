@@ -72,13 +72,6 @@ const Title = styled.p`
   padding-bottom: 20px;
 `;
 
-const EmptyState = styled.div`
-  color: #999;
-  font-size: 14px;
-  text-align: center;
-  margin-bottom: 12px;
-`;
-
 interface DomainSendingItem {
   parentCompany: string;
   allowedMondayStatuses: string[];

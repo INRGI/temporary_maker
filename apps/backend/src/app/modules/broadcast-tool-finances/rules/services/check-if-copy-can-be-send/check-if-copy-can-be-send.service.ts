@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { CheckIfCopyCanBeSendPayload } from './check-if-copy-can-be-send.payload';
+import { Injectable } from "@nestjs/common";
+import { CheckIfCopyCanBeSendPayload } from "./check-if-copy-can-be-send.payload";
 
 @Injectable()
 export class CheckIfCopyCanBeSendService {
@@ -9,6 +9,7 @@ export class CheckIfCopyCanBeSendService {
       broadcast,
       usageRules,
       domain,
+      sheetName,
       sendingDate,
       productRules,
     } = payload;
@@ -17,6 +18,10 @@ export class CheckIfCopyCanBeSendService {
     if (!cleanCopyName) return false;
 
     let sendingCount = 0;
+
+    const tabCopyLimit = usageRules.copyTabLimit?.find(
+      (tab) => tab.sheetName === sheetName
+    );
 
     for (const sheet of broadcast.sheets) {
       for (const domain of sheet.domains) {
@@ -35,7 +40,7 @@ export class CheckIfCopyCanBeSendService {
       }
     }
 
-    if (sendingCount >= usageRules.generalTabCopyLimit) {
+    if (sendingCount >= tabCopyLimit.limit) {
       return false;
     }
 
@@ -81,9 +86,9 @@ export class CheckIfCopyCanBeSendService {
 
   private cleanCopyName(copyName: string): string {
     const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : '';
+    const product = nameMatch ? nameMatch[0] : "";
     const liftMatch = copyName.match(/[a-zA-Z]+(\d+)/);
-    const productLift = liftMatch ? liftMatch[1] : '';
+    const productLift = liftMatch ? liftMatch[1] : "";
     return `${product}${productLift}`;
   }
 }

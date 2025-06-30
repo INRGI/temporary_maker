@@ -26,6 +26,7 @@ export class VerifyCopyForDomainService {
     const {
       broadcastDomain,
       copyName,
+      sheetName,
       broadcastRules,
       sendingDate,
       productsData,
@@ -76,6 +77,7 @@ export class VerifyCopyForDomainService {
       await this.checkIfCopyCanBeSendService.execute({
         copyName,
         broadcast,
+        sheetName,
         usageRules: broadcastRules.usageRules,
         domain: broadcastDomain.domain,
         sendingDate,

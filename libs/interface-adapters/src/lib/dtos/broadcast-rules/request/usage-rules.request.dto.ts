@@ -1,4 +1,5 @@
-import { IsNumber } from "class-validator";
+import { IsArray, IsNumber } from "class-validator";
+import { CopyTabLimitRequestDto } from "./copy-tab-limit.requst.dto";
 
 export class UsageRulesRequestDto {
   @IsNumber()
@@ -7,6 +8,6 @@ export class UsageRulesRequestDto {
   @IsNumber()
   public copyMinDelayPerDays: number;
 
-  @IsNumber()
-  public generalTabCopyLimit: number;
+  @IsArray()
+  public copyTabLimit: CopyTabLimitRequestDto[];
 }

@@ -145,6 +145,7 @@ const LaunchBroadcastModal: React.FC<LaunchBroadcastModalProps> = ({
         toDate: formatDateToYYYYMMDD(toDate),
       });
       if (!result || !result.sheets || !result.sheets.length) {
+        setIsLoading(false);
         return toastError("Failed to make broadcast");
       }
       

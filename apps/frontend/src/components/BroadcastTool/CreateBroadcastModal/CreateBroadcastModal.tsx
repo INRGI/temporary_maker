@@ -54,7 +54,7 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
       usageRules: {
         productMinDelayPerDays: 0,
         copyMinDelayPerDays: 0,
-        generalTabCopyLimit: 0,
+        copyTabLimit: [],
       },
       testingRules: {
         maxTestCopiesForDomain: 0,
@@ -106,6 +106,7 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
       onClose();
     } catch (error) {
       toastError("Failed to create broadcast rule");
+      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
@@ -132,6 +133,7 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
         return (
           <UsageRulesTab
             usageRules={broadcastRules.usageRules}
+            spreadsheetId={broadcastRules.broadcastSpreadsheetId}
             onChange={(updated) => handleChange("usageRules", updated)}
           />
         );
@@ -171,7 +173,9 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
         return (
           <CopyAssignmentStrategyRulesTab
             spreadsheetId={broadcastRules.broadcastSpreadsheetId}
-            copyAssignmentStrategyRules={broadcastRules.copyAssignmentStrategyRules}
+            copyAssignmentStrategyRules={
+              broadcastRules.copyAssignmentStrategyRules
+            }
             onChange={(updated) =>
               handleChange("copyAssignmentStrategyRules", updated)
             }
@@ -224,12 +228,14 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
           >
             Domain Rules
           </TabButton>
-          <TabButton
-            active={activeTab === "usage-rules"}
-            onClick={() => setActiveTab("usage-rules")}
-          >
-            Usage Rules
-          </TabButton>
+          {broadcastRules.broadcastSpreadsheetId && (
+            <TabButton
+              active={activeTab === "usage-rules"}
+              onClick={() => setActiveTab("usage-rules")}
+            >
+              Usage Rules
+            </TabButton>
+          )}
           <TabButton
             active={activeTab === "testing-rules"}
             onClick={() => setActiveTab("testing-rules")}

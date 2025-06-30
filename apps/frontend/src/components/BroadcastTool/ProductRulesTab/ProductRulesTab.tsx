@@ -140,6 +140,27 @@ const ProductRulesTab: React.FC<ProductRulesTabProps> = ({
             }
           />
         </InputGroup>
+
+        <InputGroup>
+          <ArrayInput
+            items={productRules.copyMinLimitPerDay.map((item) => ({
+              key: item.copyName,
+              value: item.limit.toString(),
+            }))}
+            keyLabel="Copy Name"
+            valueLabel="Limit"
+            title="Copies Min Limit Per Day"
+            onChange={(newItems) =>
+              onChange({
+                ...productRules,
+                copyMinLimitPerDay: newItems.map((item) => ({
+                  copyName: item.key,
+                  limit: Number(item.value),
+                })),
+              })
+            }
+          />
+        </InputGroup>
       </LeftContainer>
 
       <RightContainer>
@@ -167,27 +188,6 @@ const ProductRulesTab: React.FC<ProductRulesTabProps> = ({
             title="Domain Sending Rules"
             parentCompanies={domainMondayStatuses.uniqueParentCompanies}
             mondayStatuses={productMondayStatuses.domainSendings}
-          />
-        </InputGroup>
-
-        <InputGroup>
-          <ArrayInput
-            items={productRules.copyMinLimitPerDay.map((item) => ({
-              key: item.copyName,
-              value: item.limit.toString(),
-            }))}
-            keyLabel="Copy Name"
-            valueLabel="Limit"
-            title="Copies Min Limit Per Day"
-            onChange={(newItems) =>
-              onChange({
-                ...productRules,
-                copyMinLimitPerDay: newItems.map((item) => ({
-                  copyName: item.key,
-                  limit: Number(item.value),
-                })),
-              })
-            }
           />
         </InputGroup>
       </RightContainer>

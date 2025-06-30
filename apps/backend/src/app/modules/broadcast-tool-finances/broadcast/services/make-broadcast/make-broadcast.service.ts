@@ -211,6 +211,7 @@ export class MakeBroadcastService {
           const updatedDomain = await this.broadcastAssignerService.execute({
             domain: sheet.domains[i],
             broadcastRules: broadcastRule,
+            sheetName: sheet.sheetName,
             broadcast,
             date,
             clickableCopies,

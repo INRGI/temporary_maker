@@ -1,5 +1,7 @@
+import { CopyTabLimit } from "./copy-tab-limit.interface";
+
 export interface UsageRules {
   productMinDelayPerDays: number;
   copyMinDelayPerDays: number;
-  generalTabCopyLimit: number;
+  copyTabLimit: CopyTabLimit[];
 }

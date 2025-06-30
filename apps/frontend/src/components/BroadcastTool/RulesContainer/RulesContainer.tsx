@@ -181,6 +181,7 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
             "Usage Rules",
             "usageRules",
             <UsageRulesTab
+              spreadsheetId={broadcastRules.broadcastSpreadsheetId}
               usageRules={broadcastRules.usageRules}
               onChange={(updated) => handleChange("usageRules", updated)}
             />

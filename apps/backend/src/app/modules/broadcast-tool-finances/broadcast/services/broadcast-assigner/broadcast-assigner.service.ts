@@ -4,6 +4,7 @@ import { Injectable } from "@nestjs/common";
 import { VerifyCopyForDomainService } from "../../../copy-verify/services/verify-copy-for-domain/verify-copy-for-domain.service";
 import { VerifyWarmupCopyForDomainService } from "../../../copy-verify/services/verify-warmup-copy-for-domain/verify-warmup-copy-for-domain.service";
 import { getCopyStrategyForDomain } from "../../utils/getCopyStrategyForDomain";
+import { VerifyCopyWithoutQueueService } from "../../../copy-verify/services/verify-copy-without-queue/verify-copy-without-queue.service";
 
 const MIN_REQUIRED_COPIES_FOR_QUEUE = 2;
 
@@ -13,7 +14,8 @@ export class BroadcastAssignerService {
     private readonly clickValidator: VerifyCopyForDomainService,
     private readonly conversionValidator: VerifyCopyForDomainService,
     private readonly testValidator: VerifyCopyForDomainService,
-    private readonly warmUpValidator: VerifyWarmupCopyForDomainService
+    private readonly warmUpValidator: VerifyWarmupCopyForDomainService,
+    private readonly withoutQueueValidator:VerifyCopyWithoutQueueService,
   ) {}
 
   public async execute(
@@ -23,6 +25,7 @@ export class BroadcastAssignerService {
     const {
       broadcastRules,
       date,
+      sheetName,
       clickableCopies,
       convertibleCopies,
       testCopies,
@@ -55,10 +58,11 @@ export class BroadcastAssignerService {
         const currentCount = currentDay?.copies.filter((c) => c.name === copyName).length || 0;
         if (currentCount >= limit) continue;
 
-        const result = await this.clickValidator.execute({
+        const result = await this.withoutQueueValidator.execute({
           broadcast,
           broadcastDomain: domain,
           copyName,
+          sheetName,
           broadcastRules,
           sendingDate: date,
           productsData,
@@ -95,6 +99,7 @@ export class BroadcastAssignerService {
           broadcast,
           broadcastDomain: domain,
           copyName,
+          sheetName,
           broadcastRules,
           sendingDate: date,
           productsData,

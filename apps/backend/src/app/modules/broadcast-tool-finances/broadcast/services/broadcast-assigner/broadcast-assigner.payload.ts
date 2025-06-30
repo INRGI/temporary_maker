@@ -9,6 +9,7 @@ import { BroadcastRulesProps } from "../../../rules/domain/types/broadcast-rules
 
 export interface BroadcastAssignerPayload {
   domain: BroadcastDomain;
+  sheetName: string;
   broadcast: GetAllDomainsResponseDto;
   broadcastRules: BroadcastRulesProps;
   date: string;
