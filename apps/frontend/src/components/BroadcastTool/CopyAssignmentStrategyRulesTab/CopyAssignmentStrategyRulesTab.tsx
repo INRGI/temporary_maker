@@ -13,6 +13,7 @@ import {
   TabHeader,
   Wrapper,
 } from "./CopyAssignmentStrategyRulesTab.styled";
+import ConfirmationModal from "../ConfirmationModal";
 
 interface DomainStrategy {
   domain: string;
@@ -41,6 +42,7 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
   const [openSheets, setOpenSheets] = useState<Record<string, boolean>>({});
   const [openDomains, setOpenDomains] = useState<Record<string, boolean>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isConfirmationOpen, setConfirmationOpen] = useState(false);
 
   const [bulkType, setBulkType] =
     useState<DomainStrategy["copiesTypes"][number]>("click");
@@ -195,6 +197,21 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
     });
   };
 
+  const handleRemoveAllTypes = () => {
+    const updated: Record<string, DomainStrategy[]> = {};
+
+    for (const [sheetName, domains] of Object.entries(strategiesBySheet)) {
+      updated[sheetName] = domains.map((domain) => ({
+        ...domain,
+        copiesTypes: [],
+      }));
+    }
+
+    setStrategiesBySheet(updated);
+    const allUpdated = Object.values(updated).flat();
+    onChange({ domainStrategies: allUpdated });
+  };
+
   const handleRemoveType = (
     sheet: string,
     domainIndex: number,
@@ -213,33 +230,36 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
     <Wrapper>
       {isLoading && <Loader />}
       {!isLoading && (
-        <div
-          style={{
-            display: "flex",
-            gap: 10,
-            alignItems: "center",
-            marginBottom: 12,
-          }}
-        >
-          <SmallSelect
-            value={bulkType}
-            onChange={(e) =>
-              setBulkType(
-                e.target.value as DomainStrategy["copiesTypes"][number]
-              )
-            }
-            style={{ maxWidth: 180 }}
+        <>
+          <div
+            style={{
+              display: "flex",
+              gap: 10,
+              alignItems: "center",
+              marginBottom: 12,
+            }}
           >
-            {["click", "conversion", "test", "warmup"].map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </SmallSelect>
-          <AddTypeButton onClick={() => handleAddTypeForAll(bulkType)}>
-            + Add {bulkType} to All
-          </AddTypeButton>
-        </div>
+            <SmallSelect
+              value={bulkType}
+              onChange={(e) =>
+                setBulkType(
+                  e.target.value as DomainStrategy["copiesTypes"][number]
+                )
+              }
+              style={{ maxWidth: 180 }}
+            >
+              {["click", "conversion", "test", "warmup"].map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </SmallSelect>
+            <AddTypeButton onClick={() => handleAddTypeForAll(bulkType)}>
+              + Add {bulkType} to All
+            </AddTypeButton>
+          </div>
+          <ResetButton onClick={handleRemoveAllTypes}>Reset All</ResetButton>
+        </>
       )}
 
       {!isLoading &&
@@ -321,6 +341,19 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
               ))}
           </CollapsibleTab>
         ))}
+      {isConfirmationOpen && (
+        <ConfirmationModal
+          title="Remove all copy types"
+          message="Are you sure you want to remove all copy types?"
+          confirmButtonText="Remove All"
+          cancelButtonText="Cancel"
+          isOpen={isConfirmationOpen}
+          onClose={() => {
+            setConfirmationOpen(false);
+          }}
+          onConfirm={handleRemoveAllTypes}
+        />
+      )}
     </Wrapper>
   );
 };
