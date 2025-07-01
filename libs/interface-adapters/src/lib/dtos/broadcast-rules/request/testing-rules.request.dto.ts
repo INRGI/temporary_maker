@@ -5,5 +5,5 @@ export class TestingRulesRequestDto {
   public maxTestCopiesForDomain: number;
 
   @IsNumber()
-  public maxClicksToBeTestCopy: number;
+  public maxSendsToBeTestCopy: number;
 }

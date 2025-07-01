@@ -164,7 +164,8 @@ export class MakeBroadcastService {
     private readonly getAllMondayDomainsDataService: GetAllDomainsDataService,
     private readonly getAllMondayProductsDataService: GetAllProductsDataService,
     private readonly getAllPriorityProductsService: GetAllPriorityProductsService,
-    private readonly addPriorityCopyIndicatorService: AddPriorityCopyIndicatorService
+    private readonly addPriorityCopyIndicatorService: AddPriorityCopyIndicatorService,
+    private readonly getTestableCopiesService: GetTestableCopiesService
   ) {}
   public async execute(
     payload: MakeBroadcaastPayload
@@ -193,6 +194,12 @@ export class MakeBroadcastService {
     const warmupCopies = await this.getWarmupCopiesService.execute({
       daysBeforeInterval:
         broadcastRule.analyticSelectionRules.warmUpCopiesDaysInterval,
+    });
+
+    const testableCopies = await this.getTestableCopiesService.execute({
+      daysBeforeInterval:
+        broadcastRule.analyticSelectionRules.testCopiesDaysInterval,
+      maxSendsToBeTestCopy: broadcastRule.testingRules.maxSendsToBeTestCopy,
     });
 
     const priorityCopiesData =

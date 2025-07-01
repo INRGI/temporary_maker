@@ -5,6 +5,7 @@ import { VerifyCopyForDomainService } from "../../../copy-verify/services/verify
 import { VerifyWarmupCopyForDomainService } from "../../../copy-verify/services/verify-warmup-copy-for-domain/verify-warmup-copy-for-domain.service";
 import { getCopyStrategyForDomain } from "../../utils/getCopyStrategyForDomain";
 import { VerifyCopyWithoutQueueService } from "../../../copy-verify/services/verify-copy-without-queue/verify-copy-without-queue.service";
+import { VerifyTestCopyForDomainService } from "../../../copy-verify/services/verify-test-copy-for-domain/verify-test-copy-for-domain.service";
 
 const MIN_REQUIRED_COPIES_FOR_QUEUE = 2;
 
@@ -13,7 +14,7 @@ export class BroadcastAssignerService {
   constructor(
     private readonly clickValidator: VerifyCopyForDomainService,
     private readonly conversionValidator: VerifyCopyForDomainService,
-    private readonly testValidator: VerifyCopyForDomainService,
+    private readonly testValidator: VerifyTestCopyForDomainService,
     private readonly warmUpValidator: VerifyWarmupCopyForDomainService,
     private readonly withoutQueueValidator:VerifyCopyWithoutQueueService,
   ) {}

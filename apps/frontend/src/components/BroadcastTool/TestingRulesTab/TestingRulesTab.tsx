@@ -31,15 +31,15 @@ const TestingRulesTab: React.FC<TestingRulesTabProps> = ({
           />
         </InputContainer>
       </InputGroup>
-      <InputGroup disabled={true}>
+      <InputGroup>
         <InputContainer>
           <FloatingLabelNumberInput
-            placeholder="Max Clicks To Be Test Copy"
-            value={Number(testingRules.maxClicksToBeTestCopy)}
+            placeholder="Max Sends To Be Test Copy"
+            value={Number(testingRules.maxSendsToBeTestCopy)}
             onChange={(e) =>
               onChange({
                 ...testingRules,
-                maxClicksToBeTestCopy: Number(e.target.value),
+                maxSendsToBeTestCopy: Number(e.target.value),
               })
             }
           />

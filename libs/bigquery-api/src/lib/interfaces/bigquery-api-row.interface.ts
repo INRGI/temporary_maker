@@ -9,4 +9,5 @@ export interface BigQueryRow {
   UC: number;
   TC: number;
   Conversion: number;
+  Sends?: number;
 }

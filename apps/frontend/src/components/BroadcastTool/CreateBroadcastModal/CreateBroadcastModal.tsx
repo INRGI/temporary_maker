@@ -58,7 +58,7 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
       },
       testingRules: {
         maxTestCopiesForDomain: 0,
-        maxClicksToBeTestCopy: 0,
+        maxSendsToBeTestCopy: 0,
       },
       partnerRules: {
         useNewPartnerForClickableCopies: false,

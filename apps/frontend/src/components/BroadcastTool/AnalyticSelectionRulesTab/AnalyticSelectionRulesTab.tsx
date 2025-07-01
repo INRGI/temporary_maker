@@ -61,7 +61,7 @@ const AnalyticSelectionRulesTab: React.FC<AnalyticSelectionRulesTabProps> = ({
         </InputContainer>
       </InputGroup>
 
-      <InputGroup disabled={true}>
+      <InputGroup>
         <InputContainer>
           <FloatingLabelNumberInput
             placeholder="Days Interval For Test Copies"
@@ -69,7 +69,7 @@ const AnalyticSelectionRulesTab: React.FC<AnalyticSelectionRulesTabProps> = ({
             onChange={(e) =>
               onChange({
                 ...analyticSelectionRules,
-                warmUpCopiesDaysInterval: Number(e.target.value),
+                testCopiesDaysInterval: Number(e.target.value),
               })
             }
           />

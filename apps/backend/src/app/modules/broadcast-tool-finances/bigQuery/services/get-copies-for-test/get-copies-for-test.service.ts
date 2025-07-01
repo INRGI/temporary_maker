@@ -4,6 +4,7 @@ import {
 } from '@epc-services/bigquery-api';
 import { Injectable } from '@nestjs/common';
 import { GetCopiesForTestPayload } from './get-copies-for-test.payload';
+import { GetCopiesWithSendsResponseDto } from '@epc-services/interface-adapters';
 
 @Injectable()
 export class GetCopiesForTestService {
@@ -12,24 +13,24 @@ export class GetCopiesForTestService {
     private readonly bigQueryApiService: BigQueryApiServicePort
   ) {}
 
-  public async execute(payload: GetCopiesForTestPayload): Promise<any> {
+  public async execute(payload: GetCopiesForTestPayload): Promise<GetCopiesWithSendsResponseDto> {
     const { daysBefore } = payload;
     try {
       const data = await this.bigQueryApiService.getDatasetDataByQuery({
         query: `
         SELECT MAX(Date) as Date, 
         Copy, 
-        SUM(UC) as UC, 
-        SUM(TC) as TC
-        FROM \`delta-daylight-316213.developers.base\`
+        SUM(Sends) as Sends,
+        FROM \`delta-daylight-316213.developers.sends\`
         WHERE Date >= DATE_SUB(CURRENT_DATE(), INTERVAL ${daysBefore} DAY) 
-        AND UC > 0
         GROUP BY Copy
-        ORDER BY UC DESC
+        ORDER BY Sends DESC
     `,
       });
-      return { data };
+
+      return { data } as GetCopiesWithSendsResponseDto;
     } catch (e) {
+      console.log(e);
       return { data: [] };
     }
   }

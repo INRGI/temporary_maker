@@ -9,17 +9,18 @@ export class GetTestableCopiesService {
   ) {}
 
   public async execute(payload: GetTestableCopiesPayload): Promise<string[]> {
-    const { daysBeforeInterval } = payload;
+    const { daysBeforeInterval, maxSendsToBeTestCopy } = payload;
 
-    const convertableCopies = await this.getCopiesForTestService.execute({
+    const testableCopies = await this.getCopiesForTestService.execute({
       daysBefore: daysBeforeInterval,
     });
-
-    const filteredTestableCopies = convertableCopies.data.filter((copy) => {
+    
+    const filteredTestableCopies = testableCopies.data.filter((copy) => {
       return (
+        copy.Copy &&
         !copy.Copy.includes('_SA') &&
         !isNaN(Number(this.extractLift(copy.Copy))) &&
-        this.extractLift(copy.Copy) !== '00'
+        this.extractLift(copy.Copy) !== '00' && copy.Sends < maxSendsToBeTestCopy
       );
     });
 
