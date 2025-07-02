@@ -22,10 +22,10 @@ export class GdriveConfigService {
   }
 
   get organicGdriveClientEmail(): string {
-    return this.configService.get<string>("gdrive.organicClientEmail");
+    return this.configService.get<string>("gdrive.ogClientEmail");
   }
 
   get organicGdrivePrivateKey(): string {
-    return this.configService.get<string>("gdrive.organicPrivateKey");
+    return this.configService.get<string>("gdrive.ogPrivateKey");
   }
 }

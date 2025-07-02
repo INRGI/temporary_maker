@@ -16,4 +16,16 @@ export class MondayConfigService {
   get domainsBoardId(): string {
     return this.configService.get<string>('monday.domainsBoardId');
   }
+
+  get ogAccessToken(): string {
+    return this.configService.get<string>('monday.ogAccessToken');
+  }
+
+  get ogProductsBoardId(): string {
+    return this.configService.get<string>('monday.ogProductsBoardId');
+  }
+
+  get ogDomainsBoardId(): string {
+    return this.configService.get<string>('monday.ogDomainsBoardId');
+  }
 }

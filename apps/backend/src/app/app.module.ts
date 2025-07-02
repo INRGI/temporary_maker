@@ -6,6 +6,7 @@ import { FinancesModule } from './modules/finances/finances.module';
 import { HealthModule } from './modules/health/health.module';
 import { BroadcastToolFinancesModule } from './modules/broadcast-tool-finances/broadcast-tool-finances.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { OrganicModule } from './modules/organic/organic.module';
 
 @Module({
   imports: [    
@@ -17,6 +18,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     }),
     FinancesModule,
     HealthModule,
+    OrganicModule,
     BroadcastToolFinancesModule,
     MongooseModule.forRootAsync({
       imports: [ConfigModule],

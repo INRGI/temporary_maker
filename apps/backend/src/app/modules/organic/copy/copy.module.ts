@@ -5,23 +5,25 @@ import {
   serviceProviders,
 } from "./copy.providers";
 import { GdriveConfigModule, MondayConfigModule } from "@epc-services/core";
-import { MondayApiOptionsFactoryService } from "../../../infrastructure/options-factory/monday-api.options-factory.service";
 import { GDocApiModule } from "@epc-services/gdoc-api";
 import { GDriveApiModule } from "@epc-services/gdrive-api";
 import { BroadcastModule } from "../broadcast/broadcast.module";
 import { Module } from "@nestjs/common";
 import { OrganicGdriveApiOptionsFactoryService } from "../../../infrastructure/options-factory/organic-gdrive-api.options-factory.service";
+import { OGMondayApiOptionsFactoryService } from "../../../infrastructure/options-factory/organic-monday-api.options-factory.service";
+import { CopyParserModule } from "../../finances/copy-parser/copy-parser.module";
 
 @Module({
   imports: [
     BroadcastModule,
+    CopyParserModule,
     GDriveApiModule.registerAsync({
       imports: [GdriveConfigModule],
       useClass: OrganicGdriveApiOptionsFactoryService,
     }),
     MondayApiModule.registerAsync({
       imports: [MondayConfigModule],
-      useClass: MondayApiOptionsFactoryService,
+      useClass: OGMondayApiOptionsFactoryService,
     }),
     GDocApiModule.registerAsync({
       imports: [GdriveConfigModule],
