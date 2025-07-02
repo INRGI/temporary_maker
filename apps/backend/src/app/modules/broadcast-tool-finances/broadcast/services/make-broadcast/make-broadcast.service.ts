@@ -13,6 +13,7 @@ import { GetAllProductsDataService } from "../../../monday/services/get-all-prod
 import { GetDomainsRevenueService } from "../../../bigQuery/services/get-domains-revenue/get-domains-revenue.service";
 import { GetAllPriorityProductsService } from "../../../priority/services/get-all-priority-products/get-all-priority-products.service";
 import { AddPriorityCopyIndicatorService } from "../add-priority-copy-indicator/add-priority-copy-indicator.service";
+import { ForceCopiesToRandomDomainsService } from "../force-copies-to-random-domains/force-copies-to-random-domains.service";
 
 // @Injectable()
 // export class MakeBroadcastService {
@@ -165,7 +166,8 @@ export class MakeBroadcastService {
     private readonly getAllMondayProductsDataService: GetAllProductsDataService,
     private readonly getAllPriorityProductsService: GetAllPriorityProductsService,
     private readonly addPriorityCopyIndicatorService: AddPriorityCopyIndicatorService,
-    private readonly getTestableCopiesService: GetTestableCopiesService
+    private readonly getTestableCopiesService: GetTestableCopiesService,
+    private readonly forceCopiesToRandomDomainsService: ForceCopiesToRandomDomainsService
   ) {}
   public async execute(
     payload: MakeBroadcaastPayload
@@ -196,7 +198,7 @@ export class MakeBroadcastService {
         broadcastRule.analyticSelectionRules.warmUpCopiesDaysInterval,
     });
 
-    const testableCopies = await this.getTestableCopiesService.execute({
+    const testCopies = await this.getTestableCopiesService.execute({
       daysBeforeInterval:
         broadcastRule.analyticSelectionRules.testCopiesDaysInterval,
       maxSendsToBeTestCopy: broadcastRule.testingRules.maxSendsToBeTestCopy,
@@ -204,8 +206,6 @@ export class MakeBroadcastService {
 
     const priorityCopiesData =
       await this.getAllPriorityProductsService.execute();
-
-    const copiesWithoutQueue = broadcastRule.productRules.copyMinLimitPerDay;
 
     const domainsData = await this.getAllMondayDomainsDataService.execute();
 
@@ -224,10 +224,9 @@ export class MakeBroadcastService {
             clickableCopies,
             convertibleCopies,
             warmupCopies,
-            testCopies: [],
+            testCopies,
             domainsData,
             productsData,
-            copiesWithoutQueue,
             priorityCopiesData,
           });
 
@@ -236,9 +235,23 @@ export class MakeBroadcastService {
       }
     }
 
+    const copiesToForce = broadcastRule.productRules.copyMinLimitPerDay;
+
+    const broadcastWithForcedCopies =
+      await this.forceCopiesToRandomDomainsService.execute({
+        broadcastRules: broadcastRule,
+        copiesToForce,
+        broadcast,
+        fromDate,
+        toDate,
+        domainsData,
+        productsData,
+        priorityCopiesData,
+      });
+
     const modifiedBroadcast =
       await this.addPriorityCopyIndicatorService.execute({
-        broadcast: broadcast,
+        broadcast: broadcastWithForcedCopies,
         dateRange: this.getDateRange(fromDate, toDate),
       });
     return modifiedBroadcast;

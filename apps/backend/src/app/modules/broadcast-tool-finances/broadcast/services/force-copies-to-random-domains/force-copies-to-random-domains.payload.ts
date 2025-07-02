@@ -1,21 +1,17 @@
 import {
-  BroadcastDomain,
+  CopyMinLimitPerDay,
   GetAllDomainsResponseDto,
   GetDomainDataResponse,
   GetProductDataResponse,
 } from "@epc-services/interface-adapters";
 import { BroadcastRulesProps } from "../../../rules/domain/types/broadcast-rules.types";
 
-export interface BroadcastAssignerPayload {
-  domain: BroadcastDomain;
-  sheetName: string;
+export interface ForceCopiesToRandomDomainsPayload {
   broadcast: GetAllDomainsResponseDto;
   broadcastRules: BroadcastRulesProps;
-  date: string;
-  clickableCopies: string[];
-  convertibleCopies: string[];
-  warmupCopies: string[];
-  testCopies: string[];
+  fromDate: string;
+  toDate: string;
+  copiesToForce: CopyMinLimitPerDay[];
   priorityCopiesData: string[];
   domainsData: GetDomainDataResponse[];
   productsData: GetProductDataResponse[];

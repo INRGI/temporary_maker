@@ -4,10 +4,7 @@ import { Injectable } from "@nestjs/common";
 import { VerifyCopyForDomainService } from "../../../copy-verify/services/verify-copy-for-domain/verify-copy-for-domain.service";
 import { VerifyWarmupCopyForDomainService } from "../../../copy-verify/services/verify-warmup-copy-for-domain/verify-warmup-copy-for-domain.service";
 import { getCopyStrategyForDomain } from "../../utils/getCopyStrategyForDomain";
-import { VerifyCopyWithoutQueueService } from "../../../copy-verify/services/verify-copy-without-queue/verify-copy-without-queue.service";
 import { VerifyTestCopyForDomainService } from "../../../copy-verify/services/verify-test-copy-for-domain/verify-test-copy-for-domain.service";
-
-const MIN_REQUIRED_COPIES_FOR_QUEUE = 2;
 
 @Injectable()
 export class BroadcastAssignerService {
@@ -15,8 +12,7 @@ export class BroadcastAssignerService {
     private readonly clickValidator: VerifyCopyForDomainService,
     private readonly conversionValidator: VerifyCopyForDomainService,
     private readonly testValidator: VerifyTestCopyForDomainService,
-    private readonly warmUpValidator: VerifyWarmupCopyForDomainService,
-    private readonly withoutQueueValidator:VerifyCopyWithoutQueueService,
+    private readonly warmUpValidator: VerifyWarmupCopyForDomainService
   ) {}
 
   public async execute(
@@ -34,7 +30,6 @@ export class BroadcastAssignerService {
       domainsData,
       broadcast,
       warmupCopies,
-      copiesWithoutQueue,
       priorityCopiesData,
     } = payload;
 
@@ -49,37 +44,6 @@ export class BroadcastAssignerService {
     let copiesQuantity = currentDay?.copies.length || 0;
     const maxCopiesPerDay = strategy.copiesTypes.length;
     const added: string[] = [];
-
-    if (maxCopiesPerDay >= MIN_REQUIRED_COPIES_FOR_QUEUE) {
-      const shuffledQueue = this.shuffleArray([...copiesWithoutQueue]);
-
-      for (const { copyName, limit } of shuffledQueue) {
-        if (copiesQuantity >= maxCopiesPerDay) break;
-
-        const currentCount = currentDay?.copies.filter((c) => c.name === copyName).length || 0;
-        if (currentCount >= limit) continue;
-
-        const result = await this.withoutQueueValidator.execute({
-          broadcast,
-          broadcastDomain: domain,
-          copyName,
-          sheetName,
-          broadcastRules,
-          sendingDate: date,
-          productsData,
-          domainsData,
-          priorityCopiesData,
-        });
-
-        if (result.isValid) {
-          domain = {
-            ...domain,
-            broadcastCopies: result.broadcastDomain.broadcastCopies,
-          };
-          copiesQuantity++;
-        }
-      }
-    }
 
     for (const type of strategy.copiesTypes) {
       if (copiesQuantity >= maxCopiesPerDay) break;
@@ -154,14 +118,5 @@ export class BroadcastAssignerService {
       case "warmup":
         return this.warmUpValidator;
     }
-  }
-
-  private shuffleArray<T>(array: T[]): T[] {
-    const result = [...array];
-    for (let i = result.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [result[i], result[j]] = [result[j], result[i]];
-    }
-    return result;
   }
 }

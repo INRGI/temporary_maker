@@ -13,6 +13,7 @@ import { GetWarmupCopiesService } from './services/get-warmup-copies/get-warmup-
 import { GetTestableCopiesService } from './services/get-testable-copies/get-testable-copies.service';
 import { AddPriorityCopyIndicatorService } from './services/add-priority-copy-indicator/add-priority-copy-indicator.service';
 import { GetBroadcastDomainsListService } from './services/get-broadcast-domains-list/get-broadcast-domains-list.service';
+import { ForceCopiesToRandomDomainsService } from './services/force-copies-to-random-domains/force-copies-to-random-domains.service';
 
 export const messageControllers = [BroadcastController];
 
@@ -32,4 +33,5 @@ export const serviceProviders: Provider[] = [
   GetWarmupCopiesService,
   GetTestableCopiesService,
   AddPriorityCopyIndicatorService,
+  ForceCopiesToRandomDomainsService,
 ];

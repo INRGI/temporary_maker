@@ -141,7 +141,7 @@ const ProductRulesTab: React.FC<ProductRulesTabProps> = ({
           />
         </InputGroup>
 
-        <InputGroup disabled={true}>
+        <InputGroup>
           <ArrayInput
             items={productRules.copyMinLimitPerDay.map((item) => ({
               key: item.copyName,
