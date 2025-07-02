@@ -9,4 +9,10 @@ export class PartnerRulesRequestDto {
 
   @IsArray()
   public allowedIspsForNewPartners: string[];
+
+  @IsArray()
+  public blacklistedPartners: string[];
+
+  @IsNumber()
+  public similarPartnerDomainLimit: number;
 }

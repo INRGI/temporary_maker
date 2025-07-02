@@ -12,6 +12,7 @@ import {
 
 interface PartnerRulesTabProps {
   partnerRules: PartnerRules;
+  partners: string[];
   onChange: (updated: PartnerRules) => void;
 }
 
@@ -25,6 +26,7 @@ const allowedIspsForNewPartnersOptions = [
 
 const PartnerRulesTab: React.FC<PartnerRulesTabProps> = ({
   partnerRules,
+  partners,
   onChange,
 }) => {
   return (
@@ -74,6 +76,37 @@ const PartnerRulesTab: React.FC<PartnerRulesTabProps> = ({
               })
             }
             placeholder="Allowed ISPs For New Partners"
+          />
+        </InputContainer>
+      </InputGroup>
+
+      <InputGroup>
+        <InputContainer>
+          <MultiSelectDropdown
+            options={partners}
+            selected={partnerRules.blacklistedPartners}
+            onChange={(newValues) =>
+              onChange({
+                ...partnerRules,
+                blacklistedPartners: newValues,
+              })
+            }
+            placeholder="Blacklisted Partners"
+          />
+        </InputContainer>
+      </InputGroup>
+
+      <InputGroup>
+        <InputContainer>
+          <FloatingLabelNumberInput
+            placeholder="Similar Partner Domain Limit"
+            value={partnerRules.similarPartnerDomainLimit}
+            onChange={(e) =>
+              onChange({
+                ...partnerRules,
+                similarPartnerDomainLimit: Number(e.target.value),
+              })
+            }
           />
         </InputContainer>
       </InputGroup>

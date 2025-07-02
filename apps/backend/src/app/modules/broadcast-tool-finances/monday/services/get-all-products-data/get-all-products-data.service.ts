@@ -16,7 +16,7 @@ export class GetAllProductsDataService {
 
   public async execute(): Promise<GetProductDataResponse[]> {
     const boardId = Number(this.mondayApiConfig.productsBoardId);
-    const result = [];
+    const result: GetProductDataResponse[] = [];
     let cursor: string | null = null;
 
     do {
@@ -28,6 +28,9 @@ export class GetAllProductsDataService {
                 items {
                   id
                   name
+                  group {
+                    title
+                  }
                   column_values {
                     column { title }
                     text
@@ -52,11 +55,17 @@ export class GetAllProductsDataService {
         if (!status || ['Pending', 'Closed'].includes(status))
           continue;
 
+        if(item.group?.title === 'ARCHIVE') {
+          continue
+        }
+
         result.push({
           productName: item.name,
           productStatus: get('Status'),
           broadcastCopies: get('(B)Broadcast Copies'),
           domainSending: get('Domain Sending'),
+          sector: get('Sector'),
+          partner: item.group?.title ?? null,
         });
       }
 

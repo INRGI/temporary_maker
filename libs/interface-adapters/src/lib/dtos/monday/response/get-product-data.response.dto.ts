@@ -6,4 +6,8 @@ export class GetProductDataResponse {
   public broadcastCopies: string;
 
   public domainSending: string;
+
+  public sector: string;
+
+  public partner: string;
 }

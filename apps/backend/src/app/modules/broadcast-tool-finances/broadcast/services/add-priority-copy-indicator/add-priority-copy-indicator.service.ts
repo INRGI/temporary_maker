@@ -27,7 +27,7 @@ export class AddPriorityCopyIndicatorService {
                 copies: broadcastCopies.copies.map((c) => {
                   return {
                     ...c,
-                    name: c.isPriority ? `(P)${c.name}` : c.name,
+                    name: c.isPriority ? `${c.name}(P)` : c.name,
                   };
                 }),
               };

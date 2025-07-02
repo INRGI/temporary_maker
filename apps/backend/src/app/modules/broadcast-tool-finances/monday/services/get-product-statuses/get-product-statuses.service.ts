@@ -20,6 +20,7 @@ export class GetProductStatusesService {
 
     const uniqueProductStatuses = new Set();
     const uniqueDomainSendings = new Set();
+    const uniquePartners = new Set();
 
     do {
       const query = `
@@ -30,6 +31,9 @@ export class GetProductStatusesService {
                 items {
                   id
                   name
+                  group {
+                    title
+                  }
                   column_values {
                     column { title }
                     text
@@ -52,6 +56,7 @@ export class GetProductStatusesService {
 
         uniqueProductStatuses.add(get("Status"));
         uniqueDomainSendings.add(get("Domain Sending"));
+        uniquePartners.add(item.group?.title);
       }
 
       cursor = nextCursor;
@@ -60,6 +65,7 @@ export class GetProductStatusesService {
     return {
       productStatuses: Array.from(uniqueProductStatuses) as string[],
       domainSendings: Array.from(uniqueDomainSendings) as string[],
+      partners: Array.from(uniquePartners) as string[],
     };
   }
 }

@@ -64,6 +64,8 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
         useNewPartnerForClickableCopies: false,
         allowedIspsForNewPartners: [],
         daysSendingForNewPartners: 0,
+        blacklistedPartners: [],
+        similarPartnerDomainLimit: 1,
       },
       productRules: {
         blacklistedCopies: [],
@@ -147,6 +149,7 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
       case "partner-rules":
         return (
           <PartnerRulesTab
+            partners={productMondayStatuses.partners}
             partnerRules={broadcastRules.partnerRules}
             onChange={(updated) => handleChange("partnerRules", updated)}
           />

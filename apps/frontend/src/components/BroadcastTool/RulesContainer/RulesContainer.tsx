@@ -198,6 +198,7 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
             "Partner Rules",
             "partnerRules",
             <PartnerRulesTab
+              partners={productMondayStatuses.partners}
               partnerRules={broadcastRules.partnerRules}
               onChange={(updated) => handleChange("partnerRules", updated)}
             />

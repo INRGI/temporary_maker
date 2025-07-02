@@ -3,4 +3,6 @@ export interface GetProductDataResponse {
   productStatus: string;
   broadcastCopies: string;
   domainSending: string;
+  partner: string;
+  sector: string;
 }

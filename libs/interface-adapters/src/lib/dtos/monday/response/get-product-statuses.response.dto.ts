@@ -6,4 +6,7 @@ export class GetProductStatusesResponseDto {
 
   @IsArray()
   public domainSendings: string[];
+
+  @IsArray()
+  public partners: string[];
 }
