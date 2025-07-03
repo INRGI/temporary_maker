@@ -1,14 +1,14 @@
 import {
   GDriveApiServicePort,
   InjectGDriveApiService,
-} from '@epc-services/gdrive-api';
-import { Injectable, Logger } from '@nestjs/common';
-import * as XLSX from 'xlsx';
+} from "@epc-services/gdrive-api";
+import { Injectable, Logger } from "@nestjs/common";
+import * as XLSX from "xlsx";
 import {
   BroadcastResponseDto,
   GetDomainBroadcastResponseDto,
-} from '@epc-services/interface-adapters';
-import { GetDomainBroadcastFromDrivePayload } from './get-domain-broadcast-from-drive.payload';
+} from "@epc-services/interface-adapters";
+import { GetDomainBroadcastFromDrivePayload } from "./get-domain-broadcast-from-drive.payload";
 
 @Injectable()
 export class GetDomainBroadcastFromDriveService {
@@ -32,7 +32,7 @@ export class GetDomainBroadcastFromDriveService {
     try {
       const broadcastTableSearchResult =
         await this.gdriveApiService.searchFileWithQuery(
-          `name contains 'Broadcast ${team} team' and mimeType = 'application/vnd.google-apps.spreadsheet'`,
+          `name contains '${team} - Broadcast' and mimeType = 'application/vnd.google-apps.spreadsheet'`,
           10
         );
 
@@ -41,16 +41,22 @@ export class GetDomainBroadcastFromDriveService {
       }
 
       const broadcastTableId = await this.gdriveApiService.getContentLikeBuffer(
-        broadcastTableSearchResult.files[0].id, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        broadcastTableSearchResult.files[0].id,
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       );
 
-      const workbook = await XLSX.read(broadcastTableId, { type: 'buffer' });
+      const workbook = await XLSX.read(broadcastTableId, { type: "buffer" });
       const broadcastData: BroadcastResponseDto[] = [];
       let domainFound = false;
 
       for (const sheetName of workbook.SheetNames) {
         const sheet = workbook.Sheets[sheetName];
-        const range = XLSX.utils.decode_range(sheet['!ref']);
+
+        if (!sheet["!ref"]) {
+          continue;
+        }
+
+        const range = XLSX.utils.decode_range(sheet["!ref"]);
 
         let domainColumnIndex = -1;
         const availableColumns: string[] = [];
@@ -84,8 +90,8 @@ export class GetDomainBroadcastFromDriveService {
                       valueCell.v.toString()
                     );
                     const copiesArray = cleanedValue
-                      .split(' ')
-                      .filter((copy) => copy.trim() !== '' && copy !== '-');
+                      .split(" ")
+                      .filter((copy) => copy.trim() !== "" && copy !== "-");
 
                     if (copiesArray.length > 0) {
                       const broadcast: BroadcastResponseDto = {
@@ -132,8 +138,8 @@ export class GetDomainBroadcastFromDriveService {
 
   private cleanCopyValue(value: string): string {
     return value
-      .replace(/[\n\r\t]/g, '')
-      .replace(/\s+/g, ' ')
+      .replace(/[\n\r\t]/g, "")
+      .replace(/\s+/g, " ")
       .trim();
   }
 }

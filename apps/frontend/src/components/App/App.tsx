@@ -8,6 +8,8 @@ const HealthHome = lazy(() => import("../../pages/HealthHome/HealthHome"));
 const ProductPreview = lazy(() => import("../../pages/ProductPreview/ProductPreview"));
 const HealthProductPreview = lazy(() => import("../../pages/HealthProductPreview/HealthProductPreview"));
 
+const Organic = lazy(() => import("../../pages/Organic/Organic"));
+
 const BroadcastTool = lazy(() => import("../../pages/BroadcastTool/BroadcastTool"));
 
 export function App() {
@@ -21,6 +23,8 @@ export function App() {
         <Route path="/health" element={<HealthHome />} />
         <Route path="/health/product-preview" element={<HealthProductPreview />} />
         <Route path="/product-preview" element={<ProductPreview />} />
+
+        <Route path="/organic" element={<Organic />} />
 
         <Route path="/not-found" element={<NotFound />} />
         <Route path="*" element={<Navigate to="/not-found" replace />} />

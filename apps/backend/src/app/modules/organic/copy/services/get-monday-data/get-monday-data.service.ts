@@ -24,7 +24,7 @@ export class GetMondayDataService {
     try {
       const mondayData = await this.mondayApiService.getProductData(
         product,
-        803747785
+        2013547302
       );
 
       if (!mondayData.length) {
@@ -63,7 +63,7 @@ export class GetMondayDataService {
     }[]
   > {
     try {
-      const boardId = 803747785;
+      const boardId = 2013547302;
     const mondayData = [];
     let cursor: string | null = null;
 

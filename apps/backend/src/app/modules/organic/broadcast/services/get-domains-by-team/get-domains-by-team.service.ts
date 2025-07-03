@@ -23,10 +23,9 @@ export class GetDomainsByTeamService {
     try {
       const broadcastTableSearchResult =
         await this.gdriveApiService.searchFileWithQuery(
-          `name contains 'Broadcast ${team} team' and mimeType = 'application/vnd.google-apps.spreadsheet'`,
+          `name contains '${team} - Broadcast' and mimeType = 'application/vnd.google-apps.spreadsheet'`,
           10
         );
-
       if (!broadcastTableSearchResult.files.length) {
         throw new Error(`Broadcast table not found for team ${team}`);
       }
@@ -40,6 +39,10 @@ export class GetDomainsByTeamService {
 
       for (const sheetName of workbook.SheetNames) {
         const sheet = workbook.Sheets[sheetName];
+        if (!sheet['!ref']) {
+          continue;
+        }
+
         const range = XLSX.utils.decode_range(sheet['!ref']);
 
         for (let col = 1; col <= range.e.c; col++) {
