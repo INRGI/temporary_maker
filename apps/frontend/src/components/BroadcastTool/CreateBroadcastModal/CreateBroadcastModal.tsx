@@ -77,6 +77,8 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
         copySendingLimitPerDay: [],
         copyMinLimitPerDay: [],
         domainSending: [],
+        similarSectorDomainLimit: 1,
+        blacklistedSectors: [],
       },
       analyticSelectionRules: {
         clickableCopiesDaysInterval: 0,

@@ -16,6 +16,7 @@ export class ApproveBroadcastService {
 
     for (const broadcast of payload.broadcast) {
       const result = await this.approveBroadcastSheetService.execute(broadcast);
+
       response.push(result);
     }
 

@@ -15,6 +15,8 @@ import { CheckIfCopyBlacklistedService } from './services/check-if-copy-blacklis
 import { CheckIfDomainWarmupService } from './services/check-if-domain-warmup/check-if-domain-warmup.service';
 import { CheckWarmupCopyLimitsService } from './services/check-warmup-copy-limits/check-warmup-copy-limits.service';
 import { CheckIfProductPriorityService } from './services/check-if-product-priority/check-if-product-priority.service';
+import { CheckIfPartnerCanBeSendService } from './services/check-if-partner-can-be-send/check-if-partner-can-be-send.service';
+import { CheckIfSectorCanBeSendService } from './services/check-if-sector-can-be-send/check-if-sector-can-be-send.service';
 
 export const messageControllers = [BroadcastRulesMessageController];
 
@@ -37,4 +39,6 @@ export const serviceProviders: Provider[] = [
   CheckIfDomainWarmupService,
   CheckWarmupCopyLimitsService,
   CheckIfProductPriorityService,
+  CheckIfPartnerCanBeSendService,
+  CheckIfSectorCanBeSendService
 ];

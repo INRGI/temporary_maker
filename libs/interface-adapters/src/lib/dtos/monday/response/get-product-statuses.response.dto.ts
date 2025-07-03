@@ -9,4 +9,7 @@ export class GetProductStatusesResponseDto {
 
   @IsArray()
   public partners: string[];
+
+  @IsArray()
+  public sectors: string[];
 }

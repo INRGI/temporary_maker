@@ -183,80 +183,79 @@ export class MakeBroadcastService {
       usageRules: broadcastRule.usageRules,
     });
 
-    // const clickableCopies = await this.getClickableCopiesService.execute({
-    //   daysBeforeInterval:
-    //     broadcastRule.analyticSelectionRules.clickableCopiesDaysInterval,
-    // });
+    const clickableCopies = await this.getClickableCopiesService.execute({
+      daysBeforeInterval:
+        broadcastRule.analyticSelectionRules.clickableCopiesDaysInterval,
+    });
 
-    // const convertibleCopies = await this.getConvertableCopiesService.execute({
-    //   daysBeforeInterval:
-    //     broadcastRule.analyticSelectionRules.convertibleCopiesDaysInterval,
-    // });
+    const convertibleCopies = await this.getConvertableCopiesService.execute({
+      daysBeforeInterval:
+        broadcastRule.analyticSelectionRules.convertibleCopiesDaysInterval,
+    });
 
-    // const warmupCopies = await this.getWarmupCopiesService.execute({
-    //   daysBeforeInterval:
-    //     broadcastRule.analyticSelectionRules.warmUpCopiesDaysInterval,
-    // });
+    const warmupCopies = await this.getWarmupCopiesService.execute({
+      daysBeforeInterval:
+        broadcastRule.analyticSelectionRules.warmUpCopiesDaysInterval,
+    });
 
-    // const testCopies = await this.getTestableCopiesService.execute({
-    //   daysBeforeInterval:
-    //     broadcastRule.analyticSelectionRules.testCopiesDaysInterval,
-    //   maxSendsToBeTestCopy: broadcastRule.testingRules.maxSendsToBeTestCopy,
-    // });
+    const testCopies = await this.getTestableCopiesService.execute({
+      daysBeforeInterval:
+        broadcastRule.analyticSelectionRules.testCopiesDaysInterval,
+      maxSendsToBeTestCopy: broadcastRule.testingRules.maxSendsToBeTestCopy,
+    });
 
-    // const priorityCopiesData =
-    //   await this.getAllPriorityProductsService.execute();
+    const priorityCopiesData =
+      await this.getAllPriorityProductsService.execute();
 
     const domainsData = await this.getAllMondayDomainsDataService.execute();
 
     const productsData = await this.getAllMondayProductsDataService.execute();
 
-    // for (const date of this.getDateRange(fromDate, toDate)) {
-    //   for (const sheet of broadcast.sheets) {
-    //     sheet.domains = this.shuffleArray(sheet.domains);
-    //     for (let i = 0; i < sheet.domains.length; i++) {
-    //       const updatedDomain = await this.broadcastAssignerService.execute({
-    //         domain: sheet.domains[i],
-    //         broadcastRules: broadcastRule,
-    //         sheetName: sheet.sheetName,
-    //         broadcast,
-    //         date,
-    //         clickableCopies,
-    //         convertibleCopies,
-    //         warmupCopies,
-    //         testCopies,
-    //         domainsData,
-    //         productsData,
-    //         priorityCopiesData,
-    //       });
+    for (const date of this.getDateRange(fromDate, toDate)) {
+      for (const sheet of broadcast.sheets) {
+        sheet.domains = this.shuffleArray(sheet.domains);
+        for (let i = 0; i < sheet.domains.length; i++) {
+          const updatedDomain = await this.broadcastAssignerService.execute({
+            domain: sheet.domains[i],
+            broadcastRules: broadcastRule,
+            sheetName: sheet.sheetName,
+            broadcast,
+            date,
+            clickableCopies,
+            convertibleCopies,
+            warmupCopies,
+            testCopies,
+            domainsData,
+            productsData,
+            priorityCopiesData,
+          });
 
-    //       sheet.domains[i] = updatedDomain;
-    //     }
-    //   }
-    // }
+          sheet.domains[i] = updatedDomain;
+        }
+      }
+    }
 
-    // const copiesToForce = broadcastRule.productRules.copyMinLimitPerDay;
+    const copiesToForce = broadcastRule.productRules.copyMinLimitPerDay;
 
-    // const broadcastWithForcedCopies =
-    //   await this.forceCopiesToRandomDomainsService.execute({
-    //     broadcastRules: broadcastRule,
-    //     copiesToForce,
-    //     broadcast,
-    //     fromDate,
-    //     toDate,
-    //     domainsData,
-    //     productsData,
-    //     priorityCopiesData,
-    //   });
+    const broadcastWithForcedCopies =
+      await this.forceCopiesToRandomDomainsService.execute({
+        broadcastRules: broadcastRule,
+        copiesToForce,
+        broadcast,
+        fromDate,
+        toDate,
+        domainsData,
+        productsData,
+        priorityCopiesData,
+      });
 
-    // const modifiedBroadcast =
-    //   await this.addPriorityCopyIndicatorService.execute({
-    //     broadcast: broadcastWithForcedCopies,
-    //     dateRange: this.getDateRange(fromDate, toDate),
-    //   });
-    // return modifiedBroadcast;
+    const modifiedBroadcast =
+      await this.addPriorityCopyIndicatorService.execute({
+        broadcast: broadcastWithForcedCopies,
+        dateRange: this.getDateRange(fromDate, toDate),
+      });
+    return modifiedBroadcast;
 
-    return broadcast;
   }
 
   private getDateRange(from: string, to: string): string[] {

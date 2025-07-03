@@ -161,6 +161,37 @@ const ProductRulesTab: React.FC<ProductRulesTabProps> = ({
             }
           />
         </InputGroup>
+
+        <InputGroup>
+          <InputContainer>
+            <FloatingLabelNumberInput
+              placeholder="Similar Sector Domain Limit"
+              value={productRules.similarSectorDomainLimit}
+              onChange={(e) =>
+                onChange({
+                  ...productRules,
+                  similarSectorDomainLimit: Number(e.target.value),
+                })
+              }
+            />
+          </InputContainer>
+        </InputGroup>
+
+        <InputGroup>
+        <InputContainer>
+          <MultiSelectDropdown
+            options={productMondayStatuses.sectors}
+            selected={productRules.blacklistedSectors}
+            onChange={(newValues) =>
+              onChange({
+                ...productRules,
+                blacklistedSectors: newValues,
+              })
+            }
+            placeholder="Blacklisted Sectors"
+          />
+        </InputContainer>
+      </InputGroup>
       </LeftContainer>
 
       <RightContainer>

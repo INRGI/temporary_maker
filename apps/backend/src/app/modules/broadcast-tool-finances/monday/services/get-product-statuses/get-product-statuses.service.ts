@@ -21,6 +21,7 @@ export class GetProductStatusesService {
     const uniqueProductStatuses = new Set();
     const uniqueDomainSendings = new Set();
     const uniquePartners = new Set();
+    const uniqueSectors = new Set();
 
     do {
       const query = `
@@ -57,6 +58,7 @@ export class GetProductStatusesService {
         uniqueProductStatuses.add(get("Status"));
         uniqueDomainSendings.add(get("Domain Sending"));
         uniquePartners.add(item.group?.title);
+        uniqueSectors.add(get("Sector"));
       }
 
       cursor = nextCursor;
@@ -66,6 +68,7 @@ export class GetProductStatusesService {
       productStatuses: Array.from(uniqueProductStatuses) as string[],
       domainSendings: Array.from(uniqueDomainSendings) as string[],
       partners: Array.from(uniquePartners) as string[],
+      sectors: Array.from(uniqueSectors) as string[],
     };
   }
 }

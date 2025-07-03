@@ -10,6 +10,8 @@ import { VerifyWarmupCopyForDomainPayload } from "./verify-warmup-copy-for-domai
 import { CheckIfDomainWarmupService } from "../../../rules/services/check-if-domain-warmup/check-if-domain-warmup.service";
 import { CheckWarmupCopyLimitsService } from "../../../rules/services/check-warmup-copy-limits/check-warmup-copy-limits.service";
 import { CheckIfProductPriorityService } from "../../../rules/services/check-if-product-priority/check-if-product-priority.service";
+import { CheckIfPartnerCanBeSendService } from "../../../rules/services/check-if-partner-can-be-send/check-if-partner-can-be-send.service";
+import { CheckIfSectorCanBeSendService } from "../../../rules/services/check-if-sector-can-be-send/check-if-sector-can-be-send.service";
 
 @Injectable()
 export class VerifyWarmupCopyForDomainService {
@@ -22,7 +24,9 @@ export class VerifyWarmupCopyForDomainService {
     private readonly checkIfCopyBlacklistedService: CheckIfCopyBlacklistedService,
     private readonly checkIfDomainWarmupService: CheckIfDomainWarmupService,
     private readonly checkWarmupCopyLimitsService: CheckWarmupCopyLimitsService,
-    private readonly checkIfProductPriorityService: CheckIfProductPriorityService
+    private readonly checkIfProductPriorityService: CheckIfProductPriorityService,
+    private readonly checkIfPartnerCanBeSendService: CheckIfPartnerCanBeSendService,
+    private readonly checkIfSectorCanBeSendService: CheckIfSectorCanBeSendService
   ) {}
   public async execute(
     payload: VerifyWarmupCopyForDomainPayload
@@ -80,6 +84,32 @@ export class VerifyWarmupCopyForDomainService {
       });
 
     if (!checkIfDomainWarmupResult) {
+      return { isValid: false, broadcastDomain };
+    }
+
+    const checkIfPartnerCanBeSendServiceResult =
+      await this.checkIfPartnerCanBeSendService.execute({
+        copyName,
+        broadcastDomain,
+        partnerRules: broadcastRules.partnerRules,
+        productsData,
+        sendingDate,
+      });
+
+    if (!checkIfPartnerCanBeSendServiceResult) {
+      return { isValid: false, broadcastDomain };
+    }
+
+    const checkIfSectorCanBeSendServiceResult =
+      await this.checkIfSectorCanBeSendService.execute({
+        copyName,
+        broadcastDomain,
+        productRules: broadcastRules.productRules,
+        productsData,
+        sendingDate,
+      });
+
+    if (!checkIfSectorCanBeSendServiceResult) {
       return { isValid: false, broadcastDomain };
     }
 

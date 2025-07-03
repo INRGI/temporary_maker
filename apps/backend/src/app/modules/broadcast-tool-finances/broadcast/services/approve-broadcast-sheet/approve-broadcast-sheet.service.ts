@@ -63,24 +63,17 @@ export class ApproveBroadcastSheetService {
           .map((copy) => copy.name)
           .join(" ");
 
-        const dateParts = broadcastCopy.date.split("-");
-        const month = Number(dateParts[1]);
-        const formattedDate = `${month}/${dateParts[2]}`;
+        const [year, month, day] = broadcastCopy.date.split("-");
+        const formattedDate = `${Number(month)}/${Number(day)}`;
+        if (!month || !day) continue;
 
         const rowIndex = rowIndexMap.get(formattedDate);
-        if (rowIndex === undefined) continue;
 
-        const maxColIndex = Math.max(...values.map((row) => row.length));
-        if (rowIndex >= values.length || colIndex >= maxColIndex) continue;
+        if (rowIndex === undefined) continue;
 
         const columnLetter = this.columnToLetter(colIndex);
 
-        const safeSheetName =
-          sheetName.includes(" ") || sheetName.includes("'")
-            ? `'${sheetName.replace(/'/g, "''")}'`
-            : sheetName;
-
-        const range = `${safeSheetName}!${columnLetter}${rowIndex + 1}`;
+        const range = `${sheetName}!${columnLetter}${rowIndex + 1}`;
 
         pendingUpdates.push({
           range,

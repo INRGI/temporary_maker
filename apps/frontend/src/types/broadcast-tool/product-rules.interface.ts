@@ -14,4 +14,6 @@ export interface ProductRules {
   productsSendingLimitPerDay: ProductSendingLimitPerDay[];
   copySendingLimitPerDay: CopySendingLimitPerDay[];
   copyMinLimitPerDay: CopyMinLimitPerDay[];
+  blacklistedSectors: string[];
+  similarSectorDomainLimit: number;
 }

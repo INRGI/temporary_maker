@@ -32,4 +32,10 @@ export class ProductRulesRequestDto {
 
   @IsArray()
   public copyMinLimitPerDay: CopyMinLimitPerDayRequestDto[];
+
+  @IsArray()
+  public blacklistedSectors: string[];
+
+  @IsNumber()
+  public similarSectorDomainLimit: number;
 }
