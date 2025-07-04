@@ -35,7 +35,15 @@ export class GetMondayDataService {
       if (!mondayData.length) {
         throw new Error("Product not found");
       }
-
+      
+      if(!trackingType){
+        return {
+          product: "",
+          trackingData: "",
+          isForValidation:  mondayData[0].group?.title.startsWith("*V ") ?? false,
+          imgData: "",
+        };
+      }
       const trackingData = mondayData[0].column_values.find(
         (column) => column.column.title === trackingType
       ).text;

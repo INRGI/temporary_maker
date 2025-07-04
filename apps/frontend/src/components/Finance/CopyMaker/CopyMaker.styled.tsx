@@ -120,6 +120,10 @@ export const CopyCard = styled.li<{ isForValidation?: boolean }>`
     display: flex;
     gap: 10px;
   }
+
+  &:first-of-type {
+    margin-top: 16px;
+  }
 `;
 
 export const CardHeader = styled.div`

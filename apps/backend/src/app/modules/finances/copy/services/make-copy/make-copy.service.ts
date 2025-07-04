@@ -219,15 +219,15 @@ export class MakeCopyService {
       isForValidation: boolean;
     };
 
-    trackingData = await this.getMondayDataService.getRedtrackData({
+   trackingData = await this.getMondayDataService.getRedtrackData({
       product,
-      trackingType: presetProps.linkUrl.trackingType,
+      trackingType: presetProps.linkUrl && presetProps.linkUrl.trackingType ? presetProps.linkUrl.trackingType : '',
     });
    
     if (!trackingData) {
       trackingData = await this.getMondayDataService.getRedtrackData({
         product: `*${product}`,
-        trackingType: presetProps.linkUrl.trackingType,
+        trackingType: presetProps.linkUrl && presetProps.linkUrl.trackingType ? presetProps.linkUrl.trackingType : '',
       });
 
       if (!trackingData || !trackingData.trackingData) {
@@ -297,7 +297,7 @@ export class MakeCopyService {
     const links = await this.getImageLinks.getLinks({
       html: updatedHtml,
     });
-
+    
     const isForValidation = (trackingData && trackingData.isForValidation) ?? false;
 
     return {
