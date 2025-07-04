@@ -11,6 +11,7 @@ import { CheckIfProductPriorityService } from "../../../rules/services/check-if-
 import { VerifyTestCopyForDomainPayload } from "./verify-test-copy-for-domain.payload";
 import { CheckIfPartnerCanBeSendService } from "../../../rules/services/check-if-partner-can-be-send/check-if-partner-can-be-send.service";
 import { CheckIfSectorCanBeSendService } from "../../../rules/services/check-if-sector-can-be-send/check-if-sector-can-be-send.service";
+import { CheckTestCopyLimitsService } from "../../../rules/services/check-test-copy-limits/check-test-copy-limits.service";
 
 @Injectable()
 export class VerifyTestCopyForDomainService {
@@ -21,7 +22,7 @@ export class VerifyTestCopyForDomainService {
     private readonly checkIfCopyCanBeSendService: CheckIfCopyCanBeSendService,
     private readonly checkIfDomainActiveService: CheckIfDomainActiveService,
     private readonly checkIfCopyBlacklistedService: CheckIfCopyBlacklistedService,
-    private readonly checkTestCopyLimitsService: CheckWarmupCopyLimitsService,
+    private readonly checkTestCopyLimitsService: CheckTestCopyLimitsService,
     private readonly checkIfProductPriorityService: CheckIfProductPriorityService,
     private readonly checkIfPartnerCanBeSendService: CheckIfPartnerCanBeSendService,
     private readonly checkIfSectorCanBeSendService: CheckIfSectorCanBeSendService
@@ -68,6 +69,7 @@ export class VerifyTestCopyForDomainService {
       await this.checkTestCopyLimitsService.execute({
         copyName,
         broadcast,
+        testingRules: broadcastRules.testingRules,
         sendingDate,
       });
 

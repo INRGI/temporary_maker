@@ -45,6 +45,21 @@ const TestingRulesTab: React.FC<TestingRulesTabProps> = ({
           />
         </InputContainer>
       </InputGroup>
+
+      <InputGroup>
+        <InputContainer>
+          <FloatingLabelNumberInput
+            placeholder="Similar Test Copy Limit Per Day"
+            value={Number(testingRules.similarTestCopyLimitPerDay)}
+            onChange={(e) =>
+              onChange({
+                ...testingRules,
+                similarTestCopyLimitPerDay: Number(e.target.value),
+              })
+            }
+          />
+        </InputContainer>
+      </InputGroup>
     </RuleContainer>
   );
 };
