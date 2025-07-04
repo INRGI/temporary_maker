@@ -5,9 +5,11 @@ export interface BuildLinkPayload {
   productLift: string;
   linkUrl: LinkUrl;
   productImage?: string;
+  trackingData?:{trackingData: string; imgData: string, isForValidation?: boolean};
   mondayProductsData?: {
     product: string;
     trackingData: string;
     imgData: string;
+    isForValidation?: boolean
   }[];
 }

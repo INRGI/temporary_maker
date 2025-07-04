@@ -8,5 +8,6 @@ export interface MakeCopyPayload {
     product: string;
     trackingData: string;
     imgData: string;
+    isForValidation?: boolean
   }[];
 }

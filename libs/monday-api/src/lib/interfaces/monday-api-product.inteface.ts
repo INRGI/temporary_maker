@@ -6,6 +6,7 @@ export type MondayApiProductColumnValue = {
 export type MondayApiProductBoardData = {
   id: string;
   name: string;
+  group?: { title: string };
   column_values: MondayApiProductColumnValue[];
 };
 

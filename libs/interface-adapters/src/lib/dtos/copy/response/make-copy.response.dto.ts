@@ -8,4 +8,5 @@ export class MakeCopyResponseDto {
   imageLinks: string[];
   buildedLink: string;
   sendingDate: Date;
+  isForValidation?: boolean;
 }

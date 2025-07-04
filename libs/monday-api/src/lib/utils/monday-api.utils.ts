@@ -8,6 +8,9 @@ export class MondayApiUtils {
               items {
                 id
                 name
+                group {
+                  title
+                }
                 column_values {
                   column {
                     title

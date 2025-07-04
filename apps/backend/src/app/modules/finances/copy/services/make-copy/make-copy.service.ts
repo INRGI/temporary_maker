@@ -12,6 +12,7 @@ import { AntiSpamService } from "../../../copy-parser/services/anti-spam/anti-sp
 import { GetImageLinksService } from "../../../copy-parser/services/get-image-links/get-image-links.service";
 import { MakeCopyPayload } from "./make-copy.payload";
 import { HtmlFormatterService } from "../../../copy-parser/services/html-formatter/html-formatter.service";
+import { GetMondayDataService } from "../get-monday-data/get-monday-data.service";
 
 @Injectable()
 export class MakeCopyService {
@@ -27,7 +28,8 @@ export class MakeCopyService {
     private readonly getSubjectService: GetSubjectService,
     private readonly antiSpamService: AntiSpamService,
     private readonly getImageLinks: GetImageLinksService,
-    private readonly htmlFormatterService: HtmlFormatterService
+    private readonly htmlFormatterService: HtmlFormatterService,
+    private readonly getMondayDataService: GetMondayDataService
   ) {}
 
   public async makeCopyWithData(
@@ -56,6 +58,7 @@ export class MakeCopyService {
         subjects,
         imageLinks: [],
         buildedLink: "urlhere",
+        isForValidation: false,
       };
     }
 
@@ -76,6 +79,7 @@ export class MakeCopyService {
         subjects,
         imageLinks: [],
         buildedLink: "urlhere",
+        isForValidation: false,
       };
     }
 
@@ -140,6 +144,11 @@ export class MakeCopyService {
       html: updatedHtml,
     });
 
+    const isForValidation = await this.buildLinkService.checkIfForValidation({
+      product,
+      mondayProductsData,
+    });
+
     return {
       copyName,
       html: formattedHtml,
@@ -148,6 +157,7 @@ export class MakeCopyService {
       subjects,
       imageLinks: links,
       buildedLink: link || "urlhere",
+      isForValidation: isForValidation ?? false,
     };
   }
 
@@ -157,6 +167,7 @@ export class MakeCopyService {
     let link: string;
     let subjects: string[];
     let unsubData: UnsubData;
+    let isForValidation: boolean;
     const { copyName, preset, sendingDate } = payload;
 
     const nameMatch = copyName.match(/^[a-zA-Z]+/);
@@ -177,6 +188,7 @@ export class MakeCopyService {
         subjects,
         imageLinks: [],
         buildedLink: "urlhere",
+        isForValidation: false,
       };
     }
 
@@ -197,16 +209,42 @@ export class MakeCopyService {
         subjects,
         imageLinks: [],
         buildedLink: "urlhere",
+        isForValidation: false,
       };
+    }
+    let trackingData: {
+      product: string;
+      trackingData: string;
+      imgData: string;
+      isForValidation: boolean;
+    };
+
+    trackingData = await this.getMondayDataService.getRedtrackData({
+      product,
+      trackingType: presetProps.linkUrl.trackingType,
+    });
+
+    if (!trackingData) {
+      trackingData = await this.getMondayDataService.getRedtrackData({
+        product: `*${product}`,
+        trackingType: presetProps.linkUrl.trackingType,
+      });
+
+      if (!trackingData || !trackingData.trackingData) {
+        link = "urlhere";
+      }
     }
 
     if (presetProps.copyWhatToReplace?.isLinkUrl) {
-      link = await this.buildLinkService.buildLink({
-        product,
-        productLift,
-        productImage,
-        linkUrl: presetProps.linkUrl,
-      });
+      if (trackingData && trackingData.trackingData) {
+        link = await this.buildLinkService.buildLink({
+          product,
+          trackingData,
+          productLift,
+          productImage,
+          linkUrl: presetProps.linkUrl,
+        });
+      }
     }
 
     if (presetProps.copyWhatToReplace?.isUnsubLink) {
@@ -268,6 +306,7 @@ export class MakeCopyService {
       subjects,
       imageLinks: links,
       buildedLink: link || "urlhere",
+      isForValidation: trackingData.isForValidation ?? false,
     };
   }
 }

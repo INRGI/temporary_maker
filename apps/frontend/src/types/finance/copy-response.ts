@@ -8,4 +8,5 @@ export interface ResponseCopy {
   imageLinks?: string[];
   buildedLink: string;
   sendingDate: Date;
+  isForValidation?: boolean
 }

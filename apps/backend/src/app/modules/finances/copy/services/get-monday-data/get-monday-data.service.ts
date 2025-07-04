@@ -18,7 +18,7 @@ export class GetMondayDataService {
 
   public async getRedtrackData(
     payload: GetRedTrackDataPayload
-  ): Promise<{ trackingData: string; imgData: string }> {
+  ): Promise<{ product: string; trackingData: string; imgData: string, isForValidation: boolean }> {
     const { product, trackingType } = payload;
 
     try {
@@ -42,9 +42,13 @@ export class GetMondayDataService {
       ).text;
       const cleanedImgData = imgData.replace(/IMG/g, "");
       // if (!imgData) return;
+      
+      const isForValidation = mondayData[0].group?.title.startsWith("*V ");
 
       return {
+        product,
         trackingData,
+        isForValidation,
         imgData: cleanedImgData,
       };
     } catch (error) {
@@ -60,6 +64,7 @@ export class GetMondayDataService {
       product: string;
       trackingData: string;
       imgData: string;
+      isForValidation: boolean;
     }[]
   > {
     try {
@@ -76,6 +81,9 @@ export class GetMondayDataService {
                 items {
                   id
                   name
+                  group {
+                    title
+                  }
                   column_values {
                     column { title }
                     text
@@ -94,6 +102,7 @@ export class GetMondayDataService {
       for (const item of items) {
         mondayData.push({
           productName: item.name,
+          group: item.group,
           column_values: item.column_values,
         });
       }
@@ -114,9 +123,12 @@ export class GetMondayDataService {
         const imgData = item.column_values
           .find((column) => column.column.title === "IMG-IT")
           ?.text?.replace(/IMG/g, "");
+        
+        const isForValidation = item.group?.title.startsWith("*V ");
 
-        result.push({ product: item.productName, trackingData, imgData });
+        result.push({ product: item.productName, trackingData, imgData, isForValidation });
       }
+      
       return result;
     } catch (e) {
       this.logger.error(`Error fetching data: ${e.message}`);
