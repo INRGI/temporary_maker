@@ -1,3 +1,4 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
 export const Container = styled.div`
@@ -57,7 +58,7 @@ export const CopiesList = styled.ul`
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
   width: 100%;
   padding: 0;
   height: auto;
@@ -65,7 +66,7 @@ export const CopiesList = styled.ul`
   overflow-y: auto;
 `;
 
-export const CopyCard = styled.li`
+export const CopyCard = styled.li<{ isForValidation?: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -78,7 +79,26 @@ export const CopyCard = styled.li`
   color: #fff;
   gap: 15px;
   transition: all 0.3s ease;
+  position: relative;
 
+  ${({ isForValidation }) =>
+    isForValidation
+      ? css`
+          &::before {
+            content: "❗ Contact validation required ❗";
+            position: absolute;
+            top: -15px;
+            left: 10px;
+            background-color: #ff4d4f;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+          }
+        `
+      : css``}
   h2 {
     flex: 1;
     white-space: nowrap;

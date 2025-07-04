@@ -18,7 +18,12 @@ export class GetMondayDataService {
 
   public async getRedtrackData(
     payload: GetRedTrackDataPayload
-  ): Promise<{ product: string; trackingData: string; imgData: string, isForValidation: boolean }> {
+  ): Promise<{
+    product: string;
+    trackingData: string;
+    imgData: string;
+    isForValidation: boolean;
+  }> {
     const { product, trackingType } = payload;
 
     try {
@@ -35,15 +40,23 @@ export class GetMondayDataService {
         (column) => column.column.title === trackingType
       ).text;
 
-      if (!trackingData) return;
+      if (!trackingData) {
+        return {
+          product: "",
+          trackingData: "",
+          isForValidation:  mondayData[0].group?.title.startsWith("*V ") ?? false,
+          imgData: "",
+        };
+      }
 
       const imgData = mondayData[0].column_values.find(
         (column) => column.column.title === "IMG-IT"
       ).text;
       const cleanedImgData = imgData.replace(/IMG/g, "");
       // if (!imgData) return;
-      
-      const isForValidation = mondayData[0].group?.title.startsWith("*V ");
+
+      const isForValidation =
+        mondayData[0].group?.title.startsWith("*V ") ?? false;
 
       return {
         product,
@@ -69,11 +82,11 @@ export class GetMondayDataService {
   > {
     try {
       const boardId = 803747785;
-    const mondayData = [];
-    let cursor: string | null = null;
+      const mondayData = [];
+      let cursor: string | null = null;
 
-    do {
-      const query = `
+      do {
+        const query = `
           query ($boardId: ID!, $cursor: String) {
             boards(ids: [$boardId]) {
               items_page(limit: 500, cursor: $cursor) {
@@ -94,28 +107,32 @@ export class GetMondayDataService {
           }
         `;
 
-      const variables = { boardId, cursor };
+        const variables = { boardId, cursor };
 
-      const { items, cursor: nextCursor } =
-        await this.mondayApiService.getItemsWithCursor({ query, variables });
+        const { items, cursor: nextCursor } =
+          await this.mondayApiService.getItemsWithCursor({ query, variables });
 
-      for (const item of items) {
-        mondayData.push({
-          productName: item.name,
-          group: item.group,
-          column_values: item.column_values,
-        });
-      }
+        for (const item of items) {
+          mondayData.push({
+            productName: item.name,
+            group: item.group,
+            column_values: item.column_values,
+          });
+        }
 
-      cursor = nextCursor;
-    } while (cursor);
-    
-    const result = [];
+        cursor = nextCursor;
+      } while (cursor);
+
+      const result = [];
 
       for (const productName of products) {
-        const item = mondayData.find((product) => product.productName.startsWith(`${productName} -`) || product.productName.startsWith(`*${productName} -`));
+        const item = mondayData.find(
+          (product) =>
+            product.productName.startsWith(`${productName} -`) ||
+            product.productName.startsWith(`*${productName} -`)
+        );
         if (!item) continue;
-        
+
         const trackingData = item.column_values.find(
           (column) => column.column.title === trackingType
         )?.text;
@@ -123,12 +140,17 @@ export class GetMondayDataService {
         const imgData = item.column_values
           .find((column) => column.column.title === "IMG-IT")
           ?.text?.replace(/IMG/g, "");
-        
+
         const isForValidation = item.group?.title.startsWith("*V ");
 
-        result.push({ product: item.productName, trackingData, imgData, isForValidation });
+        result.push({
+          product: item.productName,
+          trackingData,
+          imgData,
+          isForValidation,
+        });
       }
-      
+
       return result;
     } catch (e) {
       this.logger.error(`Error fetching data: ${e.message}`);

@@ -167,7 +167,7 @@ export class MakeCopyService {
     let link: string;
     let subjects: string[];
     let unsubData: UnsubData;
-    let isForValidation: boolean;
+
     const { copyName, preset, sendingDate } = payload;
 
     const nameMatch = copyName.match(/^[a-zA-Z]+/);
@@ -223,7 +223,7 @@ export class MakeCopyService {
       product,
       trackingType: presetProps.linkUrl.trackingType,
     });
-
+   
     if (!trackingData) {
       trackingData = await this.getMondayDataService.getRedtrackData({
         product: `*${product}`,
@@ -234,7 +234,7 @@ export class MakeCopyService {
         link = "urlhere";
       }
     }
-
+    
     if (presetProps.copyWhatToReplace?.isLinkUrl) {
       if (trackingData && trackingData.trackingData) {
         link = await this.buildLinkService.buildLink({
@@ -298,6 +298,8 @@ export class MakeCopyService {
       html: updatedHtml,
     });
 
+    const isForValidation = (trackingData && trackingData.isForValidation) ?? false;
+
     return {
       copyName,
       html: formattedHtml,
@@ -306,7 +308,7 @@ export class MakeCopyService {
       subjects,
       imageLinks: links,
       buildedLink: link || "urlhere",
-      isForValidation: trackingData.isForValidation ?? false,
+      isForValidation,
     };
   }
 }

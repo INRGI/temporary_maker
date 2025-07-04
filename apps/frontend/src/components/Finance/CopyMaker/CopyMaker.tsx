@@ -436,7 +436,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
       ) : (
         <CopiesList>
           {copies.map((copy) => (
-            <CopyCard key={copy.copyName}>
+            <CopyCard key={copy.copyName} isForValidation={copy.isForValidation}>
               <CardHeader>
                 <LinkIndicator link={copy.buildedLink} />
                 <h2>
