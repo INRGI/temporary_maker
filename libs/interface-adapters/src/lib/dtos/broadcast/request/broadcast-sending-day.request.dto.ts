@@ -10,4 +10,7 @@ export class BroadcastSendingDayRequestDto {
 
   @IsArray()
   copies: BroadcastCopyRequestDto[];
+
+  @IsArray()
+  possibleReplacementCopies: BroadcastCopyRequestDto[];
 }

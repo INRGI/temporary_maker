@@ -5,7 +5,10 @@ import { CheckIfProductCanBeSendService } from "../../../rules/services/check-if
 import { CheckIfCopyCanBeSendService } from "../../../rules/services/check-if-copy-can-be-send/check-if-copy-can-be-send.service";
 import { CheckIfDomainActiveService } from "../../../rules/services/check-if-domain-active/check-if-domain-active.service";
 import { CheckIfCopyBlacklistedService } from "../../../rules/services/check-if-copy-blacklisted/check-if-copy-blacklisted.service";
-import { VerifyCopyForDomainResponseDto } from "@epc-services/interface-adapters";
+import {
+  CopyType,
+  VerifyCopyForDomainResponseDto,
+} from "@epc-services/interface-adapters";
 import { VerifyWarmupCopyForDomainPayload } from "./verify-warmup-copy-for-domain.payload";
 import { CheckIfDomainWarmupService } from "../../../rules/services/check-if-domain-warmup/check-if-domain-warmup.service";
 import { CheckWarmupCopyLimitsService } from "../../../rules/services/check-warmup-copy-limits/check-warmup-copy-limits.service";
@@ -43,6 +46,16 @@ export class VerifyWarmupCopyForDomainService {
       priorityCopiesData,
     } = payload;
 
+    const checkIfDomainWarmupResult =
+      await this.checkIfDomainWarmupService.execute({
+        domain: broadcastDomain.domain,
+        domainsData,
+      });
+
+    if (!checkIfDomainWarmupResult) {
+      return { isValid: false, broadcastDomain };
+    }
+
     const checkIfCopyBlacklistedServiceResult =
       await this.checkIfCopyBlacklistedService.execute({
         copyName,
@@ -74,16 +87,6 @@ export class VerifyWarmupCopyForDomainService {
       });
 
     if (!checkWarmupCopyLimitsResult) {
-      return { isValid: false, broadcastDomain };
-    }
-
-    const checkIfDomainWarmupResult =
-      await this.checkIfDomainWarmupService.execute({
-        domain: broadcastDomain.domain,
-        domainsData,
-      });
-
-    if (!checkIfDomainWarmupResult) {
       return { isValid: false, broadcastDomain };
     }
 
@@ -182,6 +185,7 @@ export class VerifyWarmupCopyForDomainService {
         date: sendingDate,
         copies: [],
         isModdified: false,
+        possibleReplacementCopies: [],
       };
 
       broadcastDomain.broadcastCopies.push(existingDate);
@@ -199,7 +203,11 @@ export class VerifyWarmupCopyForDomainService {
             ...broadcastCopy,
             copies: [
               ...broadcastCopy.copies,
-              { name: copyName, isPriority: isCopyPriority },
+              {
+                name: copyName,
+                isPriority: isCopyPriority,
+                copyType: CopyType.Warmup,
+              },
             ],
             isModdified: true,
           };

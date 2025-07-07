@@ -28,6 +28,7 @@ import { toastError, toastSuccess } from "../../../helpers/toastify";
 import { approveBroadcast } from "../../../api/broadcast.api";
 import Loader from "../../Common/Loader";
 import ConfirmationModal from "../ConfirmationModal";
+import { CopyType } from "../../../types/broadcast-tool";
 
 interface BroadcastTableModalProps {
   isOpen: boolean;
@@ -74,7 +75,7 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
     let copyItem = domainItem?.broadcastCopies.find((c) => c.date === date);
 
     if (!copyItem && domainItem) {
-      copyItem = { date, copies: [], isModdified: false };
+      copyItem = { date, copies: [], isModdified: false, possibleReplacementCopies: [] };
       domainItem.broadcastCopies.push(copyItem);
     }
 
@@ -94,7 +95,7 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean)
-        .map((name) => ({ name, isPriority: false }));
+        .map((name) => ({ name, isPriority: false, copyType: CopyType.Unknown }));
       copyItem.isModdified = true;
     }
     setBroadcastData(newData);

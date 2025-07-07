@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { VerifyCopyForDomainPayload } from "./verify-copy-for-domain.payload";
+import { VerifyConvCopyForDomainPayload } from "./verify-conv-copy-for-domain.payload";
 import { CheckCopyLastSendService } from "../../../rules/services/check-copy-last-send/check-copy-last-send.service";
 import { CheckProductLastSendService } from "../../../rules/services/check-product-last-send/check-product-last-send.service";
 import { CheckIfProductCanBeSendService } from "../../../rules/services/check-if-product-can-be-send/check-if-product-can-be-send.service";
@@ -12,7 +12,7 @@ import { CheckIfPartnerCanBeSendService } from "../../../rules/services/check-if
 import { CheckIfSectorCanBeSendService } from "../../../rules/services/check-if-sector-can-be-send/check-if-sector-can-be-send.service";
 
 @Injectable()
-export class VerifyCopyForDomainService {
+export class VerifyConvCopyForDomainService {
   constructor(
     private readonly checkCopyLastSendService: CheckCopyLastSendService,
     private readonly checkProductLastSendService: CheckProductLastSendService,
@@ -25,7 +25,7 @@ export class VerifyCopyForDomainService {
     private readonly checkIfSectorCanBeSendService: CheckIfSectorCanBeSendService
   ) {}
   public async execute(
-    payload: VerifyCopyForDomainPayload
+    payload: VerifyConvCopyForDomainPayload
   ): Promise<VerifyCopyForDomainResponseDto> {
     const {
       broadcastDomain,
@@ -175,7 +175,7 @@ export class VerifyCopyForDomainService {
             ...broadcastCopy,
             copies: [
               ...broadcastCopy.copies,
-              { name: copyName, isPriority: isCopyPriority, copyType: CopyType.Click},
+              { name: copyName, isPriority: isCopyPriority, copyType: CopyType.Conversion},
             ],
             isModdified: true,
           };
@@ -183,7 +183,7 @@ export class VerifyCopyForDomainService {
         return broadcastCopy;
       }
     );
-
+    
     const isBroadcastCopyAdded = updatedBroadcastCopies.some(
       (broadcastCopy) =>
         broadcastCopy.date === sendingDate &&

@@ -53,6 +53,7 @@ const Menu: React.FC = () => {
       productStatuses: [],
       domainSendings: [],
       partners: [],
+      sectors: [],
     });
   const [domainMondayStatuses, setDomainMondayStatuses] =
     useState<GetDomainStatusesResponse>({
@@ -112,6 +113,7 @@ const Menu: React.FC = () => {
         productStatuses: [],
         domainSendings: [],
         partners: [],
+        sectors: [],
       });
     }
   };

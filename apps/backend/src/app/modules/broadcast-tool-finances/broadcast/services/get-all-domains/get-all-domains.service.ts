@@ -4,8 +4,9 @@ import {
   InjectGSpreadsheetApiService,
 } from "@epc-services/gspreadsheet-api";
 import {
-  BroadcastCopy,
   BroadcastDomain,
+  BroadcastSendingDay,
+  CopyType,
   GetAllDomainsResponseDto,
 } from "@epc-services/interface-adapters";
 import { Injectable } from "@nestjs/common";
@@ -15,7 +16,7 @@ import { GetAllDomainsPayload } from "./get-all-domains.payload";
 export class GetAllDomainsService {
   constructor(
     @InjectGSpreadsheetApiService()
-    private readonly spreadsheetService: GSpreadsheetApiServicePort,
+    private readonly spreadsheetService: GSpreadsheetApiServicePort
   ) {}
 
   private parseDateToNumber(date: string): number {
@@ -72,11 +73,7 @@ export class GetAllDomainsService {
           const domain = domains[colIdx];
           const esp = esps[colIdx] || "";
 
-          const broadcastCopies: {
-            date: string;
-            copies: BroadcastCopy[];
-            isModdified: boolean;
-          }[] = [];
+          const broadcastCopies: BroadcastSendingDay[] = [];
 
           for (let rowIdx = 4; rowIdx < rows.length; rowIdx++) {
             const row = rows[rowIdx];
@@ -113,17 +110,22 @@ export class GetAllDomainsService {
             const copies = words.map((word) => {
               const start = rawText.indexOf(word, currentIndex);
               if (start === -1) {
-                return { name: word, isPriority: false };
+                return { name: word, isPriority: false, copyType: CopyType.Unknown };
               }
               currentIndex = start + word.length;
 
               const isBold = boldRanges.some(
                 ([from, to]) => start >= from && start < to
               );
-              return { name: word, isPriority: isBold };
+              return { name: word, isPriority: isBold, copyType: CopyType.Unknown };
             });
 
-            broadcastCopies.push({ date, copies, isModdified: false });
+            broadcastCopies.push({
+              date,
+              copies,
+              isModdified: false,
+              possibleReplacementCopies: [],
+            });
           }
 
           const sortedBroadcastCopies = broadcastCopies.sort(

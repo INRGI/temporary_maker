@@ -5,12 +5,13 @@ import { VerifyCopyForDomainService } from "../../../copy-verify/services/verify
 import { VerifyWarmupCopyForDomainService } from "../../../copy-verify/services/verify-warmup-copy-for-domain/verify-warmup-copy-for-domain.service";
 import { getCopyStrategyForDomain } from "../../utils/getCopyStrategyForDomain";
 import { VerifyTestCopyForDomainService } from "../../../copy-verify/services/verify-test-copy-for-domain/verify-test-copy-for-domain.service";
+import { VerifyConvCopyForDomainService } from "../../../copy-verify/services/verify-conv-copy-for-domain/verify-conv-copy-for-domain.service";
 
 @Injectable()
 export class BroadcastAssignerService {
   constructor(
     private readonly clickValidator: VerifyCopyForDomainService,
-    private readonly conversionValidator: VerifyCopyForDomainService,
+    private readonly conversionValidator: VerifyConvCopyForDomainService,
     private readonly testValidator: VerifyTestCopyForDomainService,
     private readonly warmUpValidator: VerifyWarmupCopyForDomainService
   ) {}
@@ -40,26 +41,21 @@ export class BroadcastAssignerService {
 
     if (!strategy) return domain;
 
-    const currentDay = domain.broadcastCopies.find((day) => day.date === date);
-    let copiesQuantity = currentDay?.copies.length || 0;
-    const maxCopiesPerDay = strategy.copiesTypes.length;
     const added: string[] = [];
 
     for (const type of strategy.copiesTypes) {
-      if (copiesQuantity >= maxCopiesPerDay) break;
-
       const pool = this.getCopyPool(type, {
         clickableCopies,
         convertibleCopies,
         testCopies,
         warmupCopies,
       });
+    
       const validator = this.getValidator(type);
-
+    
       for (const copyName of pool) {
-        if (copiesQuantity >= maxCopiesPerDay) break;
         if (added.includes(copyName)) continue;
-
+    
         const result = await validator.execute({
           broadcast,
           broadcastDomain: domain,
@@ -71,14 +67,15 @@ export class BroadcastAssignerService {
           domainsData,
           priorityCopiesData,
         });
-
+    
         if (result.isValid) {
           domain = {
             ...domain,
             broadcastCopies: result.broadcastDomain.broadcastCopies,
           };
           added.push(copyName);
-          copiesQuantity++;
+    
+          break;
         }
       }
     }
@@ -104,6 +101,8 @@ export class BroadcastAssignerService {
         return pools.testCopies;
       case "warmup":
         return pools.warmupCopies;
+      default:
+        return [];
     }
   }
 
@@ -117,6 +116,8 @@ export class BroadcastAssignerService {
         return this.testValidator;
       case "warmup":
         return this.warmUpValidator;
+      default:
+        return null;
     }
   }
 }

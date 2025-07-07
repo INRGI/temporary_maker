@@ -5,7 +5,7 @@ import { CheckIfProductCanBeSendService } from "../../../rules/services/check-if
 import { CheckIfCopyCanBeSendService } from "../../../rules/services/check-if-copy-can-be-send/check-if-copy-can-be-send.service";
 import { CheckIfDomainActiveService } from "../../../rules/services/check-if-domain-active/check-if-domain-active.service";
 import { CheckIfCopyBlacklistedService } from "../../../rules/services/check-if-copy-blacklisted/check-if-copy-blacklisted.service";
-import { VerifyCopyForDomainResponseDto } from "@epc-services/interface-adapters";
+import { CopyType, VerifyCopyForDomainResponseDto } from "@epc-services/interface-adapters";
 import { CheckIfProductPriorityService } from "../../../rules/services/check-if-product-priority/check-if-product-priority.service";
 import { VerifyCopyWithoutQueuePayload } from "./verify-copy-without-queue.payload";
 import { CheckIfPartnerCanBeSendService } from "../../../rules/services/check-if-partner-can-be-send/check-if-partner-can-be-send.service";
@@ -180,6 +180,7 @@ export class VerifyCopyWithoutQueueService {
         date: sendingDate,
         copies: [],
         isModdified: false,
+        possibleReplacementCopies: [],
       };
 
       broadcastDomain.broadcastCopies.push(existingDate);
@@ -197,7 +198,7 @@ export class VerifyCopyWithoutQueueService {
             ...broadcastCopy,
             copies: [
               ...broadcastCopy.copies,
-              { name: copyName, isPriority: isCopyPriority },
+              { name: copyName, isPriority: isCopyPriority, copyType: CopyType.Unknown },
             ],
             isModdified: true,
           };
