@@ -28,7 +28,8 @@ import { toastError, toastSuccess } from "../../../helpers/toastify";
 import { approveBroadcast } from "../../../api/broadcast.api";
 import Loader from "../../Common/Loader";
 import ConfirmationModal from "../ConfirmationModal";
-import { CopyType } from "../../../types/broadcast-tool";
+import { BroadcastSendingDay, CopyType } from "../../../types/broadcast-tool";
+import EditCopyCellModal from "../EditCopyCellModal";
 
 interface BroadcastTableModalProps {
   isOpen: boolean;
@@ -54,6 +55,12 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
 
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
+  const [editModal, setEditModal] = useState<{
+    domain: string;
+    date: string;
+    entry: BroadcastSendingDay;
+  } | null>(null);
+
   const activeSheet = broadcastData.sheets[activeTabIndex];
   const domains = activeSheet.domains;
 
@@ -75,7 +82,12 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
     let copyItem = domainItem?.broadcastCopies.find((c) => c.date === date);
 
     if (!copyItem && domainItem) {
-      copyItem = { date, copies: [], isModdified: false, possibleReplacementCopies: [] };
+      copyItem = {
+        date,
+        copies: [],
+        isModdified: false,
+        possibleReplacementCopies: [],
+      };
       domainItem.broadcastCopies.push(copyItem);
     }
 
@@ -95,7 +107,11 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean)
-        .map((name) => ({ name, isPriority: false, copyType: CopyType.Unknown }));
+        .map((name) => ({
+          name,
+          isPriority: false,
+          copyType: CopyType.Unknown,
+        }));
       copyItem.isModdified = true;
     }
     setBroadcastData(newData);
@@ -111,7 +127,7 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
   const handleApproveBroadcast = async () => {
     try {
       setIsLoading(true);
-      setIsConfirmationModalOpen(false)
+      setIsConfirmationModalOpen(false);
       const data: ApproveBroadcastSheetRequest[] = broadcastData.sheets.map(
         (sheet) => ({
           spreadsheetId: spreadSheetId,
@@ -162,9 +178,7 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
             </TabHeader>
             <ControlsRight>
               <ApproveButton onClick={() => setIsConfirmationModalOpen(true)}>
-                <IoMdCheckmarkCircleOutline
-                />{" "}
-                Approve
+                <IoMdCheckmarkCircleOutline /> Approve
               </ApproveButton>
               <BackButton onClick={() => onClose()}>
                 <IoIosArrowRoundBack /> Back
@@ -200,37 +214,22 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
                         <Td
                           key={domain.domain + date}
                           isHighlighted={entry?.isModdified}
-                          onDoubleClick={() => handleEdit(domain.domain, date)}
+                          onDoubleClick={() => {
+                            if (entry)
+                              setEditModal({
+                                domain: domain.domain,
+                                date,
+                                entry,
+                              });
+                          }}
                         >
-                          {isEditing ? (
-                            <input
-                              autoFocus
-                              value={editValue}
-                              onChange={(e) => setEditValue(e.target.value)}
-                              onBlur={() => handleSave(domain.domain, date)}
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter")
-                                  handleSave(domain.domain, date);
-                                if (e.key === "Escape") setEditCell(null);
-                              }}
-                              style={{
-                                width: "100%",
-                                backgroundColor: "#2b2b2b",
-                                color: "white",
-                                border: "1px solid #666",
-                                borderRadius: 4,
-                                padding: "4px 8px",
-                              }}
-                            />
-                          ) : (
-                            <CopyBlock>
-                              {entry?.copies.map((copy, idx) => (
-                                <CopySpan key={idx} bold={copy.isPriority}>
-                                  {copy.name}
-                                </CopySpan>
-                              ))}
-                            </CopyBlock>
-                          )}
+                          <CopyBlock>
+                            {entry?.copies.map((copy, idx) => (
+                              <CopySpan key={idx} bold={copy.isPriority}>
+                                {copy.name}
+                              </CopySpan>
+                            ))}
+                          </CopyBlock>
                         </Td>
                       );
                     })}
@@ -252,6 +251,27 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
             setIsConfirmationModalOpen(false);
           }}
           onConfirm={handleApproveBroadcast}
+        />
+      )}
+      {editModal && (
+        <EditCopyCellModal
+          isOpen={true}
+          entry={editModal.entry}
+          onClose={() => setEditModal(null)}
+          onUpdate={(updatedEntry) => {
+            const newData = { ...broadcastData };
+            const sheet = newData.sheets[activeTabIndex];
+            const domainItem = sheet.domains.find(
+              (d) => d.domain === editModal.domain
+            );
+            const entryToUpdate = domainItem?.broadcastCopies.find(
+              (c) => c.date === editModal.date
+            );
+            if (entryToUpdate) {
+              Object.assign(entryToUpdate, updatedEntry);
+            }
+            setBroadcastData(newData);
+          }}
         />
       )}
     </AdminModal>
