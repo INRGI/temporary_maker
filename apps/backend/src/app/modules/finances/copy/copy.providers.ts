@@ -19,6 +19,7 @@ import { GetSubjectService } from './services/get-subject/get-subject.service';
 import { HtmlFormatterService } from '../copy-parser/services/html-formatter/html-formatter.service';
 import { GetAllCopiesForProductService } from './services/get-all-copies-for-product/get-all-copies-for-product.service';
 import { SpaceAdBuildLinkService } from './services/space-ad-build-link/space-ad-build-link.service';
+import { GetRedtracksDataService } from './services/get-redtracks-data/get-redtracks-data.service';
 
 export const messageControllers = [CopyMessageController];
 
@@ -44,4 +45,5 @@ export const serviceProviders: Provider[] = [
   HtmlFormatterService,
   GetAllCopiesForProductService,
   SpaceAdBuildLinkService,
+  GetRedtracksDataService,
 ];

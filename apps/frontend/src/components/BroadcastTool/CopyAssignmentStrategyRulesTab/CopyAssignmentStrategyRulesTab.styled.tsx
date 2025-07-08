@@ -96,6 +96,8 @@ export const ResetButton = styled.button`
   border-radius: 6px;
   padding: 6px 12px;
   font-size: 14px;
+  width: 100%;
+  max-width: 300px;
   cursor: pointer;
 
   &:hover {

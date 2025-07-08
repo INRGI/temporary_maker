@@ -4,6 +4,7 @@ import {
 } from "@epc-services/monday-api";
 import { Injectable, Logger } from "@nestjs/common";
 import { GetRedTrackDataPayload } from "./get-monday-data.payload";
+import { GetRedtracksDataService } from "../get-redtracks-data/get-redtracks-data.service";
 
 @Injectable()
 export class GetMondayDataService {
@@ -13,7 +14,8 @@ export class GetMondayDataService {
 
   constructor(
     @InjectMondayApiService()
-    private readonly mondayApiService: MondayApiServicePort
+    private readonly mondayApiService: MondayApiServicePort,
+    private readonly getRedtracksDataService: GetRedtracksDataService
   ) {}
 
   public async getRedtrackData(
@@ -56,43 +58,8 @@ export class GetMondayDataService {
     }[]
   > {
     try {
-      const boardId = 3858647032;
-      const mondayData = [];
-      let cursor: string | null = null;
-
-      do {
-        const query = `
-          query ($boardId: ID!, $cursor: String) {
-            boards(ids: [$boardId]) {
-              items_page(limit: 500, cursor: $cursor) {
-                cursor
-                items {
-                  id
-                  name
-                  column_values {
-                    column { title }
-                    text
-                  }
-                }
-              }
-            }
-          }
-        `;
-
-        const variables = { boardId, cursor };
-
-        const { items, cursor: nextCursor } =
-          await this.mondayApiService.getItemsWithCursor({ query, variables });
-
-        for (const item of items) {
-          mondayData.push({
-            productName: item.name,
-            column_values: item.column_values,
-          });
-        }
-
-        cursor = nextCursor;
-      } while (cursor);
+      const mondayData =
+        await this.getRedtracksDataService.getAllRedtracksData();
 
       const result = [];
 

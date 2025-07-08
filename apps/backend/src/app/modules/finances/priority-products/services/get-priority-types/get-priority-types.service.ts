@@ -1,13 +1,15 @@
 import {
   GDriveApiServicePort,
   InjectGDriveApiService,
-} from '@epc-services/gdrive-api';
+} from "@epc-services/gdrive-api";
 import {
   GetPriorityTypesResponseDto,
   UnsubSheet,
-} from '@epc-services/interface-adapters';
-import { Injectable, Logger } from '@nestjs/common';
-import * as XLSX from 'xlsx';
+} from "@epc-services/interface-adapters";
+import { Injectable, Logger, Inject } from "@nestjs/common";
+import * as XLSX from "xlsx";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Cache } from "cache-manager";
 
 @Injectable()
 export class GetPriorityTypesService {
@@ -17,25 +19,35 @@ export class GetPriorityTypesService {
 
   constructor(
     @InjectGDriveApiService()
-    private readonly gdriveApiService: GDriveApiServicePort
+    private readonly gdriveApiService: GDriveApiServicePort,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache
   ) {}
 
   public async getPriorityTypes(): Promise<GetPriorityTypesResponseDto> {
+    const cacheKey = `financeGetPriorityTypes`;
+
+    const cached = await this.cacheManager.get<GetPriorityTypesResponseDto>(
+      cacheKey
+    );
+
+    if (cached) return cached;
+
     try {
       const fileContent = await this.gdriveApiService.getContentLikeBuffer(
-        '1e40khWM1dKTje_vZi4K4fL-RA8-D6jhp2wmZSXurQH0',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        "1e40khWM1dKTje_vZi4K4fL-RA8-D6jhp2wmZSXurQH0",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       );
-      const workbook = await XLSX.read(fileContent, { type: 'buffer' });
+      const workbook = await XLSX.read(fileContent, { type: "buffer" });
 
       const unsubSheets: UnsubSheet[] = [];
 
       for (const sheetName of workbook.SheetNames) {
-        if (sheetName.toLowerCase() === 'fit(agora)') {
+        if (sheetName.toLowerCase() === "fit(agora)") {
           continue;
         }
 
-        if (sheetName.toLowerCase() === 'stansberry') {
+        if (sheetName.toLowerCase() === "stansberry") {
           continue;
         }
 
@@ -55,8 +67,8 @@ export class GetPriorityTypesService {
             const cell = row[colIdx];
             if (
               cell &&
-              typeof cell === 'string' &&
-              cell.toString() === 'UNSUB TEXT'
+              typeof cell === "string" &&
+              cell.toString() === "UNSUB TEXT"
             ) {
               unsubTextColIdx = colIdx;
               break;
@@ -74,8 +86,8 @@ export class GetPriorityTypesService {
               const header = row[colIdx];
               if (
                 header &&
-                typeof header === 'string' &&
-                header.trim() !== ''
+                typeof header === "string" &&
+                header.trim() !== ""
               ) {
                 unsubTypes.push(header.toString().trim());
               }
@@ -93,11 +105,12 @@ export class GetPriorityTypesService {
         }
       }
 
+      await this.cacheManager.set(cacheKey, { sheets: unsubSheets }, 900000);
       return {
         sheets: unsubSheets,
       };
     } catch (error) {
-      this.logger.error('Error getting priority types', error);
+      this.logger.error("Error getting priority types", error);
       return {
         sheets: [],
       };

@@ -13,6 +13,7 @@ import {
   serviceProviders,
 } from "./copy.providers";
 import { GDocApiModule } from "@epc-services/gdoc-api";
+import { CacheModule } from "@nestjs/cache-manager";
 
 @Module({
   imports: [
@@ -30,6 +31,10 @@ import { GDocApiModule } from "@epc-services/gdoc-api";
     GDocApiModule.registerAsync({
       imports: [GdriveConfigModule],
       useClass: GdriveApiOptionsFactoryService,
+    }),
+    CacheModule.register({
+      ttl: 600000,
+      isGlobal: true,
     }),
   ],
   controllers: [...messageControllers],

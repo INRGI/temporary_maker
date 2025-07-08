@@ -14,6 +14,7 @@ import { CopyParserModule } from "../../finances/copy-parser/copy-parser.module"
 import { HealthGdriveApiOptionsFactoryService } from "../../../infrastructure/options-factory/health-gdrive-api.options-factory.service";
 import { PriorityProductsModule } from "../priority-products/priority-products.module";
 import { GDocApiModule } from "@epc-services/gdoc-api";
+import { CacheModule } from "@nestjs/cache-manager";
 
 @Module({
   imports: [
@@ -31,6 +32,10 @@ import { GDocApiModule } from "@epc-services/gdoc-api";
     GDocApiModule.registerAsync({
       imports: [GdriveConfigModule],
       useClass: HealthGdriveApiOptionsFactoryService,
+    }),
+    CacheModule.register({
+      ttl: 600000,
+      isGlobal: true,
     }),
   ],
   controllers: [...messageControllers],

@@ -90,6 +90,12 @@ const Tag = styled.div`
   border-radius: 4px;
   padding: 4px 8px;
   font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #a94141;
+  }
 `;
 
 const MultiSelectDropdown = ({
@@ -207,7 +213,7 @@ const MultiSelectDropdown = ({
         )}
       <SelectedTags>
         {selected.map((s) => (
-          <Tag key={s}>{s}</Tag>
+          <Tag key={s} onClick={() => handleSelect(s)}>{s}</Tag>
         ))}
       </SelectedTags>
     </DropdownWrapper>

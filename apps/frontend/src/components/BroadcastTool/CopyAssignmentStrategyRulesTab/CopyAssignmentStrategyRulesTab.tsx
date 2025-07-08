@@ -283,7 +283,7 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
             >
               {sheetName}{" "}
               <ResetButton onClick={() => handleRemoveAllForSheet(sheetName)}>
-                Reset All types for {sheetName}
+                Reset {sheetName}
               </ResetButton>
             </TabHeader>
 
