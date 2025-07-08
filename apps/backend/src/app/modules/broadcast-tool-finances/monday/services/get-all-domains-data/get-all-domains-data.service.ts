@@ -4,20 +4,32 @@ import {
   InjectMondayApiService,
   MondayApiServicePort,
 } from "@epc-services/monday-api";
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Cache } from "cache-manager";
 
 @Injectable()
 export class GetAllDomainsDataService {
   constructor(
     @InjectMondayApiService()
     private readonly mondayApiService: MondayApiServicePort,
-    private readonly mondayApiConfig: MondayConfigService
+    private readonly mondayApiConfig: MondayConfigService,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache
   ) {}
 
   public async execute(): Promise<GetDomainDataResponse[]> {
     const boardId = Number(this.mondayApiConfig.domainsBoardId);
     const result: GetDomainDataResponse[] = [];
     let cursor: string | null = null;
+
+    const cacheKey = `allDomainsData:${boardId}`;
+
+    const cached = await this.cacheManager.get<GetDomainDataResponse[]>(
+      cacheKey
+    );
+
+    if (cached) return cached;
 
     do {
       const query = `
@@ -63,6 +75,7 @@ export class GetAllDomainsDataService {
       cursor = nextCursor;
     } while (cursor);
 
+    await this.cacheManager.set(cacheKey, result, 900000);
     return result;
   }
 }

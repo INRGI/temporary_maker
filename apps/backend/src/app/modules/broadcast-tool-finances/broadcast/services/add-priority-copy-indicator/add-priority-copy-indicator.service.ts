@@ -30,6 +30,13 @@ export class AddPriorityCopyIndicatorService {
                     name: c.isPriority ? `${c.name}(P)` : c.name,
                   };
                 }),
+                possibleReplacementCopies:
+                  broadcastCopies.possibleReplacementCopies.map((c) => {
+                    return {
+                      ...c,
+                      name: c.isPriority ? `${c.name}(P)` : c.name,
+                    };
+                  }),
               };
             }),
           };

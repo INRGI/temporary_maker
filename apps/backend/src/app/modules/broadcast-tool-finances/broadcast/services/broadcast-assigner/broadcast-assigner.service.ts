@@ -40,6 +40,16 @@ export class BroadcastAssignerService {
     );
 
     if (!strategy) return domain;
+    const currentDayCopies = domain.broadcastCopies.find(
+      (c) => c.date === date
+    );
+
+    if (
+      currentDayCopies &&
+      currentDayCopies?.copies &&
+      currentDayCopies.copies.length >= strategy.copiesTypes.length
+    )
+      return domain;
 
     const added: string[] = [];
 

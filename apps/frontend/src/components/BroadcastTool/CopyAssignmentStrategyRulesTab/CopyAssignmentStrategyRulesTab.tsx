@@ -214,6 +214,18 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
     onChange({ domainStrategies: allUpdated });
   };
 
+  const handleRemoveAllForSheet = (sheet: string) => {
+    const updated = { ...strategiesBySheet };
+    updated[sheet] = updated[sheet].map((domain) => ({
+      ...domain,
+      copiesTypes: [],
+    }));
+
+    setStrategiesBySheet(updated);
+    const allUpdated = Object.values(updated).flat();
+    onChange({ domainStrategies: allUpdated });
+  };
+
   const handleRemoveType = (
     sheet: string,
     domainIndex: number,
@@ -232,34 +244,34 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
     <Wrapper>
       {isLoading && <Loader />}
       {!isLoading && (
-          <div
-            style={{
-              display: "flex",
-              gap: 10,
-              alignItems: "center",
-              marginBottom: 12,
-            }}
+        <div
+          style={{
+            display: "flex",
+            gap: 10,
+            alignItems: "center",
+            marginBottom: 12,
+          }}
+        >
+          <SmallSelect
+            value={bulkType}
+            onChange={(e) =>
+              setBulkType(
+                e.target.value as DomainStrategy["copiesTypes"][number]
+              )
+            }
+            style={{ maxWidth: 180 }}
           >
-            <SmallSelect
-              value={bulkType}
-              onChange={(e) =>
-                setBulkType(
-                  e.target.value as DomainStrategy["copiesTypes"][number]
-                )
-              }
-              style={{ maxWidth: 180 }}
-            >
-              {["click", "conversion", "test", "warmup"].map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </SmallSelect>
-            <AddTypeButton onClick={() => handleAddTypeForAll(bulkType)}>
-              + Add {bulkType} to All
-            </AddTypeButton>
-            <ResetButton onClick={handleRemoveAllTypes}>Reset All</ResetButton>
-          </div>
+            {["click", "conversion", "test", "warmup"].map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </SmallSelect>
+          <AddTypeButton onClick={() => handleAddTypeForAll(bulkType)}>
+            + Add {bulkType} to All
+          </AddTypeButton>
+          <ResetButton onClick={handleRemoveAllTypes}>Reset All</ResetButton>
+        </div>
       )}
 
       {!isLoading &&
@@ -269,7 +281,10 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
               active={!!openSheets[sheetName]}
               onClick={() => toggleSheet(sheetName)}
             >
-              {sheetName}
+              {sheetName}{" "}
+              <ResetButton onClick={() => handleRemoveAllForSheet(sheetName)}>
+                Reset All types for {sheetName}
+              </ResetButton>
             </TabHeader>
 
             {openSheets[sheetName] &&

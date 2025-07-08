@@ -35,9 +35,12 @@ export class ForceCopiesToRandomDomainsService {
 
         for (const domain of shuffledDomains) {
           if (
+            !broadcastRules.copyAssignmentStrategyRules.domainStrategies.find(
+              (s) => s.domain === domain.domain
+            )?.copiesTypes ||
             broadcastRules.copyAssignmentStrategyRules.domainStrategies.find(
               (s) => s.domain === domain.domain
-            ).copiesTypes.length < MIN_COPIES_DOMAIN_SEND
+            )?.copiesTypes.length < MIN_COPIES_DOMAIN_SEND
           )
             continue;
 

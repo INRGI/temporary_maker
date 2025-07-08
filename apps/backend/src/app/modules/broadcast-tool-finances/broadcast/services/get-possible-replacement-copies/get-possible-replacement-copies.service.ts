@@ -10,6 +10,7 @@ import { VerifyConvCopyForDomainService } from "../../../copy-verify/services/ve
 import { VerifyTestCopyForDomainService } from "../../../copy-verify/services/verify-test-copy-for-domain/verify-test-copy-for-domain.service";
 import { VerifyWarmupCopyForDomainService } from "../../../copy-verify/services/verify-warmup-copy-for-domain/verify-warmup-copy-for-domain.service";
 import { getCopyStrategyForDomain } from "../../utils/getCopyStrategyForDomain";
+import { CheckIfProductPriorityService } from "../../../rules/services/check-if-product-priority/check-if-product-priority.service";
 
 @Injectable()
 export class GetPossibleReplacementCopiesService {
@@ -17,7 +18,8 @@ export class GetPossibleReplacementCopiesService {
     private readonly clickValidator: VerifyCopyForDomainService,
     private readonly conversionValidator: VerifyConvCopyForDomainService,
     private readonly testValidator: VerifyTestCopyForDomainService,
-    private readonly warmUpValidator: VerifyWarmupCopyForDomainService
+    private readonly warmUpValidator: VerifyWarmupCopyForDomainService,
+    private readonly checkIfProductPriorityService: CheckIfProductPriorityService
   ) {}
 
   public async execute(
@@ -82,9 +84,15 @@ export class GetPossibleReplacementCopiesService {
               });
 
               if (result.isValid) {
+                const isCopyPriority =
+                  await this.checkIfProductPriorityService.execute({
+                    product: this.cleanProductName(name),
+                    priorityCopiesData,
+                  });
+
                 possible.push({
                   name,
-                  isPriority: false,
+                  isPriority: isCopyPriority,
                   copyType: type as CopyType,
                 });
                 proposedNames.add(name);
@@ -133,5 +141,12 @@ export class GetPossibleReplacementCopiesService {
       case "warmup":
         return this.warmUpValidator;
     }
+  }
+
+  private cleanProductName(copyName: string): string {
+    const nameMatch = copyName.match(/^[a-zA-Z]+/);
+    const product = nameMatch ? nameMatch[0] : "";
+
+    return product;
   }
 }

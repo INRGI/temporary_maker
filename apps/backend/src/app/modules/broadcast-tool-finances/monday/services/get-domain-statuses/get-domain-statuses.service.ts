@@ -1,10 +1,12 @@
-import { MondayConfigService } from '@epc-services/core';
-import { GetDomainStatusesResponseDto } from '@epc-services/interface-adapters';
+import { MondayConfigService } from "@epc-services/core";
+import { GetDomainStatusesResponseDto } from "@epc-services/interface-adapters";
 import {
   InjectMondayApiService,
   MondayApiServicePort,
-} from '@epc-services/monday-api';
-import { Injectable } from '@nestjs/common';
+} from "@epc-services/monday-api";
+import { Inject, Injectable } from "@nestjs/common";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Cache } from "cache-manager";
 
 @Injectable()
 export class GetDomainStatusesService {
@@ -12,11 +14,21 @@ export class GetDomainStatusesService {
     @InjectMondayApiService()
     private readonly mondayApiService: MondayApiServicePort,
     private readonly mondayApiConfig: MondayConfigService,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache
   ) {}
 
   public async execute(): Promise<GetDomainStatusesResponseDto> {
     const boardId = Number(this.mondayApiConfig.domainsBoardId);
     let cursor: string | null = null;
+
+    const cacheKey = `domainStatuses:${boardId}`;
+
+    const cached = await this.cacheManager.get<GetDomainStatusesResponseDto>(
+      cacheKey
+    );
+
+    if (cached) return cached;
 
     const uniqueDomainStatuses = new Set();
     const uniqueParentCompanies = new Set();
@@ -51,18 +63,22 @@ export class GetDomainStatusesService {
           item.column_values.find((c) => c.column.title === title)?.text ??
           null;
 
-        uniqueDomainStatuses.add(get('Status'));
-        uniqueParentCompanies.add(get('Parent Company'));
-        uniqueEsps.add(get('ESP'));
+        uniqueDomainStatuses.add(get("Status"));
+        uniqueParentCompanies.add(get("Parent Company"));
+        uniqueEsps.add(get("ESP"));
       }
 
       cursor = nextCursor;
     } while (cursor);
 
-    return {
+    const result = {
       uniqueDomainStatuses: Array.from(uniqueDomainStatuses) as string[],
       uniqueParentCompanies: Array.from(uniqueParentCompanies) as string[],
       uniqueEsps: Array.from(uniqueEsps) as string[],
     };
+
+    await this.cacheManager.set(cacheKey, result, 900000);
+
+    return result;
   }
 }

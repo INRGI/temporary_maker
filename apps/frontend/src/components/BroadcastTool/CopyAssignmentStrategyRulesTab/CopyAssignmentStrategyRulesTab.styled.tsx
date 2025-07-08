@@ -28,6 +28,9 @@ export const TabHeader = styled.button<{ active: boolean }>`
   cursor: pointer;
   font-weight: bold;
   text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   &:hover {
     background-color: #4f4f4f;

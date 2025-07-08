@@ -106,14 +106,16 @@ const EditCopyCellModal: React.FC<EditCopyModalProps> = ({
                 <p style={{ fontSize: 13, marginBottom: 4, color: "#aaa" }}>
                   {type}
                 </p>
-                {copies.map((c) => (
+                {copies.map((c) => {
+                  if (entry.copies.some((c2) => c2.name.includes(c.name))) return null;
+                  return (
                   <CopyRow key={c.name}>
                     <CopyName>{c.name}</CopyName>
                     <ActionButton onClick={() => handleAdd(c)}>
                       <IoMdAdd /> Add
                     </ActionButton>
                   </CopyRow>
-                ))}
+                )})}
               </div>
             );
           })}

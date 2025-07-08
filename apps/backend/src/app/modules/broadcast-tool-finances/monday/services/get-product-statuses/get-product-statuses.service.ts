@@ -4,19 +4,31 @@ import {
   InjectMondayApiService,
   MondayApiServicePort,
 } from "@epc-services/monday-api";
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Cache } from "cache-manager";
 
 @Injectable()
 export class GetProductStatusesService {
   constructor(
     @InjectMondayApiService()
     private readonly mondayApiService: MondayApiServicePort,
-    private readonly mondayApiConfig: MondayConfigService
+    private readonly mondayApiConfig: MondayConfigService,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache
   ) {}
 
   public async execute(): Promise<GetProductStatusesResponseDto> {
     const boardId = Number(this.mondayApiConfig.productsBoardId);
     let cursor: string | null = null;
+
+    const cacheKey = `productStatuses:${boardId}`;
+
+    const cached = await this.cacheManager.get<GetProductStatusesResponseDto>(
+      cacheKey
+    );
+
+    if (cached) return cached;
 
     const uniqueProductStatuses = new Set();
     const uniqueDomainSendings = new Set();
@@ -64,11 +76,14 @@ export class GetProductStatusesService {
       cursor = nextCursor;
     } while (cursor);
 
-    return {
+    const result = {
       productStatuses: Array.from(uniqueProductStatuses) as string[],
       domainSendings: Array.from(uniqueDomainSendings) as string[],
       partners: Array.from(uniquePartners) as string[],
       sectors: Array.from(uniqueSectors) as string[],
     };
+
+    await this.cacheManager.set(cacheKey, result, 900000);
+    return result;
   }
 }
