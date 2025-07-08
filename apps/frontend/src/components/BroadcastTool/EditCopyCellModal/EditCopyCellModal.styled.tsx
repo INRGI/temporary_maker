@@ -9,6 +9,8 @@ export const ModalWrapper = styled.div`
 
 export const Section = styled.div`
   margin-bottom: 20px;
+  max-height: 200px;
+  overflow-y: auto;
 `;
 
 export const SectionTitle = styled.h4`

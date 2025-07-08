@@ -1,22 +1,34 @@
 import {
   BigQueryApiServicePort,
   InjectBigQueryApiService,
-} from '@epc-services/bigquery-api';
-import { Injectable } from '@nestjs/common';
-import { GetCopiesWithConversionsPayload } from './get-copies-with-conversions.payload';
-import { GetCopiesWithConversionsResponseDto } from '@epc-services/interface-adapters';
+} from "@epc-services/bigquery-api";
+import { Inject, Injectable } from "@nestjs/common";
+import { GetCopiesWithConversionsPayload } from "./get-copies-with-conversions.payload";
+import { GetCopiesWithConversionsResponseDto } from "@epc-services/interface-adapters";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Cache } from "cache-manager";
 
 @Injectable()
 export class GetCopiesWithConversionsService {
   constructor(
     @InjectBigQueryApiService()
-    private readonly bigQueryApiService: BigQueryApiServicePort
+    private readonly bigQueryApiService: BigQueryApiServicePort,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache
   ) {}
 
   public async execute(
     payload: GetCopiesWithConversionsPayload
   ): Promise<GetCopiesWithConversionsResponseDto> {
     const { daysBefore } = payload;
+    const cacheKey = `copiesForConversions:${daysBefore}`;
+
+    const cached =
+      await this.cacheManager.get<GetCopiesWithConversionsResponseDto>(
+        cacheKey
+      );
+    if (cached) return cached;
+
     try {
       const data = await this.bigQueryApiService.getDatasetDataByQuery({
         query: `
@@ -31,7 +43,10 @@ export class GetCopiesWithConversionsService {
            ORDER BY Conversion DESC
        `,
       });
-      return { data };
+      const result = { data };
+
+      await this.cacheManager.set(cacheKey, result);
+      return result;
     } catch (e) {
       return { data: [] };
     }

@@ -14,6 +14,7 @@ import { GetDomainsRevenueService } from "../../../bigQuery/services/get-domains
 import { GetAllPriorityProductsService } from "../../../priority/services/get-all-priority-products/get-all-priority-products.service";
 import { AddPriorityCopyIndicatorService } from "../add-priority-copy-indicator/add-priority-copy-indicator.service";
 import { ForceCopiesToRandomDomainsService } from "../force-copies-to-random-domains/force-copies-to-random-domains.service";
+import { GetPossibleReplacementCopiesService } from "../get-possible-replacement-copies/get-possible-replacement-copies.service";
 
 // @Injectable()
 // export class MakeBroadcastService {
@@ -167,7 +168,8 @@ export class MakeBroadcastService {
     private readonly getAllPriorityProductsService: GetAllPriorityProductsService,
     private readonly addPriorityCopyIndicatorService: AddPriorityCopyIndicatorService,
     private readonly getTestableCopiesService: GetTestableCopiesService,
-    private readonly forceCopiesToRandomDomainsService: ForceCopiesToRandomDomainsService
+    private readonly forceCopiesToRandomDomainsService: ForceCopiesToRandomDomainsService,
+    private readonly getPossibleReplacementCopiesService: GetPossibleReplacementCopiesService
   ) {}
   public async execute(
     payload: MakeBroadcaastPayload
@@ -249,13 +251,26 @@ export class MakeBroadcastService {
         priorityCopiesData,
       });
 
+    const broadcastWithPossibleCopies =
+      await this.getPossibleReplacementCopiesService.execute({
+        broadcast: broadcastWithForcedCopies,
+        broadcastRules: broadcastRule,
+        dateRange: this.getDateRange(fromDate, toDate),
+        domainsData,
+        productsData,
+        priorityCopiesData,
+        clickableCopies,
+        convertibleCopies,
+        warmupCopies,
+        testCopies,
+      });
+
     const modifiedBroadcast =
       await this.addPriorityCopyIndicatorService.execute({
-        broadcast: broadcastWithForcedCopies,
+        broadcast: broadcastWithPossibleCopies,
         dateRange: this.getDateRange(fromDate, toDate),
       });
     return modifiedBroadcast;
-
   }
 
   private getDateRange(from: string, to: string): string[] {
@@ -278,5 +293,5 @@ export class MakeBroadcastService {
       [result[i], result[j]] = [result[j], result[i]];
     }
     return result;
-  }  
+  }
 }

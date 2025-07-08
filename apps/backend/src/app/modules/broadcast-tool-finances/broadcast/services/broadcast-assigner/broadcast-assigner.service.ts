@@ -50,12 +50,13 @@ export class BroadcastAssignerService {
         testCopies,
         warmupCopies,
       });
-    
+
       const validator = this.getValidator(type);
-    
+      if (!validator) continue;
+
       for (const copyName of pool) {
         if (added.includes(copyName)) continue;
-    
+
         const result = await validator.execute({
           broadcast,
           broadcastDomain: domain,
@@ -67,14 +68,13 @@ export class BroadcastAssignerService {
           domainsData,
           priorityCopiesData,
         });
-    
+
         if (result.isValid) {
           domain = {
             ...domain,
             broadcastCopies: result.broadcastDomain.broadcastCopies,
           };
           added.push(copyName);
-    
           break;
         }
       }

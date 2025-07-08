@@ -1,20 +1,34 @@
 import {
   BigQueryApiServicePort,
   InjectBigQueryApiService,
-} from '@epc-services/bigquery-api';
-import { Injectable } from '@nestjs/common';
-import { GetCopiesForTestPayload } from './get-copies-for-test.payload';
-import { GetCopiesWithSendsResponseDto } from '@epc-services/interface-adapters';
+} from "@epc-services/bigquery-api";
+import { Inject, Injectable } from "@nestjs/common";
+import { GetCopiesForTestPayload } from "./get-copies-for-test.payload";
+import { GetCopiesWithSendsResponseDto } from "@epc-services/interface-adapters";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Cache } from "cache-manager";
 
 @Injectable()
 export class GetCopiesForTestService {
   constructor(
     @InjectBigQueryApiService()
-    private readonly bigQueryApiService: BigQueryApiServicePort
+    private readonly bigQueryApiService: BigQueryApiServicePort,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache
   ) {}
 
-  public async execute(payload: GetCopiesForTestPayload): Promise<GetCopiesWithSendsResponseDto> {
+  public async execute(
+    payload: GetCopiesForTestPayload
+  ): Promise<GetCopiesWithSendsResponseDto> {
     const { daysBefore } = payload;
+    const cacheKey = `copiesForTest:${daysBefore}`;
+
+    const cached = await this.cacheManager.get<GetCopiesWithSendsResponseDto>(
+      cacheKey
+    );
+
+    if (cached) return cached;
+
     try {
       const data = await this.bigQueryApiService.getDatasetDataByQuery({
         query: `
@@ -28,10 +42,10 @@ export class GetCopiesForTestService {
     `,
       });
 
-      const grouped = new Map<string, typeof data[0]>();
+      const grouped = new Map<string, (typeof data)[0]>();
 
       for (const entry of data) {
-        if (!entry.Copy || entry.Copy.includes('_SA')) continue;
+        if (!entry.Copy || entry.Copy.includes("_SA")) continue;
         const baseCopy = this.cleanBaseCopy(entry.Copy);
         if (!baseCopy) continue;
 
@@ -47,7 +61,12 @@ export class GetCopiesForTestService {
         }
       }
 
-      return { data: Array.from(grouped.values()) } as GetCopiesWithSendsResponseDto;
+      const result = {
+        data: Array.from(grouped.values()),
+      } as GetCopiesWithSendsResponseDto;
+
+      await this.cacheManager.set(cacheKey, result);
+      return result;
     } catch (e) {
       return { data: [] };
     }
@@ -55,9 +74,9 @@ export class GetCopiesForTestService {
 
   private cleanBaseCopy(copyName: string): string {
     const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : '';
+    const product = nameMatch ? nameMatch[0] : "";
     const liftMatch = copyName.match(/[a-zA-Z]+(\d+)/);
-    const productLift = liftMatch ? liftMatch[1] : '';
+    const productLift = liftMatch ? liftMatch[1] : "";
     return `${product}${productLift}`;
   }
 }
