@@ -8,14 +8,11 @@ import FloatingLabelNumberInput from "../../Common/FloatingLabelInput/FloatingLa
 import MultiSelectDropdown from "../../Common/MultiSelectDropdown";
 import StringArrayEditor from "../StringArrayEditor";
 import {
-  CheckboxWithLabel,
   InputContainer,
   InputGroup,
   LeftContainer,
   RightContainer,
   RuleContainer,
-  StyledCheckbox,
-  WhiteSpan,
 } from "../DomainRulesTab/DomainRulesTab.styled";
 import ProductAllowedDaysEditor from "../ProductAllowedDaysEditor";
 import DomainSendingEditor from "../DomainSendingEditor";
@@ -65,38 +62,6 @@ const ProductRulesTab: React.FC<ProductRulesTabProps> = ({
               placeholder="Allowed Monday Statuses"
             />
           </InputContainer>
-        </InputGroup>
-
-        <InputGroup disabled={true}>
-          <InputContainer>
-            <FloatingLabelNumberInput
-              placeholder="Min Conversion For Clickable Copy"
-              value={productRules.minConversionForClickableCopy}
-              onChange={(e) =>
-                onChange({
-                  ...productRules,
-                  minConversionForClickableCopy: Number(e.target.value),
-                })
-              }
-            />
-          </InputContainer>
-        </InputGroup>
-
-        <InputGroup disabled={true}>
-          <CheckboxWithLabel>
-            <StyledCheckbox
-              type="checkbox"
-              checked={productRules.allowSimilarCopies}
-              onChange={() =>
-                onChange({
-                  ...productRules,
-                  allowSimilarCopies: !productRules.allowSimilarCopies,
-                })
-              }
-            />
-
-            <WhiteSpan>Allow Similar Copies</WhiteSpan>
-          </CheckboxWithLabel>
         </InputGroup>
 
         <InputGroup>

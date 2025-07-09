@@ -1,0 +1,45 @@
+import React, { useState } from "react";
+import AdminRules from "../AdminRules";
+import {
+  AdminContainer,
+  Container,
+  TabButton,
+  TabsContainer,
+} from "./AdminMenu.styled";
+
+const AdminMenu: React.FC = () => {
+  const [activeTab, setActiveTab] = useState("home");
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case "rules":
+        return <AdminRules />;
+      case "home":
+        return <p>Home</p>;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <AdminContainer>
+      <TabsContainer>
+        <TabButton
+          active={activeTab === "home"}
+          onClick={() => setActiveTab("home")}
+        >
+          General
+        </TabButton>
+        <TabButton
+          active={activeTab === "rules"}
+          onClick={() => setActiveTab("rules")}
+        >
+          Rules
+        </TabButton>
+      </TabsContainer>
+      <Container>{renderContent()}</Container>
+    </AdminContainer>
+  );
+};
+
+export default AdminMenu;

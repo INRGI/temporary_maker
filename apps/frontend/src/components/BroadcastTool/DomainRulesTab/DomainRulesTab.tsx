@@ -35,20 +35,6 @@ const DomainRulesTab: React.FC<DomainRulesTabProps> = ({
           />
         </InputContainer>
       </InputGroup>
-      <InputGroup disabled={true}>
-        <InputContainer>
-          <FloatingLabelNumberInput
-            placeholder="Average Clicks Per Day"
-            value={ Number(domainRules.avarageClicksDays)}
-            onChange={(e) =>
-              onChange({
-                ...domainRules,
-                avarageClicksDays: Number(e.target.value),
-              })
-            }
-          />
-        </InputContainer>
-      </InputGroup>
       <InputGroup>
         <InputContainer>
           <MultiSelectDropdown

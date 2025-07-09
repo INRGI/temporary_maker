@@ -27,3 +27,14 @@ export const googleAuth = async (
     };
   }
 };
+
+export const checkIfAdmin = async (id_token: string): Promise<{ token: string }> => {
+  try {
+    const response = await axios.post(`${authApiUrl}/admin`, {
+      id_token,
+    });
+    return response.data;
+  } catch (error) {
+    return { token: '' };
+  }
+};

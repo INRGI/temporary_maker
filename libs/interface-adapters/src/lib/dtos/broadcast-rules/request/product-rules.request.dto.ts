@@ -6,12 +6,6 @@ import { CopySendingLimitPerDayRequestDto } from "./copy-sending-limit-per-day.r
 import { CopyMinLimitPerDayRequestDto } from "./copy-min-limit-per-day.request.dto";
 
 export class ProductRulesRequestDto {
-  @IsNumber()
-  public minConversionForClickableCopy: number;
-
-  @IsBoolean()
-  public allowSimilarCopies: boolean;
-
   @IsArray()
   public allowedMondayStatuses: string[];
 

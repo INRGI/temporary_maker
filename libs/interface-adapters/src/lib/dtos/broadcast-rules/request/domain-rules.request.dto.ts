@@ -1,12 +1,6 @@
-import { IsArray, IsNumber } from "class-validator";
+import { IsArray } from "class-validator";
 
 export class DomainRulesRequestDto {
-  @IsNumber()
-  public minClicksToBeLive: number;
-
-  @IsNumber()
-  public avarageClicksDays: number;
-
   @IsArray()
   public allowedMondayStatuses: string[];
 }

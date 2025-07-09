@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from "@nestjs/common";
 import { GetPaginatedBroadcastRulesQueryService } from "../queries/get-paginated-broadcast-rules/get-paginated-broadcast-rules.query-service";
 import { GetBroadcastRulesByIdQueryService } from "../queries/get-broadcast-rules-by-id/get-broadcast-rules-by-id.query-service";
 import { UpdateBroadcastRulesService } from "../commands/update-broadcast-rules/update-broadcast-rules.service";

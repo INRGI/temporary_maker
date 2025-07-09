@@ -48,18 +48,17 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
       broadcastSpreadsheetId: "",
       domainRules: {
         minClicksToBeLive: 0,
-        avarageClicksDays: 0,
         allowedMondayStatuses: [],
       },
       usageRules: {
-        productMinDelayPerDays: 0,
-        copyMinDelayPerDays: 0,
+        productMinDelayPerDays: 3,
+        copyMinDelayPerDays: 10,
         copyTabLimit: [],
       },
       testingRules: {
         maxTestCopiesForDomain: 0,
-        maxSendsToBeTestCopy: 0,
-        similarTestCopyLimitPerDay: 1,
+        maxSendsToBeTestCopy: 1000000,
+        similarTestCopyLimitPerDay: 3,
       },
       partnerRules: {
         useNewPartnerForClickableCopies: false,
@@ -70,8 +69,6 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
       },
       productRules: {
         blacklistedCopies: [],
-        minConversionForClickableCopy: 0,
-        allowSimilarCopies: false,
         allowedMondayStatuses: [],
         productAllowedSendingDays: [],
         productsSendingLimitPerDay: [],

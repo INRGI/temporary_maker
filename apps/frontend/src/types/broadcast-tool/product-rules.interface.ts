@@ -6,8 +6,6 @@ import { ProductSendingLimitPerDay } from './product-sending-limit-per-day.inter
 
 export interface ProductRules {
   allowedMondayStatuses: string[];
-  minConversionForClickableCopy: number;
-  allowSimilarCopies: boolean;
   blacklistedCopies: string[];
   domainSending: DomainSending[];
   productAllowedSendingDays: ProductAllowedSendingDays[];

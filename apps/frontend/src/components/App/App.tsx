@@ -11,6 +11,7 @@ const HealthProductPreview = lazy(() => import("../../pages/HealthProductPreview
 const Organic = lazy(() => import("../../pages/Organic/Organic"));
 
 const BroadcastTool = lazy(() => import("../../pages/BroadcastTool/BroadcastTool"));
+const AdminBroadcastTool = lazy(() => import("../../pages/AdminBroadcastTool/AdminBroadcastTool"));
 
 export function App() {
   return (
@@ -19,6 +20,7 @@ export function App() {
         <Route index element={<Home />} />
 
         <Route path="/broadcast-tool" element={<BroadcastTool />}/>
+        <Route path="/admin-broadcast-tool" element={<AdminBroadcastTool />}/>
         
         <Route path="/health" element={<HealthHome />} />
         <Route path="/health/product-preview" element={<HealthProductPreview />} />
