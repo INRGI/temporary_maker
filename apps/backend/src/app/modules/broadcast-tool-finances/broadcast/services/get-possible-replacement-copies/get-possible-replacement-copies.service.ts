@@ -28,6 +28,7 @@ export class GetPossibleReplacementCopiesService {
     const {
       broadcast,
       broadcastRules,
+      adminBroadcastConfig,
       clickableCopies,
       convertibleCopies,
       dateRange,
@@ -73,6 +74,7 @@ export class GetPossibleReplacementCopiesService {
 
               const result = await validator.execute({
                 broadcast,
+                adminBroadcastConfig,
                 broadcastDomain: domain,
                 copyName: name,
                 broadcastRules: broadcastRules,

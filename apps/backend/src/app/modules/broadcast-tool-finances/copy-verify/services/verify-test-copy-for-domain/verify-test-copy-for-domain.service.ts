@@ -34,6 +34,7 @@ export class VerifyTestCopyForDomainService {
       copyName,
       sheetName,
       broadcastRules,
+      adminBroadcastConfig,
       sendingDate,
       productsData,
       domainsData,
@@ -68,7 +69,7 @@ export class VerifyTestCopyForDomainService {
       await this.checkTestCopyLimitsService.execute({
         copyName,
         broadcast,
-        testingRules: broadcastRules.testingRules,
+        testingRules: adminBroadcastConfig.testingRules,
         sendingDate,
       });
 

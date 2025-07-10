@@ -25,6 +25,7 @@ export class BroadcastAssignerService {
       date,
       sheetName,
       clickableCopies,
+      adminBroadcastConfig,
       convertibleCopies,
       testCopies,
       productsData,
@@ -70,6 +71,7 @@ export class BroadcastAssignerService {
         const result = await validator.execute({
           broadcast,
           broadcastDomain: domain,
+          adminBroadcastConfig,
           copyName,
           sheetName,
           broadcastRules,

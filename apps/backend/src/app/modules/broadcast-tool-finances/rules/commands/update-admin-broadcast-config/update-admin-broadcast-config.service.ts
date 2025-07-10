@@ -22,6 +22,7 @@ export class UpdateAdminBroadcastConfigService {
     const updatedAdminBroadcastConfig =
       await this.adminBroadcastConfigRepository.update(payload._id, {
         niche: payload.niche,
+        testingRules: payload.testingRules,
         analyticSelectionRules: payload.analyticSelectionRules,
       });
 

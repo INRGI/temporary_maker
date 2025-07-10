@@ -19,6 +19,7 @@ import { toastError, toastSuccess } from "../../../helpers/toastify";
 import { LiaSaveSolid } from "react-icons/lia";
 import ConfirmationModal from "../ConfirmationModal";
 import { Button } from "../Menu/Menu.styled";
+import TestingRulesTab from "../TestingRulesTab";
 
 const AdminRules: React.FC = () => {
   const [openSection, setOpenSection] = useState<string | null>(null);
@@ -132,6 +133,17 @@ const AdminRules: React.FC = () => {
               onChange={(updated) =>
                 handleChange("analyticSelectionRules", updated)
               }
+            />
+          )}
+
+        {!isLoading &&
+          adminBroadcastConfig &&
+          renderSection(
+            "Testing Rules",
+            "testingRules",
+            <TestingRulesTab
+              testingRules={adminBroadcastConfig.testingRules}
+              onChange={(updated) => handleChange("testingRules", updated)}
             />
           )}
       </ListScrollContainer>

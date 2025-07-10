@@ -16,7 +16,6 @@ import {
   GetDomainStatusesResponse,
   GetProductStatusesResponse,
 } from "../../../api/monday";
-import TestingRulesTab from "../TestingRulesTab";
 import PartnerRulesTab from "../PartnerRulesTab";
 import ProductRulesTab from "../ProductRulesTab";
 import CopyAssignmentStrategyRulesTab from "../CopyAssignmentStrategyRulesTab";
@@ -183,14 +182,6 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
               spreadsheetId={broadcastRules.broadcastSpreadsheetId}
               usageRules={broadcastRules.usageRules}
               onChange={(updated) => handleChange("usageRules", updated)}
-            />
-          )}
-          {renderSection(
-            "Testing Rules",
-            "testingRules",
-            <TestingRulesTab
-              testingRules={broadcastRules.testingRules}
-              onChange={(updated) => handleChange("testingRules", updated)}
             />
           )}
           {renderSection(

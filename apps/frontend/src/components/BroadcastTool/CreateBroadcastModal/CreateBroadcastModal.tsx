@@ -16,10 +16,8 @@ import {
   GetProductStatusesResponse,
 } from "../../../api/monday";
 import UsageRulesTab from "../UsageRulesTab";
-import TestingRulesTab from "../TestingRulesTab";
 import PartnerRulesTab from "../PartnerRulesTab";
 import ProductRulesTab from "../ProductRulesTab";
-import AnalyticSelectionRulesTab from "../AnalyticSelectionRulesTab";
 import CopyAssignmentStrategyRulesTab from "../CopyAssignmentStrategyRulesTab";
 import { BroadcastListItemResponse } from "../../../api/broadcast/response/broadcast-list-item.response.dto";
 import GeneralTab from "../GeneralTab";
@@ -54,11 +52,6 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
         productMinDelayPerDays: 3,
         copyMinDelayPerDays: 10,
         copyTabLimit: [],
-      },
-      testingRules: {
-        maxTestCopiesForDomain: 0,
-        maxSendsToBeTestCopy: 1000000,
-        similarTestCopyLimitPerDay: 3,
       },
       partnerRules: {
         useNewPartnerForClickableCopies: false,
@@ -130,13 +123,6 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
             usageRules={broadcastRules.usageRules}
             spreadsheetId={broadcastRules.broadcastSpreadsheetId}
             onChange={(updated) => handleChange("usageRules", updated)}
-          />
-        );
-      case "testing-rules":
-        return (
-          <TestingRulesTab
-            testingRules={broadcastRules.testingRules}
-            onChange={(updated) => handleChange("testingRules", updated)}
           />
         );
       case "partner-rules":
@@ -223,12 +209,6 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
               Usage Rules
             </TabButton>
           )}
-          <TabButton
-            active={activeTab === "testing-rules"}
-            onClick={() => setActiveTab("testing-rules")}
-          >
-            Testing Rules
-          </TabButton>
           <TabButton
             active={activeTab === "partner-rules"}
             onClick={() => setActiveTab("partner-rules")}

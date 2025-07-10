@@ -17,20 +17,6 @@ const TestingRulesTab: React.FC<TestingRulesTabProps> = ({
 }) => {
   return (
     <RuleContainer>
-      <InputGroup disabled={true}>
-        <InputContainer>
-          <FloatingLabelNumberInput
-            placeholder="Max Test Copies For Domain"
-            value={testingRules.maxTestCopiesForDomain}
-            onChange={(e) =>
-              onChange({
-                ...testingRules,
-                maxTestCopiesForDomain: Number(e.target.value),
-              })
-            }
-          />
-        </InputContainer>
-      </InputGroup>
       <InputGroup>
         <InputContainer>
           <FloatingLabelNumberInput

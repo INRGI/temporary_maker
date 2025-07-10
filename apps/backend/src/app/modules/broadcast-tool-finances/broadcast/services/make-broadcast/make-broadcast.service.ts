@@ -209,7 +209,7 @@ export class MakeBroadcastService {
     const testCopies = await this.getTestableCopiesService.execute({
       daysBeforeInterval:
       adminConfig.analyticSelectionRules.testCopiesDaysInterval,
-      maxSendsToBeTestCopy: broadcastRule.testingRules.maxSendsToBeTestCopy,
+      maxSendsToBeTestCopy: adminConfig.testingRules.maxSendsToBeTestCopy,
     });
 
     const priorityCopiesData =
@@ -227,6 +227,7 @@ export class MakeBroadcastService {
             domain: sheet.domains[i],
             broadcastRules: broadcastRule,
             sheetName: sheet.sheetName,
+            adminBroadcastConfig: adminConfig,
             broadcast,
             date,
             clickableCopies,
@@ -261,6 +262,7 @@ export class MakeBroadcastService {
       await this.getPossibleReplacementCopiesService.execute({
         broadcast: broadcastWithForcedCopies,
         broadcastRules: broadcastRule,
+        adminBroadcastConfig: adminConfig,
         dateRange: this.getDateRange(fromDate, toDate),
         domainsData,
         productsData,
