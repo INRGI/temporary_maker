@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+  ButtonsHeaderContainer,
   ListScrollContainer,
   Section,
   SectionContentWrapper,
@@ -10,8 +11,14 @@ import { AdminBroadcastConfigEntity } from "../../../types/broadcast-tool";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import Loader from "../../Common/Loader";
 import AnalyticSelectionRulesTab from "../AnalyticSelectionRulesTab";
-import { getAdminBroadcastConfigByNiche } from "../../../api/admin-broadcast-config.api";
-import { toastError } from "../../../helpers/toastify";
+import {
+  getAdminBroadcastConfigByNiche,
+  updateAdminBroadcastConfig,
+} from "../../../api/admin-broadcast-config.api";
+import { toastError, toastSuccess } from "../../../helpers/toastify";
+import { LiaSaveSolid } from "react-icons/lia";
+import ConfirmationModal from "../ConfirmationModal";
+import { Button } from "../Menu/Menu.styled";
 
 const AdminRules: React.FC = () => {
   const [openSection, setOpenSection] = useState<string | null>(null);
@@ -19,6 +26,7 @@ const AdminRules: React.FC = () => {
     useState<AdminBroadcastConfigEntity>();
   const contentRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -58,6 +66,29 @@ const AdminRules: React.FC = () => {
     setOpenSection((prev) => (prev === key ? null : key));
   };
 
+  const onEntityUpdate = () => {
+    setIsLoading(true);
+    Promise.allSettled([fetchAdminBroadcastConfig()]).finally(() => {
+      setIsLoading(false);
+    });
+    setIsUpdateModalOpen(false);
+  };
+
+  const handleUpdateEntity = async () => {
+    try {
+      if (!adminBroadcastConfig) return toastError("Failed to update config");
+      setIsLoading(true);
+      await updateAdminBroadcastConfig(adminBroadcastConfig);
+      toastSuccess("Config updated successfully");
+      setIsLoading(false);
+    } catch (error) {
+      toastError("Failed to update Config");
+      setIsLoading(false);
+    } finally {
+      onEntityUpdate();
+    }
+  };
+
   const renderSection = (
     label: string,
     key: keyof AdminBroadcastConfigEntity,
@@ -80,22 +111,44 @@ const AdminRules: React.FC = () => {
   );
 
   return (
-    <ListScrollContainer>
-      {isLoading && <Loader />}
+    <>
+      <ButtonsHeaderContainer>
+        <Button onClick={() => setIsUpdateModalOpen(true)}>
+          <LiaSaveSolid />
+        </Button>
+      </ButtonsHeaderContainer>
+      <ListScrollContainer>
+        {isLoading && <Loader />}
 
-      {!isLoading &&
-        adminBroadcastConfig &&
-        renderSection(
-          "Analytic Selection Rules",
-          "analyticSelectionRules",
-          <AnalyticSelectionRulesTab
-            analyticSelectionRules={adminBroadcastConfig.analyticSelectionRules}
-            onChange={(updated) =>
-              handleChange("analyticSelectionRules", updated)
-            }
-          />
-        )}
-    </ListScrollContainer>
+        {!isLoading &&
+          adminBroadcastConfig &&
+          renderSection(
+            "Analytic Selection Rules",
+            "analyticSelectionRules",
+            <AnalyticSelectionRulesTab
+              analyticSelectionRules={
+                adminBroadcastConfig.analyticSelectionRules
+              }
+              onChange={(updated) =>
+                handleChange("analyticSelectionRules", updated)
+              }
+            />
+          )}
+      </ListScrollContainer>
+      {isUpdateModalOpen && (
+        <ConfirmationModal
+          title="Update Broadcast Rules"
+          message="Are you sure you want to update the config?"
+          confirmButtonText="Update"
+          cancelButtonText="Cancel"
+          isOpen={isUpdateModalOpen}
+          onClose={() => {
+            setIsUpdateModalOpen(false);
+          }}
+          onConfirm={handleUpdateEntity}
+        />
+      )}
+    </>
   );
 };
 

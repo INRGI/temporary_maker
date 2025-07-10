@@ -28,7 +28,7 @@ const AdminMenu: React.FC = () => {
           active={activeTab === "home"}
           onClick={() => setActiveTab("home")}
         >
-          General
+          Home
         </TabButton>
         <TabButton
           active={activeTab === "rules"}

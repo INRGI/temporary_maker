@@ -11,6 +11,12 @@ export const ListScrollContainer = styled.div`
   gap: 20px;
 `;
 
+export const ButtonsHeaderContainer = styled.div`
+  padding: 5px;
+  display: flex;
+  gap: 10px;
+`;
+
 export const Section = styled.div`
   background-color: #1f1f1f;
   border: 1px solid #4f4f4f;
