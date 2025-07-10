@@ -54,9 +54,6 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
         copyTabLimit: [],
       },
       partnerRules: {
-        useNewPartnerForClickableCopies: false,
-        allowedIspsForNewPartners: [],
-        daysSendingForNewPartners: 0,
         blacklistedPartners: [],
         similarPartnerDomainLimit: 1,
       },
