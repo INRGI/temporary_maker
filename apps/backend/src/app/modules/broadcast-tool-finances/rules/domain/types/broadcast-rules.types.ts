@@ -1,5 +1,4 @@
 import {
-  AnalyticSelectionRules,
   CopyAssignmentStrategyRules,
   DomainRules,
   PartnerRules,
@@ -16,7 +15,6 @@ export interface CreateBroadcastRulesProps {
   domainRules: DomainRules;
   partnerRules: PartnerRules;
   productRules: ProductRules;
-  analyticSelectionRules: AnalyticSelectionRules;
   copyAssignmentStrategyRules: CopyAssignmentStrategyRules;
 }
 
@@ -30,6 +28,5 @@ export interface UpdateBroadcastRulesProps {
   readonly domainRules: DomainRules;
   readonly partnerRules: PartnerRules;
   readonly productRules: ProductRules;
-  readonly analyticSelectionRules: AnalyticSelectionRules;
   readonly copyAssignmentStrategyRules: CopyAssignmentStrategyRules;
 }

@@ -4,7 +4,6 @@ import { TestingRulesRequestDto } from "./testing-rules.request.dto";
 import { DomainRulesRequestDto } from "./domain-rules.request.dto";
 import { PartnerRulesRequestDto } from "./partner-rules.request.dto";
 import { ProductRulesRequestDto } from "./product-rules.request.dto";
-import { AnalyticSelectionRulesRequestDto } from "./analytic-selection-rules.request.dto";
 import { CopyAssignmentStrategyRulesRequestDto } from "./copy-assignment-strategy-rules.request.dto";
 
 export class CreateBroadcastRulesRequestDto {
@@ -24,8 +23,6 @@ export class CreateBroadcastRulesRequestDto {
   public partnerRules: PartnerRulesRequestDto;
 
   public productRules: ProductRulesRequestDto;
-
-  public analyticSelectionRules: AnalyticSelectionRulesRequestDto;
 
   public copyAssignmentStrategyRules: CopyAssignmentStrategyRulesRequestDto;
 }

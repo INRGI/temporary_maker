@@ -30,7 +30,6 @@ export class UpdateBroadcastRulesService {
         testingRules: payload.testingRules,
         partnerRules: payload.partnerRules,
         productRules: payload.productRules,
-        analyticSelectionRules: payload.analyticSelectionRules,
         copyAssignmentStrategyRules: payload.copyAssignmentStrategyRules,
       }
     );

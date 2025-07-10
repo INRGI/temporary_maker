@@ -78,13 +78,6 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
         similarSectorDomainLimit: 1,
         blacklistedSectors: [],
       },
-      analyticSelectionRules: {
-        clickableCopiesDaysInterval: 0,
-        convertibleCopiesDaysInterval: 0,
-        warmUpCopiesDaysInterval: 0,
-        testCopiesDaysInterval: 0,
-        domainRevenueDaysInterval: 0,
-      },
       copyAssignmentStrategyRules: {
         domainStrategies: [],
       },
@@ -161,15 +154,6 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
             onChange={(updated) => handleChange("productRules", updated)}
             domainMondayStatuses={domainMondayStatuses}
             productMondayStatuses={productMondayStatuses}
-          />
-        );
-      case "analytic-selection-rules":
-        return (
-          <AnalyticSelectionRulesTab
-            analyticSelectionRules={broadcastRules.analyticSelectionRules}
-            onChange={(updated) =>
-              handleChange("analyticSelectionRules", updated)
-            }
           />
         );
       case "copy-assignment-strategy-rules":
@@ -256,12 +240,6 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
             onClick={() => setActiveTab("product-rules")}
           >
             Product Rules
-          </TabButton>
-          <TabButton
-            active={activeTab === "analytic-selection-rules"}
-            onClick={() => setActiveTab("analytic-selection-rules")}
-          >
-            Analytic Selection Rules
           </TabButton>
           {broadcastRules.broadcastSpreadsheetId && (
             <TabButton

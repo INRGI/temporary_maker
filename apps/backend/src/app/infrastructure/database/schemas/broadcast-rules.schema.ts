@@ -7,7 +7,6 @@ import {
   PartnerRules,
   ProductRules,
   CopyAssignmentStrategyRules,
-  AnalyticSelectionRules,
 } from "@epc-services/interface-adapters";
 
 @Schema({ collection: "broadcast_rules", timestamps: true })
@@ -35,9 +34,6 @@ export class BroadcastRules extends Document {
 
   @Prop({ type: Object, required: true })
   copyAssignmentStrategyRules: CopyAssignmentStrategyRules;
-
-  @Prop({ type: Object, required: true })
-  analyticSelectionRules: AnalyticSelectionRules;
 }
 
 export const BroadcastRulesSchema =

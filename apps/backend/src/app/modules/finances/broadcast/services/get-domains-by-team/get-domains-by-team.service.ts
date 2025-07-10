@@ -14,12 +14,14 @@ export class GetDomainsByTeamService {
     @InjectGDriveApiService()
     private readonly gdriveApiService: GDriveApiServicePort
   ) {}
+
+  private readonly IGNORED_TABS = new Set(["Blacklist", "Rules", "BC_Report", "Pivot Table 2", "Rating", "COUNTER", ]);
   
   public async getDomains(
     payload: GetDomainsByTeamPayload
   ): Promise<GetDomainsByTeamResponseDto> {
     const { team } = payload;
-
+    
     try {
       const broadcastTableSearchResult =
         await this.gdriveApiService.searchFileWithQuery(
@@ -39,6 +41,8 @@ export class GetDomainsByTeamService {
       const domainsSet = new Set<string>();
 
       for (const sheetName of workbook.SheetNames) {
+        if (this.IGNORED_TABS.has(sheetName)) continue;
+
         const sheet = workbook.Sheets[sheetName];
         const range = XLSX.utils.decode_range(sheet['!ref']);
 

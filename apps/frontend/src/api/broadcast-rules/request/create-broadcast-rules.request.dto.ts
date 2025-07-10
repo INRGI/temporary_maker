@@ -1,5 +1,4 @@
 import {
-  AnalyticSelectionRules,
   CopyAssignmentStrategyRules,
   DomainRules,
   PartnerRules,
@@ -16,6 +15,5 @@ export interface CreateBroadcastRulesRequest {
   domainRules: DomainRules;
   partnerRules: PartnerRules;
   productRules: ProductRules;
-  analyticSelectionRules: AnalyticSelectionRules;
   copyAssignmentStrategyRules: CopyAssignmentStrategyRules;
 }

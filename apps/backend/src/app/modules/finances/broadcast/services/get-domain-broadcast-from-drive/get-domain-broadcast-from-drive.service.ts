@@ -24,6 +24,8 @@ export class GetDomainBroadcastFromDriveService {
     private readonly gdriveApiService: GDriveApiServicePort
   ) {}
 
+  private readonly IGNORED_TABS = new Set(["Blacklist", "Rules", "BC_Report", "Pivot Table 2", "Rating", "COUNTER", ]);
+
   public async getDomainBroadcastFromDrive(
     payload: GetDomainBroadcastFromDrivePayload
   ): Promise<GetDomainBroadcastResponseDto> {
@@ -49,6 +51,7 @@ export class GetDomainBroadcastFromDriveService {
       let domainFound = false;
 
       for (const sheetName of workbook.SheetNames) {
+        if (this.IGNORED_TABS.has(sheetName)) continue;
         const sheet = workbook.Sheets[sheetName];
         const range = XLSX.utils.decode_range(sheet['!ref']);
 

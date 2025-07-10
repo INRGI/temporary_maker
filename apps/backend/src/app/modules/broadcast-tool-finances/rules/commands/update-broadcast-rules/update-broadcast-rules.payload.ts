@@ -1,5 +1,4 @@
 import {
-  AnalyticSelectionRules,
   CopyAssignmentStrategyRules,
   DomainRules,
   PartnerRules,
@@ -17,6 +16,5 @@ export interface UpdateBroadcastRulesPayload {
   readonly domainRules: DomainRules;
   readonly partnerRules: PartnerRules;
   readonly productRules: ProductRules;
-  readonly analyticSelectionRules: AnalyticSelectionRules;
   readonly copyAssignmentStrategyRules: CopyAssignmentStrategyRules;
 }

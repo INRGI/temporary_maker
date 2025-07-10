@@ -19,7 +19,6 @@ import {
 import TestingRulesTab from "../TestingRulesTab";
 import PartnerRulesTab from "../PartnerRulesTab";
 import ProductRulesTab from "../ProductRulesTab";
-import AnalyticSelectionRulesTab from "../AnalyticSelectionRulesTab";
 import CopyAssignmentStrategyRulesTab from "../CopyAssignmentStrategyRulesTab";
 import { BroadcastListItemResponse } from "../../../api/broadcast/response/broadcast-list-item.response.dto";
 import { VscDebugStart } from "react-icons/vsc";
@@ -211,16 +210,6 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
               onChange={(updated) => handleChange("productRules", updated)}
               domainMondayStatuses={domainMondayStatuses}
               productMondayStatuses={productMondayStatuses}
-            />
-          )}
-          {renderSection(
-            "Analytic Selection Rules",
-            "analyticSelectionRules",
-            <AnalyticSelectionRulesTab
-              analyticSelectionRules={broadcastRules.analyticSelectionRules}
-              onChange={(updated) =>
-                handleChange("analyticSelectionRules", updated)
-              }
             />
           )}
           {renderSection(

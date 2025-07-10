@@ -15,6 +15,7 @@ import { GetAllPriorityProductsService } from "../../../priority/services/get-al
 import { AddPriorityCopyIndicatorService } from "../add-priority-copy-indicator/add-priority-copy-indicator.service";
 import { ForceCopiesToRandomDomainsService } from "../force-copies-to-random-domains/force-copies-to-random-domains.service";
 import { GetPossibleReplacementCopiesService } from "../get-possible-replacement-copies/get-possible-replacement-copies.service";
+import { GetAdminBroadcastConfigByNicheQueryService } from "../../../rules/queries/get-admin-broadcast-config-by-niche/get-admin-broadcast-config-by-niche.query-service";
 
 // @Injectable()
 // export class MakeBroadcastService {
@@ -169,7 +170,8 @@ export class MakeBroadcastService {
     private readonly addPriorityCopyIndicatorService: AddPriorityCopyIndicatorService,
     private readonly getTestableCopiesService: GetTestableCopiesService,
     private readonly forceCopiesToRandomDomainsService: ForceCopiesToRandomDomainsService,
-    private readonly getPossibleReplacementCopiesService: GetPossibleReplacementCopiesService
+    private readonly getPossibleReplacementCopiesService: GetPossibleReplacementCopiesService,
+    private readonly getAdminBroadcastConfigByNicheQueryService: GetAdminBroadcastConfigByNicheQueryService,
   ) {}
   public async execute(
     payload: MakeBroadcaastPayload
@@ -180,6 +182,10 @@ export class MakeBroadcastService {
       broadcastRulesId: broadcastRuleId,
     });
 
+    const adminConfig = await this.getAdminBroadcastConfigByNicheQueryService.execute({
+      niche: 'finance'
+    })
+
     const broadcast = await this.getBroadcastService.execute({
       broadcastId: broadcastRule.broadcastSpreadsheetId,
       usageRules: broadcastRule.usageRules,
@@ -187,22 +193,22 @@ export class MakeBroadcastService {
 
     const clickableCopies = await this.getClickableCopiesService.execute({
       daysBeforeInterval:
-        broadcastRule.analyticSelectionRules.clickableCopiesDaysInterval,
+      adminConfig.analyticSelectionRules.clickableCopiesDaysInterval,
     });
 
     const convertibleCopies = await this.getConvertableCopiesService.execute({
       daysBeforeInterval:
-        broadcastRule.analyticSelectionRules.convertibleCopiesDaysInterval,
+      adminConfig.analyticSelectionRules.convertibleCopiesDaysInterval,
     });
 
     const warmupCopies = await this.getWarmupCopiesService.execute({
       daysBeforeInterval:
-        broadcastRule.analyticSelectionRules.warmUpCopiesDaysInterval,
+      adminConfig.analyticSelectionRules.warmUpCopiesDaysInterval,
     });
 
     const testCopies = await this.getTestableCopiesService.execute({
       daysBeforeInterval:
-        broadcastRule.analyticSelectionRules.testCopiesDaysInterval,
+      adminConfig.analyticSelectionRules.testCopiesDaysInterval,
       maxSendsToBeTestCopy: broadcastRule.testingRules.maxSendsToBeTestCopy,
     });
 

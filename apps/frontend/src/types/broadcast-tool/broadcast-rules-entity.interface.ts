@@ -1,4 +1,3 @@
-import { AnalyticSelectionRules } from "./analytic-selection-rules.interface";
 import { CopyAssignmentStrategyRules } from "./copy-assignment-strategy-rules.interface";
 import { DomainRules } from "./domain-rules.interface";
 import { PartnerRules } from "./partner-rules.interface";
@@ -15,6 +14,5 @@ export interface BroadcastRulesEntity {
   domainRules: DomainRules;
   partnerRules: PartnerRules;
   productRules: ProductRules;
-  analyticSelectionRules: AnalyticSelectionRules;
   copyAssignmentStrategyRules: CopyAssignmentStrategyRules;
 }
