@@ -15,6 +15,8 @@ import { AddPriorityCopyIndicatorService } from './services/add-priority-copy-in
 import { GetBroadcastDomainsListService } from './services/get-broadcast-domains-list/get-broadcast-domains-list.service';
 import { ForceCopiesToRandomDomainsService } from './services/force-copies-to-random-domains/force-copies-to-random-domains.service';
 import { GetPossibleReplacementCopiesService } from './services/get-possible-replacement-copies/get-possible-replacement-copies.service';
+import { CalculateBroadcastSendingService } from './services/calculate-broadcast-sending/calculate-broadcast-sending.service';
+import { GetBroadcastsSendsService } from './services/get-broadcasts-sends/get-broadcasts-sends.service';
 
 export const messageControllers = [BroadcastController];
 
@@ -36,4 +38,6 @@ export const serviceProviders: Provider[] = [
   AddPriorityCopyIndicatorService,
   ForceCopiesToRandomDomainsService,
   GetPossibleReplacementCopiesService,
+  CalculateBroadcastSendingService,
+  GetBroadcastsSendsService,
 ];

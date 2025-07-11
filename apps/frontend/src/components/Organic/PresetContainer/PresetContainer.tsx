@@ -36,6 +36,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
+import ConfirmationModal from "../../BroadcastTool/ConfirmationModal";
 
 const SortablePresetCard = ({
   preset,
@@ -81,6 +82,8 @@ const PresetContainer: React.FC = () => {
   const [presetEditModalOpen, setPresetEditModalOpen] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState<Preset | null>(null);
   const [activePreset, setActivePreset] = useState<Preset | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [presetForDelete, setPresetForDelete] = useState<Preset | null>(null);
 
   const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
     return localStorage.getItem("preset_sidebar_collapsed") === "true";
@@ -93,7 +96,9 @@ const PresetContainer: React.FC = () => {
   };
 
   const getPresets = async () => {
-    const savedPresets = JSON.parse(localStorage.getItem("organic-presets") || "[]");
+    const savedPresets = JSON.parse(
+      localStorage.getItem("organic-presets") || "[]"
+    );
     setPresets(savedPresets);
   };
 
@@ -217,7 +222,10 @@ const PresetContainer: React.FC = () => {
                           <MdEdit />
                         </EditButton>
                         <DeleteButton
-                          onClick={() => handleDeletePreset(preset)}
+                          onClick={() => {
+                            setPresetForDelete(preset);
+                            setIsDeleteModalOpen(true);
+                          }}
                         >
                           <MdDeleteForever />
                         </DeleteButton>
@@ -247,6 +255,20 @@ const PresetContainer: React.FC = () => {
             isOpen={presetEditModalOpen}
             onClose={handleCloseModal}
             preset={selectedPreset}
+          />
+        )}
+        {isDeleteModalOpen && presetForDelete && (
+          <ConfirmationModal
+            title="Delete Confirmation"
+            message="Are you sure you want to delete this preset?"
+            confirmButtonText="Delete"
+            cancelButtonText="Cancel"
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={() => {
+              handleDeletePreset(presetForDelete);
+              setPresetForDelete(null);
+            }}
           />
         )}
       </Container>
