@@ -6,5 +6,5 @@ export class CalculatedBroadcastSendsResponseDto {
   public result: DayBroadcastSendsResponseDto[];
 
   @IsString()
-  public broadcastName: string;
+  public name: string;
 }

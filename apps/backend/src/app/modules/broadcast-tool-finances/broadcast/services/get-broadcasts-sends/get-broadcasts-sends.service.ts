@@ -49,10 +49,7 @@ export class GetBroadcastsSendsService {
         productsData,
       });
 
-      result.push({
-        name: sheet.sheetName,
-        sending,
-      });
+      result.push(sending);
     }
 
     return { broadcasts: result };

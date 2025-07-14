@@ -6,6 +6,7 @@ import {
   TabButton,
   TabsContainer,
 } from "./AdminMenu.styled";
+import AdminHome from "../AdminHome";
 
 const AdminMenu: React.FC = () => {
   const [activeTab, setActiveTab] = useState("home");
@@ -15,7 +16,7 @@ const AdminMenu: React.FC = () => {
       case "rules":
         return <AdminRules />;
       case "home":
-        return <p>Home</p>;
+        return <AdminHome />;
       default:
         return null;
     }

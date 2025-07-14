@@ -5,6 +5,7 @@ import { ApproveBroadcastRequest } from "./broadcast/request/approve-broadcast.r
 import { GetAllDomainsResponse } from "./broadcast/response/get-all-domains.response.dto.";
 import { ApproveBroadcastSheetResponse } from "./broadcast/response/approve-broadcast-sheet.response.dto";
 import { GetBroadcastDomainsListResponseDto } from "./broadcast/response/get-broadcast-domains-list.response.dto";
+import { GetBroadcastsSendsResponseDto } from "./broadcast/response/get-broadcasts-sends.response.dto";
 
 const broadcastToolApiUrl = "/api/finances/broadcast-tool/broadcast";
 
@@ -60,3 +61,15 @@ export const approveBroadcast = async (
     return { response: [] };
   }
 };
+
+export const getBroadcastsSends =
+  async (): Promise<GetBroadcastsSendsResponseDto> => {
+    try {
+      const response = await axios.get(
+        `${broadcastToolApiUrl}/broadcasts-sends`
+      );
+      return response.data;
+    } catch (error) {
+      return { broadcasts: [] };
+    }
+  };

@@ -37,7 +37,6 @@ export class CalculateBroadcastSendingService {
             const productKey = productName;
             const copyKey = copyName;
 
-            // Init partner
             if (!partnersMap.has(partnerKey)) {
               partnersMap.set(partnerKey, {
                 partner: partnerKey,
@@ -48,7 +47,6 @@ export class CalculateBroadcastSendingService {
             const partner = partnersMap.get(partnerKey)!;
             partner.sends += 1;
 
-            // Init product
             let product = partner.products.find(
               (p) => p.product === productKey
             );
@@ -62,7 +60,6 @@ export class CalculateBroadcastSendingService {
             }
             product.sends += 1;
 
-            // Init copy
             let copyEntry = product.copies.find((c) => c.copy === copyKey);
             if (!copyEntry) {
               copyEntry = {
@@ -82,7 +79,7 @@ export class CalculateBroadcastSendingService {
       });
     }
 
-    return { result, broadcastName };
+    return { result, name: broadcastName };
   }
 
   private cleanProductName(copyName: string): string {
