@@ -13,6 +13,7 @@ import { RulesModule } from "../rules/rules.module";
 import { BigQueryModule } from "../bigQuery/bigQuery.module";
 import { CopyVerifyModule } from "../copy-verify/copy-verify.module";
 import { MondayModule } from "../monday/monday.module";
+import { CacheModule } from "@nestjs/cache-manager";
 
 @Module({
   imports: [
@@ -23,6 +24,10 @@ import { MondayModule } from "../monday/monday.module";
     GDriveApiModule.registerAsync({
       imports: [GdriveConfigModule],
       useClass: GdriveApiOptionsFactoryService,
+    }),
+    CacheModule.register({
+      ttl: 600000,
+      isGlobal: true,
     }),
     PriorityModule,
     RulesModule,

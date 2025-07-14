@@ -28,7 +28,7 @@ import { toastError, toastSuccess } from "../../../helpers/toastify";
 import { approveBroadcast } from "../../../api/broadcast.api";
 import Loader from "../../Common/Loader";
 import ConfirmationModal from "../ConfirmationModal";
-import { BroadcastSendingDay, CopyType } from "../../../types/broadcast-tool";
+import { BroadcastSendingDay } from "../../../types/broadcast-tool";
 import EditCopyCellModal from "../EditCopyCellModal";
 
 interface BroadcastTableModalProps {
@@ -46,11 +46,6 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
 }) => {
   const [broadcastData, setBroadcastData] = useState(broadcast);
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const [editCell, setEditCell] = useState<{
-    domain: string;
-    date: string;
-  } | null>(null);
-  const [editValue, setEditValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
@@ -73,50 +68,6 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
     };
     return parseDate(a) - parseDate(b);
   });
-
-  const handleEdit = (domain: string, date: string) => {
-    const newData = { ...broadcastData };
-    const domainItem = newData.sheets[activeTabIndex].domains.find(
-      (d) => d.domain === domain
-    );
-    let copyItem = domainItem?.broadcastCopies.find((c) => c.date === date);
-
-    if (!copyItem && domainItem) {
-      copyItem = {
-        date,
-        copies: [],
-        isModdified: false,
-        possibleReplacementCopies: [],
-      };
-      domainItem.broadcastCopies.push(copyItem);
-    }
-
-    setBroadcastData(newData);
-    setEditCell({ domain, date });
-    setEditValue(copyItem?.copies.map((c) => c.name).join(", ") || "");
-  };
-
-  const handleSave = (domain: string, date: string) => {
-    const newData = { ...broadcastData };
-    const domainItem = newData.sheets[activeTabIndex].domains.find(
-      (d) => d.domain === domain
-    );
-    const copyItem = domainItem?.broadcastCopies.find((c) => c.date === date);
-    if (copyItem) {
-      copyItem.copies = editValue
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean)
-        .map((name) => ({
-          name,
-          isPriority: false,
-          copyType: CopyType.Unknown,
-        }));
-      copyItem.isModdified = true;
-    }
-    setBroadcastData(newData);
-    setEditCell(null);
-  };
 
   const formatDateToMMDD = (date: Date) => {
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -142,7 +93,8 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
       const result = await approveBroadcast({
         broadcast: data,
       });
-      if (!result) {
+      if (!result.response) {
+        setIsLoading(false);
         return toastError("Failed to approve broadcast");
       }
 
@@ -206,9 +158,6 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
                       const entry = domain.broadcastCopies.find(
                         (c) => c.date === date
                       );
-                      const isEditing =
-                        editCell?.domain === domain.domain &&
-                        editCell?.date === date;
 
                       return (
                         <Td

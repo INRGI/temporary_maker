@@ -177,7 +177,7 @@ const PartnerAllowedDaysEditor: React.FC<PartnerAllowedDaysEditorProps> = ({
           </RemoveButton>
         </Row>
       ))}
-      <AddButton onClick={handleAdd}>+ Add Product</AddButton>
+      <AddButton onClick={handleAdd}>+ Add Partner</AddButton>
     </Wrapper>
   );
 };

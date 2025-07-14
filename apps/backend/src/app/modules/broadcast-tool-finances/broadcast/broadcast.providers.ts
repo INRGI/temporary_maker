@@ -17,6 +17,7 @@ import { ForceCopiesToRandomDomainsService } from './services/force-copies-to-ra
 import { GetPossibleReplacementCopiesService } from './services/get-possible-replacement-copies/get-possible-replacement-copies.service';
 import { CalculateBroadcastSendingService } from './services/calculate-broadcast-sending/calculate-broadcast-sending.service';
 import { GetBroadcastsSendsService } from './services/get-broadcasts-sends/get-broadcasts-sends.service';
+import { GetClickableCopiesWithSendsService } from './services/get-clickable-copies-by-sends/get-clickable-copies-by-sends.service';
 
 export const messageControllers = [BroadcastController];
 
@@ -40,4 +41,5 @@ export const serviceProviders: Provider[] = [
   GetPossibleReplacementCopiesService,
   CalculateBroadcastSendingService,
   GetBroadcastsSendsService,
+  GetClickableCopiesWithSendsService,
 ];

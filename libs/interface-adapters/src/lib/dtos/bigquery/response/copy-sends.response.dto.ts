@@ -4,5 +4,9 @@ export class CopySendsResponseDto {
     public Copy: string;
   
     public Sends: number;
+
+    public UC: number;
+  
+    public Conversion: number;
   }
   

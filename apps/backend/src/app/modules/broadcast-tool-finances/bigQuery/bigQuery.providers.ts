@@ -8,6 +8,7 @@ import { GetCopiesWithConversionsService } from "./services/get-copies-with-conv
 import { GetDomainsRevenueService } from "./services/get-domains-revenue/get-domains-revenue.service";
 import { GetCopiesWarmupService } from "./services/get-copies-warmup/get-copies-warmup.service";
 import { GetCopiesForTestService } from "./services/get-copies-for-test/get-copies-for-test.service";
+import { GetClickCopiesWithSendsService } from "./services/get-click-copies-with-sends/get-click-copies-with-sends.service";
 
 export const messageControllers = [];
 
@@ -23,4 +24,5 @@ export const serviceProviders: Provider[] = [
   GetCopiesWarmupService,
   GetDomainsRevenueService,
   GetCopiesForTestService,
+  GetClickCopiesWithSendsService,
 ];

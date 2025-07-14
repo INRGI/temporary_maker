@@ -1,10 +1,12 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { CalculateBroadcastSendingService } from "../calculate-broadcast-sending/calculate-broadcast-sending.service";
 import { GetAllDomainsService } from "../get-all-domains/get-all-domains.service";
 import { GetBroadcastsListService } from "../get-broadcasts-list/get-broadcasts-list.service";
 import { GetBroadcastsSendsPayload } from "./get-broadcasts-sends.payload";
 import { GetBroadcastsSendsResponseDto } from "@epc-services/interface-adapters";
 import { GetAllProductsDataService } from "../../../monday/services/get-all-products-data/get-all-products-data.service";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Cache } from "cache-manager";
 
 @Injectable()
 export class GetBroadcastsSendsService {
@@ -12,12 +14,21 @@ export class GetBroadcastsSendsService {
     private readonly calculateBroadcastSendingService: CalculateBroadcastSendingService,
     private readonly getBroadcastService: GetAllDomainsService,
     private readonly getBroadcastsListService: GetBroadcastsListService,
-    private readonly getAllMondayProductsDataService: GetAllProductsDataService
+    private readonly getAllMondayProductsDataService: GetAllProductsDataService,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache
   ) {}
   public async execute(
     payload: GetBroadcastsSendsPayload
   ): Promise<GetBroadcastsSendsResponseDto> {
     const { fromDate, toDate } = payload;
+
+    const cacheKey = `getBroadcastsSends:${fromDate}:${toDate}`;
+
+    const cached = await this.cacheManager.get<GetBroadcastsSendsResponseDto>(
+      cacheKey
+    );
+    if (cached) return cached;
 
     const IGNORED_BROADCASTS = [
       "Broadcast Intern team",
@@ -51,7 +62,7 @@ export class GetBroadcastsSendsService {
 
       result.push(sending);
     }
-
+    await this.cacheManager.set(cacheKey, { broadcasts: result });
     return { broadcasts: result };
   }
 

@@ -6,6 +6,8 @@ import {
   AddTypeButton,
   CollapsibleTab,
   Column,
+  DomainCopiesLength,
+  DomainTabHeader,
   RemoveButton,
   ResetButton,
   SmallSelect,
@@ -44,6 +46,8 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
   const [openDomains, setOpenDomains] = useState<Record<string, boolean>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [isConfirmationOpen, setConfirmationOpen] = useState(false);
+  const [isTabConfirmationOpen, setTabConfirmationOpen] = useState(false);
+  const [sheetForResetTypes, setSheetForResetTypes] = useState<string>();
 
   const [bulkType, setBulkType] =
     useState<DomainStrategy["copiesTypes"][number]>("click");
@@ -224,6 +228,7 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
     setStrategiesBySheet(updated);
     const allUpdated = Object.values(updated).flat();
     onChange({ domainStrategies: allUpdated });
+    setSheetForResetTypes('');
   };
 
   const handleRemoveType = (
@@ -282,7 +287,10 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
               onClick={() => toggleSheet(sheetName)}
             >
               {sheetName}{" "}
-              <ResetButton onClick={() => handleRemoveAllForSheet(sheetName)}>
+              <ResetButton onClick={() => {
+                setSheetForResetTypes(sheetName);
+                setTabConfirmationOpen(true);
+              }}>
                 Reset {sheetName}
               </ResetButton>
             </TabHeader>
@@ -290,12 +298,13 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
             {openSheets[sheetName] &&
               strategies.map((strategy, index) => (
                 <CollapsibleTab key={strategy.domain}>
-                  <TabHeader
+                  <DomainTabHeader
                     active={!!openDomains[strategy.domain]}
                     onClick={() => toggleDomain(strategy.domain)}
                   >
                     {strategy.domain}
-                  </TabHeader>
+                    <DomainCopiesLength>Copies: ({strategy.copiesTypes.length})</DomainCopiesLength>
+                  </DomainTabHeader>
 
                   {openDomains[strategy.domain] && (
                     <StrategyRow>
@@ -367,6 +376,19 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
             setConfirmationOpen(false);
           }}
           onConfirm={handleRemoveAllTypes}
+        />
+      )}
+      {isTabConfirmationOpen && sheetForResetTypes && (
+        <ConfirmationModal
+          title={`Remove all copy types for ${sheetForResetTypes}`}
+          message={`Are you sure you want to remove all copy types for ${sheetForResetTypes}?`}
+          confirmButtonText="Remove"
+          cancelButtonText="Cancel"
+          isOpen={isTabConfirmationOpen}
+          onClose={() => {
+            setTabConfirmationOpen(false);
+          }}
+          onConfirm={() => handleRemoveAllForSheet(sheetForResetTypes)}
         />
       )}
     </Wrapper>

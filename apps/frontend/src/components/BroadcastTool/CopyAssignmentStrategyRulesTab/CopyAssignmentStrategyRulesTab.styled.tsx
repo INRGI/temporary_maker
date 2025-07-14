@@ -37,6 +37,17 @@ export const TabHeader = styled.button<{ active: boolean }>`
   }
 `;
 
+export const DomainTabHeader = styled(TabHeader)`
+  justify-content: flex-start;
+  gap: 10px;
+`;
+
+export const DomainCopiesLength = styled.p`
+  padding: 0;
+  margin: 0;
+  color: #fca311;
+`;
+
 export const StrategyRow = styled.div`
   display: flex;
   gap: 10px;
