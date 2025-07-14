@@ -104,16 +104,14 @@ export class CheckIfProductCanBeSendService {
 
     if (
       productRules.allowedMondayStatuses.includes(productData.productStatus) &&
-      productRules.domainSending.find(
+      productRules.domainSending.some(
         (domainSending) =>
-          domainSending.parentCompany === domainData.parentCompany
-      ) &&
-      productRules.domainSending.find((domainSending) =>
-        domainSending.allowedMondayStatuses.includes(productData.domainSending)
+          domainSending.parentCompany === domainData.parentCompany &&
+          domainSending.allowedMondayStatuses.includes(productData.domainSending)
       )
     ) {
       return true;
-    }
+    }    
 
     return false;
   }

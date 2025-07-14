@@ -1,4 +1,5 @@
 import { IsArray, IsNumber } from "class-validator";
+import { PartnerAllowedSendingDaysRequestDto } from "./partner-allowed-sending-days.request.dto";
 
 export class PartnerRulesRequestDto {
   @IsArray()
@@ -6,4 +7,7 @@ export class PartnerRulesRequestDto {
 
   @IsNumber()
   public similarPartnerDomainLimit: number;
+
+  @IsArray()
+  partnerAllowedSendingDays: PartnerAllowedSendingDaysRequestDto[];
 }

@@ -18,3 +18,4 @@ export * from "./copy.interface";
 export * from "./broadcast-sheet.interface";
 export * from "./copy-type.enum";
 export * from "./admin-broadcast-config-entity.interface";
+export * from "./partner-allowed-sending-days.interface";

@@ -6,6 +6,7 @@ import {
   InputGroup,
   RuleContainer,
 } from "../DomainRulesTab/DomainRulesTab.styled";
+import PartnerAllowedDaysEditor from "../PartnerAllowedDaysEditor";
 
 interface PartnerRulesTabProps {
   partnerRules: PartnerRules;
@@ -49,6 +50,19 @@ const PartnerRulesTab: React.FC<PartnerRulesTabProps> = ({
             }
           />
         </InputContainer>
+      </InputGroup>
+
+      <InputGroup>
+        <PartnerAllowedDaysEditor
+          items={partnerRules.partnerAllowedSendingDays}
+          onChange={(updated) =>
+            onChange({
+              ...partnerRules,
+              partnerAllowedSendingDays: updated,
+            })
+          }
+          uniquePartners={partners}
+        />
       </InputGroup>
     </RuleContainer>
   );

@@ -56,6 +56,7 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
       partnerRules: {
         blacklistedPartners: [],
         similarPartnerDomainLimit: 1,
+        partnerAllowedSendingDays: [],
       },
       productRules: {
         blacklistedCopies: [],

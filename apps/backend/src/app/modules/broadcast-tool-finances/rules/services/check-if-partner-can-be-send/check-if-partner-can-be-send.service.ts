@@ -31,6 +31,31 @@ export class CheckIfPartnerCanBeSendService {
       return false;
     }
 
+    const isPartnerHasSendingRestrictions =
+      partnerRules.partnerAllowedSendingDays.find(
+        (partnerAllowedSendingDay) => {
+          if (partnerAllowedSendingDay.partner === productData.partner) {
+            return true;
+          }
+        }
+      );
+
+    if (isPartnerHasSendingRestrictions) {
+      const daysOfWeek = [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+      ];
+      const dayOfWeek = daysOfWeek[new Date(sendingDate).getDay()];
+      if (!isPartnerHasSendingRestrictions.allowedSendingDays[dayOfWeek]) {
+        return false;
+      }
+    }
+
     const broadcastCopiesForDate = broadcastDomain.broadcastCopies.find(
       (copy) => copy.date === sendingDate
     );
