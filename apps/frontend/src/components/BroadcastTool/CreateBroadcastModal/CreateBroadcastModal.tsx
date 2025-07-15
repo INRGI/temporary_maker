@@ -8,15 +8,12 @@ import {
   TabsContainer,
 } from "./CreateBroadcastModal.styled";
 import { CreateBroadcastRulesRequest } from "../../../api/broadcast-rules";
-import DomainRulesTab from "../DomainRulesTab";
 import Loader from "../../Common/Loader";
 import { toastError, toastSuccess } from "../../../helpers/toastify";
 import {
-  GetDomainStatusesResponse,
   GetProductStatusesResponse,
 } from "../../../api/monday";
 import UsageRulesTab from "../UsageRulesTab";
-import PartnerRulesTab from "../PartnerRulesTab";
 import ProductRulesTab from "../ProductRulesTab";
 import CopyAssignmentStrategyRulesTab from "../CopyAssignmentStrategyRulesTab";
 import { BroadcastListItemResponse } from "../../../api/broadcast/response/broadcast-list-item.response.dto";
@@ -27,7 +24,6 @@ import ConfirmationModal from "../ConfirmationModal";
 interface CreateModalProps {
   isOpen: boolean;
   onClose: () => void;
-  domainMondayStatuses: GetDomainStatusesResponse;
   productMondayStatuses: GetProductStatusesResponse;
   broadcastsSheets: BroadcastListItemResponse[];
 }
@@ -35,7 +31,6 @@ interface CreateModalProps {
 const CreateBroadcastModal: React.FC<CreateModalProps> = ({
   isOpen,
   onClose,
-  domainMondayStatuses,
   productMondayStatuses,
   broadcastsSheets,
 }) => {
@@ -44,19 +39,10 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
     useState<CreateBroadcastRulesRequest>({
       name: "",
       broadcastSpreadsheetId: "",
-      domainRules: {
-        minClicksToBeLive: 0,
-        allowedMondayStatuses: [],
-      },
       usageRules: {
         productMinDelayPerDays: 3,
         copyMinDelayPerDays: 10,
         copyTabLimit: [],
-      },
-      partnerRules: {
-        blacklistedPartners: [],
-        similarPartnerDomainLimit: 1,
-        partnerAllowedSendingDays: [],
       },
       productRules: {
         blacklistedCopies: [],
@@ -65,7 +51,6 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
         productsSendingLimitPerDay: [],
         copySendingLimitPerDay: [],
         copyMinLimitPerDay: [],
-        domainSending: [],
         similarSectorDomainLimit: 1,
         blacklistedSectors: [],
       },
@@ -107,14 +92,6 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
 
   const renderContent = () => {
     switch (activeTab) {
-      case "domain-rules":
-        return (
-          <DomainRulesTab
-            domainRules={broadcastRules.domainRules}
-            onChange={(updated) => handleChange("domainRules", updated)}
-            domainMondayStatuses={domainMondayStatuses}
-          />
-        );
       case "usage-rules":
         return (
           <UsageRulesTab
@@ -123,20 +100,11 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
             onChange={(updated) => handleChange("usageRules", updated)}
           />
         );
-      case "partner-rules":
-        return (
-          <PartnerRulesTab
-            partners={productMondayStatuses.partners}
-            partnerRules={broadcastRules.partnerRules}
-            onChange={(updated) => handleChange("partnerRules", updated)}
-          />
-        );
       case "product-rules":
         return (
           <ProductRulesTab
             productRules={broadcastRules.productRules}
             onChange={(updated) => handleChange("productRules", updated)}
-            domainMondayStatuses={domainMondayStatuses}
             productMondayStatuses={productMondayStatuses}
           />
         );
@@ -193,12 +161,6 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
           >
             General
           </TabButton>
-          <TabButton
-            active={activeTab === "domain-rules"}
-            onClick={() => setActiveTab("domain-rules")}
-          >
-            Domain Rules
-          </TabButton>
           {broadcastRules.broadcastSpreadsheetId && (
             <TabButton
               active={activeTab === "usage-rules"}
@@ -207,12 +169,6 @@ const CreateBroadcastModal: React.FC<CreateModalProps> = ({
               Usage Rules
             </TabButton>
           )}
-          <TabButton
-            active={activeTab === "partner-rules"}
-            onClick={() => setActiveTab("partner-rules")}
-          >
-            Partner Rules
-          </TabButton>
           <TabButton
             active={activeTab === "product-rules"}
             onClick={() => setActiveTab("product-rules")}

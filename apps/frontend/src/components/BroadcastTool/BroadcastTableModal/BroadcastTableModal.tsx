@@ -93,7 +93,7 @@ const BroadcastTableModal: React.FC<BroadcastTableModalProps> = ({
       const result = await approveBroadcast({
         broadcast: data,
       });
-      if (!result.response) {
+      if (!result.length) {
         setIsLoading(false);
         return toastError("Failed to approve broadcast");
       }

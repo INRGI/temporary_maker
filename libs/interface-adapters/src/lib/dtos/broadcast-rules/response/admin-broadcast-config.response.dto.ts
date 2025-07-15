@@ -1,6 +1,8 @@
 import { IsString, Length } from "class-validator";
 import { AnalyticSelectionRulesRequestDto } from "../request/analytic-selection-rules.request.dto";
 import { TestingRulesRequestDto } from "../request/testing-rules.request.dto";
+import { PartnerRulesRequestDto } from "../request/partner-rules.request.dto";
+import { DomainRulesRequestDto } from "../request/domain-rules.request.dto";
 
 export class AdminBroadcastConfigResponseDto {
   @IsString()
@@ -8,6 +10,10 @@ export class AdminBroadcastConfigResponseDto {
   public niche: string;
 
   public testingRules: TestingRulesRequestDto;
+
+  public partnerRules: PartnerRulesRequestDto;
+
+  public domainRules: DomainRulesRequestDto;
 
   public analyticSelectionRules: AnalyticSelectionRulesRequestDto;
 }

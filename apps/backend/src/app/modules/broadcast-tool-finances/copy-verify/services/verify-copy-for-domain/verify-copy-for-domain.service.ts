@@ -31,6 +31,7 @@ export class VerifyCopyForDomainService {
       broadcastDomain,
       copyName,
       sheetName,
+      adminBroadcastConfig,
       broadcastRules,
       sendingDate,
       productsData,
@@ -51,7 +52,7 @@ export class VerifyCopyForDomainService {
 
     const checkIfDomainActiveResult =
       await this.checkIfDomainActiveService.execute({
-        domainRules: broadcastRules.domainRules,
+        domainRules: adminBroadcastConfig.domainRules,
         domain: broadcastDomain.domain,
         broadcast: broadcast,
         sendingDate,
@@ -66,7 +67,7 @@ export class VerifyCopyForDomainService {
       await this.checkIfPartnerCanBeSendService.execute({
         copyName,
         broadcastDomain,
-        partnerRules: broadcastRules.partnerRules,
+        partnerRules: adminBroadcastConfig.partnerRules,
         productsData,
         sendingDate,
       });
@@ -92,6 +93,7 @@ export class VerifyCopyForDomainService {
       await this.checkIfProductCanBeSendService.execute({
         copyName,
         broadcast,
+        domainRules: adminBroadcastConfig.domainRules,
         productRules: broadcastRules.productRules,
         domain: broadcastDomain.domain,
         domainsData,

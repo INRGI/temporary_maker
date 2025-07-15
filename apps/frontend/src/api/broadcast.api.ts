@@ -50,7 +50,7 @@ export const makeBroadcast = async (
 
 export const approveBroadcast = async (
   body: ApproveBroadcastRequest
-): Promise<ApproveBroadcastSheetResponse> => {
+): Promise<ApproveBroadcastSheetResponse[]> => {
   try {
     const response = await axios.post(
       `${broadcastToolApiUrl}/approve-broadcast`,
@@ -58,7 +58,7 @@ export const approveBroadcast = async (
     );
     return response.data;
   } catch (error) {
-    return { response: [] };
+    return [];
   }
 };
 

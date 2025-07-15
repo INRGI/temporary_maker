@@ -31,6 +31,7 @@ export class VerifyCopyWithoutQueueService {
       broadcastDomain,
       copyName,
       sheetName,
+      adminBroadcastConfig,
       broadcastRules,
       sendingDate,
       productsData,
@@ -51,7 +52,7 @@ export class VerifyCopyWithoutQueueService {
 
     const checkIfDomainActiveResult =
       await this.checkIfDomainActiveService.execute({
-        domainRules: broadcastRules.domainRules,
+        domainRules: adminBroadcastConfig.domainRules,
         domain: broadcastDomain.domain,
         broadcast: broadcast,
         sendingDate,
@@ -66,7 +67,7 @@ export class VerifyCopyWithoutQueueService {
       await this.checkIfPartnerCanBeSendService.execute({
         copyName,
         broadcastDomain,
-        partnerRules: broadcastRules.partnerRules,
+        partnerRules: adminBroadcastConfig.partnerRules,
         productsData,
         sendingDate,
       });
@@ -94,6 +95,7 @@ export class VerifyCopyWithoutQueueService {
         broadcast,
         productRules: broadcastRules.productRules,
         domain: broadcastDomain.domain,
+        domainRules: adminBroadcastConfig.domainRules,
         domainsData,
         productsData,
         sendingDate,

@@ -1,7 +1,7 @@
-import { GetDomainStatusesResponse } from "../../../api/monday";
+import { GetDomainStatusesResponse, GetProductStatusesResponse } from "../../../api/monday";
 import { DomainRules } from "../../../types/broadcast-tool";
-import FloatingLabelNumberInput from "../../Common/FloatingLabelInput/FloatingLabelNumberInput";
 import MultiSelectDropdown from "../../Common/MultiSelectDropdown";
+import DomainSendingEditor from "../DomainSendingEditor";
 import {
   InputContainer,
   InputGroup,
@@ -12,29 +12,17 @@ interface DomainRulesTabProps {
   domainRules: DomainRules;
   onChange: (updated: DomainRules) => void;
   domainMondayStatuses: GetDomainStatusesResponse;
+  productMondayStatuses: GetProductStatusesResponse;
 }
 
 const DomainRulesTab: React.FC<DomainRulesTabProps> = ({
   domainRules,
   onChange,
-  domainMondayStatuses
+  domainMondayStatuses,
+  productMondayStatuses
 }) => {
   return (
     <RuleContainer>
-      <InputGroup disabled={true}>
-        <InputContainer>
-          <FloatingLabelNumberInput
-            placeholder="Min Clicks To Be Live"
-            value={domainRules.minClicksToBeLive}
-            onChange={(e) =>
-              onChange({
-                ...domainRules,
-                minClicksToBeLive: Number(e.target.value),
-              })
-            }
-          />
-        </InputContainer>
-      </InputGroup>
       <InputGroup>
         <InputContainer>
           <MultiSelectDropdown
@@ -50,6 +38,21 @@ const DomainRulesTab: React.FC<DomainRulesTabProps> = ({
           />
         </InputContainer>
       </InputGroup>
+
+      <InputGroup>
+          <DomainSendingEditor
+            items={domainRules.domainSending}
+            onChange={(newItems) =>
+              onChange({
+                ...domainRules,
+                domainSending: newItems,
+              })
+            }
+            title="Domain Sending Rules"
+            parentCompanies={domainMondayStatuses.uniqueParentCompanies}
+            mondayStatuses={productMondayStatuses.domainSendings}
+          />
+        </InputGroup>
     </RuleContainer>
   );
 };

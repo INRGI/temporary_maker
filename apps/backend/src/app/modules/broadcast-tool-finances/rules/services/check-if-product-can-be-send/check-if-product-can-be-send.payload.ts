@@ -1,4 +1,5 @@
 import {
+  DomainRules,
   GetAllDomainsResponseDto,
   GetDomainDataResponse,
   GetProductDataResponse,
@@ -10,6 +11,7 @@ export interface CheckIfProductCanBeSendPayload {
   copyName: string;
   sendingDate: string;
   productRules: ProductRules;
+  domainRules: DomainRules;
   domain: string;
   domainsData: GetDomainDataResponse[];
   productsData: GetProductDataResponse[];

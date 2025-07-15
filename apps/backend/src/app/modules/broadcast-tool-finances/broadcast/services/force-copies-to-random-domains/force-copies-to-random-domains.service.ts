@@ -14,6 +14,7 @@ export class ForceCopiesToRandomDomainsService {
   ): Promise<GetAllDomainsResponseDto> {
     const {
       broadcastRules,
+      adminBroadcastConfig,
       productsData,
       copiesToForce,
       domainsData,
@@ -76,6 +77,7 @@ export class ForceCopiesToRandomDomainsService {
             broadcast,
             sheetName: sheet.sheetName,
             broadcastDomain: domain,
+            adminBroadcastConfig,
             copyName,
             broadcastRules,
             sendingDate: date,

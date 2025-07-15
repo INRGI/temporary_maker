@@ -22,12 +22,9 @@ import {
 } from "../../../api/broadcast-rules.api";
 import CreateBroadcastModal from "../CreateBroadcastModal";
 import Loader from "../../Common/Loader";
-import {
-  GetDomainStatusesResponse,
-  GetProductStatusesResponse,
-} from "../../../api/monday";
+import { GetProductStatusesResponse } from "../../../api/monday";
 import { BroadcastListItemResponse } from "../../../api/broadcast/response/broadcast-list-item.response.dto";
-import { getDomainStatuses, getProductStatuses } from "../../../api/monday.api";
+import { getProductStatuses } from "../../../api/monday.api";
 import { getBroadcastsList } from "../../../api/broadcast.api";
 import ConfirmationModal from "../ConfirmationModal";
 import { getCachedData, setCachedData } from "../../../helpers/getCachedData";
@@ -55,12 +52,6 @@ const Menu: React.FC = () => {
       partners: [],
       sectors: [],
     });
-  const [domainMondayStatuses, setDomainMondayStatuses] =
-    useState<GetDomainStatusesResponse>({
-      uniqueDomainStatuses: [],
-      uniqueEsps: [],
-      uniqueParentCompanies: [],
-    });
   const [broadcastsSheets, setBroadcastsSheets] = useState<
     BroadcastListItemResponse[]
   >([]);
@@ -76,7 +67,6 @@ const Menu: React.FC = () => {
 
     Promise.allSettled([
       fetchProductStatuses(),
-      fetchDomainStatuses(),
       fetchBroadcastsSheets(),
       fetchBroadcastRules(),
     ]).finally(() => {
@@ -95,16 +85,19 @@ const Menu: React.FC = () => {
   };
 
   const fetchProductStatuses = async () => {
-    const cached = getCachedData<GetProductStatusesResponse>("product-statuses", 30 * 60 * 1000);
+    const cached = getCachedData<GetProductStatusesResponse>(
+      "product-statuses",
+      30 * 60 * 1000
+    );
     if (cached) {
       setProductMondayStatuses(cached);
       return;
     }
-  
+
     try {
       const response = await getProductStatuses();
       if (!response) throw new Error("Failed to fetch product statuses");
-  
+
       setProductMondayStatuses(response);
       setCachedData("product-statuses", response, 15 * 60 * 1000);
     } catch (error) {
@@ -117,31 +110,6 @@ const Menu: React.FC = () => {
       });
     }
   };
-  
-
-  const fetchDomainStatuses = async () => {
-    const cached = getCachedData<GetDomainStatusesResponse>("domain-statuses", 30 * 60 * 1000);
-    if (cached) {
-      setDomainMondayStatuses(cached);
-      return;
-    }
-  
-    try {
-      const response = await getDomainStatuses();
-      if (!response) throw new Error("Failed to fetch domain statuses");
-  
-      setDomainMondayStatuses(response);
-      setCachedData("domain-statuses", response, 30 * 60 * 1000);
-    } catch (error) {
-      toastError("Failed to fetch domain statuses");
-      setDomainMondayStatuses({
-        uniqueDomainStatuses: [],
-        uniqueEsps: [],
-        uniqueParentCompanies: [],
-      });
-    }
-  };
-  
 
   const fetchBroadcastsSheets = async () => {
     try {
@@ -155,18 +123,19 @@ const Menu: React.FC = () => {
   };
 
   useEffect(() => {
-    if ( !broadcastEntities || !broadcastEntities.length) {
+    if (!broadcastEntities || !broadcastEntities.length) {
       return;
-    };
-  
-    const stillExists = broadcastEntities.find(e => e._id === activeEntity?._id);
+    }
+
+    const stillExists = broadcastEntities.find(
+      (e) => e._id === activeEntity?._id
+    );
     if (!stillExists) {
       setActiveEntity(broadcastEntities[0]);
     } else {
       setActiveEntity(stillExists);
     }
   }, [broadcastEntities]);
-  
 
   const handleDeleteEntity = async (id: string) => {
     try {
@@ -186,7 +155,7 @@ const Menu: React.FC = () => {
     try {
       const response = await getPaginatedBroadcastRules();
       setBroadcastEntities(response.items);
-  
+
       const updated = response.items.find((e) => e._id === activeEntity?._id);
       if (updated) {
         setActiveEntity({ ...updated });
@@ -197,7 +166,6 @@ const Menu: React.FC = () => {
       setIsLoading(false);
     }
   };
-  
 
   const filteredPresets =
     broadcastEntities && broadcastEntities.length > 0
@@ -278,7 +246,6 @@ const Menu: React.FC = () => {
               setCreateModalOpen(false);
               fetchBroadcastRules();
             }}
-            domainMondayStatuses={domainMondayStatuses}
             productMondayStatuses={productMondayStatuses}
             broadcastsSheets={broadcastsSheets}
           />
@@ -301,10 +268,9 @@ const Menu: React.FC = () => {
 
       {activeEntity && (
         <RulesContainer
-        key={activeEntity._id}
+          key={activeEntity._id}
           onEntityUpdate={onEntityUpdate}
           broadcastEntity={activeEntity}
-          domainMondayStatuses={domainMondayStatuses}
           productMondayStatuses={productMondayStatuses}
           broadcastsSheets={broadcastsSheets}
         />

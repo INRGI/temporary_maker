@@ -34,6 +34,7 @@ export class VerifyConvCopyForDomainService {
       broadcastRules,
       sendingDate,
       productsData,
+      adminBroadcastConfig,
       domainsData,
       broadcast,
       priorityCopiesData,
@@ -51,7 +52,7 @@ export class VerifyConvCopyForDomainService {
 
     const checkIfDomainActiveResult =
       await this.checkIfDomainActiveService.execute({
-        domainRules: broadcastRules.domainRules,
+        domainRules: adminBroadcastConfig.domainRules,
         domain: broadcastDomain.domain,
         broadcast: broadcast,
         sendingDate,
@@ -66,7 +67,7 @@ export class VerifyConvCopyForDomainService {
       await this.checkIfPartnerCanBeSendService.execute({
         copyName,
         broadcastDomain,
-        partnerRules: broadcastRules.partnerRules,
+        partnerRules: adminBroadcastConfig.partnerRules,
         productsData,
         sendingDate,
       });
@@ -94,6 +95,7 @@ export class VerifyConvCopyForDomainService {
         broadcast,
         productRules: broadcastRules.productRules,
         domain: broadcastDomain.domain,
+        domainRules: adminBroadcastConfig.domainRules,
         domainsData,
         productsData,
         sendingDate,

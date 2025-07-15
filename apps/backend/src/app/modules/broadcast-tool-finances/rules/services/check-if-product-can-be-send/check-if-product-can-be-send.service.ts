@@ -10,6 +10,7 @@ export class CheckIfProductCanBeSendService {
       copyName,
       broadcast,
       productRules,
+      domainRules,
       domain,
       domainsData,
       productsData,
@@ -104,7 +105,7 @@ export class CheckIfProductCanBeSendService {
 
     if (
       productRules.allowedMondayStatuses.includes(productData.productStatus) &&
-      productRules.domainSending.some(
+      domainRules.domainSending.some(
         (domainSending) =>
           domainSending.parentCompany === domainData.parentCompany &&
           domainSending.allowedMondayStatuses.includes(productData.domainSending)

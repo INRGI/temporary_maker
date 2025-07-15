@@ -66,6 +66,10 @@ const CopyTabLimitInput: React.FC<CopyTabLimitInputProps> = ({
       };
     });
     setLocalLimits(merged);
+
+    if (items.length === 0) {
+      onChange(merged);
+    }
   }, [items, availableSheetNames]);
 
   const handleLimitChange = (index: number, value: string) => {

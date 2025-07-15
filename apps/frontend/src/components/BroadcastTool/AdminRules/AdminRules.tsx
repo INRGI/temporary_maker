@@ -20,6 +20,14 @@ import { LiaSaveSolid } from "react-icons/lia";
 import ConfirmationModal from "../ConfirmationModal";
 import { Button } from "../Menu/Menu.styled";
 import TestingRulesTab from "../TestingRulesTab";
+import DomainRulesTab from "../DomainRulesTab";
+import PartnerRulesTab from "../PartnerRulesTab";
+import {
+  GetDomainStatusesResponse,
+  GetProductStatusesResponse,
+} from "../../../api/monday";
+import { getCachedData, setCachedData } from "../../../helpers/getCachedData";
+import { getDomainStatuses, getProductStatuses } from "../../../api/monday.api";
 
 const AdminRules: React.FC = () => {
   const [openSection, setOpenSection] = useState<string | null>(null);
@@ -28,11 +36,29 @@ const AdminRules: React.FC = () => {
   const contentRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [domainMondayStatuses, setDomainMondayStatuses] =
+    useState<GetDomainStatusesResponse>({
+      uniqueDomainStatuses: [],
+      uniqueEsps: [],
+      uniqueParentCompanies: [],
+    });
+
+  const [productMondayStatuses, setProductMondayStatuses] =
+    useState<GetProductStatusesResponse>({
+      productStatuses: [],
+      domainSendings: [],
+      partners: [],
+      sectors: [],
+    });
 
   useEffect(() => {
     setIsLoading(true);
 
-    Promise.allSettled([fetchAdminBroadcastConfig()]).finally(() => {
+    Promise.allSettled([
+      fetchAdminBroadcastConfig(),
+      fetchDomainStatuses(),
+      fetchProductStatuses(),
+    ]).finally(() => {
       setIsLoading(false);
     });
   }, []);
@@ -48,6 +74,32 @@ const AdminRules: React.FC = () => {
     } catch (error) {
       toastError("Failed to fetch admin broadcast config");
       setAdminBroadcastConfig(undefined);
+    }
+  };
+
+  const fetchDomainStatuses = async () => {
+    const cached = getCachedData<GetDomainStatusesResponse>(
+      "domain-statuses",
+      30 * 60 * 1000
+    );
+    if (cached) {
+      setDomainMondayStatuses(cached);
+      return;
+    }
+
+    try {
+      const response = await getDomainStatuses();
+      if (!response) throw new Error("Failed to fetch domain statuses");
+
+      setDomainMondayStatuses(response);
+      setCachedData("domain-statuses", response, 30 * 60 * 1000);
+    } catch (error) {
+      toastError("Failed to fetch domain statuses");
+      setDomainMondayStatuses({
+        uniqueDomainStatuses: [],
+        uniqueEsps: [],
+        uniqueParentCompanies: [],
+      });
     }
   };
 
@@ -87,6 +139,33 @@ const AdminRules: React.FC = () => {
       setIsLoading(false);
     } finally {
       onEntityUpdate();
+    }
+  };
+
+  const fetchProductStatuses = async () => {
+    const cached = getCachedData<GetProductStatusesResponse>(
+      "product-statuses",
+      30 * 60 * 1000
+    );
+    if (cached) {
+      setProductMondayStatuses(cached);
+      return;
+    }
+
+    try {
+      const response = await getProductStatuses();
+      if (!response) throw new Error("Failed to fetch product statuses");
+
+      setProductMondayStatuses(response);
+      setCachedData("product-statuses", response, 15 * 60 * 1000);
+    } catch (error) {
+      toastError("Failed to fetch product statuses");
+      setProductMondayStatuses({
+        productStatuses: [],
+        domainSendings: [],
+        partners: [],
+        sectors: [],
+      });
     }
   };
 
@@ -144,6 +223,30 @@ const AdminRules: React.FC = () => {
             <TestingRulesTab
               testingRules={adminBroadcastConfig.testingRules}
               onChange={(updated) => handleChange("testingRules", updated)}
+            />
+          )}
+
+        {!isLoading &&
+          adminBroadcastConfig &&
+          renderSection(
+            "Domain Rules",
+            "domainRules",
+            <DomainRulesTab
+              domainRules={adminBroadcastConfig.domainRules}
+              onChange={(updated) => handleChange("domainRules", updated)}
+              domainMondayStatuses={domainMondayStatuses}
+              productMondayStatuses={productMondayStatuses}
+            />
+          )}
+        {!isLoading &&
+          adminBroadcastConfig &&
+          renderSection(
+            "Partner Rules",
+            "partnerRules",
+            <PartnerRulesTab
+              partners={productMondayStatuses.partners}
+              partnerRules={adminBroadcastConfig.partnerRules}
+              onChange={(updated) => handleChange("partnerRules", updated)}
             />
           )}
       </ListScrollContainer>

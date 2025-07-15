@@ -1,5 +1,4 @@
 import {
-  GetDomainStatusesResponse,
   GetProductStatusesResponse,
 } from "../../../api/monday";
 import { ProductRules } from "../../../types/broadcast-tool";
@@ -15,20 +14,17 @@ import {
   RuleContainer,
 } from "../DomainRulesTab/DomainRulesTab.styled";
 import ProductAllowedDaysEditor from "../ProductAllowedDaysEditor";
-import DomainSendingEditor from "../DomainSendingEditor";
 
 interface ProductRulesTabProps {
   productRules: ProductRules;
   onChange: (updated: ProductRules) => void;
   productMondayStatuses: GetProductStatusesResponse;
-  domainMondayStatuses: GetDomainStatusesResponse;
 }
 
 const ProductRulesTab: React.FC<ProductRulesTabProps> = ({
   productRules,
   onChange,
   productMondayStatuses,
-  domainMondayStatuses,
 }) => {
   return (
     <RuleContainer style={{ flexDirection: "row" }}>
@@ -169,21 +165,6 @@ const ProductRulesTab: React.FC<ProductRulesTabProps> = ({
                 productAllowedSendingDays: updated,
               })
             }
-          />
-        </InputGroup>
-
-        <InputGroup>
-          <DomainSendingEditor
-            items={productRules.domainSending}
-            onChange={(newItems) =>
-              onChange({
-                ...productRules,
-                domainSending: newItems,
-              })
-            }
-            title="Domain Sending Rules"
-            parentCompanies={domainMondayStatuses.uniqueParentCompanies}
-            mondayStatuses={productMondayStatuses.domainSendings}
           />
         </InputGroup>
       </RightContainer>

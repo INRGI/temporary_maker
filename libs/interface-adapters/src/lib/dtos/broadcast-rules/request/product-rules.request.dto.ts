@@ -1,5 +1,4 @@
-import { IsArray, IsBoolean, IsNumber } from "class-validator";
-import { DomainSendingRequestDto } from "./domain-sending.request.dto";
+import { IsArray, IsNumber } from "class-validator";
 import { ProductAllowedSendingDaysRequestDto } from "./product-allowed-sending-days.request.dto";
 import { ProductSendingLimitPerDayRequestDto } from "./product-sending-limit-per-day.request.dto";
 import { CopySendingLimitPerDayRequestDto } from "./copy-sending-limit-per-day.request.dto";
@@ -11,9 +10,6 @@ export class ProductRulesRequestDto {
 
   @IsArray()
   public blacklistedCopies: string[];
-
-  @IsArray()
-  public domainSending: DomainSendingRequestDto[];
 
   @IsArray()
   public productAllowedSendingDays: ProductAllowedSendingDaysRequestDto[];

@@ -23,6 +23,8 @@ export class UpdateAdminBroadcastConfigService {
       await this.adminBroadcastConfigRepository.update(payload._id, {
         niche: payload.niche,
         testingRules: payload.testingRules,
+        partnerRules: payload.partnerRules,
+        domainRules: payload.domainRules,
         analyticSelectionRules: payload.analyticSelectionRules,
       });
 

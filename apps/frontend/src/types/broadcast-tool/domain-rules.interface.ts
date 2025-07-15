@@ -1,4 +1,6 @@
+import { DomainSending } from "./domain-sending.interface";
+
 export interface DomainRules {
-  minClicksToBeLive: number;
   allowedMondayStatuses: string[];
+  domainSending: DomainSending[];
 }

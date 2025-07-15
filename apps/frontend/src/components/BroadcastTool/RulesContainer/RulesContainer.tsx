@@ -11,12 +11,9 @@ import {
   SectionHeader,
   SectionInner,
 } from "./RulesContainer.styled";
-import DomainRulesTab from "../DomainRulesTab";
 import {
-  GetDomainStatusesResponse,
   GetProductStatusesResponse,
 } from "../../../api/monday";
-import PartnerRulesTab from "../PartnerRulesTab";
 import ProductRulesTab from "../ProductRulesTab";
 import CopyAssignmentStrategyRulesTab from "../CopyAssignmentStrategyRulesTab";
 import { BroadcastListItemResponse } from "../../../api/broadcast/response/broadcast-list-item.response.dto";
@@ -41,14 +38,12 @@ import BroadcastTableModal from "../BroadcastTableModal";
 interface RulesContainerProps {
   onEntityUpdate: () => void;
   broadcastEntity: BroadcastRulesEntity;
-  domainMondayStatuses: GetDomainStatusesResponse;
   productMondayStatuses: GetProductStatusesResponse;
   broadcastsSheets: BroadcastListItemResponse[];
 }
 
 const RulesContainer: React.FC<RulesContainerProps> = ({
   broadcastEntity,
-  domainMondayStatuses,
   productMondayStatuses,
   broadcastsSheets,
   onEntityUpdate,
@@ -166,15 +161,7 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
               </InputGroup>
             </RuleContainer>
           )}
-          {renderSection(
-            "Domain Rules",
-            "domainRules",
-            <DomainRulesTab
-              domainRules={broadcastRules.domainRules}
-              onChange={(updated) => handleChange("domainRules", updated)}
-              domainMondayStatuses={domainMondayStatuses}
-            />
-          )}
+         
           {renderSection(
             "Usage Rules",
             "usageRules",
@@ -185,21 +172,11 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
             />
           )}
           {renderSection(
-            "Partner Rules",
-            "partnerRules",
-            <PartnerRulesTab
-              partners={productMondayStatuses.partners}
-              partnerRules={broadcastRules.partnerRules}
-              onChange={(updated) => handleChange("partnerRules", updated)}
-            />
-          )}
-          {renderSection(
             "Product Rules",
             "productRules",
             <ProductRulesTab
               productRules={broadcastRules.productRules}
               onChange={(updated) => handleChange("productRules", updated)}
-              domainMondayStatuses={domainMondayStatuses}
               productMondayStatuses={productMondayStatuses}
             />
           )}

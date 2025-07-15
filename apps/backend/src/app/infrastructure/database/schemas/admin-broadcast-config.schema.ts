@@ -1,4 +1,9 @@
-import { AnalyticSelectionRules, TestingRules } from "@epc-services/interface-adapters";
+import {
+  AnalyticSelectionRules,
+  DomainRules,
+  PartnerRules,
+  TestingRules,
+} from "@epc-services/interface-adapters";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
@@ -11,7 +16,13 @@ export class AdminBroadcastConfig extends Document {
   testingRules: TestingRules;
 
   @Prop({ type: Object, required: true })
+  partnerRules: PartnerRules;
+
+  @Prop({ type: Object, required: true })
   analyticSelectionRules: AnalyticSelectionRules;
+
+  @Prop({ type: Object, required: true })
+  domainRules: DomainRules;
 }
 
 export const AdminBroadcastConfigSchema =

@@ -147,6 +147,7 @@ export class MakeBroadcastService {
         domainsData,
         productsData,
         priorityCopiesData,
+        adminBroadcastConfig: adminConfig,
       });
 
     const broadcastWithPossibleCopies =

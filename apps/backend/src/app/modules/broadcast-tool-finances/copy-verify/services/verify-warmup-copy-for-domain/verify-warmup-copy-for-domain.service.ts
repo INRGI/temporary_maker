@@ -39,6 +39,7 @@ export class VerifyWarmupCopyForDomainService {
       copyName,
       sheetName,
       broadcastRules,
+      adminBroadcastConfig,
       sendingDate,
       productsData,
       domainsData,
@@ -68,7 +69,7 @@ export class VerifyWarmupCopyForDomainService {
 
     const checkIfDomainActiveResult =
       await this.checkIfDomainActiveService.execute({
-        domainRules: broadcastRules.domainRules,
+        domainRules: adminBroadcastConfig.domainRules,
         domain: broadcastDomain.domain,
         broadcast: broadcast,
         sendingDate,
@@ -94,7 +95,7 @@ export class VerifyWarmupCopyForDomainService {
       await this.checkIfPartnerCanBeSendService.execute({
         copyName,
         broadcastDomain,
-        partnerRules: broadcastRules.partnerRules,
+        partnerRules: adminBroadcastConfig.partnerRules,
         productsData,
         sendingDate,
       });
@@ -122,6 +123,7 @@ export class VerifyWarmupCopyForDomainService {
         broadcast,
         productRules: broadcastRules.productRules,
         domain: broadcastDomain.domain,
+        domainRules: adminBroadcastConfig.domainRules,
         domainsData,
         productsData,
         sendingDate,

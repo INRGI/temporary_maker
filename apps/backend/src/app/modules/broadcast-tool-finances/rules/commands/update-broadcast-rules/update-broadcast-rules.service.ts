@@ -25,9 +25,7 @@ export class UpdateBroadcastRulesService {
       {
         name: payload.name,
         broadcastSpreadsheetId: payload.broadcastSpreadsheetId,
-        domainRules: payload.domainRules,
         usageRules: payload.usageRules,
-        partnerRules: payload.partnerRules,
         productRules: payload.productRules,
         copyAssignmentStrategyRules: payload.copyAssignmentStrategyRules,
       }

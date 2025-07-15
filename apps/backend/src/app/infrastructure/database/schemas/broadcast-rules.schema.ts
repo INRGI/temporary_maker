@@ -2,8 +2,6 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 import {
   UsageRules,
-  DomainRules,
-  PartnerRules,
   ProductRules,
   CopyAssignmentStrategyRules,
 } from "@epc-services/interface-adapters";
@@ -18,12 +16,6 @@ export class BroadcastRules extends Document {
 
   @Prop({ type: Object, required: true })
   usageRules: UsageRules;
-
-  @Prop({ type: Object, required: true })
-  domainRules: DomainRules;
-
-  @Prop({ type: Object, required: true })
-  partnerRules: PartnerRules;
 
   @Prop({ type: Object, required: true })
   productRules: ProductRules;
