@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import AdminModal from "../../Common/AdminModal";
-import { Container } from "./BroadcastSendsModal.styled";
+import { Container, LoadingContainer } from "./BroadcastSendsModal.styled";
 import {
   Box,
   Card,
@@ -191,7 +191,9 @@ const BroadcastSendsModal: React.FC<BroadcastSendsModalProps> = ({
   return (
     <AdminModal isOpen={isOpen} onClose={onClose}>
       {isLoading ? (
-        <Loader />
+        <LoadingContainer>
+          <Loader />
+        </LoadingContainer>
       ) : !broadcastsSends ? (
         <Container>
           <Card sx={{ m: 3, p: 4 }}>
@@ -206,7 +208,12 @@ const BroadcastSendsModal: React.FC<BroadcastSendsModalProps> = ({
             <CssBaseline />
             <Box sx={{ p: 0 }}>
               <Grid container spacing={3}>
-                <Grid component={Card}>
+                <Grid
+                  component={Card}
+                  width={Math.max(
+                    document.body.clientWidth - 20
+                  )}
+                >
                   <Card>
                     <CardContent>
                       <Typography variant="h5" gutterBottom>
@@ -284,10 +291,6 @@ const BroadcastSendsModal: React.FC<BroadcastSendsModalProps> = ({
                           ]}
                           series={series}
                           height={400}
-                          width={Math.max(
-                            dataset.length * 50,
-                            document.body.clientWidth - 50
-                          )}
                         />
                       </Box>
                     </CardContent>

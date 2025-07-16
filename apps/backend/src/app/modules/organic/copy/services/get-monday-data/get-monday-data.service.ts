@@ -38,14 +38,12 @@ export class GetMondayDataService {
       if (!trackingData) return;
 
       const imgData = mondayData[0].column_values.find(
-        (column) => column.column.title === "IMG-IT"
+        (column) => column.column.title === "Product ID"
       ).text;
-      const cleanedImgData = imgData.replace(/IMG/g, "");
-      // if (!imgData) return;
 
       return {
         trackingData,
-        imgData: cleanedImgData,
+        imgData,
       };
     } catch (error) {
       return;
@@ -112,8 +110,8 @@ export class GetMondayDataService {
         )?.text;
 
         const imgData = item.column_values
-          .find((column) => column.column.title === "IMG-IT")
-          ?.text?.replace(/IMG/g, "");
+          .find((column) => column.column.title === "Product ID")
+          ?.text
 
         result.push({ product: item.productName, trackingData, imgData });
       }

@@ -43,7 +43,6 @@ import DownloadHtmlZipButton from "../../Common/DownloadHtmlZipButton";
 import PreviewAndEditModal from "../../Common/PreviewAndEditModal";
 import { FaLink } from "react-icons/fa";
 import BuildSpaceAdLink from "../BuildSpaceAdLink/BuildSpaceAdLink";
-import { LinkIndicator } from "../../Common/LinkIndicator/LinkIndicator";
 import { DateBadge } from "../../Common/DateBadge";
 import { TbRepeatOnce } from "react-icons/tb";
 import MakeCopyModal from "../MakeCopyModal/MakeCopyModal";
@@ -52,6 +51,7 @@ import { FaTrash } from "react-icons/fa6";
 import AddButtonModal from "../../Common/AddButtonModal/AddButtonModal";
 import { RiSpamLine } from "react-icons/ri";
 import AntiSpamModal from "../AntiSpamModal/AntiSpamModal";
+import { OrganicLinkIndicator } from "../LinkIndicator/LinkIndicator";
 
 interface Props {
   preset: Preset;
@@ -437,26 +437,14 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
           {copies.map((copy) => (
             <CopyCard key={copy.copyName}>
               <CardHeader>
-                <LinkIndicator link={copy.buildedLink} />
+                <OrganicLinkIndicator link={copy.buildedLink} />
                 <h2>
                   {copy.copyName}
-                  {copy.buildedLink.includes("IMG") && (
-                    <TitleCopy
-                      onClick={() => {
-                        navigator.clipboard.writeText(
-                          copy.buildedLink.match(/(IMG.*)/)?.[0] || ""
-                        );
-                        toastSuccess("Copied to clipboard");
-                      }}
-                    >
-                      ({copy.buildedLink.match(/(IMG.*)/)?.[0] || ""})
-                    </TitleCopy>
-                  )}
                   {preset.linkUrl?.productCode === "0000_#IMAGE" && (
                     <TitleCopy
                       onClick={() => {
                         const rawProductCode =
-                          copy.buildedLink.match(/product=([^&]*)/)?.[1] || "";
+                          copy.buildedLink.match(/[^/]+$/)?.[0] || "";
                         const formatted = formatProductCode(
                           rawProductCode,
                           format
@@ -467,7 +455,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                     >
                       (
                       {formatProductCode(
-                        copy.buildedLink.match(/product=([^&]*)/)?.[1] || "",
+                        copy.buildedLink.match(/[^/]+$/)?.[0] || "",
                         format
                       )}
                       )

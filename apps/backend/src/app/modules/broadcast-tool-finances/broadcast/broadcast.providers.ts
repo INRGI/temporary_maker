@@ -20,6 +20,7 @@ import { GetBroadcastsSendsService } from './services/get-broadcasts-sends/get-b
 import { GetClickableCopiesWithSendsService } from './services/get-clickable-copies-by-sends/get-clickable-copies-by-sends.service';
 import { GetBroadcastsSendsByIdService } from './services/get-broadcast-sends-by-id/get-broadcast-sends-by-id.service';
 import { AddCustomLinkIndicatorService } from './services/add-custom-link-indicator/add-custom-link-indicator.service';
+import { GetUnavailableBroadcastCopiesService } from './services/get-unavailable-broadcast-copies/get-unavailable-broadcast-copies.service';
 
 export const messageControllers = [BroadcastController];
 
@@ -46,4 +47,5 @@ export const serviceProviders: Provider[] = [
   GetClickableCopiesWithSendsService,
   GetBroadcastsSendsByIdService,
   AddCustomLinkIndicatorService,
+  GetUnavailableBroadcastCopiesService,
 ];

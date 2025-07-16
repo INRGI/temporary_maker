@@ -23,7 +23,7 @@ export class BuildLinkService {
       })
     
       if (!trackingData || !trackingData.trackingData) {
-        return 'urlhere';
+        return 'insertlink';
       }
     }
 
@@ -31,18 +31,13 @@ export class BuildLinkService {
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${product}${productLift}${productImage}`;
     }
 
-    if (linkUrl.productCode === 'IMG0000_#IMAGE' && trackingData.trackingData) {
-      if(!trackingData.imgData) return 'urlhere';
-      return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}IMG${trackingData.imgData}_${productLift}${productImage}`;
-    }
-
     if (linkUrl.productCode === '0000_#IMAGE' && trackingData.trackingData) {
-      if(!trackingData.imgData) return 'urlhere';
+      if(!trackingData.imgData) return 'insertlink';
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.imgData}_${productLift}${productImage}`;
     }
 
     if (linkUrl.productCode === '000_#IMAGE' && trackingData.trackingData) {
-      if(!trackingData.imgData) return 'urlhere';
+      if(!trackingData.imgData) return 'insertlink';
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.imgData.slice(1)}_${productLift}${productImage}`;
     }
 
@@ -50,7 +45,7 @@ export class BuildLinkService {
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.trackingData}_${productLift}${productImage}`;
     }
 
-    return 'urlhere';
+    return 'insertlink';
   }
 
   public async buildLinkWithDataProvided(payload: BuildLinkPayload): Promise<string> {
@@ -62,29 +57,24 @@ export class BuildLinkService {
     if (!trackingData) {
       trackingData = mondayProductsData?.find((item) => item.product.startsWith(`*${product} -`));
       if (!trackingData.trackingData) {
-        return 'urlhere';
+        return 'insertlink';
       }
     }
     
     if (!trackingData.trackingData) {
-      return 'urlhere';
+      return 'insertlink';
     }
     if (linkUrl.productCode === 'PRODUCT#IMAGE') {
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${product}${productLift}${productImage}`;
     }
 
-    if (linkUrl.productCode === 'IMG0000_#IMAGE') {
-      if(!trackingData.imgData) return 'urlhere';
-      return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}IMG${trackingData.imgData}_${productLift}${productImage}`;
-    }
-
     if (linkUrl.productCode === '0000_#IMAGE') {
-      if(!trackingData.imgData) return 'urlhere';
+      if(!trackingData.imgData) return 'insertlink';
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.imgData}_${productLift}${productImage}`;
     }
 
     if (linkUrl.productCode === '000_#IMAGE') {
-      if(!trackingData.imgData) return 'urlhere';
+      if(!trackingData.imgData) return 'insertlink';
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.imgData.slice(1)}_${productLift}${productImage}`;
     }
 
@@ -92,6 +82,6 @@ export class BuildLinkService {
       return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.trackingData}_${productLift}${productImage}`;
     }
 
-    return 'urlhere';
+    return 'insertlink';
   }
 }

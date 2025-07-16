@@ -16,3 +16,8 @@ export const Container = styled.div`
   align-items: flex-start;
   overflow-y: scroll;
 `;
+
+export const LoadingContainer = styled(Container)`
+  justify-content: center;
+  align-items: center;
+`;

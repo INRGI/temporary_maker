@@ -20,7 +20,6 @@ interface Props {
 
 const productCodeOptions: LinkUrl["productCode"][] = [
   "PRODUCT#IMAGE",
-  "IMG0000_#IMAGE",
   "0000_#IMAGE",
   "000_#IMAGE",
   "TRACKINGID_#IMAGE",

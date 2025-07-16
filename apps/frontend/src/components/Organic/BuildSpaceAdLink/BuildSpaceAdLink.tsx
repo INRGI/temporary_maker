@@ -33,7 +33,7 @@ const BuildSpaceAdLink: React.FC<Props> = ({ linkUrl, onClose, isOpen }) => {
         linkUrl,
       });
 
-      if (!response.data || response.data === 'urlhere') {
+      if (!response.data || response.data === 'insertlink') {
         toastError("Failed to build link");
         return;
       }

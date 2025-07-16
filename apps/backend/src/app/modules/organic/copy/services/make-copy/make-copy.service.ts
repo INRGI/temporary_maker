@@ -53,7 +53,7 @@ export class MakeCopyService {
         unsubData,
         subjects,
         imageLinks: [],
-        buildedLink: "urlhere",
+        buildedLink: "insertlink",
       };
     }
 
@@ -73,7 +73,7 @@ export class MakeCopyService {
         unsubData,
         subjects,
         imageLinks: [],
-        buildedLink: "urlhere",
+        buildedLink: "insertlink",
       };
     }
 
@@ -138,7 +138,7 @@ export class MakeCopyService {
       unsubData,
       subjects,
       imageLinks: links,
-      buildedLink: link || "urlhere",
+      buildedLink: link || "insertlink",
     };
   }
 
@@ -167,7 +167,7 @@ export class MakeCopyService {
         unsubData,
         subjects,
         imageLinks: [],
-        buildedLink: "urlhere",
+        buildedLink: "insertlink",
       };
     }
 
@@ -187,7 +187,7 @@ export class MakeCopyService {
         unsubData,
         subjects,
         imageLinks: [],
-        buildedLink: "urlhere",
+        buildedLink: "insertlink",
       };
     }
 
@@ -251,7 +251,7 @@ export class MakeCopyService {
       unsubData,
       subjects,
       imageLinks: links,
-      buildedLink: link || "urlhere",
+      buildedLink: link || "insertlink",
     };
   }
 }

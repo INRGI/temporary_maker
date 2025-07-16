@@ -137,6 +137,28 @@ const Menu: React.FC = () => {
     }
   }, [broadcastEntities]);
 
+  useEffect(() => {
+    const savedSearch = localStorage.getItem("broadcast_search_text");
+    const savedEntityId = localStorage.getItem("broadcast_active_entity_id");
+  
+    if (savedSearch) setSearchText(savedSearch);
+    if (savedEntityId && broadcastEntities.length) {
+      const found = broadcastEntities.find((e) => e._id === savedEntityId);
+      if (found) setActiveEntity(found);
+    }
+  }, [broadcastEntities]);
+  
+  useEffect(() => {
+    localStorage.setItem("broadcast_search_text", searchText);
+  }, [searchText]);
+  
+
+  useEffect(() => {
+    if (activeEntity?._id) {
+      localStorage.setItem("broadcast_active_entity_id", activeEntity._id);
+    }
+  }, [activeEntity]);  
+
   const handleDeleteEntity = async (id: string) => {
     try {
       setIsLoading(true);

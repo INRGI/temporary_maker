@@ -45,7 +45,7 @@ const CustomUnsubBlockBuilder: React.FC<Props> = ({ value, onChange }) => {
       <InputGroup>
         <InputContainer>
           <FloatingLabelInput
-            placeholder="Link Start, e.g. <a href='urlhere'>"
+            placeholder="Link Start, e.g. <a href='insertlink'>"
             value={safeValue.linkStart}
             onChange={(e) => handleChange("linkStart", e.target.value)}
           />

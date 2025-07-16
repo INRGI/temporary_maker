@@ -126,17 +126,15 @@ const LaunchBroadcastModal: React.FC<LaunchBroadcastModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const formatDateToYYYYMMDD = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
+    const day = new Date(date);
+    day.setDate(day.getDate() + 1);
+    return day.toISOString().split('T')[0];
   };
 
   const handleMakeBroadcast = async () => {
     if (!fromDate || !toDate) return toastError("Please select both dates");
     if (fromDate > toDate)
       return toastError("'From' date must be before 'To' date");
-
     try {
       setIsLoading(true);
       const result = await makeBroadcast({
