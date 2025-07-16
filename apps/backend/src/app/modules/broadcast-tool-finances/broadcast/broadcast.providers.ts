@@ -18,6 +18,8 @@ import { GetPossibleReplacementCopiesService } from './services/get-possible-rep
 import { CalculateBroadcastSendingService } from './services/calculate-broadcast-sending/calculate-broadcast-sending.service';
 import { GetBroadcastsSendsService } from './services/get-broadcasts-sends/get-broadcasts-sends.service';
 import { GetClickableCopiesWithSendsService } from './services/get-clickable-copies-by-sends/get-clickable-copies-by-sends.service';
+import { GetBroadcastsSendsByIdService } from './services/get-broadcast-sends-by-id/get-broadcast-sends-by-id.service';
+import { AddCustomLinkIndicatorService } from './services/add-custom-link-indicator/add-custom-link-indicator.service';
 
 export const messageControllers = [BroadcastController];
 
@@ -42,4 +44,6 @@ export const serviceProviders: Provider[] = [
   CalculateBroadcastSendingService,
   GetBroadcastsSendsService,
   GetClickableCopiesWithSendsService,
+  GetBroadcastsSendsByIdService,
+  AddCustomLinkIndicatorService,
 ];

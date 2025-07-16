@@ -16,6 +16,7 @@ import { AddPriorityCopyIndicatorService } from "../add-priority-copy-indicator/
 import { ForceCopiesToRandomDomainsService } from "../force-copies-to-random-domains/force-copies-to-random-domains.service";
 import { GetPossibleReplacementCopiesService } from "../get-possible-replacement-copies/get-possible-replacement-copies.service";
 import { GetAdminBroadcastConfigByNicheQueryService } from "../../../rules/queries/get-admin-broadcast-config-by-niche/get-admin-broadcast-config-by-niche.query-service";
+import { AddCustomLinkIndicatorService } from "../add-custom-link-indicator/add-custom-link-indicator.service";
 
 @Injectable()
 export class MakeBroadcastService {
@@ -34,7 +35,8 @@ export class MakeBroadcastService {
     private readonly forceCopiesToRandomDomainsService: ForceCopiesToRandomDomainsService,
     private readonly getPossibleReplacementCopiesService: GetPossibleReplacementCopiesService,
     private readonly getAdminBroadcastConfigByNicheQueryService: GetAdminBroadcastConfigByNicheQueryService,
-    private readonly getDomainsRevenueService: GetDomainsRevenueService
+    private readonly getDomainsRevenueService: GetDomainsRevenueService,
+    private readonly addCustomLinkIndicatorService: AddCustomLinkIndicatorService
   ) {}
   public async execute(
     payload: MakeBroadcaastPayload
@@ -165,12 +167,19 @@ export class MakeBroadcastService {
         testCopies,
       });
 
-    const modifiedBroadcast =
+    const broadcastWithPriorityIndicator =
       await this.addPriorityCopyIndicatorService.execute({
         broadcast: broadcastWithPossibleCopies,
         dateRange: this.getDateRange(fromDate, toDate),
       });
-    return modifiedBroadcast;
+
+    const broadcastWithCustomLinkIndicator =
+      await this.addCustomLinkIndicatorService.execute({
+        broadcast: broadcastWithPriorityIndicator,
+        dateRange: this.getDateRange(fromDate, toDate),
+        productsData,
+      });
+    return broadcastWithCustomLinkIndicator;
   }
 
   private getDateRange(from: string, to: string): string[] {

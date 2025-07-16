@@ -13,6 +13,7 @@ import { MakeBroadcastService } from "../services/make-broadcast/make-broadcast.
 import { ApproveBroadcastService } from "../services/approve-broadcast/approve-broadcast.service";
 import { GetBroadcastDomainsListService } from "../services/get-broadcast-domains-list/get-broadcast-domains-list.service";
 import { GetBroadcastsSendsService } from "../services/get-broadcasts-sends/get-broadcasts-sends.service";
+import { GetBroadcastsSendsByIdService } from "../services/get-broadcast-sends-by-id/get-broadcast-sends-by-id.service";
 
 @Controller("finances/broadcast-tool/broadcast")
 export class BroadcastController {
@@ -21,7 +22,8 @@ export class BroadcastController {
     private readonly makeBroadcastService: MakeBroadcastService,
     private readonly approveBroadcastService: ApproveBroadcastService,
     private readonly getBroadcastDomainsListService: GetBroadcastDomainsListService,
-    private readonly getBroadcastsSendsService: GetBroadcastsSendsService
+    private readonly getBroadcastsSendsService: GetBroadcastsSendsService,
+    private readonly getBroadcastsSendsByIdService: GetBroadcastsSendsByIdService
   ) {}
 
   @Get("domains/:spreadsheetId")
@@ -61,6 +63,21 @@ export class BroadcastController {
     return await this.getBroadcastsSendsService.execute({
       fromDate: fromDate.toISOString().split("T")[0],
       toDate: toDate.toISOString().split("T")[0],
+    });
+  }
+
+  @Get("broadcast-sends/:broadcastRuleId")
+  public async getBroadcastSendsById(
+    @Param("broadcastRuleId") broadcastRuleId: string
+  ): Promise<GetBroadcastsSendsResponseDto> {
+    const fromDate = new Date();
+    fromDate.setDate(fromDate.getDate() - 2);
+
+    const toDate = new Date();
+    return await this.getBroadcastsSendsByIdService.execute({
+      fromDate: fromDate.toISOString().split("T")[0],
+      toDate: toDate.toISOString().split("T")[0],
+      broadcastRuleId,
     });
   }
 }

@@ -73,3 +73,16 @@ export const getBroadcastsSends =
       return { broadcasts: [] };
     }
   };
+
+export const getBroadcastSendsById = async (
+  broadcastRuleId: string
+): Promise<GetBroadcastsSendsResponseDto> => {
+  try {
+    const response = await axios.get(
+      `${broadcastToolApiUrl}/broadcast-sends/${broadcastRuleId}`
+    );
+    return response.data;
+  } catch (error) {
+    return { broadcasts: [] };
+  }
+};

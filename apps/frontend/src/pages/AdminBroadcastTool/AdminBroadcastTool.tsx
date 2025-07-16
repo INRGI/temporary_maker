@@ -12,6 +12,10 @@ const AdminBroadcastTool: React.FC = () => {
   const [isUserAdmin, setIsUserAdmin] = useState(false);
 
   useEffect(() => {
+    document.title = "Admin Broadcast Tool";
+  }, []);
+
+  useEffect(() => {
     const token = localStorage.getItem(TOKEN_KEY);
     if (token) {
       try {

@@ -115,3 +115,25 @@ export const ResetButton = styled.button`
     background-color: #777;
   }
 `;
+
+export const Indicator = styled.span<{ empty?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: ${({ empty }) => (empty ? "#ff6b6b" : "#ccc")};
+  background-color: ${({ empty }) => (empty ? "#3a1f1f" : "#2e2e2e")};
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: ${({ empty }) => (empty ? "#5a2b2b" : "#444")};
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;

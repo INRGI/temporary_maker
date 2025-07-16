@@ -8,6 +8,7 @@ import {
   Column,
   DomainCopiesLength,
   DomainTabHeader,
+  Indicator,
   RemoveButton,
   ResetButton,
   SmallSelect,
@@ -17,6 +18,10 @@ import {
 } from "./CopyAssignmentStrategyRulesTab.styled";
 import ConfirmationModal from "../ConfirmationModal";
 import { toastError, toastSuccess } from "../../../helpers/toastify";
+import { FaFireAlt, FaMousePointer } from "react-icons/fa";
+import { FaDollarSign } from "react-icons/fa6";
+import { GrTest } from "react-icons/gr";
+import { Box } from "@mui/material";
 
 interface DomainStrategy {
   domain: string;
@@ -32,6 +37,16 @@ interface Props {
 type SheetData = {
   sheetName: string;
   domains: string[];
+};
+
+const indicatorIcons: Record<
+  DomainStrategy["copiesTypes"][number],
+  JSX.Element
+> = {
+  click: <FaMousePointer size={12} />,
+  conversion: <FaDollarSign size={12} />,
+  test: <GrTest size={12} />,
+  warmup: <FaFireAlt size={12} />,
 };
 
 const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
@@ -203,6 +218,18 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
     });
   };
 
+  const addType = (
+    sheet: string,
+    domainIndex: number,
+    type: DomainStrategy["copiesTypes"][number]
+  ) => {
+    const domain = strategiesBySheet[sheet][domainIndex];
+    updateDomain(sheet, domainIndex, {
+      ...domain,
+      copiesTypes: [...domain.copiesTypes, type],
+    });
+  };
+
   const handleRemoveAllTypes = () => {
     const updated: Record<string, DomainStrategy[]> = {};
 
@@ -228,7 +255,7 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
     setStrategiesBySheet(updated);
     const allUpdated = Object.values(updated).flat();
     onChange({ domainStrategies: allUpdated });
-    setSheetForResetTypes('');
+    setSheetForResetTypes("");
   };
 
   const handleRemoveType = (
@@ -243,6 +270,32 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
       ...domain,
       copiesTypes: updatedTypes,
     });
+  };
+
+  const removeType = (
+    sheet: string,
+    domainIndex: number,
+    type: DomainStrategy["copiesTypes"][number]
+  ) => {
+    const domain = strategiesBySheet[sheet][domainIndex];
+    const index = domain.copiesTypes.indexOf(type);
+    if (index !== -1) {
+      const updatedTypes = [...domain.copiesTypes];
+      updatedTypes.splice(index, 1);
+      updateDomain(sheet, domainIndex, {
+        ...domain,
+        copiesTypes: updatedTypes,
+      });
+    }
+  };
+
+  const getTypeCounts = (
+    types: DomainStrategy["copiesTypes"]
+  ): Record<string, number> => {
+    return types.reduce((acc, type) => {
+      acc[type] = (acc[type] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
   };
 
   return (
@@ -287,82 +340,131 @@ const CopyAssignmentStrategiesEditor: React.FC<Props> = ({
               onClick={() => toggleSheet(sheetName)}
             >
               {sheetName}{" "}
-              <ResetButton onClick={() => {
-                setSheetForResetTypes(sheetName);
-                setTabConfirmationOpen(true);
-              }}>
+              <ResetButton
+                onClick={() => {
+                  setSheetForResetTypes(sheetName);
+                  setTabConfirmationOpen(true);
+                }}
+              >
                 Reset {sheetName}
               </ResetButton>
             </TabHeader>
 
             {openSheets[sheetName] &&
-              strategies.map((strategy, index) => (
-                <CollapsibleTab key={strategy.domain}>
-                  <DomainTabHeader
-                    active={!!openDomains[strategy.domain]}
-                    onClick={() => toggleDomain(strategy.domain)}
-                  >
-                    {strategy.domain}
-                    <DomainCopiesLength>Copies: ({strategy.copiesTypes.length})</DomainCopiesLength>
-                  </DomainTabHeader>
-
-                  {openDomains[strategy.domain] && (
-                    <StrategyRow>
-                      <Column>
-                        {strategy.copiesTypes.map((type, typeIdx) => (
-                          <div
-                            key={typeIdx}
-                            style={{
-                              display: "flex",
-                              gap: 8,
-                              marginBottom: 6,
+              strategies.map((strategy, index) => {
+                const typeCounts = getTypeCounts(strategy.copiesTypes);
+                return (
+                  <CollapsibleTab key={strategy.domain}>
+                    <DomainTabHeader
+                      active={!!openDomains[strategy.domain]}
+                      onClick={() => toggleDomain(strategy.domain)}
+                    >
+                      {strategy.domain}
+                      <Box
+                        sx={{ display: "flex", gap: "8px", marginLeft: "auto" }}
+                      >
+                        {(
+                          Object.keys(indicatorIcons).filter(
+                            (type) => type !== "warmup"
+                          ) as DomainStrategy["copiesTypes"][number][]
+                        ).map((type) => (
+                          <Indicator
+                            key={type}
+                            empty={strategy.copiesTypes.length === 0}
+                            title={`Click to add / right click to remove "${type}"`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addType(sheetName, index, type);
+                            }}
+                            onContextMenu={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              removeType(sheetName, index, type);
                             }}
                           >
-                            <SmallSelect
-                              value={type}
-                              onChange={(e) =>
-                                handleChangeType(
-                                  sheetName,
-                                  index,
-                                  typeIdx,
-                                  e.target.value
-                                )
-                              }
-                            >
-                              {["click", "conversion", "test", "warmup"].map(
-                                (t) => (
-                                  <option key={t} value={t}>
-                                    {t}
-                                  </option>
-                                )
-                              )}
-                            </SmallSelect>
-                            <RemoveButton
-                              onClick={() =>
-                                handleRemoveType(sheetName, index, typeIdx)
-                              }
-                            >
-                              ✕
-                            </RemoveButton>
-                          </div>
+                            {indicatorIcons[type]} {typeCounts[type] || 0}
+                          </Indicator>
                         ))}
-                        <AddTypeButton
-                          onClick={() => handleAddType(sheetName, index)}
-                        >
-                          + Add type
-                        </AddTypeButton>
-                      </Column>
-                      <Column style={{ maxWidth: 150 }}>
-                        <ResetButton
-                          onClick={() => handleReset(sheetName, index)}
-                        >
-                          Reset strategy
-                        </ResetButton>
-                      </Column>
-                    </StrategyRow>
-                  )}
-                </CollapsibleTab>
-              ))}
+                        {(strategy.copiesTypes.length === 0 ||
+                          strategy.copiesTypes.includes("warmup")) && (
+                          <Indicator
+                            empty={strategy.copiesTypes.length === 0}
+                            title={`Click to add "warmup"`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addType(sheetName, index, "warmup");
+                            }}
+                            onContextMenu={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              removeType(sheetName, index, "warmup");
+                            }}
+                          >
+                            {indicatorIcons["warmup"]}{" "}
+                            {typeCounts["warmup"] || 0}
+                          </Indicator>
+                        )}
+                      </Box>
+                    </DomainTabHeader>
+
+                    {openDomains[strategy.domain] && (
+                      <StrategyRow>
+                        <Column>
+                          {strategy.copiesTypes.map((type, typeIdx) => (
+                            <div
+                              key={typeIdx}
+                              style={{
+                                display: "flex",
+                                gap: 8,
+                                marginBottom: 6,
+                              }}
+                            >
+                              <SmallSelect
+                                value={type}
+                                onChange={(e) =>
+                                  handleChangeType(
+                                    sheetName,
+                                    index,
+                                    typeIdx,
+                                    e.target.value
+                                  )
+                                }
+                              >
+                                {["click", "conversion", "test", "warmup"].map(
+                                  (t) => (
+                                    <option key={t} value={t}>
+                                      {t}
+                                    </option>
+                                  )
+                                )}
+                              </SmallSelect>
+                              <RemoveButton
+                                onClick={() =>
+                                  handleRemoveType(sheetName, index, typeIdx)
+                                }
+                              >
+                                ✕
+                              </RemoveButton>
+                            </div>
+                          ))}
+                          <AddTypeButton
+                            onClick={() => handleAddType(sheetName, index)}
+                          >
+                            + Add type
+                          </AddTypeButton>
+                        </Column>
+                        <Column style={{ maxWidth: 150 }}>
+                          <ResetButton
+                            onClick={() => handleReset(sheetName, index)}
+                          >
+                            Reset strategy
+                          </ResetButton>
+                        </Column>
+                      </StrategyRow>
+                    )}
+                  </CollapsibleTab>
+                );
+              })}
           </CollapsibleTab>
         ))}
       {isConfirmationOpen && (

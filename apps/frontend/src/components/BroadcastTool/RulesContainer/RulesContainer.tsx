@@ -11,13 +11,11 @@ import {
   SectionHeader,
   SectionInner,
 } from "./RulesContainer.styled";
-import {
-  GetProductStatusesResponse,
-} from "../../../api/monday";
+import { GetProductStatusesResponse } from "../../../api/monday";
 import ProductRulesTab from "../ProductRulesTab";
 import CopyAssignmentStrategyRulesTab from "../CopyAssignmentStrategyRulesTab";
 import { BroadcastListItemResponse } from "../../../api/broadcast/response/broadcast-list-item.response.dto";
-import { VscDebugStart } from "react-icons/vsc";
+import { VscDebugStart, VscGraph } from "react-icons/vsc";
 import { Button } from "../Menu/Menu.styled";
 import { LiaSaveSolid } from "react-icons/lia";
 import { updateBroadcastRules } from "../../../api/broadcast-rules.api";
@@ -34,6 +32,7 @@ import ConfirmationModal from "../ConfirmationModal";
 import LaunchBroadcastModal from "../LaunchBroadcastModal";
 import { GetAllDomainsResponse } from "../../../api/broadcast";
 import BroadcastTableModal from "../BroadcastTableModal";
+import BroadcastSendsModal from "../BroadcastSendsModal";
 
 interface RulesContainerProps {
   onEntityUpdate: () => void;
@@ -55,6 +54,8 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
 
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isLaunchModalOpen, setIsLaunchModalOpen] = useState(false);
+  const [isBroadcastSendsModalOpen, setIsBroadcastSendsModalOpen] =
+    useState(false);
 
   const [broadcastResult, setBroadcastResult] =
     useState<GetAllDomainsResponse | null>(null);
@@ -115,6 +116,10 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
   return (
     <Container>
       <ButtonsHeaderContainer>
+        <Button onClick={() => setIsBroadcastSendsModalOpen(true)}>
+          <VscGraph />
+        </Button>
+
         <Button onClick={() => setIsUpdateModalOpen(true)}>
           <LiaSaveSolid />
         </Button>
@@ -161,7 +166,7 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
               </InputGroup>
             </RuleContainer>
           )}
-         
+
           {renderSection(
             "Usage Rules",
             "usageRules",
@@ -220,6 +225,15 @@ const RulesContainer: React.FC<RulesContainerProps> = ({
             setIsLaunchModalOpen(false);
             setBroadcastResult(result);
           }}
+        />
+      )}
+      {isBroadcastSendsModalOpen && (
+        <BroadcastSendsModal
+          isOpen={isBroadcastSendsModalOpen}
+          onClose={() => {
+            setIsBroadcastSendsModalOpen(false);
+          }}
+          broadcastRulesId={broadcastRules._id}
         />
       )}
       {broadcastResult && (

@@ -54,6 +54,9 @@ export class GetPossibleReplacementCopiesService {
           )
             continue;
           const addedNames = new Set(day.copies.map((c) => c.name));
+          const usedProducts = new Set(
+            day.copies.map((c) => this.cleanProductName(c.name))
+          );          
           const proposedNames = new Set<string>();
           const possible: BroadcastCopy[] = [];
 
@@ -69,7 +72,8 @@ export class GetPossibleReplacementCopiesService {
             let addedForType = 0;
 
             for (const name of pool) {
-              if (addedNames.has(name) || proposedNames.has(name)) continue;
+              const product = this.cleanProductName(name);
+              if (addedNames.has(name) || proposedNames.has(name) || usedProducts.has(product)) continue;
               if (addedForType >= 3) break;
 
               const result = await validator.execute({
@@ -98,6 +102,7 @@ export class GetPossibleReplacementCopiesService {
                   copyType: type as CopyType,
                 });
                 proposedNames.add(name);
+                usedProducts.add(product);
                 addedForType++;
               }
             }
