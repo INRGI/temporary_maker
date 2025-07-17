@@ -8,7 +8,7 @@ export class ChangeUrlLinkService {
     let { html, url } = payload;
 
     html = html.replace(/urlhere/g, url);
-
+    html = html.replace(/insertlink/g, url);
     return html;
   }
 }
