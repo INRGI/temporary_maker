@@ -436,7 +436,10 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
       ) : (
         <CopiesList>
           {copies.map((copy) => (
-            <CopyCard key={copy.copyName} isForValidation={copy.isForValidation}>
+            <CopyCard
+              key={copy.copyName}
+              isForValidation={copy.isForValidation}
+            >
               <CardHeader>
                 <LinkIndicator link={copy.buildedLink} />
                 <h2>
@@ -505,13 +508,37 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                     <UnsubContainer>
                       <TextTitle>
                         Unsub Text:
-                        <Text> {copy.unsubData.unsubscribeText}</Text>
+                        <Text
+                          onClick={() => {
+                            if (copy.unsubData) {
+                              navigator.clipboard.writeText(
+                                copy.unsubData.unsubscribeText || ""
+                              );
+                              toastSuccess("Copied to clipboard");
+                            }
+                          }}
+                        >
+                          {" "}
+                          {copy.unsubData.unsubscribeText}
+                        </Text>
                       </TextTitle>
 
                       {copy.unsubData.unsubscribeUrl && (
                         <TextTitle>
                           Unsub Link:
-                          <Text> {copy.unsubData.unsubscribeUrl}</Text>
+                          <Text
+                            onClick={() => {
+                              if (copy.unsubData) {
+                                navigator.clipboard.writeText(
+                                  copy.unsubData.unsubscribeUrl || ""
+                                );
+                                toastSuccess("Copied to clipboard");
+                              }
+                            }}
+                          >
+                            {" "}
+                            {copy.unsubData.unsubscribeUrl}
+                          </Text>
                         </TextTitle>
                       )}
                       {copy.unsubData.unsubscribeBuildedBlock && (
@@ -546,7 +573,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                       )}
                     </UnsubContainer>
                   )}
-                 
+
                   {copy.subjects && copy.subjects.length > 0 ? (
                     <SubjectContainer>
                       <TextTitle>Subjects:</TextTitle>
@@ -562,10 +589,12 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                         </Subject>
                       ))}
                     </SubjectContainer>
-                  ) : copy.subjects && (
-                    <SubjectContainer>
-                      <TextTitle>Subjects Not Found</TextTitle>
-                    </SubjectContainer>
+                  ) : (
+                    copy.subjects && (
+                      <SubjectContainer>
+                        <TextTitle>Subjects Not Found</TextTitle>
+                      </SubjectContainer>
+                    )
                   )}
                   {copy.imageLinks && copy.imageLinks?.length > 0 && (
                     <>

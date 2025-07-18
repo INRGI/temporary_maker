@@ -11,8 +11,14 @@ export class CheckIfDomainActiveService {
       (domainName) =>
         this.normalizeDomain(domain) ===
           this.normalizeDomain(domainName.domainName) ||
-        domainName.domainName.trim().endsWith(`_${domain}`) ||
-        domainName.domainName.trim().endsWith(`-${domain}`)
+        domainName.domainName
+          .trim()
+          .toLowerCase()
+          .endsWith(`_${this.normalizeDomain(domain)}`) ||
+        domainName.domainName
+          .trim()
+          .toLowerCase()
+          .endsWith(`-${this.normalizeDomain(domain)}`)
     );
 
     if (!domainData) {

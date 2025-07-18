@@ -9,6 +9,9 @@ import {
   MondayApiGetDataResponse,
   MondayApiBoardData,
   MondayApiQueryParams,
+  MondayGroup,
+  MondayApiGroupBoardData,
+  MondayApiGetGroupDataResponse,
 } from "../interfaces";
 import { firstValueFrom } from "rxjs";
 import { MONDAY_API_BASE_URL } from "../constants";
@@ -23,7 +26,9 @@ export class MondayApiService implements MondayApiServicePort {
     private readonly options: MondayApiConnectionOptions
   ) {}
 
-  private async queryWithParams(queryParams: MondayApiQueryParams): Promise<[]> {
+  private async queryWithParams(
+    queryParams: MondayApiQueryParams
+  ): Promise<[]> {
     const { data }: { data: MondayApiGetDataResponse } = await firstValueFrom(
       this.httpService.post(`${MONDAY_API_BASE_URL}`, queryParams, {
         headers: MondayApiUtils.auth(this.options.accessToken),
@@ -31,6 +36,18 @@ export class MondayApiService implements MondayApiServicePort {
     );
 
     return data.data.boards[0].items_page.items;
+  }
+
+  private async groupQueryWithParams(
+    queryParams: MondayApiQueryParams
+  ): Promise<MondayGroup[]> {
+    const { data }: { data: MondayApiGetDataResponse } = await firstValueFrom(
+      this.httpService.post(`${MONDAY_API_BASE_URL}`, queryParams, {
+        headers: MondayApiUtils.auth(this.options.accessToken),
+      })
+    );
+
+    return data.data.boards[0].groups;
   }
 
   private async queryItems(
@@ -88,7 +105,28 @@ export class MondayApiService implements MondayApiServicePort {
       cursor: itemsPage.cursor,
     };
   }
-  
+
+  private async queryGroupItemsWithCursor(
+    queryParams: MondayApiQueryParams
+  ): Promise<{
+    items: MondayApiGroupBoardData[];
+    cursor: string | null;
+  }> {
+    const { data }: { data: MondayApiGetGroupDataResponse } =
+      await firstValueFrom(
+        this.httpService.post(`${MONDAY_API_BASE_URL}`, queryParams, {
+          headers: MondayApiUtils.auth(this.options.accessToken),
+        })
+      );
+
+    const itemsPage = data.data.boards[0].groups[0].items_page;
+
+    return {
+      items: itemsPage.items,
+      cursor: itemsPage.cursor,
+    };
+  }
+
   public async getMultipleProductsData(
     productNames: string[],
     boardId: number
@@ -103,15 +141,24 @@ export class MondayApiService implements MondayApiServicePort {
           }
         )
       );
-      console.log(data);
+    console.log(data);
     return data.data.boards[0].items_page.items;
   }
-  
+
   public async getItemsWithCursor(queryParams: MondayApiQueryParams): Promise<{
     items: MondayApiBoardData[];
     cursor: string | null;
   }> {
     return await this.queryItemsWithCursor(queryParams);
+  }
+
+  public async getGroupItemsWithCursor(
+    queryParams: MondayApiQueryParams
+  ): Promise<{
+    items: MondayApiGroupBoardData[];
+    cursor: string | null;
+  }> {
+    return await this.queryGroupItemsWithCursor(queryParams);
   }
 
   public async getProductData(
@@ -139,5 +186,11 @@ export class MondayApiService implements MondayApiServicePort {
     queryParams: MondayApiQueryParams
   ): Promise<MondayApiBoardData[]> {
     return await this.queryWithParams(queryParams);
+  }
+
+  public async getGroupsByQuery(
+    queryParams: MondayApiQueryParams
+  ): Promise<MondayGroup[]> {
+    return await this.groupQueryWithParams(queryParams);
   }
 }

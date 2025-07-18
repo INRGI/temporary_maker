@@ -107,6 +107,47 @@ export class ApproveBroadcastSheetService {
       }
     }
 
+    if (pendingUpdates.length > 0) {
+      const result = await this.spreadsheetService.batchUpdateCells(
+        spreadsheetId,
+        pendingUpdates.map(({ range, values }) => ({ range, values }))
+      );
+
+      updatedCells = result.totalUpdatedCells ?? pendingUpdates.length;
+
+      for (const update of pendingUpdates) {
+        response.push({
+          isUpdated: true,
+          ...update.meta,
+        });
+      }
+
+      const sheetInfo = await this.spreadsheetService.getSheetMetadata(
+        spreadsheetId
+      );
+      const sheetId = sheetInfo.sheets.find(
+        (s) => s.properties.title === sheetName
+      )?.properties.sheetId;
+
+      if (sheetId !== undefined) {
+        const formatRanges = pendingUpdates.map(({ meta }) => ({
+          sheetId,
+          row: meta.row,
+          column: meta.column,
+        }));
+
+        await this.spreadsheetService.formatCellsColor(
+          spreadsheetId,
+          formatRanges,
+          {
+            red: 0.5,
+            green: 0.0,
+            blue: 0.5,
+          }
+        );
+      }
+    }
+
     return { response };
   }
 

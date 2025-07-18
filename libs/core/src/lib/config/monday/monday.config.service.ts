@@ -13,6 +13,10 @@ export class MondayConfigService {
     return this.configService.get<string>('monday.productsBoardId');
   }
 
+  get testCopiesBoardId(): string {
+    return this.configService.get<string>('monday.testCopiesBoardId');
+  }
+
   get domainsBoardId(): string {
     return this.configService.get<string>('monday.domainsBoardId');
   }

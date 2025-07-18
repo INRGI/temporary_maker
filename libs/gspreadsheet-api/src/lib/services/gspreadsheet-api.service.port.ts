@@ -31,4 +31,14 @@ export interface GSpreadsheetApiServicePort {
     spreadsheetId: string,
     updates: { range: string; values: string[][] }[]
   ): Promise<sheets_v4.Schema$BatchUpdateValuesResponse>;
+
+  formatCellsColor(
+    spreadsheetId: string,
+    ranges: { sheetId: number; row: number; column: number }[],
+    color: { red: number; green: number; blue: number }
+  ): Promise<void>;
+
+  getSheetMetadata(
+    spreadsheetId: string
+  ): Promise<sheets_v4.Schema$Spreadsheet>;
 }

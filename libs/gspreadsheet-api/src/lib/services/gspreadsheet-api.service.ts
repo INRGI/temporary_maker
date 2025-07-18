@@ -119,6 +119,50 @@ export class GSpreadsheetApiService implements GSpreadsheetApiServicePort {
     return response.data;
   }
 
+  public async formatCellsColor(
+    spreadsheetId: string,
+    ranges: { sheetId: number; row: number; column: number }[],
+    color: { red: number; green: number; blue: number }
+  ): Promise<void> {
+    const sheetsApi = await this.createClient();
+  
+    const requests = ranges.map(({ sheetId, row, column }) => ({
+      repeatCell: {
+        range: {
+          sheetId,
+          startRowIndex: row,
+          endRowIndex: row + 1,
+          startColumnIndex: column,
+          endColumnIndex: column + 1,
+        },
+        cell: {
+          userEnteredFormat: {
+            textFormat: {
+              foregroundColor: color,
+            },
+          },
+        },
+        fields: "userEnteredFormat.textFormat.foregroundColor",
+      },
+    }));
+  
+    await sheetsApi.spreadsheets.batchUpdate({
+      spreadsheetId,
+      requestBody: {
+        requests,
+      },
+    });
+  }
+
+  public async getSheetMetadata(spreadsheetId: string): Promise<sheets_v4.Schema$Spreadsheet> {
+    const sheetsApi = await this.createClient();
+    const { data } = await sheetsApi.spreadsheets.get({
+      spreadsheetId,
+      includeGridData: false,
+    });
+    return data;
+  }
+
   private columnToLetter(col: number): string {
     let letter = "";
     while (col >= 0) {

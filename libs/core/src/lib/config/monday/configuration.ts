@@ -7,4 +7,5 @@ export default registerAs('monday', () => ({
   ogAccessToken: process.env.OG_MONDAY_ACCESS_TOKEN,
   ogProductsBoardId: process.env.OG_MONDAY_PRODUCTS_BOARD_ID,
   ogDomainsBoardId: process.env.OG_MONDAY_DOMAINS_BOARD_ID,
+  testCopiesBoardId: process.env.MONDAY_DEV_COPIES_BOARD_ID,
 }));

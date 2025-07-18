@@ -1,11 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { GetTestableCopiesPayload } from "./get-testable-copies.payload";
 import { GetCopiesForTestService } from "../../../bigQuery/services/get-copies-for-test/get-copies-for-test.service";
+import { GetNewTestCopiesService } from "../../../monday/services/get-new-test-copies/get-new-test-copies.service";
 
 @Injectable()
 export class GetTestableCopiesService {
   constructor(
-    private readonly getCopiesForTestService: GetCopiesForTestService
+    private readonly getCopiesForTestService: GetCopiesForTestService,
+    private readonly getNewTestCopiesService: GetNewTestCopiesService
   ) {}
 
   public async execute(payload: GetTestableCopiesPayload): Promise<string[]> {
@@ -13,6 +15,19 @@ export class GetTestableCopiesService {
 
     const testableCopies = await this.getCopiesForTestService.execute({
       daysBefore: daysBeforeInterval,
+    });
+
+    const newTestCopies = await this.getNewTestCopiesService.execute();
+
+    const formattedNewTestCopies = newTestCopies.map((copy) => {
+      return {
+        ...copy,
+        copyName: copy.copyName.replace(" ", ""),
+      };
+    });
+
+    const sortedNewTestCopies = formattedNewTestCopies.sort((a, b) => {
+      return b.createDate.localeCompare(a.createDate);
     });
 
     const filteredTestableCopies = testableCopies.data.filter((copy) => {
@@ -25,18 +40,22 @@ export class GetTestableCopiesService {
       );
     });
 
-    const shuffledTestableCopies = [
-      ...filteredTestableCopies.map((copy) => copy.Copy),
-    ];
-    for (let i = shuffledTestableCopies.length - 1; i > 0; i--) {
+    const result = sortedNewTestCopies.filter((copy) => {
+      return filteredTestableCopies.some(
+        (testableCopy) => testableCopy.Copy === copy.copyName
+      );
+    });
+
+    const shuffledResult = [...result.map((copy) => copy.copyName)];
+    for (let i = shuffledResult.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [shuffledTestableCopies[i], shuffledTestableCopies[j]] = [
-        shuffledTestableCopies[j],
-        shuffledTestableCopies[i],
+      [shuffledResult[i], shuffledResult[j]] = [
+        shuffledResult[j],
+        shuffledResult[i],
       ];
     }
 
-    return shuffledTestableCopies;
+    return shuffledResult;
   }
 
   private extractLift(copyName: string): string {

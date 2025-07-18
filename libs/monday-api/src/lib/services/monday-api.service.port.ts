@@ -3,6 +3,8 @@ import {
   MondayApiDomainBoardData,
   MondayApiQueryParams,
   MondayApiBoardData,
+  MondayGroup,
+  MondayApiGroupBoardData,
 } from "../interfaces";
 
 export interface MondayApiServicePort {
@@ -31,7 +33,14 @@ export interface MondayApiServicePort {
     cursor: string | null;
   }>;
 
+  getGroupItemsWithCursor(queryParams: MondayApiQueryParams): Promise<{
+    items: MondayApiGroupBoardData[];
+    cursor: string | null;
+  }>;
+
   getItemsByQuery(
     queryParams: MondayApiQueryParams
   ): Promise<MondayApiBoardData[]>;
+
+  getGroupsByQuery(queryParams: MondayApiQueryParams): Promise<MondayGroup[]>;
 }
