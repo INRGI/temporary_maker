@@ -3,13 +3,11 @@ import { CheckTestCopyLimitsPayload } from "./check-test-copy-limits.payload";
 
 @Injectable()
 export class CheckTestCopyLimitsService {
-  public async execute(
-    payload: CheckTestCopyLimitsPayload
-  ): Promise<boolean> {
+  public async execute(payload: CheckTestCopyLimitsPayload): Promise<boolean> {
     const { copyName, broadcast, testingRules } = payload;
 
-    const cleanCopyName = this.cleanCopyName(copyName);
-    if (!cleanCopyName) return false;
+    const cleanTargetName = this.cleanCopyName(copyName);
+    if (!cleanTargetName) return false;
 
     const testCopySendingLimit = testingRules.similarTestCopyLimitPerDay;
 
@@ -18,15 +16,18 @@ export class CheckTestCopyLimitsService {
     for (const sheet of broadcast.sheets) {
       for (const domain of sheet.domains) {
         for (const copy of domain.broadcastCopies) {
-          const found = copy.copies.find(
-            (c) => this.cleanCopyName(c.name) === cleanCopyName
+          const matches = copy.copies.some(
+            (c) => this.cleanCopyName(c.name) === cleanTargetName
           );
-          if (found) sendingCount++;
+          if (matches) {
+            sendingCount++;
+            if (sendingCount >= testCopySendingLimit) return false;
+          }
         }
       }
     }
 
-    return sendingCount < testCopySendingLimit;
+    return true;
   }
 
   private cleanCopyName(copyName: string): string {

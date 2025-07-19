@@ -5,24 +5,18 @@ import { CheckIfDomainWarmupPayload } from "./check-if-domain-warmup.payload";
 export class CheckIfDomainWarmupService {
   public async execute(payload: CheckIfDomainWarmupPayload): Promise<boolean> {
     const { domain, domainsData } = payload;
+    const normalized = this.normalizeDomain(domain);
 
-    const domainData = domainsData.find(
-      (domainName) =>
-        this.normalizeDomain(domain) ===
-          this.normalizeDomain(domainName.domainName) ||
-        domainName.domainName.trim().endsWith(`_${domain}`) ||
-        domainName.domainName.trim().endsWith(`-${domain}`)
-    );
+    const domainData = domainsData.find(({ domainName }) => {
+      const normalizedName = this.normalizeDomain(domainName);
+      return (
+        normalizedName === normalized ||
+        normalizedName.endsWith(`_${normalized}`) ||
+        normalizedName.endsWith(`-${normalized}`)
+      );
+    });
 
-    if (!domainData) {
-      return false;
-    }
-
-    if (domainData.domainStatus === "Warm Up") {
-      return true;
-    }
-
-    return false;
+    return domainData?.domainStatus === "Warm Up";
   }
 
   private normalizeDomain(domain: string): string {

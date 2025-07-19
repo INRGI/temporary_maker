@@ -17,30 +17,24 @@ export class CheckIfPartnerCanBeSendService {
     const productName = this.cleanProductName(copyName);
     if (!productName || productsData.length === 0) return false;
 
-    const productData = productsData.find(
+    const matchingProducts = productsData.filter(
       (product) =>
         product.productName.startsWith(`${productName} -`) ||
         product.productName.startsWith(`*${productName} -`)
     );
 
-    if (!productData || !productData.productStatus) {
-      return false;
-    }
+    const productData = matchingProducts.find((p) => p.productStatus);
+    if (!productData) return false;
 
     if (partnerRules.blacklistedPartners.includes(productData.partner)) {
       return false;
     }
 
-    const isPartnerHasSendingRestrictions =
-      partnerRules.partnerAllowedSendingDays.find(
-        (partnerAllowedSendingDay) => {
-          if (partnerAllowedSendingDay.partner === productData.partner) {
-            return true;
-          }
-        }
-      );
+    const sendingDayRule = partnerRules.partnerAllowedSendingDays.find(
+      (rule) => rule.partner === productData.partner
+    );
 
-    if (isPartnerHasSendingRestrictions) {
+    if (sendingDayRule) {
       const daysOfWeek = [
         "sunday",
         "monday",
@@ -51,7 +45,7 @@ export class CheckIfPartnerCanBeSendService {
         "saturday",
       ];
       const dayOfWeek = daysOfWeek[new Date(sendingDate).getDay()];
-      if (!isPartnerHasSendingRestrictions.allowedSendingDays[dayOfWeek]) {
+      if (!sendingDayRule.allowedSendingDays[dayOfWeek]) {
         return false;
       }
     }
@@ -60,27 +54,22 @@ export class CheckIfPartnerCanBeSendService {
       (copy) => copy.date === sendingDate
     );
 
-    if (!broadcastCopiesForDate) {
-      return true;
-    }
+    if (!broadcastCopiesForDate) return true;
 
-    const currentPartnerCopyCount = broadcastCopiesForDate.copies.reduce(
-      (count, c) => {
-        const cProductName = this.cleanProductName(c.name);
-        const product = productsData.find(
-          (p) =>
-            p.productName.startsWith(`${cProductName} -`) ||
-            p.productName.startsWith(`*${cProductName} -`)
-        );
-        return product?.partner === productData.partner ? count + 1 : count;
-      },
-      0
-    );
-
-    const limit = partnerRules.similarPartnerDomainLimit;
-
-    if (currentPartnerCopyCount >= limit) {
-      return false;
+    let partnerCopyCount = 0;
+    for (const c of broadcastCopiesForDate.copies) {
+      const cProductName = this.cleanProductName(c.name);
+      const match = productsData.find(
+        (p) =>
+          p.productName.startsWith(`${cProductName} -`) ||
+          p.productName.startsWith(`*${cProductName} -`)
+      );
+      if (match?.partner === productData.partner) {
+        partnerCopyCount++;
+        if (partnerCopyCount >= partnerRules.similarPartnerDomainLimit) {
+          return false;
+        }
+      }
     }
 
     return true;
@@ -88,8 +77,6 @@ export class CheckIfPartnerCanBeSendService {
 
   private cleanProductName(copyName: string): string {
     const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : "";
-
-    return product;
+    return nameMatch ? nameMatch[0] : "";
   }
 }

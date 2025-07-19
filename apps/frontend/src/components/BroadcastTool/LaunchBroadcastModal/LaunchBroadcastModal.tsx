@@ -126,9 +126,10 @@ const LaunchBroadcastModal: React.FC<LaunchBroadcastModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const formatDateToYYYYMMDD = (date: Date) => {
-    const day = new Date(date);
-    day.setDate(day.getDate() + 1);
-    return day.toISOString().split('T')[0];
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, '0');
+    const day = `${date.getDate()}`.padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   const handleMakeBroadcast = async () => {

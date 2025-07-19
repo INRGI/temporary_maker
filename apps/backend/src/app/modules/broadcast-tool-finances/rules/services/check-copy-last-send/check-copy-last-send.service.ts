@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { CheckCopyLastSendPayload } from './check-copy-last-send.payload';
+import { Injectable } from "@nestjs/common";
+import { CheckCopyLastSendPayload } from "./check-copy-last-send.payload";
 
 @Injectable()
 export class CheckCopyLastSendService {
@@ -11,32 +11,35 @@ export class CheckCopyLastSendService {
       copyMinDelayPerDays,
     } = payload;
 
+    const targetName = this.cleanCopyName(copyName);
+    let latestDate: string | null = null;
 
-    const lastCopySend = broadcastDomain.broadcastCopies
-      .filter((copy) => copy.copies.find((copy) => this.cleanCopyName(copy.name) === this.cleanCopyName(copyName)))
-      .reduce(
-        (prev, current) => (prev && prev.date > current.date ? prev : current),
-        null
+    for (const copyEntry of broadcastDomain.broadcastCopies) {
+      const hasMatch = copyEntry.copies.some(
+        (c) => this.cleanCopyName(c.name) === targetName
       );
-
-    if (!lastCopySend) {
-      return true;
+      if (hasMatch) {
+        if (!latestDate || copyEntry.date > latestDate) {
+          latestDate = copyEntry.date;
+        }
+      }
     }
 
-    const lastCopySendDate = new Date(lastCopySend.date);
-    const possibleSendingDateObj = new Date(possibleSendingDate);
-    
-    const diffInMilliseconds =
-      possibleSendingDateObj.getTime() - lastCopySendDate.getTime();
-    const diffInDays = Math.round(diffInMilliseconds / (1000 * 3600 * 24));
+    if (!latestDate) return true;
 
-    return diffInDays >= copyMinDelayPerDays;
+    const lastDate = new Date(latestDate);
+    const possibleDate = new Date(possibleSendingDate);
+    const diffDays = Math.round(
+      (possibleDate.getTime() - lastDate.getTime()) / (1000 * 3600 * 24)
+    );
+
+    return diffDays >= copyMinDelayPerDays;
   }
 
   private cleanCopyName(copyName: string): string {
     const nameMatch = copyName.match(/^[a-zA-Z]+/);
     const product = nameMatch ? nameMatch[0] : "";
-    const liftMatch = copyName.match(/[a-zA-Z]+(\d+)/);
+    const liftMatch = copyName.match(/[a-zA-Z]+(\\d+)/);
     const productLift = liftMatch ? liftMatch[1] : "";
     return `${product}${productLift}`;
   }

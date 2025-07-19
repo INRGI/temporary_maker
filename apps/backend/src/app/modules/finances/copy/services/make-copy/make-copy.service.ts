@@ -1,4 +1,5 @@
 import {
+  CryptoPartnerMapping,
   MakeCopyResponseDto,
   UnsubData,
 } from "@epc-services/interface-adapters";
@@ -13,6 +14,7 @@ import { GetImageLinksService } from "../../../copy-parser/services/get-image-li
 import { MakeCopyPayload } from "./make-copy.payload";
 import { HtmlFormatterService } from "../../../copy-parser/services/html-formatter/html-formatter.service";
 import { GetMondayDataService } from "../get-monday-data/get-monday-data.service";
+import { GetCryptoDataService } from "../get-crypto-data/get-crypto-data.service";
 
 @Injectable()
 export class MakeCopyService {
@@ -29,7 +31,8 @@ export class MakeCopyService {
     private readonly antiSpamService: AntiSpamService,
     private readonly getImageLinks: GetImageLinksService,
     private readonly htmlFormatterService: HtmlFormatterService,
-    private readonly getMondayDataService: GetMondayDataService
+    private readonly getMondayDataService: GetMondayDataService,
+    private readonly getCryptoDataService: GetCryptoDataService
   ) {}
 
   public async makeCopyWithData(
@@ -38,7 +41,8 @@ export class MakeCopyService {
     let link: string;
     let subjects: string[];
     let unsubData: UnsubData;
-    const { copyName, preset, sendingDate, mondayProductsData } = payload;
+    const { copyName, preset, sendingDate, mondayProductsData, cryptoData } =
+      payload;
 
     const nameMatch = copyName.match(/^[a-zA-Z]+/);
     const product = nameMatch ? nameMatch[0] : "";
@@ -90,6 +94,7 @@ export class MakeCopyService {
         productImage,
         linkUrl: presetProps.linkUrl,
         mondayProductsData,
+        cryptoData,
       });
     }
 
@@ -167,6 +172,7 @@ export class MakeCopyService {
     let link: string;
     let subjects: string[];
     let unsubData: UnsubData;
+    let cryptoData: { product: string; mappings: CryptoPartnerMapping[] }[];
 
     const { copyName, preset, sendingDate } = payload;
 
@@ -219,23 +225,32 @@ export class MakeCopyService {
       isForValidation: boolean;
     };
 
-   trackingData = await this.getMondayDataService.getRedtrackData({
+    trackingData = await this.getMondayDataService.getRedtrackData({
       product,
-      trackingType: presetProps.linkUrl && presetProps.linkUrl.trackingType ? presetProps.linkUrl.trackingType : '',
+      trackingType:
+        presetProps.linkUrl && presetProps.linkUrl.trackingType
+          ? presetProps.linkUrl.trackingType
+          : "",
     });
-   
+
     if (!trackingData) {
       trackingData = await this.getMondayDataService.getRedtrackData({
         product: `*${product}`,
-        trackingType: presetProps.linkUrl && presetProps.linkUrl.trackingType ? presetProps.linkUrl.trackingType : '',
+        trackingType:
+          presetProps.linkUrl && presetProps.linkUrl.trackingType
+            ? presetProps.linkUrl.trackingType
+            : "",
       });
 
       if (!trackingData || !trackingData.trackingData) {
         link = "urlhere";
       }
     }
-    
+
     if (presetProps.copyWhatToReplace?.isLinkUrl) {
+      if (product.toLocaleLowerCase().startsWith("co")) {
+        cryptoData = await this.getCryptoDataService.execute();
+      }
       if (trackingData && trackingData.trackingData) {
         link = await this.buildLinkService.buildLink({
           product,
@@ -243,6 +258,7 @@ export class MakeCopyService {
           productLift,
           productImage,
           linkUrl: presetProps.linkUrl,
+          cryptoData,
         });
       }
     }
@@ -297,8 +313,9 @@ export class MakeCopyService {
     const links = await this.getImageLinks.getLinks({
       html: updatedHtml,
     });
-    
-    const isForValidation = (trackingData && trackingData.isForValidation) ?? false;
+
+    const isForValidation =
+      (trackingData && trackingData.isForValidation) ?? false;
 
     return {
       copyName,

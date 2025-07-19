@@ -12,7 +12,6 @@ import { GetAllCopiesForProductService } from "../services/get-all-copies-for-pr
 import { SpaceAdBuildLinkService } from "../services/space-ad-build-link/space-ad-build-link.service";
 import { SpaceAdBuildLinkPayload } from "../services/space-ad-build-link/space-ad-build-link.payload";
 import { MakeCopyService } from "../services/make-copy/make-copy.service";
-import { AntiSpamPayload } from "../../copy-parser/services/anti-spam/anti-spam.payload";
 import { AntiSpamService } from "../../copy-parser/services/anti-spam/anti-spam.service";
 
 @Controller("finances/copy")

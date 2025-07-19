@@ -3,37 +3,66 @@ import { BuildLinkPayload } from "./build-link.payload";
 
 @Injectable()
 export class BuildLinkService {
-
   public async buildLink(payload: BuildLinkPayload): Promise<string> {
-    const { product, productLift, linkUrl, productImage, trackingData } = payload;
-    
+    const {
+      product,
+      productLift,
+      linkUrl,
+      productImage,
+      trackingData,
+      cryptoData,
+    } = payload;
+    let cryptoLinkType: string | undefined;
+    let linkEnd = linkUrl.linkEnd;
+
+    const productEntry = cryptoData?.find(
+      (item) => item.product.toLocaleLowerCase() === product.toLocaleLowerCase()
+    );
+
+    if (
+      productEntry &&
+      Array.isArray(productEntry.mappings) &&
+      productEntry.mappings.length > 0
+    ) {
+      const cryptoIdData = productEntry.mappings.find(
+        (item) => item.ourId === productLift
+      )?.partnerId;
+
+      cryptoLinkType = cryptoIdData ?? "DedEmail";
+    }
+
+    if (cryptoLinkType) {
+      linkEnd = linkEnd.replace(/(&type=)[^&]*/, `$1${cryptoLinkType}`);
+    }
 
     if (linkUrl.productCode === "PRODUCT#IMAGE" && trackingData.trackingData) {
-      return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${product}${productLift}${productImage}`;
+      return `${linkUrl.linkStart}${trackingData.trackingData}${linkEnd}${product}${productLift}${productImage}`;
     }
 
     if (linkUrl.productCode === "IMG0000_#IMAGE" && trackingData.trackingData) {
       if (!trackingData.imgData) return "urlhere";
-      return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}IMG${trackingData.imgData}_${productLift}${productImage}`;
+      return `${linkUrl.linkStart}${trackingData.trackingData}${linkEnd}IMG${trackingData.imgData}_${productLift}${productImage}`;
     }
 
     if (linkUrl.productCode === "0000_#IMAGE" && trackingData.trackingData) {
       if (!trackingData.imgData) return "urlhere";
-      return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.imgData}_${productLift}${productImage}`;
+      return `${linkUrl.linkStart}${trackingData.trackingData}${linkEnd}${trackingData.imgData}_${productLift}${productImage}`;
     }
 
     if (linkUrl.productCode === "000_#IMAGE" && trackingData.trackingData) {
       if (!trackingData.imgData) return "urlhere";
-      return `${linkUrl.linkStart}${trackingData.trackingData}${
-        linkUrl.linkEnd
-      }${trackingData.imgData.slice(1)}_${productLift}${productImage}`;
+      return `${linkUrl.linkStart}${
+        trackingData.trackingData
+      }${linkEnd}${trackingData.imgData.slice(
+        1
+      )}_${productLift}${productImage}`;
     }
 
     if (
       linkUrl.productCode === "TRACKINGID_#IMAGE" &&
       trackingData.trackingData
     ) {
-      return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.trackingData}_${productLift}${productImage}`;
+      return `${linkUrl.linkStart}${trackingData.trackingData}${linkEnd}${trackingData.trackingData}_${productLift}${productImage}`;
     }
 
     return "urlhere";
@@ -42,13 +71,42 @@ export class BuildLinkService {
   public async buildLinkWithDataProvided(
     payload: BuildLinkPayload
   ): Promise<string> {
-    const { product, productLift, linkUrl, productImage, mondayProductsData } =
-      payload;
+    const {
+      product,
+      productLift,
+      linkUrl,
+      productImage,
+      mondayProductsData,
+      cryptoData,
+    } = payload;
     let trackingData: { trackingData: string; imgData: string };
 
     trackingData = mondayProductsData?.find((item) =>
       item.product.startsWith(`${product} -`)
     );
+
+    let cryptoLinkType: string | undefined;
+    let linkEnd = linkUrl.linkEnd;
+
+    const productEntry = cryptoData?.find(
+      (item) => item.product.toLocaleLowerCase() === product.toLocaleLowerCase()
+    );
+
+    if (
+      productEntry &&
+      Array.isArray(productEntry.mappings) &&
+      productEntry.mappings.length > 0
+    ) {
+      const cryptoIdData = productEntry.mappings.find(
+        (item) => item.ourId === productLift
+      )?.partnerId;
+
+      cryptoLinkType = cryptoIdData ?? "DedEmail";
+    }
+
+    if (cryptoLinkType) {
+      linkEnd = linkEnd.replace(/(&type=)[^&]*/, `$1${cryptoLinkType}`);
+    }
 
     if (!trackingData) {
       trackingData = mondayProductsData?.find((item) =>
@@ -63,28 +121,30 @@ export class BuildLinkService {
       return "urlhere";
     }
     if (linkUrl.productCode === "PRODUCT#IMAGE") {
-      return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${product}${productLift}${productImage}`;
+      return `${linkUrl.linkStart}${trackingData.trackingData}${linkEnd}${product}${productLift}${productImage}`;
     }
 
     if (linkUrl.productCode === "IMG0000_#IMAGE") {
       if (!trackingData.imgData) return "urlhere";
-      return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}IMG${trackingData.imgData}_${productLift}${productImage}`;
+      return `${linkUrl.linkStart}${trackingData.trackingData}${linkEnd}IMG${trackingData.imgData}_${productLift}${productImage}`;
     }
 
     if (linkUrl.productCode === "0000_#IMAGE") {
       if (!trackingData.imgData) return "urlhere";
-      return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.imgData}_${productLift}${productImage}`;
+      return `${linkUrl.linkStart}${trackingData.trackingData}${linkEnd}${trackingData.imgData}_${productLift}${productImage}`;
     }
 
     if (linkUrl.productCode === "000_#IMAGE") {
       if (!trackingData.imgData) return "urlhere";
-      return `${linkUrl.linkStart}${trackingData.trackingData}${
-        linkUrl.linkEnd
-      }${trackingData.imgData.slice(1)}_${productLift}${productImage}`;
+      return `${linkUrl.linkStart}${
+        trackingData.trackingData
+      }${linkEnd}${trackingData.imgData.slice(
+        1
+      )}_${productLift}${productImage}`;
     }
 
     if (linkUrl.productCode === "TRACKINGID_#IMAGE") {
-      return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${trackingData.trackingData}_${productLift}${productImage}`;
+      return `${linkUrl.linkStart}${trackingData.trackingData}${linkEnd}${trackingData.trackingData}_${productLift}${productImage}`;
     }
 
     return "urlhere";
@@ -107,7 +167,7 @@ export class BuildLinkService {
       const trackingData = mondayProductsData?.find((item) =>
         item.product.startsWith(`*${product} -`)
       );
-      
+
       if (!trackingData || !trackingData.product) return false;
       return trackingData?.isForValidation;
     }

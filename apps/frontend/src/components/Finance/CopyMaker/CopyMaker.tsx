@@ -509,6 +509,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                       <TextTitle>
                         Unsub Text:
                         <Text
+                          style={{ cursor: "pointer" }}
                           onClick={() => {
                             if (copy.unsubData) {
                               navigator.clipboard.writeText(
@@ -527,6 +528,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                         <TextTitle>
                           Unsub Link:
                           <Text
+                          style={{ cursor: "pointer" }}
                             onClick={() => {
                               if (copy.unsubData) {
                                 navigator.clipboard.writeText(

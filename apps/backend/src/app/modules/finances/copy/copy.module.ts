@@ -14,6 +14,7 @@ import {
 } from "./copy.providers";
 import { GDocApiModule } from "@epc-services/gdoc-api";
 import { CacheModule } from "@nestjs/cache-manager";
+import { GSpreadsheetApiModule } from "@epc-services/gspreadsheet-api";
 
 @Module({
   imports: [
@@ -35,6 +36,10 @@ import { CacheModule } from "@nestjs/cache-manager";
     CacheModule.register({
       ttl: 600000,
       isGlobal: true,
+    }),
+    GSpreadsheetApiModule.registerAsync({
+      imports: [GdriveConfigModule],
+      useClass: GdriveApiOptionsFactoryService,
     }),
   ],
   controllers: [...messageControllers],

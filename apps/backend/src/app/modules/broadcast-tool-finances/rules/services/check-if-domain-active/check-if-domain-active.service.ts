@@ -4,32 +4,22 @@ import { CheckIfDomainActivePayload } from "./check-if-domain-active.payload";
 @Injectable()
 export class CheckIfDomainActiveService {
   public async execute(payload: CheckIfDomainActivePayload): Promise<boolean> {
-    const { domainRules, broadcast, sendingDate, domain, domainsData } =
-      payload;
+    const { domainRules, domainsData, domain } = payload;
 
-    const domainData = domainsData.find(
-      (domainName) =>
-        this.normalizeDomain(domain) ===
-          this.normalizeDomain(domainName.domainName) ||
-        domainName.domainName
-          .trim()
-          .toLowerCase()
-          .endsWith(`_${this.normalizeDomain(domain)}`) ||
-        domainName.domainName
-          .trim()
-          .toLowerCase()
-          .endsWith(`-${this.normalizeDomain(domain)}`)
-    );
+    const normalized = this.normalizeDomain(domain);
 
-    if (!domainData) {
-      return false;
-    }
+    const domainData = domainsData.find(({ domainName }) => {
+      const normalizedName = this.normalizeDomain(domainName);
+      return (
+        normalizedName === normalized ||
+        normalizedName.endsWith(`_${normalized}`) ||
+        normalizedName.endsWith(`-${normalized}`)
+      );
+    });
 
-    if (domainRules.allowedMondayStatuses.includes(domainData.domainStatus)) {
-      return true;
-    }
-
-    return false;
+    return domainData
+      ? domainRules.allowedMondayStatuses.includes(domainData.domainStatus)
+      : false;
   }
 
   private normalizeDomain(domain: string): string {

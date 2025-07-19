@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { CheckProductLastSendPayload } from './check-product-last-send.payload';
+import { Injectable } from "@nestjs/common";
+import { CheckProductLastSendPayload } from "./check-product-last-send.payload";
 
 @Injectable()
 export class CheckProductLastSendService {
@@ -11,35 +11,37 @@ export class CheckProductLastSendService {
       productMinDelayPerDays,
     } = payload;
 
-    const lastProductSend = broadcastDomain.broadcastCopies
-      .filter((copy) =>
-        copy.copies.find(
-          (copy) =>
-            this.cleanProductName(copy.name) === this.cleanProductName(copyName)
-        )
-      )
-      .reduce(
-        (prev, current) => (prev && prev.date > current.date ? prev : current),
-        null
+    const targetProductName = this.cleanProductName(copyName);
+    let latestDate: Date | null = null;
+
+    for (const broadcastCopy of broadcastDomain.broadcastCopies) {
+      const hasMatchingProduct = broadcastCopy.copies.some(
+        (c) => this.cleanProductName(c.name) === targetProductName
       );
 
-    if (!lastProductSend) {
+      if (hasMatchingProduct) {
+        const currentDate = new Date(broadcastCopy.date);
+        if (!latestDate || currentDate > latestDate) {
+          latestDate = currentDate;
+        }
+      }
+    }
+
+    if (!latestDate) {
       return true;
     }
 
-    const lastCopySendDate = new Date(lastProductSend.date);
-    const possibleSendingDateObj = new Date(possibleSendingDate);
-
-    const diffInMilliseconds =
-      possibleSendingDateObj.getTime() - lastCopySendDate.getTime();
-    const diffInDays = Math.round(diffInMilliseconds / (1000 * 3600 * 24));
+    const possibleDate = new Date(possibleSendingDate);
+    const diffInDays = Math.round(
+      (possibleDate.getTime() - latestDate.getTime()) / (1000 * 60 * 60 * 24)
+    );
 
     return diffInDays >= productMinDelayPerDays;
   }
 
   private cleanProductName(copyName: string): string {
     const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : '';
+    const product = nameMatch ? nameMatch[0] : "";
 
     return product;
   }

@@ -21,11 +21,14 @@ export class CheckIfProductCanBeSendService {
     if (!productName || domainsData.length === 0 || productsData.length === 0)
       return false;
 
-    const productData = productsData.find(
+    const matchingProducts = productsData.filter(
       (product) =>
         product.productName.startsWith(`${productName} -`) ||
         product.productName.startsWith(`*${productName} -`)
     );
+
+    const productData = matchingProducts.find((p) => p.productStatus);
+    if (!productData) return false;
 
     const domainData = domainsData.find(
       (domainName) =>
@@ -35,50 +38,38 @@ export class CheckIfProductCanBeSendService {
         domainName.domainName.trim().endsWith(`-${domain}`)
     );
 
-    const isProductHasSendingLimits =
-      productRules.productsSendingLimitPerDay.find(
-        (productSendingLimitPerDay) => {
-          if (productSendingLimitPerDay.productName === productName) {
-            return true;
-          }
-        }
-      );
+    if (!domainData || !domainData.domainStatus) return false;
 
-    if (isProductHasSendingLimits) {
+    const sendingLimit = productRules.productsSendingLimitPerDay.find(
+      (rule) => rule.productName === productName
+    );
+
+    if (sendingLimit) {
       let sendingCount = 0;
-
       for (const sheet of broadcast.sheets) {
-        for (const domain of sheet.domains) {
-          const sendingDateObj = domain.broadcastCopies.find(
+        for (const d of sheet.domains) {
+          const sendingDateObj = d.broadcastCopies.find(
             (date) => date.date === sendingDate
           );
 
           if (
             sendingDateObj &&
-            sendingDateObj.copies.find(
+            sendingDateObj.copies.some(
               (copy) => this.cleanProductName(copy.name) === productName
             )
           ) {
             sendingCount++;
+            if (sendingCount >= sendingLimit.limit) return false;
           }
         }
-      }
-
-      if (sendingCount >= isProductHasSendingLimits.limit) {
-        return false;
       }
     }
 
-    const isProductHasSendingRestrictions =
-      productRules.productAllowedSendingDays.find(
-        (productAllowedSendingDay) => {
-          if (productAllowedSendingDay.product === productName) {
-            return true;
-          }
-        }
-      );
+    const dayRule = productRules.productAllowedSendingDays.find(
+      (rule) => rule.product === productName
+    );
 
-    if (isProductHasSendingRestrictions) {
+    if (dayRule) {
       const daysOfWeek = [
         "sunday",
         "monday",
@@ -89,39 +80,23 @@ export class CheckIfProductCanBeSendService {
         "saturday",
       ];
       const dayOfWeek = daysOfWeek[new Date(sendingDate).getDay()];
-      if (!isProductHasSendingRestrictions.allowedSendingDays[dayOfWeek]) {
-        return false;
-      }
+      if (!dayRule.allowedSendingDays[dayOfWeek]) return false;
     }
 
-    if (
-      !productData ||
-      !domainData ||
-      !productData.productStatus ||
-      !domainData.domainStatus
-    ) {
-      return false;
-    }
-
-    if (
+    const isAllowed =
       productRules.allowedMondayStatuses.includes(productData.productStatus) &&
       domainRules.domainSending.some(
-        (domainSending) =>
-          domainSending.parentCompany === domainData.parentCompany &&
-          domainSending.allowedMondayStatuses.includes(productData.domainSending)
-      )
-    ) {
-      return true;
-    }    
+        (rule) =>
+          rule.parentCompany === domainData.parentCompany &&
+          rule.allowedMondayStatuses.includes(productData.domainSending)
+      );
 
-    return false;
+    return isAllowed;
   }
 
   private cleanProductName(copyName: string): string {
     const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : "";
-
-    return product;
+    return nameMatch ? nameMatch[0] : "";
   }
 
   private normalizeDomain(domain: string): string {

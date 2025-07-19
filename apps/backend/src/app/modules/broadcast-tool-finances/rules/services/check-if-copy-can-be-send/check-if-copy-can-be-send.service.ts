@@ -8,80 +8,65 @@ export class CheckIfCopyCanBeSendService {
       copyName,
       broadcast,
       usageRules,
-      domain,
       sheetName,
       sendingDate,
       productRules,
     } = payload;
 
-    const cleanCopyName = this.cleanCopyName(copyName);
-    if (!cleanCopyName) return false;
-
-    let sendingCount = 0;
+    const cleanedName = this.cleanCopyName(copyName);
+    if (!cleanedName) return false;
 
     const tabCopyLimit = usageRules.copyTabLimit?.find(
       (tab) => tab.sheetName === sheetName
     );
 
+    if (tabCopyLimit) {
+      const tabCopyCount = this.countCopiesOnDate(
+        broadcast,
+        sendingDate,
+        cleanedName
+      );
+      if (tabCopyCount >= tabCopyLimit.limit) return false;
+    }
+
+    const sendingLimitRule = productRules.copySendingLimitPerDay.find(
+      (rule) => this.cleanCopyName(rule.copyName) === cleanedName
+    );
+
+    if (sendingLimitRule) {
+      const totalCopyCount = this.countCopiesOnDate(
+        broadcast,
+        sendingDate,
+        cleanedName
+      );
+      if (totalCopyCount >= sendingLimitRule.limit) return false;
+    }
+
+    return true;
+  }
+
+  private countCopiesOnDate(
+    broadcast: any,
+    sendingDate: string,
+    cleanedName: string
+  ): number {
+    let count = 0;
     for (const sheet of broadcast.sheets) {
       for (const domain of sheet.domains) {
         const sendingDateObj = domain.broadcastCopies.find(
           (date) => date.date === sendingDate
         );
-
         if (
           sendingDateObj &&
-          sendingDateObj.copies.find(
-            (copy) => this.cleanCopyName(copy.name) === cleanCopyName
+          sendingDateObj.copies.some(
+            (copy) => this.cleanCopyName(copy.name) === cleanedName
           )
         ) {
-          sendingCount++;
+          count++;
         }
       }
     }
-
-    if (sendingCount >= tabCopyLimit.limit) {
-      return false;
-    }
-
-    const isCopyHasSendingLimits = productRules.copySendingLimitPerDay.find(
-      (copySendingLimitPerDay) => {
-        if (
-          this.cleanCopyName(copySendingLimitPerDay.copyName) ===
-          this.cleanCopyName(copyName)
-        ) {
-          return true;
-        }
-      }
-    );
-
-    if (isCopyHasSendingLimits) {
-      let sendingCount = 0;
-
-      for (const sheet of broadcast.sheets) {
-        for (const domain of sheet.domains) {
-          const sendingDateObj = domain.broadcastCopies.find(
-            (date) => date.date === sendingDate
-          );
-
-          if (
-            sendingDateObj &&
-            sendingDateObj.copies.find(
-              (copy) =>
-                this.cleanCopyName(copy.name) === this.cleanCopyName(copyName)
-            )
-          ) {
-            sendingCount++;
-          }
-        }
-      }
-
-      if (sendingCount >= isCopyHasSendingLimits.limit) {
-        return false;
-      }
-    }
-
-    return true;
+    return count;
   }
 
   private cleanCopyName(copyName: string): string {

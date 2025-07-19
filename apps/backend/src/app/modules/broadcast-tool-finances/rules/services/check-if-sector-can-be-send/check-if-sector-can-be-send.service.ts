@@ -14,18 +14,21 @@ export class CheckIfSectorCanBeSendService {
       sendingDate,
     } = payload;
 
-    const productName = this.cleanProductName(copyName);
-    if (!productName || productsData.length === 0) return false;
+    if (!productsData.length) return false;
 
-    const productData = productsData.find(
-      (product) =>
-        product.productName.startsWith(`${productName} -`) ||
-        product.productName.startsWith(`*${productName} -`)
-    );
+    const targetProductPrefix = this.cleanProductName(copyName);
+    if (!targetProductPrefix) return false;
 
-    if (!productData || !productData.productStatus) {
-      return false;
+    const prefixMap = new Map<string, (typeof productsData)[0]>();
+    for (const product of productsData) {
+      const prefix = this.extractPrefixBeforeDash(product.productName);
+      if (prefix && !prefixMap.has(prefix)) {
+        prefixMap.set(prefix, product);
+      }
     }
+
+    const productData = prefixMap.get(targetProductPrefix);
+    if (!productData || !productData.productStatus) return false;
 
     if (productRules.blacklistedSectors.includes(productData.sector)) {
       return false;
@@ -35,27 +38,20 @@ export class CheckIfSectorCanBeSendService {
       (copy) => copy.date === sendingDate
     );
 
-    if (!broadcastCopiesForDate) {
-      return true;
-    }
+    if (!broadcastCopiesForDate) return true;
 
-    const currentSectorCopyCount = broadcastCopiesForDate.copies.reduce(
-      (count, c) => {
-        const cProductName = this.cleanProductName(c.name);
-        const product = productsData.find(
-          (p) =>
-            p.productName.startsWith(`${cProductName} -`) ||
-            p.productName.startsWith(`*${cProductName} -`)
-        );
-        return product?.sector === productData.sector ? count + 1 : count;
-      },
-      0
-    );
+    let currentSectorCopyCount = 0;
 
-    const limit = productRules.similarSectorDomainLimit;
+    for (const copy of broadcastCopiesForDate.copies) {
+      const cleanedPrefix = this.cleanProductName(copy.name);
+      const otherProduct = prefixMap.get(cleanedPrefix);
 
-    if (currentSectorCopyCount >= limit) {
-      return false;
+      if (otherProduct?.sector === productData.sector) {
+        currentSectorCopyCount++;
+        if (currentSectorCopyCount >= productRules.similarSectorDomainLimit) {
+          return false;
+        }
+      }
     }
 
     return true;
@@ -63,8 +59,11 @@ export class CheckIfSectorCanBeSendService {
 
   private cleanProductName(copyName: string): string {
     const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : "";
+    return nameMatch ? nameMatch[0] : "";
+  }
 
-    return product;
+  private extractPrefixBeforeDash(productName: string): string | null {
+    const match = productName.match(/^\*?([a-zA-Z]+)\s*-/);
+    return match ? match[1] : null;
   }
 }

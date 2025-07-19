@@ -8,8 +8,8 @@ export class CheckWarmupCopyLimitsService {
   ): Promise<boolean> {
     const { copyName, broadcast } = payload;
 
-    const cleanCopyName = this.cleanCopyName(copyName);
-    if (!cleanCopyName) return false;
+    const cleanTargetName = this.cleanCopyName(copyName);
+    if (!cleanTargetName) return false;
 
     const warmUpSendingLimit = 1;
 
@@ -18,15 +18,18 @@ export class CheckWarmupCopyLimitsService {
     for (const sheet of broadcast.sheets) {
       for (const domain of sheet.domains) {
         for (const copy of domain.broadcastCopies) {
-          const found = copy.copies.find(
-            (c) => this.cleanCopyName(c.name) === cleanCopyName
+          const matches = copy.copies.some(
+            (c) => this.cleanCopyName(c.name) === cleanTargetName
           );
-          if (found) sendingCount++;
+          if (matches) {
+            sendingCount++;
+            if (sendingCount >= warmUpSendingLimit) return false;
+          }
         }
       }
     }
 
-    return sendingCount < warmUpSendingLimit;
+    return true;
   }
 
   private cleanCopyName(copyName: string): string {

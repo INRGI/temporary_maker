@@ -1,4 +1,4 @@
-import { Preset } from "@epc-services/interface-adapters";
+import { CryptoPartnerMapping, Preset } from "@epc-services/interface-adapters";
 
 export interface MakeCopyPayload {
   copyName: string;
@@ -10,4 +10,5 @@ export interface MakeCopyPayload {
     imgData: string;
     isForValidation?: boolean
   }[];
+  cryptoData?: { product: string; mappings: CryptoPartnerMapping[] }[];
 }

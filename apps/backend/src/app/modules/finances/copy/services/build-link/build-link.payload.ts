@@ -1,4 +1,4 @@
-import { LinkUrl } from '@epc-services/interface-adapters';
+import { CryptoPartnerMapping, LinkUrl } from '@epc-services/interface-adapters';
 
 export interface BuildLinkPayload {
   product: string;
@@ -12,4 +12,5 @@ export interface BuildLinkPayload {
     imgData: string;
     isForValidation?: boolean
   }[];
+  cryptoData?: { product: string; mappings: CryptoPartnerMapping[] }[];
 }

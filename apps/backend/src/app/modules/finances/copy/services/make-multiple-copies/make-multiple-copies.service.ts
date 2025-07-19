@@ -3,13 +3,15 @@ import { MakeCopyService } from "../make-copy/make-copy.service";
 import { GetDomainBroadcastWithDateService } from "../../../broadcast/services/get-domain-broadcast-with-date/get-domain-broadcast-with-date.service";
 import { MakeMultipleCopiesPayload } from "./make-multiple-copies.payload";
 import { GetMondayDataService } from "../get-monday-data/get-monday-data.service";
+import { GetCryptoDataService } from "../get-crypto-data/get-crypto-data.service";
 
 @Injectable()
 export class MakeMultipleCopiesService {
   constructor(
     private readonly makeCopyService: MakeCopyService,
     private readonly getDomainBroadcastWithDateService: GetDomainBroadcastWithDateService,
-    private readonly getMondayDataService: GetMondayDataService
+    private readonly getMondayDataService: GetMondayDataService,
+    private readonly getCryptoDataService: GetCryptoDataService
   ) {}
 
   public async makeMultipleCopies(
@@ -49,6 +51,8 @@ export class MakeMultipleCopiesService {
           preset.linkUrl.trackingType
         );
 
+      const cryptoData = await this.getCryptoDataService.execute();
+
       const copies = [];
 
       for (const item of domainBroadcast.broadcast) {
@@ -60,6 +64,7 @@ export class MakeMultipleCopiesService {
             preset,
             sendingDate: item.date,
             mondayProductsData,
+            cryptoData,
           });
 
           copies.push(result);

@@ -2,12 +2,15 @@ import { Injectable } from "@nestjs/common";
 import { SpaceAdBuildLinkPayload } from "./space-ad-build-link.payload";
 import { BuildLinkService } from "../build-link/build-link.service";
 import { GetMondayDataService } from "../get-monday-data/get-monday-data.service";
+import { GetCryptoDataService } from "../get-crypto-data/get-crypto-data.service";
+import { CryptoPartnerMapping } from "@epc-services/interface-adapters";
 
 @Injectable()
 export class SpaceAdBuildLinkService {
   constructor(
     private readonly buildLinkService: BuildLinkService,
-    private readonly getMondayDataService: GetMondayDataService
+    private readonly getMondayDataService: GetMondayDataService,
+    private readonly getCryptoDataService: GetCryptoDataService
   ) {}
 
   public async buildLink(payload: SpaceAdBuildLinkPayload): Promise<string> {
@@ -27,6 +30,11 @@ export class SpaceAdBuildLinkService {
       imgData: string;
       isForValidation: boolean;
     };
+    let cryptoData: { product: string; mappings: CryptoPartnerMapping[] }[];
+
+    if (product.toLocaleLowerCase().startsWith("co")) {
+      cryptoData = await this.getCryptoDataService.execute();
+    }
 
     trackingData = await this.getMondayDataService.getRedtrackData({
       product,
@@ -51,6 +59,7 @@ export class SpaceAdBuildLinkService {
       productImage,
       trackingData,
       linkUrl: linkUrl,
+      cryptoData,
     });
 
     return link;
