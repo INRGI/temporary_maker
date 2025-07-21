@@ -22,6 +22,7 @@ import { CreateAdminBroadcastConfigService } from "./commands/create-admin-broad
 import { UpdateAdminBroadcastConfigService } from "./commands/update-admin-broadcast-config/update-admin-broadcast-config.service";
 import { AdminBroadcastConfigMessageController } from "./controllers/admin-broadcast-config.controller";
 import { GetAdminBroadcastConfigByNicheQueryService } from "./queries/get-admin-broadcast-config-by-niche/get-admin-broadcast-config-by-niche.query-service";
+import { RecheckCopyService } from "./services/recheck-copy/recheck-copy.service";
 
 export const messageControllers = [
   BroadcastRulesMessageController,
@@ -53,4 +54,5 @@ export const serviceProviders: Provider[] = [
   CheckIfPartnerCanBeSendService,
   CheckIfSectorCanBeSendService,
   CheckTestCopyLimitsService,
+  RecheckCopyService,
 ];

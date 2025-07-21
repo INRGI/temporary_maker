@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { GetUnavailableBroadcastCopiesPayload } from "./get-unavailable-broadcast-copies.payload";
 import { ReverifyCopyService } from "../../../copy-verify/services/reverify-copy/reverify-copy.service";
+import { cleanCopyName } from "../../../rules/utils/cleanCopyName";
 
 @Injectable()
 export class GetUnavailableBroadcastCopiesService {
@@ -14,11 +15,11 @@ export class GetUnavailableBroadcastCopiesService {
         broadcast,
         broadcastRules,
         adminBroadcastConfig,
-        domainsData,
         productsData,
       } = payload;
 
-      const unavailableCopies: string[] = [];
+      const unavailableCopies = new Set<string>();
+      const checkedCopies = new Set<string>();
 
       for (const date of dateRange) {
         const allDomains = broadcast.sheets.flatMap(
@@ -26,33 +27,34 @@ export class GetUnavailableBroadcastCopiesService {
         );
 
         for (const domain of allDomains) {
-          const copyNames = domain.broadcastCopies.flatMap((c) =>
-            c.copies.map((c) => c.name)
-          );
+          const copyNames = domain.broadcastCopies
+            .find((c) => c.date === date)
+            ?.copies.map((c) => c.name) ?? [];
 
           for (const copyName of copyNames) {
+            if(!copyName) continue;
+            const cleanedCopyName = cleanCopyName(copyName);
+            if (checkedCopies.has(cleanedCopyName)) continue;
+            if (copyName.includes("_SA") || copyName.startsWith("(")) continue;
+            if (unavailableCopies.has(cleanedCopyName)) continue;
             const result = await this.reverifyCopyService.execute({
-              broadcast,
-              sheetName: broadcast.sheets.find((sheet) =>
-                sheet.domains.includes(domain)
-              )?.sheetName,
               broadcastDomain: domain,
               adminBroadcastConfig,
               copyName,
               broadcastRules,
               sendingDate: date,
               productsData,
-              domainsData,
             });
 
-            if (!result) {
-              unavailableCopies.push(copyName);
+            if (result) {
+              unavailableCopies.add(copyName);
             }
+            checkedCopies.add(cleanedCopyName);
           }
         }
       }
 
-      return unavailableCopies;
+      return Array.from(unavailableCopies);
     } catch (error) {
       return [];
     }

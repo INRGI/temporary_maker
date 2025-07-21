@@ -32,7 +32,11 @@ export class BuildLinkService {
     }
 
     if (cryptoLinkType) {
-      linkEnd = linkEnd.replace(/(&type=)[^&]*/, `$1${cryptoLinkType}`);
+      if (linkEnd.includes("type=")) {
+        linkEnd = linkEnd.replace(/([?&]type=)[^&]*/, `$1${cryptoLinkType}`);
+      } else {
+        linkEnd = linkEnd.replace(/\/([^/?#]*)\/?$/, `/${cryptoLinkType}/`);
+      }
     }
 
     if (linkUrl.productCode === "PRODUCT#IMAGE" && trackingData.trackingData) {
@@ -105,7 +109,11 @@ export class BuildLinkService {
     }
 
     if (cryptoLinkType) {
-      linkEnd = linkEnd.replace(/(&type=)[^&]*/, `$1${cryptoLinkType}`);
+      if (linkEnd.includes("type=")) {
+        linkEnd = linkEnd.replace(/([?&]type=)[^&]*/, `$1${cryptoLinkType}`);
+      } else {
+        linkEnd = linkEnd.replace(/\/([^/?#]*)\/?$/, `/${cryptoLinkType}/`);
+      }
     }
 
     if (!trackingData) {

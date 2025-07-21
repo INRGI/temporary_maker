@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { GetAllDomainsResponseDto } from "@epc-services/interface-adapters";
 import { AddCustomLinkIndicatorPayload } from "./add-custom-link-indicator.payload";
+import { cleanProductName } from "../../../rules/utils/cleanProductName";
 
 @Injectable()
 export class AddCustomLinkIndicatorService {
@@ -39,14 +40,14 @@ export class AddCustomLinkIndicatorService {
                 copies: broadcastCopies.copies.map((c) => {
                   return {
                     ...c,
-                    name: handleCheckIfProductHaveCustomLink(this.cleanProductName(c.name)) ? `${c.name}(L)` : c.name,
+                    name: handleCheckIfProductHaveCustomLink(cleanProductName(c.name)) ? `${c.name}(L)` : c.name,
                   };
                 }),
                 possibleReplacementCopies:
                   broadcastCopies.possibleReplacementCopies.map((c) => {
                     return {
                       ...c,
-                      name: handleCheckIfProductHaveCustomLink(this.cleanProductName(c.name)) ? `${c.name}(L)` : c.name,
+                      name: handleCheckIfProductHaveCustomLink(cleanProductName(c.name)) ? `${c.name}(L)` : c.name,
                     };
                   }),
               };
@@ -57,12 +58,5 @@ export class AddCustomLinkIndicatorService {
     });
 
     return { ...broadcast, sheets: modifiedBroadcast };
-  }
-
-  private cleanProductName(copyName: string): string {
-    const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : "";
-
-    return product;
   }
 }

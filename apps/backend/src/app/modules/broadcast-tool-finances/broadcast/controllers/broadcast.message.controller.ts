@@ -14,6 +14,7 @@ import { ApproveBroadcastService } from "../services/approve-broadcast/approve-b
 import { GetBroadcastDomainsListService } from "../services/get-broadcast-domains-list/get-broadcast-domains-list.service";
 import { GetBroadcastsSendsService } from "../services/get-broadcasts-sends/get-broadcasts-sends.service";
 import { GetBroadcastsSendsByIdService } from "../services/get-broadcast-sends-by-id/get-broadcast-sends-by-id.service";
+import { RedoBroadcastService } from "../services/redo-broadcast/redo-broadcast.service";
 
 @Controller("finances/broadcast-tool/broadcast")
 export class BroadcastController {
@@ -23,7 +24,8 @@ export class BroadcastController {
     private readonly approveBroadcastService: ApproveBroadcastService,
     private readonly getBroadcastDomainsListService: GetBroadcastDomainsListService,
     private readonly getBroadcastsSendsService: GetBroadcastsSendsService,
-    private readonly getBroadcastsSendsByIdService: GetBroadcastsSendsByIdService
+    private readonly getBroadcastsSendsByIdService: GetBroadcastsSendsByIdService,
+    private readonly redoBroadcastService: RedoBroadcastService,
   ) {}
 
   @Get("domains/:spreadsheetId")
@@ -79,5 +81,12 @@ export class BroadcastController {
       toDate: toDate.toISOString().split("T")[0],
       broadcastRuleId,
     });
+  }
+
+  @Post("redo-broadcast")
+  public async redoBroadcast(
+    @Body() body: MakeBroadcastRequestDto
+  ): Promise<GetAllDomainsResponseDto> {
+    return await this.redoBroadcastService.execute(body);
   }
 }

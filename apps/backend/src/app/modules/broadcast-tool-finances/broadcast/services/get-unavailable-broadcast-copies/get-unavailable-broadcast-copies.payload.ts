@@ -1,6 +1,5 @@
 import {
   GetAllDomainsResponseDto,
-  GetDomainDataResponse,
   GetProductDataResponse,
 } from "@epc-services/interface-adapters";
 import { BroadcastRulesProps } from "../../../rules/domain/types/broadcast-rules.types";
@@ -11,6 +10,5 @@ export interface GetUnavailableBroadcastCopiesPayload {
   dateRange: string[];
   broadcastRules: BroadcastRulesProps;
   adminBroadcastConfig: AdminBroadcastConfigProps;
-  domainsData: GetDomainDataResponse[];
   productsData: GetProductDataResponse[];
 }

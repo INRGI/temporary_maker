@@ -45,6 +45,31 @@ export class VerifyCopyWithoutQueueService {
       priorityCopiesData,
     } = payload;
 
+    const checkCopyLastSendResult = await this.checkCopyLastSendService.execute(
+      {
+        copyName,
+        broadcastDomain,
+        possibleSendingDate: sendingDate,
+        copyMinDelayPerDays: broadcastRules.usageRules.copyMinDelayPerDays,
+      }
+    );
+    if (!checkCopyLastSendResult) {
+      return { isValid: false, broadcastDomain };
+    }
+
+    const checkProductLastSendResult =
+      await this.checkProductLastSendService.execute({
+        copyName,
+        broadcastDomain,
+        possibleSendingDate: sendingDate,
+        productMinDelayPerDays:
+          broadcastRules.usageRules.productMinDelayPerDays,
+      });
+
+    if (!checkProductLastSendResult) {
+      return { isValid: false, broadcastDomain };
+    }
+
     const checkIfCopyBlacklistedServiceResult =
       await this.checkIfCopyBlacklistedService.execute({
         copyName,
@@ -145,31 +170,6 @@ export class VerifyCopyWithoutQueueService {
       if (sendingCount >= isCopyHasSendingLimits.limit) {
         return { isValid: false, broadcastDomain };
       }
-    }
-
-    const checkCopyLastSendResult = await this.checkCopyLastSendService.execute(
-      {
-        copyName,
-        broadcastDomain,
-        possibleSendingDate: sendingDate,
-        copyMinDelayPerDays: broadcastRules.usageRules.copyMinDelayPerDays,
-      }
-    );
-    if (!checkCopyLastSendResult) {
-      return { isValid: false, broadcastDomain };
-    }
-
-    const checkProductLastSendResult =
-      await this.checkProductLastSendService.execute({
-        copyName,
-        broadcastDomain,
-        possibleSendingDate: sendingDate,
-        productMinDelayPerDays:
-          broadcastRules.usageRules.productMinDelayPerDays,
-      });
-
-    if (!checkProductLastSendResult) {
-      return { isValid: false, broadcastDomain };
     }
 
     const isCopyPriority = await this.checkIfProductPriorityService.execute({

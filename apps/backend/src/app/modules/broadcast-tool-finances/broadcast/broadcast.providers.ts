@@ -21,6 +21,7 @@ import { GetClickableCopiesWithSendsService } from './services/get-clickable-cop
 import { GetBroadcastsSendsByIdService } from './services/get-broadcast-sends-by-id/get-broadcast-sends-by-id.service';
 import { AddCustomLinkIndicatorService } from './services/add-custom-link-indicator/add-custom-link-indicator.service';
 import { GetUnavailableBroadcastCopiesService } from './services/get-unavailable-broadcast-copies/get-unavailable-broadcast-copies.service';
+import { RedoBroadcastService } from './services/redo-broadcast/redo-broadcast.service';
 
 export const messageControllers = [BroadcastController];
 
@@ -48,4 +49,5 @@ export const serviceProviders: Provider[] = [
   GetBroadcastsSendsByIdService,
   AddCustomLinkIndicatorService,
   GetUnavailableBroadcastCopiesService,
+  RedoBroadcastService,
 ];
