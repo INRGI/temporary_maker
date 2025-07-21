@@ -36,7 +36,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
-import ConfirmationModal from "../../BroadcastTool/ConfirmationModal";
+import ConfirmationModal from "../../Common/ConfirmationModal";
 
 const SortablePresetCard = ({
   preset,
