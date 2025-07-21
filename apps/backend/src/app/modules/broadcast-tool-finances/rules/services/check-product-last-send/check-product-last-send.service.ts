@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { CheckProductLastSendPayload } from "./check-product-last-send.payload";
+import { cleanProductName } from "../../utils/cleanProductName";
 
 @Injectable()
 export class CheckProductLastSendService {
@@ -11,12 +12,12 @@ export class CheckProductLastSendService {
       productMinDelayPerDays,
     } = payload;
 
-    const targetProductName = this.cleanProductName(copyName);
+    const targetProductName = cleanProductName(copyName);
     let latestDate: Date | null = null;
 
     for (const broadcastCopy of broadcastDomain.broadcastCopies) {
       const hasMatchingProduct = broadcastCopy.copies.some(
-        (c) => this.cleanProductName(c.name) === targetProductName
+        (c) => cleanProductName(c.name) === targetProductName
       );
 
       if (hasMatchingProduct) {
@@ -37,12 +38,5 @@ export class CheckProductLastSendService {
     );
 
     return diffInDays >= productMinDelayPerDays;
-  }
-
-  private cleanProductName(copyName: string): string {
-    const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : "";
-
-    return product;
   }
 }

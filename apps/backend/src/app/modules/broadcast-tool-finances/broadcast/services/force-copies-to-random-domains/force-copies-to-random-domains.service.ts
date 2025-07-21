@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { GetAllDomainsResponseDto } from "@epc-services/interface-adapters";
 import { ForceCopiesToRandomDomainsPayload } from "./force-copies-to-random-domains.payload";
 import { VerifyCopyWithoutQueueService } from "../../../copy-verify/services/verify-copy-without-queue/verify-copy-without-queue.service";
+import { getDateRange } from "../../utils/getDateRange";
 
 @Injectable()
 export class ForceCopiesToRandomDomainsService {
@@ -25,7 +26,7 @@ export class ForceCopiesToRandomDomainsService {
     } = payload;
 
     const MIN_COPIES_DOMAIN_SEND = 2;
-    const dateRange = this.getDateRange(fromDate, toDate);
+    const dateRange = getDateRange(fromDate, toDate);
 
     for (const date of dateRange) {
       let sentCount = 0;
@@ -103,19 +104,6 @@ export class ForceCopiesToRandomDomainsService {
     }
 
     return broadcast;
-  }
-
-  private getDateRange(from: string, to: string): string[] {
-    const result: string[] = [];
-    const current = new Date(from);
-    const end = new Date(to);
-
-    while (current <= end) {
-      result.push(current.toISOString().split("T")[0]);
-      current.setDate(current.getDate() + 1);
-    }
-
-    return result;
   }
 
   private shuffleArray<T>(array: T[]): T[] {

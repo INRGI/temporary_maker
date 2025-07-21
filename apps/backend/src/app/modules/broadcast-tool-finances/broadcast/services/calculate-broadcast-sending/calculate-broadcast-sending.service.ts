@@ -5,6 +5,8 @@ import {
   DayBroadcastSends,
   PartnerSends,
 } from "@epc-services/interface-adapters";
+import { cleanProductName } from "../../../rules/utils/cleanProductName";
+import { cleanCopyName } from "../../../rules/utils/cleanCopyName";
 
 @Injectable()
 export class CalculateBroadcastSendingService {
@@ -23,8 +25,8 @@ export class CalculateBroadcastSendingService {
           if (!day) continue;
 
           for (const copy of day.copies) {
-            const productName = this.cleanProductName(copy.name);
-            const copyName = this.cleanCopyName(copy.name);
+            const productName = cleanProductName(copy.name);
+            const copyName = cleanCopyName(copy.name);
             const productData = productsData.find(
               (p) =>
                 p.productName.startsWith(`${productName} -`) ||
@@ -80,18 +82,5 @@ export class CalculateBroadcastSendingService {
     }
 
     return { result, name: broadcastName };
-  }
-
-  private cleanProductName(copyName: string): string {
-    const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    return nameMatch ? nameMatch[0] : "";
-  }
-
-  private cleanCopyName(copyName: string): string {
-    const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : "";
-    const liftMatch = copyName.match(/[a-zA-Z]+(\d+)/);
-    const productLift = liftMatch ? liftMatch[1] : "";
-    return `${product}${productLift}`;
   }
 }

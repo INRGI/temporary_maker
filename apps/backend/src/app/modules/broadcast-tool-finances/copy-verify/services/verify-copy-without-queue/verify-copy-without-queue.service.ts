@@ -5,11 +5,16 @@ import { CheckIfProductCanBeSendService } from "../../../rules/services/check-if
 import { CheckIfCopyCanBeSendService } from "../../../rules/services/check-if-copy-can-be-send/check-if-copy-can-be-send.service";
 import { CheckIfDomainActiveService } from "../../../rules/services/check-if-domain-active/check-if-domain-active.service";
 import { CheckIfCopyBlacklistedService } from "../../../rules/services/check-if-copy-blacklisted/check-if-copy-blacklisted.service";
-import { CopyType, VerifyCopyForDomainResponseDto } from "@epc-services/interface-adapters";
+import {
+  CopyType,
+  VerifyCopyForDomainResponseDto,
+} from "@epc-services/interface-adapters";
 import { CheckIfProductPriorityService } from "../../../rules/services/check-if-product-priority/check-if-product-priority.service";
 import { VerifyCopyWithoutQueuePayload } from "./verify-copy-without-queue.payload";
 import { CheckIfPartnerCanBeSendService } from "../../../rules/services/check-if-partner-can-be-send/check-if-partner-can-be-send.service";
 import { CheckIfSectorCanBeSendService } from "../../../rules/services/check-if-sector-can-be-send/check-if-sector-can-be-send.service";
+import { cleanCopyName } from "../../../rules/utils/cleanCopyName";
+import { cleanProductName } from "../../../rules/utils/cleanProductName";
 
 @Injectable()
 export class VerifyCopyWithoutQueueService {
@@ -109,8 +114,8 @@ export class VerifyCopyWithoutQueueService {
       broadcastRules.productRules.copySendingLimitPerDay.find(
         (copySendingLimitPerDay) => {
           if (
-            this.cleanCopyName(copySendingLimitPerDay.copyName) ===
-            this.cleanCopyName(copyName)
+            cleanCopyName(copySendingLimitPerDay.copyName) ===
+            cleanCopyName(copyName)
           ) {
             return true;
           }
@@ -129,8 +134,7 @@ export class VerifyCopyWithoutQueueService {
           if (
             sendingDateObj &&
             sendingDateObj.copies.find(
-              (copy) =>
-                this.cleanCopyName(copy.name) === this.cleanCopyName(copyName)
+              (copy) => cleanCopyName(copy.name) === cleanCopyName(copyName)
             )
           ) {
             sendingCount++;
@@ -169,7 +173,7 @@ export class VerifyCopyWithoutQueueService {
     }
 
     const isCopyPriority = await this.checkIfProductPriorityService.execute({
-      product: this.cleanProductName(copyName),
+      product: cleanProductName(copyName),
       priorityCopiesData,
     });
 
@@ -200,7 +204,11 @@ export class VerifyCopyWithoutQueueService {
             ...broadcastCopy,
             copies: [
               ...broadcastCopy.copies,
-              { name: copyName, isPriority: isCopyPriority, copyType: CopyType.Unknown },
+              {
+                name: copyName,
+                isPriority: isCopyPriority,
+                copyType: CopyType.Unknown,
+              },
             ],
             isModdified: true,
           };
@@ -226,20 +234,5 @@ export class VerifyCopyWithoutQueueService {
         broadcastCopies: updatedBroadcastCopies,
       },
     };
-  }
-
-  private cleanProductName(copyName: string): string {
-    const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : "";
-
-    return product;
-  }
-
-  private cleanCopyName(copyName: string): string {
-    const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : "";
-    const liftMatch = copyName.match(/[a-zA-Z]+(\d+)/);
-    const productLift = liftMatch ? liftMatch[1] : "";
-    return `${product}${productLift}`;
   }
 }

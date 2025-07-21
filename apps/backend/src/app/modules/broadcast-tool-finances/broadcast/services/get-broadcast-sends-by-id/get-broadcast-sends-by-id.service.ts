@@ -7,6 +7,7 @@ import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { Cache } from "cache-manager";
 import { GetBroadcastSendsByIdPayload } from "./get-broadcast-sends-by-id.payload";
 import { GetBroadcastRulesByIdQueryService } from "../../../rules/queries/get-broadcast-rules-by-id/get-broadcast-rules-by-id.query-service";
+import { getDateRange } from "../../utils/getDateRange";
 
 @Injectable()
 export class GetBroadcastsSendsByIdService {
@@ -47,7 +48,7 @@ export class GetBroadcastsSendsByIdService {
       },
     });
 
-    const dateRange = this.getDateRange(fromDate, toDate);
+    const dateRange = getDateRange(fromDate, toDate);
     const sending = await this.calculateBroadcastSendingService.execute({
       broadcast,
       dateRange,
@@ -59,18 +60,5 @@ export class GetBroadcastsSendsByIdService {
 
     await this.cacheManager.set(cacheKey, { broadcasts: result });
     return { broadcasts: result };
-  }
-
-  private getDateRange(from: string, to: string): string[] {
-    const result: string[] = [];
-    const current = new Date(from);
-    const end = new Date(to);
-
-    while (current <= end) {
-      result.push(current.toISOString().split("T")[0]);
-      current.setDate(current.getDate() + 1);
-    }
-
-    return result;
   }
 }

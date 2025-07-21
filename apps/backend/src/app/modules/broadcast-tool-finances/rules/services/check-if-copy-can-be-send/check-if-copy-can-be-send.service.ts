@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { CheckIfCopyCanBeSendPayload } from "./check-if-copy-can-be-send.payload";
+import { cleanCopyName } from "../../utils/cleanCopyName";
 
 @Injectable()
 export class CheckIfCopyCanBeSendService {
@@ -13,7 +14,7 @@ export class CheckIfCopyCanBeSendService {
       productRules,
     } = payload;
 
-    const cleanedName = this.cleanCopyName(copyName);
+    const cleanedName = cleanCopyName(copyName);
     if (!cleanedName) return false;
 
     const tabCopyLimit = usageRules.copyTabLimit?.find(
@@ -30,7 +31,7 @@ export class CheckIfCopyCanBeSendService {
     }
 
     const sendingLimitRule = productRules.copySendingLimitPerDay.find(
-      (rule) => this.cleanCopyName(rule.copyName) === cleanedName
+      (rule) => cleanCopyName(rule.copyName) === cleanedName
     );
 
     if (sendingLimitRule) {
@@ -59,7 +60,7 @@ export class CheckIfCopyCanBeSendService {
         if (
           sendingDateObj &&
           sendingDateObj.copies.some(
-            (copy) => this.cleanCopyName(copy.name) === cleanedName
+            (copy) => cleanCopyName(copy.name) === cleanedName
           )
         ) {
           count++;
@@ -67,13 +68,5 @@ export class CheckIfCopyCanBeSendService {
       }
     }
     return count;
-  }
-
-  private cleanCopyName(copyName: string): string {
-    const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : "";
-    const liftMatch = copyName.match(/[a-zA-Z]+(\d+)/);
-    const productLift = liftMatch ? liftMatch[1] : "";
-    return `${product}${productLift}`;
   }
 }

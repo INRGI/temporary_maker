@@ -1,3 +1,4 @@
+import { setImmediate } from "timers/promises";
 import {
   InjectMondayApiService,
   MondayApiColumnValue,
@@ -74,6 +75,7 @@ export class GetRedtracksDataService {
         }
 
         cursor = nextCursor;
+        await setImmediate();
       } while (cursor);
 
       await this.cacheManager.set(cacheKey, mondayData, 600000);

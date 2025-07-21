@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { CheckIfPartnerCanBeSendPayload } from "./check-if-partner-can-be-send.payload";
+import { cleanProductName } from "../../utils/cleanProductName";
 
 @Injectable()
 export class CheckIfPartnerCanBeSendService {
@@ -14,7 +15,7 @@ export class CheckIfPartnerCanBeSendService {
       sendingDate,
     } = payload;
 
-    const productName = this.cleanProductName(copyName);
+    const productName = cleanProductName(copyName);
     if (!productName || productsData.length === 0) return false;
 
     const matchingProducts = productsData.filter(
@@ -58,7 +59,7 @@ export class CheckIfPartnerCanBeSendService {
 
     let partnerCopyCount = 0;
     for (const c of broadcastCopiesForDate.copies) {
-      const cProductName = this.cleanProductName(c.name);
+      const cProductName = cleanProductName(c.name);
       const match = productsData.find(
         (p) =>
           p.productName.startsWith(`${cProductName} -`) ||
@@ -73,10 +74,5 @@ export class CheckIfPartnerCanBeSendService {
     }
 
     return true;
-  }
-
-  private cleanProductName(copyName: string): string {
-    const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    return nameMatch ? nameMatch[0] : "";
   }
 }

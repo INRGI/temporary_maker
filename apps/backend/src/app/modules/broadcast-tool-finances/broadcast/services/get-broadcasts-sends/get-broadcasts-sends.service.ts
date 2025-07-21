@@ -7,6 +7,7 @@ import { GetBroadcastsSendsResponseDto } from "@epc-services/interface-adapters"
 import { GetAllProductsDataService } from "../../../monday/services/get-all-products-data/get-all-products-data.service";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { Cache } from "cache-manager";
+import { getDateRange } from "../../utils/getDateRange";
 
 @Injectable()
 export class GetBroadcastsSendsService {
@@ -52,7 +53,7 @@ export class GetBroadcastsSendsService {
         },
       });
 
-      const dateRange = this.getDateRange(fromDate, toDate);
+      const dateRange = getDateRange(fromDate, toDate);
       const sending = await this.calculateBroadcastSendingService.execute({
         broadcast,
         dateRange,
@@ -64,18 +65,5 @@ export class GetBroadcastsSendsService {
     }
     await this.cacheManager.set(cacheKey, { broadcasts: result });
     return { broadcasts: result };
-  }
-
-  private getDateRange(from: string, to: string): string[] {
-    const result: string[] = [];
-    const current = new Date(from);
-    const end = new Date(to);
-
-    while (current <= end) {
-      result.push(current.toISOString().split("T")[0]);
-      current.setDate(current.getDate() + 1);
-    }
-
-    return result;
   }
 }

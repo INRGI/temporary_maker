@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { CheckIfCopyBlacklistedPayload } from "./check-if-copy-blacklisted.payload";
+import { cleanCopyName } from "../../utils/cleanCopyName";
 
 @Injectable()
 export class CheckIfCopyBlacklistedService {
@@ -9,7 +10,7 @@ export class CheckIfCopyBlacklistedService {
     payload: CheckIfCopyBlacklistedPayload
   ): Promise<boolean> {
     const { copyName, blacklistedCopies } = payload;
-    const cleaned = this.cleanCopyName(copyName);
+    const cleaned = cleanCopyName(copyName);
 
     const hash = blacklistedCopies.join("|");
     if (!this.cache.has(hash)) {
@@ -18,13 +19,5 @@ export class CheckIfCopyBlacklistedService {
 
     const blacklistedSet = this.cache.get(hash);
     return blacklistedSet.has(cleaned);
-  }
-
-  private cleanCopyName(copyName: string): string {
-    const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : "";
-    const liftMatch = copyName.match(/[a-zA-Z]+(\\d+)/);
-    const productLift = liftMatch ? liftMatch[1] : "";
-    return `${product}${productLift}`;
   }
 }

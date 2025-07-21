@@ -1,5 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { CheckIfProductCanBeSendPayload } from "./check-if-product-can-be-send.payload";
+import { cleanProductName } from "../../utils/cleanProductName";
+import { normalizeDomain } from "../../utils/normalizeDomain";
 
 @Injectable()
 export class CheckIfProductCanBeSendService {
@@ -17,7 +19,7 @@ export class CheckIfProductCanBeSendService {
       sendingDate,
     } = payload;
 
-    const productName = this.cleanProductName(copyName);
+    const productName = cleanProductName(copyName);
     if (!productName || domainsData.length === 0 || productsData.length === 0)
       return false;
 
@@ -32,8 +34,7 @@ export class CheckIfProductCanBeSendService {
 
     const domainData = domainsData.find(
       (domainName) =>
-        this.normalizeDomain(domain) ===
-          this.normalizeDomain(domainName.domainName) ||
+        normalizeDomain(domain) === normalizeDomain(domainName.domainName) ||
         domainName.domainName.trim().endsWith(`_${domain}`) ||
         domainName.domainName.trim().endsWith(`-${domain}`)
     );
@@ -55,7 +56,7 @@ export class CheckIfProductCanBeSendService {
           if (
             sendingDateObj &&
             sendingDateObj.copies.some(
-              (copy) => this.cleanProductName(copy.name) === productName
+              (copy) => cleanProductName(copy.name) === productName
             )
           ) {
             sendingCount++;
@@ -92,14 +93,5 @@ export class CheckIfProductCanBeSendService {
       );
 
     return isAllowed;
-  }
-
-  private cleanProductName(copyName: string): string {
-    const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    return nameMatch ? nameMatch[0] : "";
-  }
-
-  private normalizeDomain(domain: string): string {
-    return domain.trim().toLowerCase();
   }
 }

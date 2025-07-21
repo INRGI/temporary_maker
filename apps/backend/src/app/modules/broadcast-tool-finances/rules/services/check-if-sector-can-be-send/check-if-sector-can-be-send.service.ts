@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { CheckIfSectorCanBeSendPayload } from "./check-if-sector-can-be-send.payload";
+import { cleanProductName } from "../../utils/cleanProductName";
 
 @Injectable()
 export class CheckIfSectorCanBeSendService {
@@ -16,7 +17,7 @@ export class CheckIfSectorCanBeSendService {
 
     if (!productsData.length) return false;
 
-    const targetProductPrefix = this.cleanProductName(copyName);
+    const targetProductPrefix = cleanProductName(copyName);
     if (!targetProductPrefix) return false;
 
     const prefixMap = new Map<string, (typeof productsData)[0]>();
@@ -43,7 +44,7 @@ export class CheckIfSectorCanBeSendService {
     let currentSectorCopyCount = 0;
 
     for (const copy of broadcastCopiesForDate.copies) {
-      const cleanedPrefix = this.cleanProductName(copy.name);
+      const cleanedPrefix = cleanProductName(copy.name);
       const otherProduct = prefixMap.get(cleanedPrefix);
 
       if (otherProduct?.sector === productData.sector) {
@@ -55,11 +56,6 @@ export class CheckIfSectorCanBeSendService {
     }
 
     return true;
-  }
-
-  private cleanProductName(copyName: string): string {
-    const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    return nameMatch ? nameMatch[0] : "";
   }
 
   private extractPrefixBeforeDash(productName: string): string | null {

@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { CheckWarmupCopyLimitsPayload } from "./check-warmup-copy-limits.payload";
+import { cleanCopyName } from "../../utils/cleanCopyName";
 
 @Injectable()
 export class CheckWarmupCopyLimitsService {
@@ -8,7 +9,7 @@ export class CheckWarmupCopyLimitsService {
   ): Promise<boolean> {
     const { copyName, broadcast } = payload;
 
-    const cleanTargetName = this.cleanCopyName(copyName);
+    const cleanTargetName = cleanCopyName(copyName);
     if (!cleanTargetName) return false;
 
     const warmUpSendingLimit = 1;
@@ -19,7 +20,7 @@ export class CheckWarmupCopyLimitsService {
       for (const domain of sheet.domains) {
         for (const copy of domain.broadcastCopies) {
           const matches = copy.copies.some(
-            (c) => this.cleanCopyName(c.name) === cleanTargetName
+            (c) => cleanCopyName(c.name) === cleanTargetName
           );
           if (matches) {
             sendingCount++;
@@ -30,13 +31,5 @@ export class CheckWarmupCopyLimitsService {
     }
 
     return true;
-  }
-
-  private cleanCopyName(copyName: string): string {
-    const nameMatch = copyName.match(/^[a-zA-Z]+/);
-    const product = nameMatch ? nameMatch[0] : "";
-    const liftMatch = copyName.match(/[a-zA-Z]+(\d+)/);
-    const productLift = liftMatch ? liftMatch[1] : "";
-    return `${product}${productLift}`;
   }
 }

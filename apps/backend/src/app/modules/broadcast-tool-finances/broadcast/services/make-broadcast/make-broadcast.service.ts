@@ -17,6 +17,8 @@ import { ForceCopiesToRandomDomainsService } from "../force-copies-to-random-dom
 import { GetPossibleReplacementCopiesService } from "../get-possible-replacement-copies/get-possible-replacement-copies.service";
 import { GetAdminBroadcastConfigByNicheQueryService } from "../../../rules/queries/get-admin-broadcast-config-by-niche/get-admin-broadcast-config-by-niche.query-service";
 import { AddCustomLinkIndicatorService } from "../add-custom-link-indicator/add-custom-link-indicator.service";
+import { getDateRange } from "../../utils/getDateRange";
+import { normalizeDomain } from "../../../rules/utils/normalizeDomain";
 
 @Injectable()
 export class MakeBroadcastService {
@@ -42,6 +44,7 @@ export class MakeBroadcastService {
     payload: MakeBroadcaastPayload
   ): Promise<GetAllDomainsResponseDto> {
     const { broadcastRuleId, fromDate, toDate } = payload;
+    const dateRange = getDateRange(fromDate, toDate);
 
     const broadcastRule = await this.getBroadcastRulesByIdQueryService.execute({
       broadcastRulesId: broadcastRuleId,
@@ -104,7 +107,7 @@ export class MakeBroadcastService {
     const domainPriorityMap = new Map<string, number>();
 
     domainsRevenue.data.forEach((entry) => {
-      const key = this.normalizeDomain(entry.Domain ?? "");
+      const key = normalizeDomain(entry.Domain ?? "");
       const clicks = Number(entry.UC ?? 0);
       const conversions = Number(entry.Conversion ?? 0);
 
@@ -115,13 +118,13 @@ export class MakeBroadcastService {
       }
     });
 
-    for (const date of this.getDateRange(fromDate, toDate)) {
+    for (const date of dateRange) {
       for (const sheet of broadcast.sheets) {
         sheet.domains.sort((a, b) => {
           const priorityA =
-            domainPriorityMap.get(this.normalizeDomain(a.domain)) ?? 0;
+            domainPriorityMap.get(normalizeDomain(a.domain)) ?? 0;
           const priorityB =
-            domainPriorityMap.get(this.normalizeDomain(b.domain)) ?? 0;
+            domainPriorityMap.get(normalizeDomain(b.domain)) ?? 0;
           return priorityB - priorityA;
         });
         for (let i = 0; i < sheet.domains.length; i++) {
@@ -166,7 +169,7 @@ export class MakeBroadcastService {
         broadcast: broadcastWithForcedCopies,
         broadcastRules: broadcastRule,
         adminBroadcastConfig: adminConfig,
-        dateRange: this.getDateRange(fromDate, toDate),
+        dateRange,
         domainsData,
         productsData,
         priorityCopiesData,
@@ -179,13 +182,13 @@ export class MakeBroadcastService {
     const broadcastWithPriorityIndicator =
       await this.addPriorityCopyIndicatorService.execute({
         broadcast: broadcastWithPossibleCopies,
-        dateRange: this.getDateRange(fromDate, toDate),
+        dateRange,
       });
 
     const broadcastWithCustomLinkIndicator =
       await this.addCustomLinkIndicatorService.execute({
         broadcast: broadcastWithPriorityIndicator,
-        dateRange: this.getDateRange(fromDate, toDate),
+        dateRange,
         productsData,
       });
 
@@ -200,22 +203,5 @@ export class MakeBroadcastService {
     }
 
     return broadcastWithCustomLinkIndicator;
-  }
-
-  private getDateRange(from: string, to: string): string[] {
-    const result: string[] = [];
-    const current = new Date(from);
-    const end = new Date(to);
-
-    while (current <= end) {
-      result.push(current.toISOString().split("T")[0]);
-      current.setDate(current.getDate() + 1);
-    }
-
-    return result;
-  }
-
-  private normalizeDomain(domain: string): string {
-    return domain.trim().toLowerCase();
   }
 }

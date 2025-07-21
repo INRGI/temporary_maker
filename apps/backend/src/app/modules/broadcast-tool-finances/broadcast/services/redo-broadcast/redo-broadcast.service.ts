@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { GetAllDomainsResponseDto } from "@epc-services/interface-adapters";
 import { RedoBroadcaastPayload } from "./redo-broadcast.payload";
+import { getDateRange } from "../../utils/getDateRange";
 
 @Injectable()
 export class RedoBroadcastService {
@@ -9,20 +10,8 @@ export class RedoBroadcastService {
   ): Promise<GetAllDomainsResponseDto> {
     const { broadcastRuleId, fromDate, toDate } = payload;
 
-    return
-  }
-
-  private getDateRange(from: string, to: string): string[] {
-    const result: string[] = [];
-    const current = new Date(from);
-    const end = new Date(to);
-
-    while (current <= end) {
-      result.push(current.toISOString().split("T")[0]);
-      current.setDate(current.getDate() + 1);
-    }
-
-    return result;
+    const dateRange = getDateRange(fromDate, toDate);
+    return;
   }
 
   private normalizeDomain(domain: string): string {

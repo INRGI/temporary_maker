@@ -1,3 +1,4 @@
+import { setImmediate } from "timers/promises";
 import {
   InjectMondayApiService,
   MondayApiServicePort,
@@ -97,6 +98,7 @@ export class GetMondayDataService {
       }
 
       cursor = nextCursor;
+      await setImmediate();
     } while (cursor);
     
     const result = [];
