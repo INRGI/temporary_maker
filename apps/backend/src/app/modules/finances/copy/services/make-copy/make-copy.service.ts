@@ -50,8 +50,9 @@ export class MakeCopyService {
     const liftMatch = copyName.match(/[a-zA-Z]+(\d+)/);
     const productLift = liftMatch ? liftMatch[1] : "";
 
-    const imageMatch = copyName.match(/\d+([a-zA-Z].*)/);
-    const productImage = imageMatch ? imageMatch[1] : "";
+    const cleanedCopyName = copyName.replace(/\((P|L)\)/g, "").trim();
+    const imageMatch = cleanedCopyName.match(/\d+([a-zA-Z].*)/);
+    const productImage = imageMatch ? imageMatch[1].trim() : "";    
 
     if (!product || !productLift) {
       return {
@@ -182,8 +183,9 @@ export class MakeCopyService {
     const liftMatch = copyName.match(/[a-zA-Z]+(\d+)/);
     const productLift = liftMatch ? liftMatch[1] : "";
 
-    const imageMatch = copyName.match(/\d+([a-zA-Z].*)/);
-    const productImage = imageMatch ? imageMatch[1] : "";
+    const cleanedCopyName = copyName.replace(/\((P|L)\)/g, "").trim();
+    const imageMatch = cleanedCopyName.match(/\d+([a-zA-Z].*)/);
+    const productImage = imageMatch ? imageMatch[1].trim() : "";
 
     if (!product || !productLift) {
       return {
