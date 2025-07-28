@@ -7,6 +7,7 @@ const Home = lazy(() => import("../../pages/Home/Home"));
 const HealthHome = lazy(() => import("../../pages/HealthHome/HealthHome"));
 const ProductPreview = lazy(() => import("../../pages/ProductPreview/ProductPreview"));
 const HealthProductPreview = lazy(() => import("../../pages/HealthProductPreview/HealthProductPreview"));
+const OrganicProductPreview = lazy(() => import("../../pages/OrganicProductPreview/OrganicProductPreview"));
 
 const Organic = lazy(() => import("../../pages/Organic/Organic"));
 
@@ -18,6 +19,7 @@ export function App() {
         
         <Route path="/health" element={<HealthHome />} />
         <Route path="/health/product-preview" element={<HealthProductPreview />} />
+        <Route path="/organic/product-preview" element={<OrganicProductPreview />} />
         <Route path="/product-preview" element={<ProductPreview />} />
 
         <Route path="/organic" element={<Organic />} />

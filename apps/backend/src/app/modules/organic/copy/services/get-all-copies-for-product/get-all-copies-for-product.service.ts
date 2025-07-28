@@ -88,13 +88,13 @@ export class GetAllCopiesForProductService {
     try {
       mondayData = await this.mondayApiService.getProductData(
         product,
-        803747785
+        2013547302
       );
 
       if (!mondayData.length) {
         mondayData = await this.mondayApiService.getProductData(
           `*${product}`,
-          803747785
+          2013547302
         );
         if (!mondayData.length) {
           throw new Error("Product not found");
