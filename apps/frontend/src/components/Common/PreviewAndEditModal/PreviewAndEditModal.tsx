@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import AdminModal from "../AdminModal";
 import Editor from "@monaco-editor/react";
-import { FaBold, FaItalic, FaRegImage } from "react-icons/fa6";
+import { FaBold, FaItalic, FaLink, FaRegImage } from "react-icons/fa6";
 import {
   ActiveOverlay,
   BottomToolbar,
@@ -159,6 +159,15 @@ function resolveNodePath(
     cur = cur.children[idx];
   }
   return (cur as HTMLElement) || null;
+}
+
+function addClass(el: HTMLElement, className: string) {
+  const prev = el.getAttribute("class") || "";
+  const classes = new Set(prev.split(/\s+/).filter(Boolean));
+  if (!classes.has(className)) {
+    classes.add(className);
+    el.setAttribute("class", Array.from(classes).join(" "));
+  }
 }
 
 const PreviewAndEditModal: React.FC<Props> = ({
@@ -330,6 +339,14 @@ const PreviewAndEditModal: React.FC<Props> = ({
     applyToActive({ color: v.trim() || "" });
   };
 
+  const addEsButtonClass = () => {
+    if (!activeEl || activeEl.tagName !== "A" || !contentRef.current) return;
+    const path = getNodePath(contentRef.current, activeEl);
+    addClass(activeEl, "es-button");
+
+    publish(path);
+  };
+
   const selectParent = () => {
     if (!activeEl || !contentRef.current) return;
     const p = closestAllowedBounded(contentRef.current, activeEl.parentElement);
@@ -474,9 +491,9 @@ const PreviewAndEditModal: React.FC<Props> = ({
 
           {activeEl && activeEl.tagName === "IMG" && (
             <BottomToolbar>
-               <Row>
-               <FaRegImage />
-               </Row>
+              <Row>
+                <FaRegImage />
+              </Row>
               <Row>
                 <Label>Width</Label>
                 <Input
@@ -492,6 +509,22 @@ const PreviewAndEditModal: React.FC<Props> = ({
                   value={imageMaxWidth}
                   onChange={(e) => onImageMaxWidthChange(e.target.value)}
                 />
+              </Row>
+            </BottomToolbar>
+          )}
+          {activeEl && activeEl.tagName === "A" && (
+            <BottomToolbar>
+              <Row>
+                <FaLink />
+              </Row>
+
+              <Row>
+                <Button
+                  onClick={addEsButtonClass}
+                  title='Add class "es-button"'
+                >
+                  add es-button
+                </Button>
               </Row>
             </BottomToolbar>
           )}
