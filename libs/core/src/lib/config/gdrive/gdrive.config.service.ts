@@ -28,4 +28,12 @@ export class GdriveConfigService {
   get organicGdrivePrivateKey(): string {
     return this.configService.get<string>("gdrive.ogPrivateKey");
   }
+
+  get bizopGdriveClientEmail(): string {
+    return this.configService.get<string>("gdrive.bizopClientEmail");
+  }
+
+  get bizopGdrivePrivateKey(): string {
+    return this.configService.get<string>("gdrive.bizopPrivateKey");
+  }
 }

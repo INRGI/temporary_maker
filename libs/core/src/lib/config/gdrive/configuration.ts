@@ -7,4 +7,6 @@ export default registerAs('gdrive', () => ({
   healthPrivateKey: process.env.HEALTH_GDRIVE_PRIVATE_KEY,
   ogPrivateKey: process.env.OG_GDRIVE_PRIVATE_KEY,
   ogClientEmail: process.env.OG_GDRIVE_CLIENT_EMAIL,
+  bizopPrivateKey: process.env.BIZOP_GDRIVE_PRIVATE_KEY,
+  bizopClientEmail: process.env.BIZOP_GDRIVE_CLIENT_EMAIL
 }));

@@ -89,6 +89,15 @@ export class BuildLinkService {
       item.product.startsWith(`${product} -`)
     );
 
+    if (!trackingData) {
+      trackingData = mondayProductsData?.find((item) =>
+        item.product.startsWith(`*${product} -`)
+      );
+      if (!trackingData.trackingData) {
+        return "urlhere";
+      }
+    }
+
     let cryptoLinkType: string | undefined;
     let linkEnd = linkUrl.linkEnd;
 
@@ -113,15 +122,6 @@ export class BuildLinkService {
         linkEnd = linkEnd.replace(/([?&]type=)[^&]*/, `$1${cryptoLinkType}`);
       } else {
         linkEnd = linkEnd.replace(/\/([^/?#]*)\/?$/, `/${cryptoLinkType}/`);
-      }
-    }
-
-    if (!trackingData) {
-      trackingData = mondayProductsData?.find((item) =>
-        item.product.startsWith(`*${product} -`)
-      );
-      if (!trackingData.trackingData) {
-        return "urlhere";
       }
     }
 

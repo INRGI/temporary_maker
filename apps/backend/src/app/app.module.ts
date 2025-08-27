@@ -5,6 +5,7 @@ import { join } from 'path';
 import { FinancesModule } from './modules/finances/finances.module';
 import { HealthModule } from './modules/health/health.module';
 import { OrganicModule } from './modules/organic/organic.module';
+import { BizopModule } from './modules/bizop/bizop.module';
 
 @Module({
   imports: [    
@@ -17,6 +18,7 @@ import { OrganicModule } from './modules/organic/organic.module';
     FinancesModule,
     HealthModule,
     OrganicModule,
+    BizopModule,
   ],
   controllers: [],
   providers: [],
