@@ -15,7 +15,7 @@ export class BuildCustomUnsubBlockService {
       unsubscribeUrl
     ) {
       const linkStartWithLink = customUnsubBlock.linkStart.replace(
-        'urlhere',
+        'insertlink',
         unsubscribeUrl
       );
       const textWithLink = unsubscribeText.replace(

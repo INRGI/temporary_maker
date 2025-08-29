@@ -1,7 +1,6 @@
 import { GdriveConfigModule } from "@epc-services/core";
 import { GDriveApiModule } from "@epc-services/gdrive-api";
 import { Module } from "@nestjs/common";
-import { GdriveApiOptionsFactoryService } from "../../../infrastructure/options-factory/gdrive-api.options-factory.service";
 import {
   applicationProviders,
   messageControllers,
@@ -9,16 +8,17 @@ import {
 } from "./priority-products.providers";
 import { GSpreadsheetApiModule } from "@epc-services/gspreadsheet-api";
 import { CacheModule } from "@nestjs/cache-manager";
+import { OrganicGdriveApiOptionsFactoryService } from "../../../infrastructure/options-factory/organic-gdrive-api.options-factory.service";
 
 @Module({
   imports: [
     GDriveApiModule.registerAsync({
       imports: [GdriveConfigModule],
-      useClass: GdriveApiOptionsFactoryService,
+      useClass: OrganicGdriveApiOptionsFactoryService,
     }),
     GSpreadsheetApiModule.registerAsync({
       imports: [GdriveConfigModule],
-      useClass: GdriveApiOptionsFactoryService,
+      useClass: OrganicGdriveApiOptionsFactoryService,
     }),
     CacheModule.register({
       ttl: 900000,

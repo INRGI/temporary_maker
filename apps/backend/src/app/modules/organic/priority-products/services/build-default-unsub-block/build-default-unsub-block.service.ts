@@ -17,7 +17,7 @@ export class BuildDefaultUnsubBlockService {
 
     if (unsubscribeText && linkedText && unsubscribeUrl) {
       const linkStartWithLink = htmlBlock.linkStart.replace(
-        'urlhere',
+        'insertlink',
         unsubscribeUrl
       );
       const textWithLink = unsubscribeText.replace(
@@ -40,7 +40,7 @@ export class BuildDefaultUnsubBlockService {
       defaultUnsubBlock;
     const { top, right, bottom, left } = padding;
 
-    const linkStart = `<a href="urlhere" style="font-weight: bold; text-decoration: underline; color: ${linkColor}; font-size: ${fontSize}; font-family: ${fontFamily};">`;
+    const linkStart = `<a href="insertlink" style="font-weight: bold; text-decoration: underline; color: ${linkColor}; font-size: ${fontSize}; font-family: ${fontFamily};">`;
     const linkEnd = `</a>`;
     const htmlStart = `<table role="presentation" cellpadding="0" cellspacing="0" align="center">
       <tr>
