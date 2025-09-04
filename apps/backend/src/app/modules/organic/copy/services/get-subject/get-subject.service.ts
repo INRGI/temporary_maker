@@ -63,12 +63,12 @@ export class GetSubjectService {
 
   private async findRelevantFiles(fileName: string) {
     const googleDocs = await this.gdriveApiService.searchFileWithQuery(
-      `name = '${fileName}' and mimeType = 'application/vnd.google-apps.document'`,
+      `name = '${fileName}' and mimeType = 'application/vnd.google-apps.document' and trashed = false`,
       10
     );
 
     const wordDocs = await this.gdriveApiService.searchFileWithQuery(
-      `name = '${fileName}' and mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'`,
+      `name = '${fileName}' and mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' and trashed = false`,
       10
     );
 
@@ -76,12 +76,12 @@ export class GetSubjectService {
 
     if (!files.length) {
       const googleDocsPartial = await this.gdriveApiService.searchFileWithQuery(
-        `name = '${fileName} ' and mimeType = 'application/vnd.google-apps.document'`,
+        `name = '${fileName} ' and mimeType = 'application/vnd.google-apps.document' and trashed = false`,
         10
       );
 
       const wordDocsPartial = await this.gdriveApiService.searchFileWithQuery(
-        `name = '${fileName} ' and mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'`,
+        `name = '${fileName} ' and mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' and trashed = false`,
         10
       );
 
@@ -93,12 +93,12 @@ export class GetSubjectService {
 
     if (!files.length) {
       const googleDocsPartial = await this.gdriveApiService.searchFileWithQuery(
-        `name = '${fileName}.docx' and mimeType = 'application/vnd.google-apps.document'`,
+        `name = '${fileName}.docx' and mimeType = 'application/vnd.google-apps.document' and trashed = false`,
         10
       );
 
       const wordDocsPartial = await this.gdriveApiService.searchFileWithQuery(
-        `name = '${fileName}.docx' and mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'`,
+        `name = '${fileName}.docx' and mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' and trashed = false`,
         10
       );
 

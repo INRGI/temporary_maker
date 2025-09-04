@@ -22,7 +22,7 @@ export class GetCopyFromDriveService {
 
     try {
       const files = await this.gdriveApiService.searchFileWithQuery(
-        `name = '${product}${productLift}_${format || 'html'}.html' and mimeType = 'text/html'`,
+        `name = '${product}${productLift}_${format || 'html'}.html' and mimeType = 'text/html' and trashed = false`,
         10
       );
       

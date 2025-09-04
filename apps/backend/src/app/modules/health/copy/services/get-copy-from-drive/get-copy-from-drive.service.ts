@@ -23,7 +23,7 @@ export class GetCopyFromDriveService {
     let html;
     try {
       let files = await this.gdriveApiService.searchFileWithQuery(
-        `name = '${product}${productLift}_${format || 'html'}.html' and mimeType = 'text/html'`,
+        `name = '${product}${productLift}_${format || 'html'}.html' and mimeType = 'text/html' and trashed = false`,
         10,
         undefined,
         driveId
@@ -31,7 +31,7 @@ export class GetCopyFromDriveService {
 
       if (!files.files.length) {
         files = await this.gdriveApiService.searchFileWithQuery(
-          `name = '${product}${productLift}_${format || 'html'}(Approve needed).html' and mimeType = 'text/html'`,
+          `name = '${product}${productLift}_${format || 'html'}(Approve needed).html' and mimeType = 'text/html' and trashed = false`,
           10,
           undefined,
           driveId

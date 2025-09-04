@@ -25,7 +25,7 @@ export class GetCopyFromDriveService {
       files = await this.gdriveApiService.searchFileWithQuery(
         `name = '${product}${productLift}_${
           format || "html"
-        }.html' and mimeType = 'text/html'`,
+        }.html' and mimeType = 'text/html' and trashed = false`,
         10
       );
 
@@ -33,7 +33,7 @@ export class GetCopyFromDriveService {
         files = await this.gdriveApiService.searchFileWithQuery(
           `name = '${product}${productLift}_${
             format || "html"
-          }(Approve needed).html' and mimeType = 'text/html'`,
+          }(Approve needed).html' and mimeType = 'text/html' and trashed = false`,
           10
         );
 
