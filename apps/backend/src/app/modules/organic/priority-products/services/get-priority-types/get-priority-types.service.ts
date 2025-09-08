@@ -35,7 +35,7 @@ export class GetPriorityTypesService {
 
     try {
       const fileContent = await this.gdriveApiService.getContentLikeBuffer(
-        "1FC6Uz5puQMIGWnj2M4kryYkotbwdH7i0",
+        "1dB8SKnQliC8irUOoLBrEVfJxT-ZRnkBuu-iuI0RDtCg",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       );
       const workbook = await XLSX.read(fileContent, { type: "buffer" });
@@ -68,11 +68,12 @@ export class GetPriorityTypesService {
             if (
               cell &&
               typeof cell === "string" &&
-              cell.toString() === "Footer"
+              cell.trim().toLowerCase() === "footer"
             ) {
               unsubTextColIdx = colIdx;
               break;
             }
+            
           }
 
           if (unsubTextColIdx !== -1) {

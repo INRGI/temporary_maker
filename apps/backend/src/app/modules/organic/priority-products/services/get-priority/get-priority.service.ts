@@ -23,7 +23,7 @@ export class GetPriorityService {
   ): Promise<UnsubData> {
     const { product, unsubLinkUrl } = payload;
     const { linkStart, linkEnd, sheetName, unsubType } = unsubLinkUrl || {};
-    const spreadsheetId = "1FC6Uz5puQMIGWnj2M4kryYkotbwdH7i0";
+    const spreadsheetId = "1dB8SKnQliC8irUOoLBrEVfJxT-ZRnkBuu-iuI0RDtCg";
 
     try {
       const sheet = await this.spreadsheetService.getSheetWithRichText(
