@@ -36,8 +36,8 @@ const PresetUpdateModal: React.FC<PresetUpdateModalProps> = ({
         return <StylesBlock preset={currentPreset} />;
       case "link":
         return <LinkBlock preset={currentPreset} />;
-      // case "unsub":
-      //   return <UnsubBlock preset={currentPreset} />;
+      case "unsub":
+        return <UnsubBlock preset={currentPreset} />;
       case "subject":
         return <SubjectBlock preset={currentPreset} />;
       case "bottrap":
@@ -68,12 +68,12 @@ const PresetUpdateModal: React.FC<PresetUpdateModalProps> = ({
           >
             Link
           </TabButton>
-          {/* <TabButton
+          <TabButton
             active={activeTab === "unsub"}
             onClick={() => setActiveTab("unsub")}
           >
             Unsub
-          </TabButton> */}
+          </TabButton>
           <TabButton
             active={activeTab === "subject"}
             onClick={() => setActiveTab("subject")}

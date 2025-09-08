@@ -12,11 +12,13 @@ import { Module } from "@nestjs/common";
 import { OrganicGdriveApiOptionsFactoryService } from "../../../infrastructure/options-factory/organic-gdrive-api.options-factory.service";
 import { OGMondayApiOptionsFactoryService } from "../../../infrastructure/options-factory/organic-monday-api.options-factory.service";
 import { CopyParserModule } from "../../finances/copy-parser/copy-parser.module";
+import { PriorityProductsModule } from "../priority-products/priority-products.module";
 
 @Module({
   imports: [
     BroadcastModule,
     CopyParserModule,
+    PriorityProductsModule,
     GDriveApiModule.registerAsync({
       imports: [GdriveConfigModule],
       useClass: OrganicGdriveApiOptionsFactoryService,

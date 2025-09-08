@@ -23,7 +23,7 @@ export class GetPriorityService {
   ): Promise<UnsubData> {
     const { product, unsubLinkUrl } = payload;
     const { linkStart, linkEnd, sheetName, unsubType } = unsubLinkUrl || {};
-    const spreadsheetId = "1e40khWM1dKTje_vZi4K4fL-RA8-D6jhp2wmZSXurQH0";
+    const spreadsheetId = "1FC6Uz5puQMIGWnj2M4kryYkotbwdH7i0";
 
     try {
       const sheet = await this.spreadsheetService.getSheetWithRichText(
@@ -50,7 +50,7 @@ export class GetPriorityService {
           (c) => c.formattedValue?.toLowerCase() || ""
         );
 
-        if (potentialHeaders.includes("product")) {
+        if (potentialHeaders.includes("Product name")) {
           headerRow = potentialHeaders;
           headerRowIdx = rowIndex;
           break;
@@ -65,9 +65,9 @@ export class GetPriorityService {
         };
       }
 
-      const productColIdx = headerRow.findIndex((h) => h === "product");
-      const unsubTextColIdx = headerRow.findIndex((h) => h === "unsub text");
-      const unsubUrlColIdx = headerRow.findIndex((h) => h === "unsub url");
+      const productColIdx = headerRow.findIndex((h) => h === "product name");
+      const unsubTextColIdx = headerRow.findIndex((h) => h === "footer");
+      const unsubUrlColIdx = headerRow.findIndex((h) => h === "optout link ");
 
       const customUnsubColIdx = unsubType
         ? headerRow.findIndex(

@@ -25,7 +25,7 @@ export class GetPriorityTypesService {
   ) {}
 
   public async getPriorityTypes(): Promise<GetPriorityTypesResponseDto> {
-    const cacheKey = `financeGetPriorityTypes`;
+    const cacheKey = `organicGetPriorityTypes`;
 
     const cached = await this.cacheManager.get<GetPriorityTypesResponseDto>(
       cacheKey
@@ -35,7 +35,7 @@ export class GetPriorityTypesService {
 
     try {
       const fileContent = await this.gdriveApiService.getContentLikeBuffer(
-        "1e40khWM1dKTje_vZi4K4fL-RA8-D6jhp2wmZSXurQH0",
+        "1FC6Uz5puQMIGWnj2M4kryYkotbwdH7i0",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       );
       const workbook = await XLSX.read(fileContent, { type: "buffer" });
@@ -68,7 +68,7 @@ export class GetPriorityTypesService {
             if (
               cell &&
               typeof cell === "string" &&
-              cell.toString() === "UNSUB TEXT"
+              cell.toString() === "Footer"
             ) {
               unsubTextColIdx = colIdx;
               break;

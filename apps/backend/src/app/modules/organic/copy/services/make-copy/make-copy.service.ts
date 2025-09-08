@@ -11,6 +11,7 @@ import { MakeCopyPayload } from "./make-copy.payload";
 import { AntiSpamService } from "../../../../finances/copy-parser/services/anti-spam/anti-spam.service";
 import { GetImageLinksService } from "../../../../finances/copy-parser/services/get-image-links/get-image-links.service";
 import { HtmlFormatterService } from "../../../../finances/copy-parser/services/html-formatter/html-formatter.service";
+import { GetPriorityService } from "../../../priority-products/services/get-priority/get-priority.service";
 
 @Injectable()
 export class MakeCopyService {
@@ -22,6 +23,7 @@ export class MakeCopyService {
     private readonly getCopyFromDriveService: GetCopyFromDriveService,
     private readonly applyChangesOnCopyService: ApplyChangesOnCopyService,
     private readonly buildLinkService: BuildLinkService,
+    private readonly getPriorityService: GetPriorityService,
     private readonly getSubjectService: GetSubjectService,
     private readonly antiSpamService: AntiSpamService,
     private readonly getImageLinks: GetImageLinksService,
@@ -84,6 +86,13 @@ export class MakeCopyService {
         productImage,
         linkUrl: presetProps.linkUrl,
         mondayProductsData,
+      });
+    }
+
+    if (presetProps.copyWhatToReplace?.isUnsubLink) {
+      unsubData = await this.getPriorityService.getPriorityDetails({
+        product,
+        unsubLinkUrl: presetProps.unsubLinkUrl,
       });
     }
 
@@ -197,6 +206,13 @@ export class MakeCopyService {
         productLift,
         productImage,
         linkUrl: presetProps.linkUrl,
+      });
+    }
+
+    if (presetProps.copyWhatToReplace?.isUnsubLink) {
+      unsubData = await this.getPriorityService.getPriorityDetails({
+        product,
+        unsubLinkUrl: presetProps.unsubLinkUrl,
       });
     }
 
