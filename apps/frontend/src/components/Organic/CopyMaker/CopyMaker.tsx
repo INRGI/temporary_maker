@@ -492,13 +492,39 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                     <UnsubContainer>
                       <TextTitle>
                         Unsub Text:
-                        <Text> {copy.unsubData.unsubscribeText}</Text>
+                        <Text
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            if (copy.unsubData) {
+                              navigator.clipboard.writeText(
+                                copy.unsubData.unsubscribeText || ""
+                              );
+                              toastSuccess("Copied to clipboard");
+                            }
+                          }}
+                        >
+                          {" "}
+                          {copy.unsubData.unsubscribeText}
+                        </Text>
                       </TextTitle>
 
                       {copy.unsubData.unsubscribeUrl && (
                         <TextTitle>
                           Unsub Link:
-                          <Text> {copy.unsubData.unsubscribeUrl}</Text>
+                          <Text
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              if (copy.unsubData) {
+                                navigator.clipboard.writeText(
+                                  copy.unsubData.unsubscribeUrl || ""
+                                );
+                                toastSuccess("Copied to clipboard");
+                              }
+                            }}
+                          >
+                            {" "}
+                            {copy.unsubData.unsubscribeUrl}
+                          </Text>
                         </TextTitle>
                       )}
                       {copy.unsubData.unsubscribeBuildedBlock && (
@@ -533,7 +559,7 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                       )}
                     </UnsubContainer>
                   )}
-                 
+
                   {copy.subjects && copy.subjects.length > 0 ? (
                     <SubjectContainer>
                       <TextTitle>Subjects:</TextTitle>
@@ -549,10 +575,12 @@ const CopyMaker: React.FC<Props> = ({ preset }) => {
                         </Subject>
                       ))}
                     </SubjectContainer>
-                  ) : copy.subjects && (
-                    <SubjectContainer>
-                      <TextTitle>Subjects Not Found</TextTitle>
-                    </SubjectContainer>
+                  ) : (
+                    copy.subjects && (
+                      <SubjectContainer>
+                        <TextTitle>Subjects Not Found</TextTitle>
+                      </SubjectContainer>
+                    )
                   )}
                   {copy.imageLinks && copy.imageLinks?.length > 0 && (
                     <>

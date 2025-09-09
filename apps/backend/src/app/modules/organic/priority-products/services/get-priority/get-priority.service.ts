@@ -50,7 +50,7 @@ export class GetPriorityService {
           (c) => c.formattedValue?.toLowerCase() || ""
         );
 
-        if (potentialHeaders.includes("Product name")) {
+        if (potentialHeaders.includes("product name")) {
           headerRow = potentialHeaders;
           headerRowIdx = rowIndex;
           break;
@@ -65,9 +65,15 @@ export class GetPriorityService {
         };
       }
 
-      const productColIdx = headerRow.findIndex((h) => h === "product name");
-      const unsubTextColIdx = headerRow.findIndex((h) => h === "footer");
-      const unsubUrlColIdx = headerRow.findIndex((h) => h === "optout link ");
+      const productColIdx = headerRow.findIndex(
+        (h) => h.trim().toLocaleLowerCase() === "product name"
+      );
+      const unsubTextColIdx = headerRow.findIndex(
+        (h) => h.trim().toLocaleLowerCase() === "footer"
+      );
+      const unsubUrlColIdx = headerRow.findIndex(
+        (h) => h.trim().toLocaleLowerCase() === "optout link"
+      );
 
       const customUnsubColIdx = unsubType
         ? headerRow.findIndex(
@@ -84,9 +90,10 @@ export class GetPriorityService {
         const cells = row.values || [];
 
         const productCell = cells[productColIdx]?.formattedValue || "";
-        const products = productCell.split(/[\s\/\\]+/);
-
-        if (!products.includes(product)) continue;
+        const products = productCell
+          .split(/[\s\/\\]+/)
+          .map((p) => p.trim().toLowerCase());
+        if (!products.includes(product.toLowerCase())) continue;
 
         const unsubTextCell = cells[unsubTextColIdx];
         const unsubUrlCell =
