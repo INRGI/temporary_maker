@@ -51,6 +51,8 @@ export class GetSubjectService {
 
       text = text.replace(/&amp;/g, '&').replace(/&quot;/g, '"');
 
+      text = this.sanitizeExtractedText(text);
+
       return text
         .replace(/\x0B/g, '\n')
         .split('\n')
@@ -134,5 +136,36 @@ export class GetSubjectService {
     } catch {
       return 'Error extracting text';
     }
+  }
+
+  private sanitizeExtractedText(text: string): string {
+    text = text
+      .replace(/&amp;/g, "&")
+      .replace(/&quot;/g, '"')
+      .replace(/&apos;/g, "'")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&#x([0-9A-Fa-f]+);/g, (_, h) =>
+        String.fromCodePoint(parseInt(h, 16))
+      )
+      .replace(/&#([0-9]+);/g, (_, d) => String.fromCodePoint(parseInt(d, 10)));
+
+    text = text
+      .replace(/<\/?w:[^>]+\/?>/gi, "")
+      .replace(/<\/?m:[^>]+\/?>/gi, "")
+      .replace(/<mc:AlternateContent>[\s\S]*?<\/mc:AlternateContent>/gi, "");
+
+    text = text
+      .replace(/[\u200B-\u200D\u2060\uFEFF]/g, "")
+      .replace(/\u00AD/g, "")
+      .replace(/[\u200E\u200F\u061C\u202A-\u202E\u2066-\u2069]/g, "")
+      .replace(/\u00A0|\u202F/g, " ");
+
+    return text
+      .replace(/\x0B/g, "\n")
+      .replace(/\r\n?|\f/g, "\n")
+      .replace(/[ \t]+\n/g, "\n")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
   }
 }

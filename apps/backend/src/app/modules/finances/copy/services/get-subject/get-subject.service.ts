@@ -2,14 +2,14 @@
 import {
   GDriveApiServicePort,
   InjectGDriveApiService,
-} from '@epc-services/gdrive-api';
-import { Injectable } from '@nestjs/common';
-import { GetSubjectPayload } from './get-subject.payload';
-import AdmZip from 'adm-zip';
+} from "@epc-services/gdrive-api";
+import { Injectable } from "@nestjs/common";
+import { GetSubjectPayload } from "./get-subject.payload";
+import AdmZip from "adm-zip";
 import {
   GDocApiServicePort,
   InjectGDocApiService,
-} from '@epc-services/gdoc-api';
+} from "@epc-services/gdoc-api";
 
 @Injectable()
 export class GetSubjectService {
@@ -35,7 +35,7 @@ export class GetSubjectService {
     try {
       let text: string;
 
-      if (fileToUse.mimeType === 'application/vnd.google-apps.document') {
+      if (fileToUse.mimeType === "application/vnd.google-apps.document") {
         text = await this.gdocApiService.getDocumentPlainText(fileToUse.id);
       } else {
         const fileBuffer = await this.gdriveApiService.getFileAsBuffer(
@@ -43,17 +43,19 @@ export class GetSubjectService {
         );
 
         if (!Buffer.isBuffer(fileBuffer)) {
-          throw new Error('Invalid file format. Expected Buffer.');
+          throw new Error("Invalid file format. Expected Buffer.");
         }
 
         text = this.extractTextFromDocx(fileBuffer);
       }
 
-      text = text.replace(/&amp;/g, '&').replace(/&quot;/g, '"');
+      text = text.replace(/&amp;/g, "&").replace(/&quot;/g, '"');
+
+      text = this.sanitizeExtractedText(text);
 
       return text
-        .replace(/\x0B/g, '\n')
-        .split('\n')
+        .replace(/\x0B/g, "\n")
+        .split("\n")
         .map((line) => line.trim())
         .filter((line) => line);
     } catch (error) {
@@ -114,25 +116,56 @@ export class GetSubjectService {
   private extractTextFromDocx(buffer: Buffer): string {
     try {
       const zip = new AdmZip(buffer);
-      const documentXml = zip.getEntry('word/document.xml');
-      if (!documentXml) throw new Error('document.xml not found in DOCX file');
+      const documentXml = zip.getEntry("word/document.xml");
+      if (!documentXml) throw new Error("document.xml not found in DOCX file");
 
-      const content = documentXml.getData().toString('utf8');
+      const content = documentXml.getData().toString("utf8");
       const paragraphs = content.match(/<w:p[^>]*>.*?<\/w:p>/gs) || [];
 
       const lines = paragraphs
         .map((p) => {
           const matches = p.match(/<w:t[^>]*>(.*?)<\/w:t>/g) || [];
           return matches
-            .map((m) => m.replace(/<w:t[^>]*>|<\/w:t>/g, ''))
-            .join('')
+            .map((m) => m.replace(/<w:t[^>]*>|<\/w:t>/g, ""))
+            .join("")
             .trim();
         })
         .filter(Boolean);
 
-      return lines.join('\n');
+      return lines.join("\n");
     } catch {
-      return 'Error extracting text';
+      return "Error extracting text";
     }
+  }
+
+  private sanitizeExtractedText(text: string): string {
+    text = text
+      .replace(/&amp;/g, "&")
+      .replace(/&quot;/g, '"')
+      .replace(/&apos;/g, "'")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&#x([0-9A-Fa-f]+);/g, (_, h) =>
+        String.fromCodePoint(parseInt(h, 16))
+      )
+      .replace(/&#([0-9]+);/g, (_, d) => String.fromCodePoint(parseInt(d, 10)));
+
+    text = text
+      .replace(/<\/?w:[^>]+\/?>/gi, "")
+      .replace(/<\/?m:[^>]+\/?>/gi, "")
+      .replace(/<mc:AlternateContent>[\s\S]*?<\/mc:AlternateContent>/gi, "");
+
+    text = text
+      .replace(/[\u200B-\u200D\u2060\uFEFF]/g, "")
+      .replace(/\u00AD/g, "")
+      .replace(/[\u200E\u200F\u061C\u202A-\u202E\u2066-\u2069]/g, "")
+      .replace(/\u00A0|\u202F/g, " ");
+
+    return text
+      .replace(/\x0B/g, "\n")
+      .replace(/\r\n?|\f/g, "\n")
+      .replace(/[ \t]+\n/g, "\n")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
   }
 }
