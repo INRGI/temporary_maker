@@ -18,12 +18,18 @@ interface Props {
   preset: Preset;
 }
 
+const productCodeOptions: LinkUrl["productCode"][] = [
+  "COPY/PRODUCT/",
+  "COPY&landingid=PRODUCT",
+];
+
 const LinkBlock: React.FC<Props> = ({ preset }) => {
   const [loading, setLoading] = useState(false);
   const [linkUrl, setLinkUrl] = useState<LinkUrl>({
     linkStart: preset?.linkUrl?.linkStart || "",
     linkEnd: preset?.linkUrl?.linkEnd || "",
     trackingType: preset?.linkUrl?.trackingType || "",
+    productCode: preset?.linkUrl?.productCode || productCodeOptions[0],
   });
 
   const [isLinkUrl, setIsLinkUrl] = useState(
@@ -136,6 +142,14 @@ const LinkBlock: React.FC<Props> = ({ preset }) => {
         </InputContainer>
       </InputGroup>
 
+      <InputGroup>
+        <Dropdown
+          placeholder="Product code type ex: HUGPR1&landingid=HUGPR"
+          options={productCodeOptions}
+          selected={linkUrl.productCode}
+          onSelect={(value) => handleChange("productCode", value as string)}
+        />
+      </InputGroup>
 
       <InputGroup>
         <SaveButton onClick={handleSave}>Save</SaveButton>

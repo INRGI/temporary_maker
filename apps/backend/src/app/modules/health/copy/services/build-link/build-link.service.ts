@@ -15,23 +15,57 @@ export class BuildLinkService {
         trackingType: linkUrl.trackingType,
       });
 
-    if (!trackingData) {
+    if (!trackingData || !trackingData.trackingData) {
       return "urlhere";
     }
 
-    return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${product}${productLift}${(productImage && productImage.length > 0 ? `_${productImage}` : ``)}/${product}/`;
+    if (
+      linkUrl.productCode === "COPY&landingid=PRODUCT" &&
+      trackingData.trackingData
+    ) {
+      return `${linkUrl.linkStart}${trackingData.trackingData}${
+        linkUrl.linkEnd
+      }${product}${productLift}${
+        productImage && productImage.length > 0 ? `_${productImage}` : ``
+      }&landingid=${product}`;
+    }
+
+    return `${linkUrl.linkStart}${trackingData.trackingData}${
+      linkUrl.linkEnd
+    }${product}${productLift}${
+      productImage && productImage.length > 0 ? `_${productImage}` : ``
+    }/${product}/`;
   }
 
-  public async buildLinkWithDataProvided(payload: BuildLinkPayload): Promise<string> {
-      const { product, productLift, linkUrl, productImage, mondayProductsData } = payload;
-     
-     const  trackingData = mondayProductsData?.find((item) => item.product.endsWith(`/${product}`));
-      
-        if (!trackingData || !trackingData.trackingData) {
-          return 'urlhere';
-        }
-      
-  
-      return `${linkUrl.linkStart}${trackingData.trackingData}${linkUrl.linkEnd}${product}${productLift}${(productImage && productImage.length > 0 ? `_${productImage}` : ``)}/${product}/`;
+  public async buildLinkWithDataProvided(
+    payload: BuildLinkPayload
+  ): Promise<string> {
+    const { product, productLift, linkUrl, productImage, mondayProductsData } =
+      payload;
+
+    const trackingData = mondayProductsData?.find((item) =>
+      item.product.endsWith(`/${product}`)
+    );
+
+    if (!trackingData || !trackingData.trackingData) {
+      return "urlhere";
     }
+
+    if (
+      linkUrl.productCode === "COPY&landingid=PRODUCT" &&
+      trackingData.trackingData
+    ) {
+      return `${linkUrl.linkStart}${trackingData.trackingData}${
+        linkUrl.linkEnd
+      }${product}${productLift}${
+        productImage && productImage.length > 0 ? `_${productImage}` : ``
+      }&landingid=${product}`;
+    }
+
+    return `${linkUrl.linkStart}${trackingData.trackingData}${
+      linkUrl.linkEnd
+    }${product}${productLift}${
+      productImage && productImage.length > 0 ? `_${productImage}` : ``
+    }/${product}/`;
+  }
 }
