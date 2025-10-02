@@ -220,7 +220,7 @@ const PreviewAndEditModal: React.FC<Props> = ({
   const publish = (keepPath?: NodePath) => {
     const out = contentRef.current?.innerHTML ?? "";
     if (out !== localHtml) setLocalHtml(out);
-    onChange(out);
+    onChange(out.replace(/&amp;/g, "&"));
     if (keepPath && contentRef.current) {
       const restored = resolveNodePath(contentRef.current, keepPath);
       setActiveEl(restored);
