@@ -1,9 +1,11 @@
+import ClosingNotification from "../../components/Common/ClosingNotification/ClosingNotification";
 import PresetContainer from "../../components/Health/PresetContainer/PresetContainer";
 import {
   Container,
   LinkNotification,
   TextNotification,
 } from "./HealthHome.styled";
+
 
 const HealthHome: React.FC = () => {
   return (
@@ -18,6 +20,7 @@ const HealthHome: React.FC = () => {
           here
         </LinkNotification>
       </TextNotification>
+      <ClosingNotification docUrl="https://wiki.epcnetwork.dev/uk/EPC_prod/Copy_Maker_Health" newUrl="https://health.prodepc.com/pages/copy-automation/copymaker"/>
     </Container>
   );
 };

@@ -1,3 +1,4 @@
+import ClosingNotification from "../../components/Common/ClosingNotification/ClosingNotification";
 import PresetContainer from "../../components/Organic/PresetContainer/PresetContainer";
 import {
   Container,
@@ -15,6 +16,7 @@ const Organic: React.FC = () => {
           here
         </LinkNotification>
       </TextNotification>
+      <ClosingNotification docUrl="https://wiki.epcnetwork.dev/uk/EPC_prod/Copy_Maker" newUrl="https://prodepc.com/pages/copy-automation/copymaker"/>
     </Container>
   );
 };

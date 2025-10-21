@@ -2,6 +2,7 @@ import { useState } from "react";
 import PresetContainer from "../../components/Finance/PresetContainer/PresetContainer";
 import { Container, LinkNotification, TextNotification } from "./Home.styled";
 import ImageEditorModal from "../../components/Common/ImageEditorModal/ImageEditorModal";
+import ClosingNotification from "../../components/Common/ClosingNotification/ClosingNotification";
 
 const Home: React.FC = () => {
   const [imageEditorModalOpen, setImageEditorModalOpen] = useState(false);
@@ -18,7 +19,11 @@ const Home: React.FC = () => {
           here
         </LinkNotification>
       </TextNotification>
-      <ImageEditorModal isOpen={imageEditorModalOpen} onClose={() => setImageEditorModalOpen(false)} />
+      <ClosingNotification docUrl="https://wiki.epcnetwork.dev/uk/EPC_prod/Copy_Maker" newUrl="https://prodepc.com/pages/copy-automation/copymaker"/>
+      <ImageEditorModal
+        isOpen={imageEditorModalOpen}
+        onClose={() => setImageEditorModalOpen(false)}
+      />
     </Container>
   );
 };

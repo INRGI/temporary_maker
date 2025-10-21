@@ -1,4 +1,5 @@
 import PresetContainer from "../../components/BizOp/PresetContainer/PresetContainer";
+import ClosingNotification from "../../components/Common/ClosingNotification/ClosingNotification";
 import {
   Container,
   LinkNotification,
@@ -18,6 +19,7 @@ const BizOpHome: React.FC = () => {
           here
         </LinkNotification>
       </TextNotification>
+      <ClosingNotification docUrl="https://wiki.epcnetwork.dev/uk/EPC_prod/Copy_Maker" newUrl="https://bizop.prodepc.com/pages/copy-automation/copymaker"/>
     </Container>
   );
 };
