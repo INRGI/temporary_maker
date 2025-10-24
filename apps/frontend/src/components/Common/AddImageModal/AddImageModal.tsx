@@ -98,6 +98,15 @@ const AddImageModal: React.FC<Props> = ({
     setRedoStack([]);
   };
 
+  const isValidUrl = (url: string): boolean => {
+    try {
+      const urlObj = new URL(url);
+      return urlObj.protocol === 'https:';
+    } catch {
+      return false;
+    }
+  };
+
   const undo = () => {
     if (history.length === 0) return;
     const prev = history[history.length - 1];
@@ -117,6 +126,11 @@ const AddImageModal: React.FC<Props> = ({
   const handleInsert = () => {
     if (!newImageSrc || !newImageAlt || !newImageWidth) {
       toastError("Please provide all image data");
+      return;
+    }
+
+    if (!isValidUrl(newImageSrc)) {
+      toastError("Please provide a valid image URL");
       return;
     }
 
