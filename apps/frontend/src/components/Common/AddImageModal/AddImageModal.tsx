@@ -130,7 +130,7 @@ const AddImageModal: React.FC<Props> = ({
     }
 
     if (!isValidUrl(newImageSrc)) {
-      toastError("Please provide a valid image URL");
+      toastError("Please provide a valid image URL (https://)");
       return;
     }
 
