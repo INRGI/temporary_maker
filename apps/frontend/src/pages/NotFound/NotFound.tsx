@@ -8,7 +8,7 @@ const NotFound: React.FC = () => {
     <NotFoundContainer>
       <Title>404</Title>
       <Subtitle>Page Not Found</Subtitle>
-      <BackButton to="/">Go Back</BackButton>
+      {/* <BackButton to="/">Go Back</BackButton> */}
     </NotFoundContainer>
   );
 };

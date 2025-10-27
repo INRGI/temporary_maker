@@ -23,9 +23,9 @@ export function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-
-        <Route path="/health" element={<HealthHome />} />
+        <Route index element={<NotFound />} />
+        <Route path="/backup/finance" element={<Home />} />
+        <Route path="/backup/health" element={<HealthHome />} />
         <Route
           path="/health/product-preview"
           element={<HealthProductPreview />}
@@ -36,9 +36,9 @@ export function App() {
         />
         <Route path="/product-preview" element={<ProductPreview />} />
 
-        <Route path="/organic" element={<Organic />} />
+        <Route path="backup/organic" element={<Organic />} />
 
-        <Route path="/bizop" element={<BizOpHome />} />
+        <Route path="backup/bizop" element={<BizOpHome />} />
 
         <Route path="/not-found" element={<NotFound />} />
         <Route path="*" element={<Navigate to="/not-found" replace />} />
