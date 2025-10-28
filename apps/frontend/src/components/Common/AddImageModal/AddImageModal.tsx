@@ -101,7 +101,7 @@ const AddImageModal: React.FC<Props> = ({
   const isValidUrl = (url: string): boolean => {
     try {
       const urlObj = new URL(url);
-      return urlObj.protocol === 'https:';
+      return urlObj.protocol === 'https:'|| urlObj.protocol === 'http:';
     } catch {
       return false;
     }
@@ -130,7 +130,7 @@ const AddImageModal: React.FC<Props> = ({
     }
 
     if (!isValidUrl(newImageSrc)) {
-      toastError("Please provide a valid image URL (https://)");
+      toastError("Please provide a valid image URL (https:// or http://)");
       return;
     }
 
