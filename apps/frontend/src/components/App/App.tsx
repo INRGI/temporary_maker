@@ -27,14 +27,14 @@ export function App() {
         <Route path="/backup/finance" element={<Home />} />
         <Route path="/backup/health" element={<HealthHome />} />
         <Route
-          path="/health/product-preview"
+          path="/backup/health/product-preview"
           element={<HealthProductPreview />}
         />
         <Route
-          path="/organic/product-preview"
+          path="/backup/organic/product-preview"
           element={<OrganicProductPreview />}
         />
-        <Route path="/product-preview" element={<ProductPreview />} />
+        <Route path="/backup/product-preview" element={<ProductPreview />} />
 
         <Route path="backup/organic" element={<Organic />} />
 
